@@ -12,7 +12,7 @@ import javax.ejb.Singleton;
  * @author tobia
  */
 @Singleton
-public class NewSessionBean implements NewSessionBeanRemote {
+public class TimerSchedular implements TimerSchedularRemote {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
