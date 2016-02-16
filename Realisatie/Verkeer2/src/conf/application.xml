@@ -4,4 +4,19 @@
   <module>
     <ejb>TimerScheduler.jar</ejb>
   </module>
+  <module>
+    <ejb>GeneralDAO.jar</ejb>
+  </module>
+  <module>
+    <ejb>GoogleMapsSourceAdaptor.jar</ejb>
+  </module>
+  <module>
+    <ejb>TrafficDataAnalyzer.jar</ejb>
+  </module>
+  <module>
+    <ejb>TrafficDataDAO.jar</ejb>
+  </module>
+  <module>
+    <ejb>TrafficDataDownloader.jar</ejb>
+  </module>
 </application>

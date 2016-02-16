@@ -11,11 +11,71 @@
                     <file>${reference.TimerScheduler.dist-ear}</file>
                     <path-in-war>/</path-in-war>
                 </library>
+                <library>
+                    <file>${reference.GeneralDAO.dist-ear}</file>
+                    <path-in-war>/</path-in-war>
+                </library>
+                <library>
+                    <file>${reference.GoogleMapsSourceAdaptor.dist-ear}</file>
+                    <path-in-war>/</path-in-war>
+                </library>
+                <library>
+                    <file>${reference.TrafficDataAnalyzer.dist-ear}</file>
+                    <path-in-war>/</path-in-war>
+                </library>
+                <library>
+                    <file>${reference.TrafficDataDAO.dist-ear}</file>
+                    <path-in-war>/</path-in-war>
+                </library>
+                <library>
+                    <file>${reference.TrafficDataDownloader.dist-ear}</file>
+                    <path-in-war>/</path-in-war>
+                </library>
             </web-module-additional-libraries>
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
+                <foreign-project>GeneralDAO</foreign-project>
+                <artifact-type>j2ee_ear_archive</artifact-type>
+                <script>build.xml</script>
+                <target>dist-ear</target>
+                <clean-target>clean-ear</clean-target>
+                <id>dist-ear</id>
+            </reference>
+            <reference>
+                <foreign-project>GoogleMapsSourceAdaptor</foreign-project>
+                <artifact-type>j2ee_ear_archive</artifact-type>
+                <script>build.xml</script>
+                <target>dist-ear</target>
+                <clean-target>clean-ear</clean-target>
+                <id>dist-ear</id>
+            </reference>
+            <reference>
                 <foreign-project>TimerScheduler</foreign-project>
+                <artifact-type>j2ee_ear_archive</artifact-type>
+                <script>build.xml</script>
+                <target>dist-ear</target>
+                <clean-target>clean-ear</clean-target>
+                <id>dist-ear</id>
+            </reference>
+            <reference>
+                <foreign-project>TrafficDataAnalyzer</foreign-project>
+                <artifact-type>j2ee_ear_archive</artifact-type>
+                <script>build.xml</script>
+                <target>dist-ear</target>
+                <clean-target>clean-ear</clean-target>
+                <id>dist-ear</id>
+            </reference>
+            <reference>
+                <foreign-project>TrafficDataDAO</foreign-project>
+                <artifact-type>j2ee_ear_archive</artifact-type>
+                <script>build.xml</script>
+                <target>dist-ear</target>
+                <clean-target>clean-ear</clean-target>
+                <id>dist-ear</id>
+            </reference>
+            <reference>
+                <foreign-project>TrafficDataDownloader</foreign-project>
                 <artifact-type>j2ee_ear_archive</artifact-type>
                 <script>build.xml</script>
                 <target>dist-ear</target>
