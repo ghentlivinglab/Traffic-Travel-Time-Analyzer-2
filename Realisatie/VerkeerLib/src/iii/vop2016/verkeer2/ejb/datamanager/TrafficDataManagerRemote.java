@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package iii.vop2016.verkeer2.ejb.downloader;
+package iii.vop2016.verkeer2.ejb.datamanager;
 
 import javax.ejb.Remote;
 
@@ -12,6 +12,8 @@ import javax.ejb.Remote;
  * @author tobia
  */
 @Remote
-public interface TrafficDataDownloaderRemote {
+public interface TrafficDataManagerRemote {
+    
+    public void downloadNewData();
     
 }

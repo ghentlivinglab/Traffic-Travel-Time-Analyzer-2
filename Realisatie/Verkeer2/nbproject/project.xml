@@ -28,7 +28,7 @@
                     <path-in-war>/</path-in-war>
                 </library>
                 <library>
-                    <file>${reference.TrafficDataDownloader.dist-ear}</file>
+                    <file>${reference.TrafficDataManager.dist-ear}</file>
                     <path-in-war>/</path-in-war>
                 </library>
             </web-module-additional-libraries>
@@ -75,7 +75,7 @@
                 <id>dist-ear</id>
             </reference>
             <reference>
-                <foreign-project>TrafficDataDownloader</foreign-project>
+                <foreign-project>TrafficDataManager</foreign-project>
                 <artifact-type>j2ee_ear_archive</artifact-type>
                 <script>build.xml</script>
                 <target>dist-ear</target>

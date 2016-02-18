@@ -221,7 +221,7 @@ exists or setup the property manually. For example like this:
             <property location="${build.dir}" name="dist.ear.dir"/>
             <property name="deploy.on.save" value="${build.deploy.on.save}"/>
         </ant>
-        <ant antfile="${project.TrafficDataDownloader}/build.xml" inheritall="false" target="dist-ear">
+        <ant antfile="${project.TrafficDataManager}/build.xml" inheritall="false" target="dist-ear">
             <property location="${build.dir}" name="dist.ear.dir"/>
             <property name="deploy.on.save" value="${build.deploy.on.save}"/>
         </ant>
@@ -242,7 +242,7 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${reference.GoogleMapsSourceAdaptor.dist-ear}" todir="${build.dir}//"/>
         <copyfiles files="${reference.TrafficDataAnalyzer.dist-ear}" todir="${build.dir}//"/>
         <copyfiles files="${reference.TrafficDataDAO.dist-ear}" todir="${build.dir}//"/>
-        <copyfiles files="${reference.TrafficDataDownloader.dist-ear}" todir="${build.dir}//"/>
+        <copyfiles files="${reference.TrafficDataManager.dist-ear}" todir="${build.dir}//"/>
     </target>
     <target name="post-compile">
         <!-- Empty placeholder for easier customization. -->
@@ -324,7 +324,7 @@ exists or setup the property manually. For example like this:
         <ant antfile="${project.TimerScheduler}/build.xml" inheritall="false" target="-run-deploy-am"/>
         <ant antfile="${project.TrafficDataAnalyzer}/build.xml" inheritall="false" target="-run-deploy-am"/>
         <ant antfile="${project.TrafficDataDAO}/build.xml" inheritall="false" target="-run-deploy-am"/>
-        <ant antfile="${project.TrafficDataDownloader}/build.xml" inheritall="false" target="-run-deploy-am"/>
+        <ant antfile="${project.TrafficDataManager}/build.xml" inheritall="false" target="-run-deploy-am"/>
     </target>
     <target depends="-init-cos,dist-directory-deploy,pre-run-deploy,-pre-nbmodule-run-deploy,-run-deploy-nb,-init-deploy-ant,-deploy-ant,-run-deploy-am,-post-nbmodule-run-deploy,post-run-deploy" name="run-deploy"/>
     <target if="netbeans.home" name="-run-deploy-nb">
@@ -669,7 +669,7 @@ exists or setup the property manually. For example like this:
             <property location="${build.dir}" name="dist.ear.dir"/>
             <property name="deploy.on.save" value="${build.deploy.on.save}"/>
         </ant>
-        <ant antfile="${project.TrafficDataDownloader}/build.xml" inheritall="false" target="clean-ear">
+        <ant antfile="${project.TrafficDataManager}/build.xml" inheritall="false" target="clean-ear">
             <property location="${build.dir}" name="dist.ear.dir"/>
             <property name="deploy.on.save" value="${build.deploy.on.save}"/>
         </ant>
