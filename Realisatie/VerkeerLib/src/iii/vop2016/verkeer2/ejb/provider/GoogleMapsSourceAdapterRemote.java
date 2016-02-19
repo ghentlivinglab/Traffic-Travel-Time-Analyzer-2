@@ -12,6 +12,6 @@ import javax.ejb.Remote;
  * @author tobia
  */
 @Remote
-public interface GoogleMapsSourceAdaptorRemote extends ISourceAdaptor {
+public interface GoogleMapsSourceAdapterRemote extends ISourceAdapter {
     
 }

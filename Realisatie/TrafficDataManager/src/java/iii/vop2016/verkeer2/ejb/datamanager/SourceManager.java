@@ -7,6 +7,8 @@ package iii.vop2016.verkeer2.ejb.datamanager;
 
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
+import iii.vop2016.verkeer2.ejb.provider.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -16,6 +18,15 @@ import java.util.concurrent.Future;
  */
 public class SourceManager implements ISourceManager{
 
+    private List<ISourceAdapter> adapters;
+
+    public SourceManager() {
+        adapters = new ArrayList<ISourceAdapter>();
+    }
+    
+    
+    
+    
     @Override
     public List<Future<IRouteData>> parse(IRoute route) {
         return null;

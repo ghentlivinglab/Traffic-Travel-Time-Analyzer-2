@@ -13,7 +13,7 @@ import java.util.concurrent.Future;
  *
  * @author Mike
  */
-interface ISourceAdaptor {
+public interface ISourceAdapter {
     
     public Future<IRouteData> parse(IRoute route); //Future is needed to download data async
     

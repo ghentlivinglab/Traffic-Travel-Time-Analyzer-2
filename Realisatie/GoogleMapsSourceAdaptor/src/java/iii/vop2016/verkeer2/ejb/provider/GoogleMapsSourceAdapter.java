@@ -15,7 +15,7 @@ import javax.ejb.Singleton;
  * @author tobia
  */
 @Singleton
-public class GoogleMapsSourceAdaptor implements GoogleMapsSourceAdaptorRemote {
+public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
 
     @Override
     public Future<IRouteData> parse(IRoute route) {
