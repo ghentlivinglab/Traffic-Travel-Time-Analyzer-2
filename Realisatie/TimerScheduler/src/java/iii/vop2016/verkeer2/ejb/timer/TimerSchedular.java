@@ -155,8 +155,7 @@ public class TimerSchedular implements TimerSchedularRemote {
         return interval;
     }
 
-    private void DoTick() {
-        
+    private void DoTick() {     
         //lookup datamanager bean and trigger timed function
         TrafficDataManagerRemote managementBean = (TrafficDataManagerRemote) beans.getDataManager();
         if (managementBean != null) {
