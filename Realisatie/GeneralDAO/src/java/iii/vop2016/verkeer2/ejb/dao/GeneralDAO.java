@@ -9,7 +9,7 @@ import javax.ejb.Singleton;
 
 /**
  *
- * @author tobia
+ * @author Tobias
  */
 @Singleton
 public class GeneralDAO implements GeneralDAORemote {

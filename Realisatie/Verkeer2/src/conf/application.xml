@@ -16,4 +16,7 @@
   <module>
     <ejb>TrafficDataDAO.jar</ejb>
   </module>
+  <module>
+    <ejb>TrafficDataManager.jar</ejb>
+  </module>
 </application>
