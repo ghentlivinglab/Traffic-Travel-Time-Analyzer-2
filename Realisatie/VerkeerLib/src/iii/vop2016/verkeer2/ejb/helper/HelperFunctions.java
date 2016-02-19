@@ -71,4 +71,26 @@ public class HelperFunctions {
         
         return obj;  
     }
+    
+     /**
+     * Retrieve the beanType according to the provided JNDI name
+     * @param jndi The jndi name that represents the bean.
+     * @param ctx SessionContext of the bean
+     * @param logger A logger to log error. When in doubt use Logger.getGlobal()
+     * @return The requested bean (needs casting)
+     */
+    public static Object getBean(String jndi, SessionContext ctx, Logger logger) {
+        if(jndi == null || jndi.equals("")){
+            logger.log(Level.SEVERE, "Jndi not valid (" + jndi + ")");
+            return null;
+        }
+        
+        Object obj = ctx.lookup(jndi);
+        if(obj == null){
+            logger.log(Level.SEVERE, "BEAN not found (" + jndi + ")");
+            return null;
+        }
+        
+        return obj;  
+    }
 }
