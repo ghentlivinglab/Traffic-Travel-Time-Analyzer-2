@@ -6,6 +6,7 @@
 package iii.vop2016.verkeer2.ejb.timer;
 
 import iii.vop2016.verkeer2.ejb.datamanager.TrafficDataManagerRemote;
+import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.BeanSelector;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import java.text.SimpleDateFormat;
@@ -49,9 +50,9 @@ public class TimerSchedular implements TimerSchedularRemote {
 
     private InitialContext ctx;
     private static final String JNDILOOKUP_PROPERTYFILE = "resources/properties/TimerScheduler";
-    private static final String JNDILOOKUP_BEANFILE = "resources/properties/Beans";
     private Properties properties;
-    private Properties beanProperties;
+    
+    private BeanFactory beans;
 
     /**
      * Constructor
@@ -68,10 +69,10 @@ public class TimerSchedular implements TimerSchedularRemote {
         } catch (NamingException ex) {
             Logger.getLogger(TimerSchedular.class.getName()).log(Level.SEVERE, null, ex);
         }
+        beans = BeanFactory.getInstance(ctx, ctxs);
 
         //Get properties file for bean
         properties = HelperFunctions.RetrievePropertyFile(JNDILOOKUP_PROPERTYFILE, ctx, Logger.getGlobal());
-        beanProperties = HelperFunctions.RetrievePropertyFile(JNDILOOKUP_BEANFILE, ctx, Logger.getGlobal());
 
         //Get interval to closest time for timer from properties file
         int currentTime = getIndexedCurrentTime();
@@ -157,8 +158,9 @@ public class TimerSchedular implements TimerSchedularRemote {
     private void DoTick() {
         
         //lookup datamanager bean and trigger timed function
-        TrafficDataManagerRemote managementBean = (TrafficDataManagerRemote) HelperFunctions.getBean(beanProperties, BeanSelector.dataManager, ctxs, Logger.getGlobal());
+        TrafficDataManagerRemote managementBean = (TrafficDataManagerRemote) beans.getDataManager();
         if (managementBean != null) {
+            System.out.println("Tick Tick It's me");
             managementBean.downloadNewData();
         } else {
             Logger.getGlobal().log(Level.SEVERE, "Could not access dataManagement bean to trigger Timed function");

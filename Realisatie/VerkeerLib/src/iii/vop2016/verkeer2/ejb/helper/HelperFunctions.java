@@ -17,6 +17,8 @@ import javax.naming.NamingException;
  * @author Tobias
  */
 public class HelperFunctions {
+    
+    
 
     /**
      * Retrieve a properties file located in the JNDI resources. (Heavy
