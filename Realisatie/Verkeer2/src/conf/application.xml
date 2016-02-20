@@ -22,7 +22,7 @@
   <module>
     <web>
       <web-uri>RestApi.war</web-uri>
-      <context-root>/RestApi</context-root>
+      <context-root>/rest</context-root>
     </web>
   </module>
 </application>
