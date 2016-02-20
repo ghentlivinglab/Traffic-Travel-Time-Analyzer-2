@@ -19,4 +19,10 @@
   <module>
     <ejb>TrafficDataManager.jar</ejb>
   </module>
+  <module>
+    <web>
+      <web-uri>RestApi.war</web-uri>
+      <context-root>/RestApi</context-root>
+    </web>
+  </module>
 </application>
