@@ -12,6 +12,6 @@ import javax.ejb.Remote;
  * @author tobia
  */
 @Remote
-public interface TrafficDataAnalyzerRemote {
+public interface TrafficDataAnalyzerRemote extends IAnalyzer{
     
 }

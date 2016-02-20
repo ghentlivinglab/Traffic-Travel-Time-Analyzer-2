@@ -41,4 +41,9 @@ public class TrafficDataAnalyzer implements TrafficDataAnalyzerRemote {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+
+    @Override
+    public String getProjectName() {
+        return "Verkeer-2";
+    }
 }

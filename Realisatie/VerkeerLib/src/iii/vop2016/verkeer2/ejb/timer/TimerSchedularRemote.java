@@ -12,8 +12,8 @@ import javax.ejb.Remote;
  * @author tobia
  */
 @Remote
-public interface TimerSchedularRemote {
+public interface TimerSchedularRemote extends ITimer{
 
-    void Tick();
+
     
 }

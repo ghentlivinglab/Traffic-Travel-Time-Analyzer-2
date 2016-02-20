@@ -5,9 +5,9 @@
  */
 package iii.vop2016.verkeer2.ejb.timer;
 
+import iii.vop2016.verkeer2.ejb.datamanager.ITrafficDataManager;
 import iii.vop2016.verkeer2.ejb.datamanager.TrafficDataManagerRemote;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
-import iii.vop2016.verkeer2.ejb.helper.BeanSelector;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -83,7 +83,7 @@ public class TimerSchedular implements TimerSchedularRemote {
 
         //Create timer with specified interval
         ticks=0;
-        t = ctxs.getTimerService().createIntervalTimer(0, 60000, new TimerConfig());
+        t = ctxs.getTimerService().createIntervalTimer(1000, 60000, new TimerConfig());
     }
 
     /**
@@ -95,7 +95,7 @@ public class TimerSchedular implements TimerSchedularRemote {
         int currentTime = getIndexedCurrentTime();
         
         if(ticks == interval){
-            ticks = 0;
+            ticks = 1;
             DoTick();
         }else{
             ticks++;
@@ -107,7 +107,7 @@ public class TimerSchedular implements TimerSchedularRemote {
             DoTick();
             
             interval = i;
-            ticks = 0;
+            ticks = 1;
             Logger.getGlobal().log(Level.INFO, "Interval for Timer set to " + interval);
         }
 
@@ -157,7 +157,7 @@ public class TimerSchedular implements TimerSchedularRemote {
 
     private void DoTick() {     
         //lookup datamanager bean and trigger timed function
-        TrafficDataManagerRemote managementBean = (TrafficDataManagerRemote) beans.getDataManager();
+        ITrafficDataManager managementBean = beans.getDataManager();
         if (managementBean != null) {
             System.out.println("Tick Tick It's me");
             managementBean.downloadNewData();

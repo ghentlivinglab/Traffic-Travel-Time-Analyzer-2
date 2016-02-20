@@ -17,8 +17,6 @@ import javax.naming.NamingException;
  * @author Tobias
  */
 public class HelperFunctions {
-    
-    
 
     /**
      * Retrieve a properties file located in the JNDI resources. (Heavy
@@ -48,6 +46,7 @@ public class HelperFunctions {
 
     /**
      * Retrieve the beanType according to the provided property file
+     *
      * @param beanProperties property file to retrieve JNDI for beans
      * @param bean selection what beantype to get
      * @param ctx SessionContext of the bean
@@ -58,41 +57,104 @@ public class HelperFunctions {
         if (beanProperties == null) {
             return null;
         }
-        
+
         String jndi = beanProperties.getProperty(bean.toString());
-        if(jndi == null || jndi.equals("")){
+        if (jndi == null || jndi.equals("")) {
             logger.log(Level.SEVERE, "Bean REFERENCE in property file not found (" + jndi + ")");
             return null;
         }
-        
+
         Object obj = ctx.lookup(jndi);
-        if(obj == null){
+        if (obj == null) {
             logger.log(Level.SEVERE, "BEAN not found (" + jndi + ")");
             return null;
         }
-        
-        return obj;  
+
+        return obj;
     }
-    
-     /**
+
+    /**
+     * Retrieve the beanType according to the provided property file
+     *
+     * @param beanProperties property file to retrieve JNDI for beans
+     * @param bean selection what beantype to get
+     * @param ctx InitialContext of the bean
+     * @param logger A logger to log error. When in doubt use Logger.getGlobal()
+     * @return The requested bean (needs casting)
+     */
+    public static Object getBean(Properties beanProperties, BeanSelector bean, InitialContext ctx, Logger logger) {
+
+        if (beanProperties == null) {
+            return null;
+        }
+
+        String jndi = beanProperties.getProperty(bean.toString());
+        if (jndi == null || jndi.equals("")) {
+            logger.log(Level.SEVERE, "Bean REFERENCE in property file not found (" + jndi + ")");
+            return null;
+        }
+        try {
+            Object obj = ctx.lookup(jndi);
+            if (obj == null) {
+                logger.log(Level.SEVERE, "BEAN not found (" + jndi + ")");
+                return null;
+            }
+
+            return obj;
+        } catch (NamingException ex) {
+            logger.log(Level.SEVERE, "BEAN not found (" + jndi + ")");
+        }
+        return null;
+    }
+
+    /**
      * Retrieve the beanType according to the provided JNDI name
+     *
      * @param jndi The jndi name that represents the bean.
      * @param ctx SessionContext of the bean
      * @param logger A logger to log error. When in doubt use Logger.getGlobal()
      * @return The requested bean (needs casting)
      */
     public static Object getBean(String jndi, SessionContext ctx, Logger logger) {
-        if(jndi == null || jndi.equals("")){
+        if (jndi == null || jndi.equals("")) {
             logger.log(Level.SEVERE, "Jndi not valid (" + jndi + ")");
             return null;
         }
-        
+
         Object obj = ctx.lookup(jndi);
-        if(obj == null){
+        if (obj == null) {
             logger.log(Level.SEVERE, "BEAN not found (" + jndi + ")");
             return null;
         }
-        
-        return obj;  
+
+        return obj;
+    }
+
+    /**
+     * Retrieve the beanType according to the provided JNDI name
+     *
+     * @param jndi The jndi name that represents the bean.
+     * @param ctx SessionContext of the bean
+     * @param logger A logger to log error. When in doubt use Logger.getGlobal()
+     * @return The requested bean (needs casting)
+     */
+    public static Object getBean(String jndi, InitialContext ctx, Logger logger) {
+        if (jndi == null || jndi.equals("")) {
+            logger.log(Level.SEVERE, "Jndi not valid (" + jndi + ")");
+            return null;
+        }
+
+        Object obj = null;
+        try {
+            obj = ctx.lookup(jndi);
+
+            if (obj == null) {
+                logger.log(Level.SEVERE, "BEAN not found (" + jndi + ")");
+                return null;
+            }
+        } catch (NamingException ex) {
+            logger.log(Level.SEVERE, "BEAN not found (" + jndi + ")");
+        }
+        return obj;
     }
 }

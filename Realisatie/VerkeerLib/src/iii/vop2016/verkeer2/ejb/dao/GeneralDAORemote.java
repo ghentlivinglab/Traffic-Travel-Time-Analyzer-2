@@ -12,6 +12,6 @@ import javax.ejb.Remote;
  * @author tobia
  */
 @Remote
-public interface GeneralDAORemote {
+public interface GeneralDAORemote extends IGeneralDAO{
     
 }

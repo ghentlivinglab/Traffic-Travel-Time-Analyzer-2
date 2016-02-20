@@ -12,8 +12,8 @@ import javax.ejb.Remote;
  * @author tobia
  */
 @Remote
-public interface TrafficDataManagerRemote {
+public interface TrafficDataManagerRemote extends  ITrafficDataManager{
     
-    public void downloadNewData();
+    
     
 }
