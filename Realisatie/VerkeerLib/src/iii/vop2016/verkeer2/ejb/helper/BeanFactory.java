@@ -48,11 +48,13 @@ public class BeanFactory {
     private ITimer timer = null;
     private List<ISourceAdapter> adapters = null;
 
-    private BeanFactory(InitialContext ctx, SessionContext sctx) {
+    protected BeanFactory(InitialContext ctx, SessionContext sctx) {
         this.ctx = ctx;
         this.sctx = sctx;
-        beanProperties = HelperFunctions.RetrievePropertyFile(JNDILOOKUP_BEANFILE, ctx, Logger.getGlobal());
-        sourceAdaptorsProperties = HelperFunctions.RetrievePropertyFile(JNDILOOKUP_SOURCEADAPORTSFILE, ctx, Logger.getGlobal());
+        if (ctx != null) {
+            beanProperties = HelperFunctions.RetrievePropertyFile(JNDILOOKUP_BEANFILE, ctx, Logger.getGlobal());
+            sourceAdaptorsProperties = HelperFunctions.RetrievePropertyFile(JNDILOOKUP_SOURCEADAPORTSFILE, ctx, Logger.getGlobal());
+        }
     }
 
     public IAnalyzer getAnalyzer() {
