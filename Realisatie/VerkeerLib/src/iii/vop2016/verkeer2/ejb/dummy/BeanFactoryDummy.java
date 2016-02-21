@@ -12,6 +12,7 @@ import iii.vop2016.verkeer2.ejb.datamanager.ITrafficDataManager;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.provider.ISourceAdapter;
 import iii.vop2016.verkeer2.ejb.timer.ITimer;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,27 +35,29 @@ public class BeanFactoryDummy extends BeanFactory{
 
     @Override
     public IAnalyzer getAnalyzer() {
-        return super.getAnalyzer(); //To change body of generated methods, choose Tools | Templates.
+        return new TrafficDataAnalyzerDummy();
     }
 
     @Override
     public ITrafficDataDAO getDataDAO() {
-        return super.getDataDAO(); //To change body of generated methods, choose Tools | Templates.
+        return new TrafficDataDAODummy();
     }
 
     @Override
     public ITrafficDataManager getDataManager() {
-        return super.getDataManager(); //To change body of generated methods, choose Tools | Templates.
+        return new TrafficDataManagerDummy();
     }
 
     @Override
     public IGeneralDAO getGeneralDAO() {
-        return super.getGeneralDAO(); //To change body of generated methods, choose Tools | Templates.
+        return new GeneralDAODummy();
     }
 
     @Override
     public List<ISourceAdapter> getSourceAdaptors() {
-        return super.getSourceAdaptors(); //To change body of generated methods, choose Tools | Templates.
+        List<ISourceAdapter> l = new ArrayList<>();
+        l.add(new SourceAdapterDummy());
+        return l;
     }
 
     @Override

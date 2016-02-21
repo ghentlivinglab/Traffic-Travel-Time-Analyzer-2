@@ -5,6 +5,7 @@
  */
 package iii.vop2016.verkeer2.ejb.timer;
 
+import com.sun.faces.facelets.util.DevTools;
 import iii.vop2016.verkeer2.ejb.datamanager.ITrafficDataManager;
 import iii.vop2016.verkeer2.ejb.datamanager.TrafficDataManagerRemote;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
@@ -37,28 +38,27 @@ import javax.naming.NamingException;
 public class TimerSchedular implements TimerSchedularRemote {
 
     @Resource
-    private SessionContext ctxs;
+    protected SessionContext ctxs;
 
-    private Timer t;
-    private int ticks;
-    private int interval;
-    private SimpleDateFormat sdf = new SimpleDateFormat("HHmm");
-    private Pattern timeFormat = Pattern.compile("([0-9]{2})-([0-9]{2})");
-    private static final int DEFAULTINTERVAL = 5;
+    protected Timer t;
+    protected int ticks;
+    protected int interval;
+    protected SimpleDateFormat sdf = new SimpleDateFormat("HHmm");
+    protected Pattern timeFormat = Pattern.compile("([0-9]{2})-([0-9]{2})");
+    protected static final int DEFAULTINTERVAL = 5;
 
-    private Pattern numberFormat = Pattern.compile("\\d+");
+    protected Pattern numberFormat = Pattern.compile("\\d+");
 
-    private InitialContext ctx;
-    private static final String JNDILOOKUP_PROPERTYFILE = "resources/properties/TimerScheduler";
-    private Properties properties;
+    protected InitialContext ctx;
+    protected static final String JNDILOOKUP_PROPERTYFILE = "resources/properties/TimerScheduler";
+    protected Properties properties;
     
-    private BeanFactory beans;
+    protected BeanFactory beans;
 
     /**
      * Constructor
      */
     public TimerSchedular() {
-
     }
 
     @PostConstruct
