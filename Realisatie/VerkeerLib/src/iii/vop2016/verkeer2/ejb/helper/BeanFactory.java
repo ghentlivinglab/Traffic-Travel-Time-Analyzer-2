@@ -14,6 +14,7 @@ import iii.vop2016.verkeer2.ejb.timer.ITimer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.SessionContext;
 import javax.naming.InitialContext;
@@ -31,7 +32,12 @@ public class BeanFactory {
 
     public static BeanFactory getInstance(InitialContext ctx, SessionContext sctx) {
         if (instance == null) {
-            instance = new BeanFactory(ctx, sctx);
+            try {
+                instance = new BeanFactory(ctx, sctx);
+            } catch (ResourceFileMissingExcepion ex) {
+                Logger.getLogger(BeanFactory.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printSolution();
+            }
         }
         return instance;
     }
@@ -48,12 +54,19 @@ public class BeanFactory {
     private ITimer timer = null;
     private List<ISourceAdapter> adapters = null;
 
-    protected BeanFactory(InitialContext ctx, SessionContext sctx) {
+    protected BeanFactory(InitialContext ctx, SessionContext sctx) throws ResourceFileMissingExcepion {
         this.ctx = ctx;
         this.sctx = sctx;
         if (ctx != null) {
             beanProperties = HelperFunctions.RetrievePropertyFile(JNDILOOKUP_BEANFILE, ctx, Logger.getGlobal());
             sourceAdaptorsProperties = HelperFunctions.RetrievePropertyFile(JNDILOOKUP_SOURCEADAPORTSFILE, ctx, Logger.getGlobal());
+        }
+
+        if (beanProperties == null) {
+            throw new ResourceFileMissingExcepion(JNDILOOKUP_BEANFILE);
+        }
+        if (sourceAdaptorsProperties == null) {
+            throw new ResourceFileMissingExcepion(JNDILOOKUP_SOURCEADAPORTSFILE);
         }
     }
 

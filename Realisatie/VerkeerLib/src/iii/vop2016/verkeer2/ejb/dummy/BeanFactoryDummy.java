@@ -10,10 +10,13 @@ import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
 import iii.vop2016.verkeer2.ejb.datamanager.ITrafficDataManager;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
+import iii.vop2016.verkeer2.ejb.helper.ResourceFileMissingExcepion;
 import iii.vop2016.verkeer2.ejb.provider.ISourceAdapter;
 import iii.vop2016.verkeer2.ejb.timer.ITimer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -21,7 +24,7 @@ import java.util.List;
  */
 public class BeanFactoryDummy extends BeanFactory{
     
-    private BeanFactoryDummy() {
+    private BeanFactoryDummy() throws ResourceFileMissingExcepion {
         super(null,null);
     }
     
@@ -29,7 +32,11 @@ public class BeanFactoryDummy extends BeanFactory{
     
     public static BeanFactoryDummy getInstance() {
         if(INSTANCE== null)
-            INSTANCE = new BeanFactoryDummy();
+            try {
+                INSTANCE = new BeanFactoryDummy();
+        } catch (ResourceFileMissingExcepion ex) {
+            Logger.getLogger(BeanFactoryDummy.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return INSTANCE;
     }
 
