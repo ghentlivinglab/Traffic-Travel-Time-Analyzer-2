@@ -18,7 +18,7 @@ import javax.ejb.Singleton;
 public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
 
     @Override
-    public Future<IRouteData> parse(IRoute route) {
+    public IRouteData parse(IRoute route) {
         return null;
     }
 

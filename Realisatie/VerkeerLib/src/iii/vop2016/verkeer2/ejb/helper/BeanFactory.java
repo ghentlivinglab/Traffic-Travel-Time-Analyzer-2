@@ -80,7 +80,7 @@ public class BeanFactory {
                 dataManager = (ITrafficDataManager) obj;
             }
         }
-        if (dataManager == null && sctx == null) {
+        if (dataManager == null && ctx == null) {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.dataManager, ctx, Logger.getGlobal());
             if (obj instanceof ITrafficDataManager) {
                 dataManager = (ITrafficDataManager) obj;

@@ -17,7 +17,7 @@ import java.util.concurrent.Future;
 public class SourceAdapterDummy implements ISourceAdapter{
 
     @Override
-    public Future<IRouteData> parse(IRoute route) {
+    public IRouteData parse(IRoute route) {
         return null;
     }
     

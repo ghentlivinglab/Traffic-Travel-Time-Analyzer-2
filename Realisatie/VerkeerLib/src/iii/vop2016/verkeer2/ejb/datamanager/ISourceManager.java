@@ -16,6 +16,6 @@ import java.util.concurrent.Future;
  */
 public interface ISourceManager {
     
-    public List<Future<IRouteData>> parse(IRoute route);
+    public List<IRouteData> parse(IRoute route);
     
 }
