@@ -20,9 +20,13 @@ public interface IRoute {
     public IGeoLocation getStartLocation();
     public IGeoLocation getEndLocation();
     
+    public void setId(Long id);
     public void setName(String name);
     public void setInverseRoute(IRoute route);
     public void setGeoLocations(IGeoLocation location);
+    
+    
+    
     public void addGeolocation(IGeoLocation location); 
     public void addGeolocation(IGeoLocation location, int i); //i = rank, same counting method as ArrayList
     public void removeGeoLocation(IGeoLocation location);
