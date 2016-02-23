@@ -9,6 +9,8 @@ import iii.vop2016.verkeer2.ejb.components.IRoute;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Singleton;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  *
@@ -17,6 +19,13 @@ import javax.ejb.Singleton;
 @Singleton
 public class GeneralDAO implements GeneralDAORemote {
 
+    private EntityManagerFactory emFactory;
+            
+    public GeneralDAO(){
+        emFactory = Persistence.createEntityManagerFactory("BoekenPU");
+    }
+    
+    
     @Override
     public List<IRoute> getRoutes() {
         return new ArrayList<>();

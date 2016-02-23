@@ -7,7 +7,7 @@ package iii.vop2016.verkeer2.ejb.datamanager;
 
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
-import iii.vop2016.verkeer2.ejb.components.Route;
+import iii.vop2016.verkeer2.ejb.dao.Route;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.provider.ISourceAdapter;
 import java.util.ArrayList;
