@@ -43,5 +43,12 @@ public class TrafficDataDAODummy implements ITrafficDataDAO{
     public void addData(IRouteData data) {
         
     }
+
+    @Override
+    public void addData(List<IRouteData> allData) {
+        for(IRouteData data : allData){
+            addData(data);
+        }
+    }
     
 }

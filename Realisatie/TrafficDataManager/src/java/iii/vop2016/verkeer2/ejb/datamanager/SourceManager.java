@@ -100,7 +100,7 @@ public class SourceManager implements ISourceManager{
                 }
                 //System.out.println("Waiting for other tasks to complete");
             }catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+                Logger.getGlobal().log(Level.SEVERE, "Exception thrown caused by InterruptException or ExecutionException of a thread.");
             }
         }
         

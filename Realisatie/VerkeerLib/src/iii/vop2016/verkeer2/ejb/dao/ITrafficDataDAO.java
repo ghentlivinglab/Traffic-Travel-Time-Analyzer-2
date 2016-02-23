@@ -22,6 +22,7 @@ public interface ITrafficDataDAO {
     public List<IRouteData> getData(ISourceAdapter adapter);
     public List<IRouteData> getData(Date time1, Date time2);
     public void addData(IRouteData data);
+    public void addData(List<IRouteData> data);
     
     
     

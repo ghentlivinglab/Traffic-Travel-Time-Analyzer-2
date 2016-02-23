@@ -10,5 +10,5 @@ package iii.vop2016.verkeer2.ejb.helper;
  * @author Tobias
  */
 public enum BeanSelector {
-    analyzer,dataManager,dataDAO,generalDAO,Timer
+    analyzer,dataManager,dataDAO,generalDAO,trafficDataDAO,Timer
 }

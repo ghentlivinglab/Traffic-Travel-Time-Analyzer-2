@@ -7,7 +7,8 @@ package iii.vop2016.verkeer2.ejb.datamanager;
 
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
-import iii.vop2016.verkeer2.ejb.dao.Route;
+import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
+import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.provider.ISourceAdapter;
 import java.util.ArrayList;
@@ -45,6 +46,9 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
     private BeanFactory beanFactory;
     private ISourceManager sourceManager;
     
+    private IGeneralDAO generalDAO;
+    private ITrafficDataDAO trafficDataDAO;
+    
     public TrafficDataManager(){
         
     }
@@ -56,11 +60,19 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
         Logger.getGlobal().log(Level.INFO, "TrafficDataManager init...");
         
          //Initialize bean and its context
+        //Initialize bean and its context
         try {
             ctx = new InitialContext();
         } catch (NamingException ex) {
-            Logger.getLogger(TrafficDataManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SourceManager.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        beanFactory = BeanFactory.getInstance(ctx, ctxs);
+        
+        generalDAO = beanFactory.getGeneralDAO();
+        trafficDataDAO = beanFactory.getTrafficDataDAO();
+        
+        
         sourceManager = new SourceManager();
         
         Logger.getGlobal().log(Level.INFO, "TrafficDataManager has been initialized.");
@@ -72,12 +84,15 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
     public void downloadNewData() {
         
         //Ophalen van alle routes
-        //dataManager de nodige calls laten doen voor de desbetreffende routes
-        
-        IRoute route = new Route();
-        List<IRouteData> data = sourceManager.parse(route);
-        
-        //opslaan van de verkregen data
+        List<IRoute> routes = generalDAO.getRoutes();
+
+        List<IRouteData> data;
+        for(IRoute route : routes){
+            //opvragen van de data
+             data = sourceManager.parse(route);
+             //opslaan van de verkregen data
+             trafficDataDAO.addData(data);
+        }
         
         
     }
