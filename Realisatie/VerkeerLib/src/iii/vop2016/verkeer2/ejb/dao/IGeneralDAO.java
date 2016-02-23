@@ -5,10 +5,18 @@
  */
 package iii.vop2016.verkeer2.ejb.dao;
 
+import iii.vop2016.verkeer2.ejb.components.IRoute;
+import java.util.List;
+
 /**
  *
  * @author tobia
  */
 public interface IGeneralDAO{
+    
+    public List<IRoute> getRoutes();
+    public IRoute getRoute(String name);
+    public void addRoute(IRoute route);
+    public void removeRoute(IRoute route);
     
 }
