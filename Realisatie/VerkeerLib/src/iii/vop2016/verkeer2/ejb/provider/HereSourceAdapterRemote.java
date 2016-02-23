@@ -12,6 +12,6 @@ import javax.ejb.Remote;
  * @author Simon
  */
 @Remote
-public interface HereSourceAdapterRemote extends ISourceAdapter {
+public interface HereSourceAdapterRemote extends ISourceAdapter{
     
 }
