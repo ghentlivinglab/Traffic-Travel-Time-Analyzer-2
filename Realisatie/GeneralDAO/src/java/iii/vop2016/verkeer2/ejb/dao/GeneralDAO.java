@@ -22,7 +22,7 @@ public class GeneralDAO implements GeneralDAORemote {
     private EntityManagerFactory emFactory;
             
     public GeneralDAO(){
-        emFactory = Persistence.createEntityManagerFactory("BoekenPU");
+        emFactory = Persistence.createEntityManagerFactory("GeneralDBPU");
     }
     
     
