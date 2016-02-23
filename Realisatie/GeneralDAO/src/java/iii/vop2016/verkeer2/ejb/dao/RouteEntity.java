@@ -10,10 +10,13 @@ import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.Route;
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 /**
@@ -23,27 +26,23 @@ import javax.persistence.Transient;
 @Entity
 public class RouteEntity implements Serializable, IRoute {
 
-    
     private IRoute component;
-    
-    private static final long serialVersionUID = 1L;
-    
-    
-    public RouteEntity(){
+
+    public RouteEntity() {
         component = new Route();
     }
-    
-    public RouteEntity(IRoute component){
+
+    public RouteEntity(IRoute component) {
         this.component = component;
     }
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long getId() {
+    public long getId() {
         return component.getId();
     }
-
-    public void setId(Long id) {
+    
+    public void setId(long id) {
         component.setId(id);
     }
 
@@ -51,7 +50,6 @@ public class RouteEntity implements Serializable, IRoute {
     public IRoute getComponent() {
         return component;
     }
-
 
     @Override
     public String getName() {
@@ -91,13 +89,13 @@ public class RouteEntity implements Serializable, IRoute {
     }
 
     @Override
-    public void setGeoLocations(IGeoLocation location) {
-        this.component.setGeoLocations(location);
+    public void setGeoLocations(List<IGeoLocation> locations) {
+        this.component.setGeoLocations(locations);
     }
 
     @Override
     public void addGeolocation(IGeoLocation location) {
-         this.component.addGeolocation(location);
+        this.component.addGeolocation(location);
     }
 
     @Override
@@ -109,9 +107,7 @@ public class RouteEntity implements Serializable, IRoute {
     public void removeGeoLocation(IGeoLocation location) {
         this.component.removeGeoLocation(location);
     }
-    
-    
-    
+
     @Override
     public int hashCode() {
         Long id = getId();
@@ -128,9 +124,9 @@ public class RouteEntity implements Serializable, IRoute {
             return false;
         }
         RouteEntity other = (RouteEntity) object;
-        if ((getId() == null && other.getId() != null) || (id != null && !id.equals(other.getId()))) {
-            return false;
-        }
+        //if ((getId() == null && other.getId() != null) || (id != null && !id.equals(other.getId()))) {
+        //    return false;
+        //}
         return true;
     }
 
@@ -138,5 +134,5 @@ public class RouteEntity implements Serializable, IRoute {
     public String toString() {
         return "iii.vop2016.verkeer2.ejb.dao.RouteEntity[ id=" + getId() + " ]";
     }
-    
+
 }

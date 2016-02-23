@@ -6,7 +6,11 @@
 package iii.vop2016.verkeer2.war.rest;
 
 import iii.vop2016.verkeer2.ejb.analyzer.IAnalyzer;
+import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
+import iii.vop2016.verkeer2.ejb.components.IRoute;
+import iii.vop2016.verkeer2.ejb.components.Route;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -65,6 +69,19 @@ public class RoutesResource {
     @Produces("application/xml")
     public String getXml() {
         IAnalyzer analyzer = beans.getAnalyzer();
+        
+        IRoute r = new Route();
+        r.setName("test");
+        r.setGeoLocations(new ArrayList<IGeoLocation>());
+        r.setInverseRoute(r);
+        
+        IRoute r2 = new Route();
+        r2.setName("test2");
+        r2.setGeoLocations(new ArrayList<IGeoLocation>());
+        r2.setInverseRoute(r);
+        
+        analyzer.addRoute(r);
+        analyzer.addRoute(r2);
         //TODO return proper representation object
         return "<test>"+analyzer.getProjectName()+"</test>";
     }

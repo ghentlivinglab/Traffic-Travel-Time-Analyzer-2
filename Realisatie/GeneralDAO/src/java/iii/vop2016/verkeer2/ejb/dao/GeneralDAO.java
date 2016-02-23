@@ -8,8 +8,11 @@ package iii.vop2016.verkeer2.ejb.dao;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 /**
@@ -22,6 +25,11 @@ public class GeneralDAO implements GeneralDAORemote {
     private EntityManagerFactory emFactory;
             
     public GeneralDAO(){
+        
+    }
+    
+    @PostConstruct
+    public void init(){
         emFactory = Persistence.createEntityManagerFactory("GeneralDBPU");
     }
     
@@ -38,7 +46,18 @@ public class GeneralDAO implements GeneralDAORemote {
 
     @Override
     public void addRoute(IRoute route) {
-        
+        EntityManager manager = emFactory.createEntityManager();
+        EntityTransaction tr = manager.getTransaction();
+        tr.begin();
+        try{
+            manager.persist(new RouteEntity(route));
+            tr.commit();
+        }catch(Exception e){
+            e.printStackTrace();
+            tr.rollback();
+        }finally{
+            manager.close();
+        }
     }
 
     @Override

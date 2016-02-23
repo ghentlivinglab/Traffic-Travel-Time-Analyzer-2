@@ -13,17 +13,17 @@ import java.util.List;
  */
 public interface IRoute {
     
-    public Long getId();
+    public long getId();
     public String getName();
     public IRoute getInverseRoute();
     public List<IGeoLocation> getGeolocations();
     public IGeoLocation getStartLocation();
     public IGeoLocation getEndLocation();
     
-    public void setId(Long id);
+    public void setId(long id);
     public void setName(String name);
     public void setInverseRoute(IRoute route);
-    public void setGeoLocations(IGeoLocation location);
+    public void setGeoLocations(List<IGeoLocation> locations);
     
     
     

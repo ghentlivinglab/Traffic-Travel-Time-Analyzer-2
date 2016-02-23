@@ -72,7 +72,7 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
         generalDAO = beanFactory.getGeneralDAO();
         trafficDataDAO = beanFactory.getTrafficDataDAO();
         
-        
+
         sourceManager = new SourceManager();
         
         Logger.getGlobal().log(Level.INFO, "TrafficDataManager has been initialized.");

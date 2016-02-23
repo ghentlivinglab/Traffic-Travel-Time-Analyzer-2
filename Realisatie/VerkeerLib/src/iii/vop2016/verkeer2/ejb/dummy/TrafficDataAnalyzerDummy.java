@@ -6,6 +6,7 @@
 package iii.vop2016.verkeer2.ejb.dummy;
 
 import iii.vop2016.verkeer2.ejb.analyzer.IAnalyzer;
+import iii.vop2016.verkeer2.ejb.components.IRoute;
 
 /**
  *
@@ -16,6 +17,11 @@ public class TrafficDataAnalyzerDummy implements IAnalyzer{
     @Override
     public String getProjectName() {
         return "Dummy";
+    }
+
+    @Override
+    public boolean addRoute(IRoute route) {
+        return true;
     }
     
 }

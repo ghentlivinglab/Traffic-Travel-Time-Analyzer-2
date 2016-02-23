@@ -5,6 +5,7 @@
  */
 package iii.vop2016.verkeer2.ejb.analyzer;
 
+import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,5 +46,11 @@ public class TrafficDataAnalyzer implements TrafficDataAnalyzerRemote {
     @Override
     public String getProjectName() {
         return "Verkeer-2";
+    }
+
+    @Override
+    public boolean addRoute(IRoute route) {
+        beans.getGeneralDAO().addRoute(route);
+        return true;
     }
 }

@@ -5,10 +5,13 @@
  */
 package iii.vop2016.verkeer2.ejb.analyzer;
 
+import iii.vop2016.verkeer2.ejb.components.IRoute;
+
 /**
  *
  * @author tobia
  */
 public interface IAnalyzer {
     String getProjectName();
+    boolean addRoute(IRoute route);
 }

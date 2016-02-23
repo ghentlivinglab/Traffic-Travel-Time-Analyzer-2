@@ -13,69 +13,80 @@ import java.util.List;
  */
 public class Route implements IRoute{
 
+    private String name;
+    private long id;
+    private IRoute inv;
+    private List<IGeoLocation> geolocations;
+
+    public Route() {
+        id = 0;
+    }
+    
+    
+    
     @Override
-    public Long getId() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public long getId() {
+        return id;
     }
 
     @Override
     public String getName() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return name;
     }
 
     @Override
     public IRoute getInverseRoute() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return inv;
     }
 
     @Override
     public List<IGeoLocation> getGeolocations() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return geolocations;
     }
 
     @Override
     public IGeoLocation getStartLocation() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
     }
 
     @Override
     public IGeoLocation getEndLocation() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
     }
 
     @Override
     public void setName(String name) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.name = name;
     }
 
     @Override
     public void setInverseRoute(IRoute route) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        inv = route;
     }
 
     @Override
-    public void setGeoLocations(IGeoLocation location) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void setGeoLocations(List<IGeoLocation> locations) {
+        geolocations = locations;
     }
 
     @Override
     public void addGeolocation(IGeoLocation location) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        geolocations.add(location);
     }
 
     @Override
     public void addGeolocation(IGeoLocation location, int i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        geolocations.add(i,location);
     }
 
     @Override
     public void removeGeoLocation(IGeoLocation location) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        geolocations.remove(location);
     }
 
     @Override
-    public void setId(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void setId(long id) {
+        this.id = id;
     }
     
 }
