@@ -37,10 +37,9 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
     
     
     @Override
-<<<<<<< Updated upstream
+
     public IRouteData parse(IRoute route) {
-=======
-    public Future<IRouteData> parse(IRoute route) {
+
         
         int duration=0;
         int distance=0;
@@ -105,7 +104,6 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
         
         //what to do when status is not ok?
         
->>>>>>> Stashed changes
         return null;
     }
     
