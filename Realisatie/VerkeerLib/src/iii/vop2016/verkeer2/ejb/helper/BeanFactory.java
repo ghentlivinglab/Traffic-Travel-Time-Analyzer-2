@@ -78,7 +78,7 @@ public class BeanFactory {
                 analyzer = (IAnalyzer) obj;
             }
         }
-        if (analyzer == null && ctx == null) {
+        if (analyzer == null && sctx == null) {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.analyzer, ctx, Logger.getGlobal());
             if (obj instanceof IAnalyzer) {
                 analyzer = (IAnalyzer) obj;
@@ -94,7 +94,7 @@ public class BeanFactory {
                 dataManager = (ITrafficDataManager) obj;
             }
         }
-        if (dataManager == null && ctx == null) {
+        if (dataManager == null && sctx == null) {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.dataManager, ctx, Logger.getGlobal());
             if (obj instanceof ITrafficDataManager) {
                 dataManager = (ITrafficDataManager) obj;
@@ -110,7 +110,7 @@ public class BeanFactory {
                 dataDAO = (ITrafficDataDAO) obj;
             }
         }
-        if (dataDAO == null && ctx == null) {
+        if (dataDAO == null && sctx == null) {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.dataDAO, ctx, Logger.getGlobal());
             if (obj instanceof ITrafficDataDAO) {
                 dataDAO = (ITrafficDataDAO) obj;
@@ -126,7 +126,7 @@ public class BeanFactory {
                 timer = (ITimer) obj;
             }
         }
-        if (timer == null && ctx == null) {
+        if (timer == null && sctx == null) {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.Timer, ctx, Logger.getGlobal());
             if (obj instanceof ITimer) {
                 timer = (ITimer) obj;
@@ -142,7 +142,7 @@ public class BeanFactory {
                 generalDAO = (IGeneralDAO) obj;
             }
         }
-        if (generalDAO == null && ctx == null) {
+        if (generalDAO == null && sctx == null) {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.generalDAO, ctx, Logger.getGlobal());
             if (obj instanceof IGeneralDAO) {
                 generalDAO = (IGeneralDAO) obj;
@@ -158,7 +158,7 @@ public class BeanFactory {
                 trafficDataDAO = (ITrafficDataDAO) obj;
             }
         }
-        if (generalDAO == null && ctx == null) {
+        if (generalDAO == null && sctx == null) {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.trafficDataDAO, ctx, Logger.getGlobal());
             if (obj instanceof ITrafficDataDAO) {
                 trafficDataDAO = (ITrafficDataDAO) obj;

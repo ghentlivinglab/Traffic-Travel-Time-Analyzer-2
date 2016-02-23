@@ -23,9 +23,9 @@
     </web>
   </module>
   <module>
-    <ejb>GoogleMapsSourceAdapter.jar</ejb>
+    <ejb>HereSourceAdapter.jar</ejb>
   </module>
   <module>
-    <ejb>HereSourceAdapter.jar</ejb>
+    <ejb>GoogleMapsSourceAdapter.jar</ejb>
   </module>
 </application>
