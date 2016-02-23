@@ -25,4 +25,7 @@
   <module>
     <ejb>GoogleMapsSourceAdapter.jar</ejb>
   </module>
+  <module>
+    <ejb>HereSourceAdapter.jar</ejb>
+  </module>
 </application>
