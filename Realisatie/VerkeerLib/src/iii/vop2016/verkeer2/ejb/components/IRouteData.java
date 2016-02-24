@@ -14,8 +14,7 @@ import java.util.Date;
 public interface IRouteData {
     
     
-    public int getId();
-    public int getRoute();
+    public IRoute getRoute();
     public int getDuration();
     public int getDistance();
     public Date getTimestamp();
