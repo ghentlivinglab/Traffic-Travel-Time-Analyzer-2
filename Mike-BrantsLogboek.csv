@@ -12,3 +12,4 @@ Datum,Start,Einde,Plaats,Categorie,Omschrijving,Issue #,Opmerkingen
 22/02/16,15:30,17:52,Thuis,Projectwerk,Opzoeken informatie ivm conccurency in JAVA EE. Coderen DataManager. Aanpassen SourceAdapater-interface.,,
 23/02/16,08:15,12:30,School,Projectwerk,DAO's + Persistence JPA + samenvoegen project + oplossen problemen git,,
 23/02/16,16:30,17:30,Thuis,Projectwerk,DAO's + Persistence JPA,,
+24/02/16,21:00,23:00,Thuis,Projectwerk,Making Persistance Unit work. Add GeoLocationEntity.,,

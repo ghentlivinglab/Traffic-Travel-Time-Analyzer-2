@@ -23,7 +23,7 @@ public interface IRoute {
     public void setId(long id);
     public void setName(String name);
     public void setInverseRoute(IRoute route);
-    public void setGeoLocations(List<IGeoLocation> locations);
+    public void setGeolocations(List<IGeoLocation> locations);
     
     
     

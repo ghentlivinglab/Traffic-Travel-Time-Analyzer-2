@@ -9,14 +9,19 @@ import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.Route;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 /**
@@ -24,6 +29,7 @@ import javax.persistence.Transient;
  * @author Mike
  */
 @Entity
+@Table(name="routes")
 public class RouteEntity implements Serializable, IRoute {
 
     private IRoute component;
@@ -36,6 +42,9 @@ public class RouteEntity implements Serializable, IRoute {
         this.component = component;
     }
 
+    
+    
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long getId() {
@@ -45,26 +54,53 @@ public class RouteEntity implements Serializable, IRoute {
     public void setId(long id) {
         component.setId(id);
     }
+       
 
-    @Transient
-    public IRoute getComponent() {
-        return component;
-    }
-
+    
+    
+    
+    
     @Override
     public String getName() {
         return this.component.getName();
     }
+    
+    @Override
+    public void setName(String name) {
+        component.setName(name);
+    }
 
+    
+    
+    
     @Override
     public IRoute getInverseRoute() {
         return this.getInverseRoute();
     }
+    
+    @Override
+    public void setInverseRoute(IRoute route) {
+        this.component.setInverseRoute(route);
+    }
+    
+    
+    
+    
 
     @Override
+    @OneToMany(targetEntity = GeoLocationEntity.class, orphanRemoval=true)
+    @JoinColumn(name="ROUTE_ID") // join column is in table for Order
     public List<IGeoLocation> getGeolocations() {
         return this.component.getGeolocations();
     }
+    
+    @Override
+    public void setGeolocations(List<IGeoLocation> locations) {
+        this.component.setGeolocations(locations);
+    }
+    
+    
+    
 
     @Override
     @Transient
@@ -76,21 +112,6 @@ public class RouteEntity implements Serializable, IRoute {
     @Transient
     public IGeoLocation getEndLocation() {
         return this.getEndLocation();
-    }
-
-    @Override
-    public void setName(String name) {
-        component.setName(name);
-    }
-
-    @Override
-    public void setInverseRoute(IRoute route) {
-        this.component.setInverseRoute(route);
-    }
-
-    @Override
-    public void setGeoLocations(List<IGeoLocation> locations) {
-        this.component.setGeoLocations(locations);
     }
 
     @Override
@@ -134,5 +155,12 @@ public class RouteEntity implements Serializable, IRoute {
     public String toString() {
         return "iii.vop2016.verkeer2.ejb.dao.RouteEntity[ id=" + getId() + " ]";
     }
+    
+    
+    @Transient
+    public IRoute getComponent() {
+        return component;
+    }
+    
 
 }

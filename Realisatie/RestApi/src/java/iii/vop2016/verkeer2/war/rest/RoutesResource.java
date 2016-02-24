@@ -72,12 +72,12 @@ public class RoutesResource {
         
         IRoute r = new Route();
         r.setName("test");
-        r.setGeoLocations(new ArrayList<IGeoLocation>());
+        r.setGeolocations(new ArrayList<IGeoLocation>());
         r.setInverseRoute(r);
         
         IRoute r2 = new Route();
         r2.setName("test2");
-        r2.setGeoLocations(new ArrayList<IGeoLocation>());
+        r2.setGeolocations(new ArrayList<IGeoLocation>());
         r2.setInverseRoute(r);
         
         analyzer.addRoute(r);

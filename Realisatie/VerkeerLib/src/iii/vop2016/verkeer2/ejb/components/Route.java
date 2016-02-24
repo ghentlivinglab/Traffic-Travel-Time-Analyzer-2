@@ -65,7 +65,7 @@ public class Route implements IRoute{
     }
 
     @Override
-    public void setGeoLocations(List<IGeoLocation> locations) {
+    public void setGeolocations(List<IGeoLocation> locations) {
         geolocations = locations;
     }
 
