@@ -13,3 +13,4 @@ Datum,Start,Einde,Plaats,Categorie,Omschrijving,Issue #,Opmerkingen
 23/02/16,08:15,12:30,School,Projectwerk,DAO's + Persistence JPA + samenvoegen project + oplossen problemen git,,
 23/02/16,16:30,17:30,Thuis,Projectwerk,DAO's + Persistence JPA,,
 24/02/16,21:00,23:00,Thuis,Projectwerk,Making Persistance Unit work. Add GeoLocationEntity.,,
+25/02/16,11:00,12:30,School,Projectwerk,Add basic methods in DAOs,,

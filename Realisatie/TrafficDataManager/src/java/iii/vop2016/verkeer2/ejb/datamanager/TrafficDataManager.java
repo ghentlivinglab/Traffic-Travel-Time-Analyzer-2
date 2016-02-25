@@ -5,8 +5,11 @@
  */
 package iii.vop2016.verkeer2.ejb.datamanager;
 
+import iii.vop2016.verkeer2.ejb.components.GeoLocation;
+import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
+import iii.vop2016.verkeer2.ejb.components.Route;
 import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
@@ -75,6 +78,7 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
 
         sourceManager = new SourceManager();
         
+        
         Logger.getGlobal().log(Level.INFO, "TrafficDataManager has been initialized.");
     }
     
@@ -93,11 +97,25 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
              //opslaan van de verkregen data
              trafficDataDAO.addData(data);
         }
-        
-        
+    
     }
 
     
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+
+    @Override
+    public void initRoutes() {
+        IRoute route = new Route("Test route 1");
+        route.setInverseRoute(route);
+        IGeoLocation geolocation = new GeoLocation(50.6565, 51.2566);
+        route.addGeolocation(geolocation);
+        generalDAO.addRoute(route);
+    }
+    
+    
+    
+    
+    
+    
 }

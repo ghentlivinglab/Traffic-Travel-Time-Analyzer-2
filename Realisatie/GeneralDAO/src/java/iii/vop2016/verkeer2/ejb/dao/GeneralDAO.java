@@ -8,6 +8,7 @@ package iii.vop2016.verkeer2.ejb.dao;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
@@ -36,7 +37,22 @@ public class GeneralDAO implements GeneralDAORemote {
     
     @Override
     public List<IRoute> getRoutes() {
-        return new ArrayList<>();
+        EntityManager em = null;
+        List<IRoute> routes = new ArrayList<>();
+        try {
+            em = emFactory.createEntityManager();
+            em.getTransaction().begin();
+            routes = em.createQuery("SELECT r FROM RouteEntity r").getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            Logger logger = Logger.getLogger(this.getClass().getName());
+            logger.severe(e.getMessage());
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return routes;
     }
 
     @Override
@@ -46,17 +62,21 @@ public class GeneralDAO implements GeneralDAORemote {
 
     @Override
     public void addRoute(IRoute route) {
-        EntityManager manager = emFactory.createEntityManager();
-        EntityTransaction tr = manager.getTransaction();
-        tr.begin();
+        EntityManager em = null;
         try{
-            manager.persist(new RouteEntity(route));
-            tr.commit();
+            em = emFactory.createEntityManager();
+            em.getTransaction().begin();
+            em.persist(new RouteEntity(route));
+            em.getTransaction().commit();
         }catch(Exception e){
             e.printStackTrace();
-            tr.rollback();
+            if (em != null) {
+                em.getTransaction().rollback();
+            }
         }finally{
-            manager.close();
+            if (em != null) {
+                em.close();
+            }
         }
     }
 

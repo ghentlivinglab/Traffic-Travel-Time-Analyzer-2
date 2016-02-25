@@ -15,6 +15,14 @@ public class GeoLocation implements IGeoLocation {
     private double latitude;
     private String name;
     
+    public GeoLocation(){
+        
+    }
+    
+    public GeoLocation(double longitude, double latitude){
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
     
     @Override
     public double getLongitude() {

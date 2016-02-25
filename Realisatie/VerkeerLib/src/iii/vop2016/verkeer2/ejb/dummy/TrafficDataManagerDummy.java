@@ -17,5 +17,10 @@ public class TrafficDataManagerDummy implements ITrafficDataManager{
     public void downloadNewData() {
         
     }
+
+    @Override
+    public void initRoutes() {
+    
+    }
     
 }

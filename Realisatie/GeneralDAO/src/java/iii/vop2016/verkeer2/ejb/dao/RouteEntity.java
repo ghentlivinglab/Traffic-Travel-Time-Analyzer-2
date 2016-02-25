@@ -75,7 +75,7 @@ public class RouteEntity implements Serializable, IRoute {
     
     @Override
     public IRoute getInverseRoute() {
-        return this.getInverseRoute();
+        return this.component.getInverseRoute();
     }
     
     @Override

@@ -11,7 +11,13 @@ import iii.vop2016.verkeer2.ejb.provider.ISourceAdapter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 
 /**
  *
@@ -19,10 +25,36 @@ import javax.ejb.Singleton;
  */
 @Singleton
 public class TrafficDataDAO implements TrafficDataDAORemote {
+    
+    private EntityManagerFactory emFactory;
+            
+    public TrafficDataDAO(){
+        
+    }
+    
+    @PostConstruct
+    public void init(){
+        emFactory = Persistence.createEntityManagerFactory("TrafficDataDBPU");
+    }
 
     @Override
     public List<IRouteData> getAllData() {
-        return new ArrayList<>();
+        EntityManager em = null;
+        List<IRouteData> data = new ArrayList<>();
+        try {
+            em = emFactory.createEntityManager();
+            em.getTransaction().begin();
+            data = em.createQuery("SELECT d FROM RouteDataEntity d").getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            Logger logger = Logger.getLogger(this.getClass().getName());
+            logger.severe(e.getMessage());
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return data;
     }
 
     @Override
@@ -42,7 +74,9 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
 
     @Override
     public void addData(IRouteData data) {
-        
+        List<IRouteData> allData = new ArrayList<>();
+        allData.add(data);
+        addData(allData);
     }
 
     // Add business logic below. (Right-click in editor and choose
@@ -50,8 +84,24 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
 
     @Override
     public void addData(List<IRouteData> allData) {
-        for(IRouteData data : allData){
-            addData(data);
+        EntityManager em = null;
+        try{
+            em = emFactory.createEntityManager();
+            em.getTransaction().begin();
+            for(IRouteData data : allData){
+                em.persist(new RouteDataEntity(data));
+            }
+            em.getTransaction().commit();
+        }catch(Exception e){
+            e.printStackTrace();
+            if(em != null){
+                em.getTransaction().rollback();                
+            }
+        }finally{
+            if(em != null){
+                em.close();
+            }
         }
+        
     }
 }

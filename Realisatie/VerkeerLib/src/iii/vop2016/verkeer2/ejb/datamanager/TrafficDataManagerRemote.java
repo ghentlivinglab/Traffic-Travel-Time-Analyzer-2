@@ -13,7 +13,8 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface TrafficDataManagerRemote extends  ITrafficDataManager{
-    
+
+       
     
     
 }

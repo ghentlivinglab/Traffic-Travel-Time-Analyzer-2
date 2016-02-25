@@ -5,6 +5,7 @@
  */
 package iii.vop2016.verkeer2.ejb.components;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +21,12 @@ public class Route implements IRoute{
 
     public Route() {
         id = 0;
+        geolocations = new ArrayList<>();
+    }
+    
+    public Route(String name) {
+        this.name = name;
+        geolocations = new ArrayList<>();
     }
     
     

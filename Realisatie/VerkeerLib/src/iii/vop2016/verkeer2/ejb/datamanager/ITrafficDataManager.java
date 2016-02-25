@@ -11,4 +11,5 @@ package iii.vop2016.verkeer2.ejb.datamanager;
  */
 public interface ITrafficDataManager {
     public void downloadNewData();
+    public void initRoutes();
 }
