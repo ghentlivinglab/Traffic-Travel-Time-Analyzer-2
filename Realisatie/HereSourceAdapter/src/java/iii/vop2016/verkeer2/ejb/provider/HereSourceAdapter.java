@@ -8,12 +8,21 @@ package iii.vop2016.verkeer2.ejb.provider;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
+import iii.vop2016.verkeer2.ejb.components.RouteData;
+import iii.vop2016.verkeer2.ejb.helper.DataAccessException;
+import iii.vop2016.verkeer2.ejb.helper.URLException;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Singleton;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -23,11 +32,13 @@ import org.json.JSONObject;
 @Singleton
 public class HereSourceAdapter implements HereSourceAdapterRemote {
 
-    final String appId = "KcOsDG6cNwwshKhALecH";
-    final String appCode = "K-gS30K9dbNrznv5TonvHQ";
+    private final String appId = "KcOsDG6cNwwshKhALecH";
+    private final String appCode = "K-gS30K9dbNrznv5TonvHQ";
 
     @Override
-    public IRouteData parse(IRoute route) {
+    public IRouteData parse(IRoute route) throws URLException,DataAccessException {
+
+        RouteData rd = null;
         try {
 
             //json.org.* moet geimporteerd worden
@@ -62,31 +73,32 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
             int seconds = (int) summary.get("trafficTime");
             int distance = (int) summary.get("distance");
 
-           /* IRouteData data = new RouteData();
-            data.setRoute(route);
-            data.setDistance(distance);
-            data.setDuration(seconds);
-
-            data.setTimestamp(new Date());*/
+            rd = new RouteData();
+            rd.setDistance(distance);
+            rd.setDuration(seconds);
+            rd.setRoute(route);
+            rd.setTimestamp(new Date());
             //maakt nieuw Date object en initaliseert het met tijdstip van aanmaken
             // in principe kan je ook timestamp uit de json call zelf halen maar dit lijkt mij minder goed?
             //best is misschien zelfs om een timestamp mee te geven aan de methode parse(IRoute) zodat je makkelijker alle info van de
             //verschillende providers op 1 bepaalde timestamp kan vragen in je database
 
-            return null;
+            //return null;
 
             /* 
         } catch (JSONException e) {
         e.printStackTrace();
         }
              */
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (URLException e) {
+            throw new URLException("Wrong URL for Here adapter");
+        } catch(JSONException e) {
+            throw new DataAccessException("Cannot access data for Here adapter");
         }
-        return null;
+        return rd;
     }
 
-    private String readUrl(String urlString) throws Exception {
+    private String readUrl(String urlString) throws URLException {
         BufferedReader reader = null;
         try {
             URL url = new URL(urlString);
@@ -99,9 +111,15 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
             }
             System.out.println(buffer.toString());
             return buffer.toString();
+        } catch (IOException e) {
+            throw new URLException();
         } finally {
-            if (reader != null) {
-                reader.close();
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                throw new URLException("Wrong URL for Here adapter");
             }
         }
     }
