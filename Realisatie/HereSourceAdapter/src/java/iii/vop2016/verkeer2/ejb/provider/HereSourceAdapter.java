@@ -17,9 +17,8 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Iterator;
+import java.util.Set;
 import javax.ejb.Singleton;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,15 +48,16 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
             //AppCode = K-gS30K9dbNrznv5TonvHQ
             //mode = fastest
             //traffic = enabled
-            List<IGeoLocation> waypoints = route.getGeolocations();
+            Set<IGeoLocation> waypoints = route.getGeolocations();
             IGeoLocation waypoint = null;
             StringBuilder builder = new StringBuilder("https://route.cit.api.here.com/routing/7.2/calculateroute.json?");
-
-            for (int i = 0; i < waypoints.size(); i++) {
+            
+            int i = 0;
+            for (Iterator<IGeoLocation> it = waypoints.iterator(); it.hasNext();) {
+                waypoint = it.next();
                 if (i != 0) {
                     builder.append("&");
                 }
-                waypoint = waypoints.get(i);
                 builder.append("waypoint").append(i).append("=").append(String.valueOf(waypoint.getLongitude()).replace(',', '.')).append(",").append(String.valueOf(waypoint.getLongitude()).replace(',', '.'));
             }
 

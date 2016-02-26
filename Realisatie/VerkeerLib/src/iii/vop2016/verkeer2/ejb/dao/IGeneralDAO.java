@@ -5,6 +5,7 @@
  */
 package iii.vop2016.verkeer2.ejb.dao;
 
+import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import java.util.List;
 
@@ -18,5 +19,7 @@ public interface IGeneralDAO{
     public IRoute getRoute(String name);
     public void addRoute(IRoute route);
     public void removeRoute(IRoute route);
+
+    public void addGeoLocation(IGeoLocation geolocation);
     
 }

@@ -10,7 +10,10 @@ import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.Route;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +22,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -43,16 +47,16 @@ public class RouteEntity implements Serializable, IRoute {
     }
 
     
-    
+    private long id;
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
-        return component.getId();
+        return id;
     }
     
     public void setId(long id) {
-        component.setId(id);
+        this.id = id;
     }
        
 
@@ -74,6 +78,8 @@ public class RouteEntity implements Serializable, IRoute {
     
     
     @Override
+    @OneToOne(targetEntity = RouteEntity.class, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    //@Transient
     public IRoute getInverseRoute() {
         return this.component.getInverseRoute();
     }
@@ -84,20 +90,20 @@ public class RouteEntity implements Serializable, IRoute {
     }
     
     
-    
-    
-
     @Override
-    @OneToMany(targetEntity = GeoLocationEntity.class, orphanRemoval=true)
-    @JoinColumn(name="ROUTE_ID") // join column is in table for Order
-    public List<IGeoLocation> getGeolocations() {
-        return this.component.getGeolocations();
+    @OneToMany(targetEntity = GeoLocationEntity.class, cascade = CascadeType.ALL, mappedBy = "route", fetch=FetchType.EAGER)
+    public Set<IGeoLocation> getGeolocations() {
+        Set<IGeoLocation> list = new HashSet<>();
+        for(IGeoLocation location : this.component.getGeolocations())
+            list.add(new GeoLocationEntity(location));
+        return list;
     }
     
     @Override
-    public void setGeolocations(List<IGeoLocation> locations) {
+    public void setGeolocations(Set<IGeoLocation> locations) {
         this.component.setGeolocations(locations);
     }
+    
     
     
     
@@ -111,7 +117,7 @@ public class RouteEntity implements Serializable, IRoute {
     @Override
     @Transient
     public IGeoLocation getEndLocation() {
-        return this.getEndLocation();
+        return this.component.getEndLocation();
     }
 
     @Override

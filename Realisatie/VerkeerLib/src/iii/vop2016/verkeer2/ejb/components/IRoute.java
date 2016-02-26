@@ -6,6 +6,7 @@
 package iii.vop2016.verkeer2.ejb.components;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -16,14 +17,14 @@ public interface IRoute {
     public long getId();
     public String getName();
     public IRoute getInverseRoute();
-    public List<IGeoLocation> getGeolocations();
+    public Set<IGeoLocation> getGeolocations();
     public IGeoLocation getStartLocation();
     public IGeoLocation getEndLocation();
     
     public void setId(long id);
     public void setName(String name);
     public void setInverseRoute(IRoute route);
-    public void setGeolocations(List<IGeoLocation> locations);
+    public void setGeolocations(Set<IGeoLocation> locations);
     
     
     

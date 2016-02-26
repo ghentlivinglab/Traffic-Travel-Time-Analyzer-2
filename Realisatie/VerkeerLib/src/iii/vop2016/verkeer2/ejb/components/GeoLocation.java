@@ -14,6 +14,7 @@ public class GeoLocation implements IGeoLocation {
     private double longitude;
     private double latitude;
     private String name;
+    private IRoute route;
     
     public GeoLocation(){
         
@@ -52,6 +53,16 @@ public class GeoLocation implements IGeoLocation {
     @Override
     public void setName(String name) {
         this.name=name;
+    }
+
+    @Override
+    public IRoute getRoute() {
+        return this.route;
+    }
+
+    @Override
+    public void setRoute(IRoute route) {
+        this.route = route;
     }
     
 }

@@ -5,6 +5,7 @@
  */
 package iii.vop2016.verkeer2.ejb.dummy;
 
+import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import java.util.ArrayList;
@@ -34,6 +35,11 @@ public class GeneralDAODummy implements IGeneralDAO{
     @Override
     public void removeRoute(IRoute route) {
         
+    }
+
+    @Override
+    public void addGeoLocation(IGeoLocation geolocation) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

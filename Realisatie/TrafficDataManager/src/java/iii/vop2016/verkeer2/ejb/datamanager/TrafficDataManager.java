@@ -78,6 +78,7 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
 
         sourceManager = new SourceManager();
         
+
         
         Logger.getGlobal().log(Level.INFO, "TrafficDataManager has been initialized.");
     }
@@ -86,7 +87,7 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
     //method triggered by timer
     @Override
     public void downloadNewData() {
-        
+        /*
         //Ophalen van alle routes
         List<IRoute> routes = generalDAO.getRoutes();
 
@@ -97,7 +98,9 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
              //opslaan van de verkregen data
              trafficDataDAO.addData(data);
         }
-    
+        
+        //initRoutes();
+        */
     }
 
     
@@ -107,7 +110,7 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
     @Override
     public void initRoutes() {
         IRoute route = new Route("Test route 1");
-        route.setInverseRoute(route);
+       
         IGeoLocation geolocation = new GeoLocation(50.6565, 51.2566);
         route.addGeolocation(geolocation);
         generalDAO.addRoute(route);

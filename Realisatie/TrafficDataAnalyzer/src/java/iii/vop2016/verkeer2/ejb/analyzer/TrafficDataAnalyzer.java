@@ -5,6 +5,7 @@
  */
 package iii.vop2016.verkeer2.ejb.analyzer;
 
+import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import java.util.logging.Level;
@@ -52,5 +53,10 @@ public class TrafficDataAnalyzer implements TrafficDataAnalyzerRemote {
     public boolean addRoute(IRoute route) {
         beans.getGeneralDAO().addRoute(route);
         return true;
+    }
+
+    @Override
+    public void addGeoLocation(IGeoLocation geolocation) {
+        beans.getGeneralDAO().addGeoLocation(geolocation);
     }
 }

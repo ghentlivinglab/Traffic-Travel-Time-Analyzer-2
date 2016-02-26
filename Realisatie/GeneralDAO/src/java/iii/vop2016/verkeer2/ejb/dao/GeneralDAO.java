@@ -5,16 +5,25 @@
  */
 package iii.vop2016.verkeer2.ejb.dao;
 
+import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.Singleton;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 
 /**
  *
@@ -23,24 +32,31 @@ import javax.persistence.Persistence;
 @Singleton
 public class GeneralDAO implements GeneralDAORemote {
 
-    private EntityManagerFactory emFactory;
-            
+    @PersistenceContext(name="GeneralDBPU")
+    EntityManager em;
+    private InitialContext ctx;
+    
     public GeneralDAO(){
         
     }
     
     @PostConstruct
     public void init(){
-        emFactory = Persistence.createEntityManagerFactory("GeneralDBPU");
+        try {
+            //emFactory = Persistence.createEntityManagerFactory("GeneralDBPU");
+            ctx = new InitialContext();
+        } catch (NamingException ex) {
+            Logger.getLogger(GeneralDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     
     @Override
     public List<IRoute> getRoutes() {
-        EntityManager em = null;
+        
+        
         List<IRoute> routes = new ArrayList<>();
         try {
-            em = emFactory.createEntityManager();
             em.getTransaction().begin();
             routes = em.createQuery("SELECT r FROM RouteEntity r").getResultList();
             em.getTransaction().commit();
@@ -62,22 +78,19 @@ public class GeneralDAO implements GeneralDAORemote {
 
     @Override
     public void addRoute(IRoute route) {
-        EntityManager em = null;
-        try{
-            em = emFactory.createEntityManager();
-            em.getTransaction().begin();
-            em.persist(new RouteEntity(route));
-            em.getTransaction().commit();
-        }catch(Exception e){
-            e.printStackTrace();
-            if (em != null) {
-                em.getTransaction().rollback();
+
+        try {
+            for(IGeoLocation location : route.getGeolocations()){
+                //GeoLocationEntity loc2 = new GeoLocationEntity(location);
+                //loc2.setRoute(route);
+                //addGeoLocation(location);
             }
-        }finally{
-            if (em != null) {
-                em.close();
-            }
+            em.persist(new RouteEntity(route)); 
+        } catch (Exception ex) {
+            Logger.getLogger(GeneralDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        
     }
 
     @Override
@@ -87,4 +100,13 @@ public class GeneralDAO implements GeneralDAORemote {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+
+    @Override
+    public void addGeoLocation(IGeoLocation geolocation) {
+ 
+            em.persist(new GeoLocationEntity(geolocation));
+
+    }
+
+    
 }

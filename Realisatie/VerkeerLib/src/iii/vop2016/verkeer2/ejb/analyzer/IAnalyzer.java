@@ -5,6 +5,7 @@
  */
 package iii.vop2016.verkeer2.ejb.analyzer;
 
+import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 
 /**
@@ -13,5 +14,7 @@ import iii.vop2016.verkeer2.ejb.components.IRoute;
  */
 public interface IAnalyzer {
     String getProjectName();
-    boolean addRoute(IRoute route);
+    public boolean addRoute(IRoute route);
+
+    public void addGeoLocation(IGeoLocation geolocation1);
 }

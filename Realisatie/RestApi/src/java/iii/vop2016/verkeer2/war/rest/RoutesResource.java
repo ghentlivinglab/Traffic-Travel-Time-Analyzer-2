@@ -6,6 +6,7 @@
 package iii.vop2016.verkeer2.war.rest;
 
 import iii.vop2016.verkeer2.ejb.analyzer.IAnalyzer;
+import iii.vop2016.verkeer2.ejb.components.GeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.Route;
@@ -72,16 +73,23 @@ public class RoutesResource {
         
         IRoute r = new Route();
         r.setName("test");
-        r.setGeolocations(new ArrayList<IGeoLocation>());
-        r.setInverseRoute(r);
+        IGeoLocation geolocation1 = new GeoLocation(50.6565, 51.2566);
+        geolocation1.setName("De Brug");
+        geolocation1.setRoute(r);
+        r.addGeolocation(geolocation1);
+        analyzer.addRoute(r);
         
+        /*
         IRoute r2 = new Route();
         r2.setName("test2");
-        r2.setGeolocations(new ArrayList<IGeoLocation>());
         r2.setInverseRoute(r);
+        IGeoLocation geolocation2 = new GeoLocation(50.6565, 51.2566);
+        analyzer.addGeoLocation(geolocation2);
+        r2.addGeolocation(geolocation2);
         
-        analyzer.addRoute(r);
         analyzer.addRoute(r2);
+        */
+        
         //TODO return proper representation object
         return "<test>"+analyzer.getProjectName()+"</test>";
     }

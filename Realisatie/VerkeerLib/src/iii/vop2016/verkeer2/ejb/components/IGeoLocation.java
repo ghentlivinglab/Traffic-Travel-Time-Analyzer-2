@@ -19,6 +19,9 @@ public interface IGeoLocation {
     public void setLatitude(double latitude);  
     public void setName(String name);
     
+    public IRoute getRoute();
+    public void setRoute(IRoute route);
+    
     
     
 }

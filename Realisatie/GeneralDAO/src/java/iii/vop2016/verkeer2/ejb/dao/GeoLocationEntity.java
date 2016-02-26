@@ -7,11 +7,16 @@ package iii.vop2016.verkeer2.ejb.dao;
 
 import iii.vop2016.verkeer2.ejb.components.GeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
+import iii.vop2016.verkeer2.ejb.components.IRoute;
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -24,13 +29,16 @@ import javax.persistence.Transient;
 public class GeoLocationEntity implements Serializable, IGeoLocation {
     
     private IGeoLocation component;
+    private IRoute route;
     
     public GeoLocationEntity() {
         component = new GeoLocation();
+        route = null;
     }
 
     public GeoLocationEntity(IGeoLocation component) {
         this.component = component;
+        route = null;
     }
 
     private static final long serialVersionUID = 1L;
@@ -38,7 +46,7 @@ public class GeoLocationEntity implements Serializable, IGeoLocation {
     private long id;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
         return id;
     }
@@ -106,5 +114,19 @@ public class GeoLocationEntity implements Serializable, IGeoLocation {
     public IGeoLocation getComponent(){
         return this.component;
     }
+    
+    
+    @Override
+    @ManyToOne(targetEntity = RouteEntity.class, optional = false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    @JoinColumn(referencedColumnName="id")
+    public IRoute getRoute(){
+        return route;
+    }
+    
+    @Override
+    public void setRoute(IRoute route){
+        this.route = route;
+    }
+    
     
 }

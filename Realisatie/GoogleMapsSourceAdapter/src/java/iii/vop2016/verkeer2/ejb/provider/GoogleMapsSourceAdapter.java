@@ -19,6 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,13 +42,13 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
     @Override
     public IRouteData parse(IRoute route) throws URLException, DataAccessException{
 
-        int duration = 0;
-        int distance = 0;
-
-        List<IGeoLocation> geoLocations = route.getGeolocations();
-        String URL = createURL(geoLocations);
-
         RouteData rd = null;
+
+        int duration=0;
+        int distance=0;
+        
+        Set<IGeoLocation> geoLocations= route.getGeolocations();
+        String URL=createURL(geoLocations);
 
         try {
             URL obj = new URL(URL);
@@ -111,23 +112,23 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
     }
 
     //Method to create the correct Google API URL, based on all the geoLocations
-    private String createURL(List<IGeoLocation> geoLocations) {
-        StringBuilder sb = new StringBuilder(basicURL);
+    private String createURL(Set<IGeoLocation> geoLocations){
+        StringBuilder sb= new StringBuilder(basicURL);
         sb.append("origins=");
         //Loop to put all the origins in the URL = all the geoLocations, except for the last one
-        for (int i = 0; i < geoLocations.size() - 1; i++) {
-            sb.append(geoLocations.get(i).getLatitude());
+        for (IGeoLocation location : geoLocations){
+            sb.append(location.getLatitude());
             sb.append(",");
-            sb.append(geoLocations.get(i).getLongitude());
+            sb.append(location.getLongitude());
             sb.append("|");
         }
         sb.deleteCharAt(sb.length() - 1); //Delete the last '|' sign
         sb.append("&destinations=");
         //Loop to put all the destinations in the URL = all the geoLocations, except for the first one
-        for (int i = 1; i < geoLocations.size(); i++) {
-            sb.append(geoLocations.get(i).getLatitude());
+        for (IGeoLocation location : geoLocations){
+            sb.append(location.getLatitude());
             sb.append(",");
-            sb.append(geoLocations.get(i).getLongitude());
+            sb.append(location.getLongitude());
             sb.append("|");
         }
         sb.deleteCharAt(sb.length() - 1); //Delete the last '|' sign

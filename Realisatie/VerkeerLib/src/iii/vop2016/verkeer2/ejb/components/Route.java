@@ -6,7 +6,9 @@
 package iii.vop2016.verkeer2.ejb.components;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -15,25 +17,23 @@ import java.util.List;
 public class Route implements IRoute{
 
     private String name;
-    private long id;
     private IRoute inv;
-    private List<IGeoLocation> geolocations;
+    private Set<IGeoLocation> geolocations;
 
     public Route() {
-        id = 0;
-        geolocations = new ArrayList<>();
+        geolocations = new HashSet<>();
     }
     
     public Route(String name) {
         this.name = name;
-        geolocations = new ArrayList<>();
+        geolocations = new HashSet<>();
     }
     
     
     
     @Override
     public long getId() {
-        return id;
+        return 0;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class Route implements IRoute{
     }
 
     @Override
-    public List<IGeoLocation> getGeolocations() {
+    public Set<IGeoLocation> getGeolocations() {
         return geolocations;
     }
 
@@ -72,7 +72,7 @@ public class Route implements IRoute{
     }
 
     @Override
-    public void setGeolocations(List<IGeoLocation> locations) {
+    public void setGeolocations(Set<IGeoLocation> locations) {
         geolocations = locations;
     }
 
@@ -83,7 +83,7 @@ public class Route implements IRoute{
 
     @Override
     public void addGeolocation(IGeoLocation location, int i) {
-        geolocations.add(i,location);
+        geolocations.add(location);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class Route implements IRoute{
 
     @Override
     public void setId(long id) {
-        this.id = id;
+        
     }
     
 }
