@@ -10,8 +10,10 @@ import iii.vop2016.verkeer2.ejb.components.GeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.Route;
+import iii.vop2016.verkeer2.ejb.dummy.BeanFactoryDummy;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -59,7 +61,8 @@ public class RoutesResource {
         } catch (NamingException ex) {
             Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        beans = BeanFactory.getInstance(ctx, sctx);
+        //beans = BeanFactory.getInstance(ctx, sctx);
+        beans = BeanFactoryDummy.getInstance();
     }
 
     /**
@@ -69,8 +72,10 @@ public class RoutesResource {
     @GET
     @Produces("application/xml")
     public String getXml() {
+                
         IAnalyzer analyzer = beans.getAnalyzer();
         
+        /* //** DB DAO **
         IRoute r = new Route();
         r.setName("test1");
         r.setInverseRoute(new Route());
@@ -88,8 +93,22 @@ public class RoutesResource {
         geolocation1.setName("Home Fabiola");
         geolocation1.setRoute(r2);
         r2.addGeolocation(geolocation2);
-        
         analyzer.addRoute(r2);
+        */
+        
+        IRoute r = new Route("R4 Gent");
+        //r2.setInverseRoute(r);
+        IGeoLocation geolocation = new GeoLocation(50.6, 51.5);
+        geolocation.setName("Home Fabiola");
+        geolocation.setRoute(r);
+        r.addGeolocation(geolocation);
+        analyzer.addRoute(r);
+        
+        List<IRoute> routes = beans.getGeneralDAO().getRoutes();
+        for(IRoute route : routes){
+            System.out.println(route);
+        }
+        
         
         
         //TODO return proper representation object

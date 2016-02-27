@@ -7,6 +7,7 @@ package iii.vop2016.verkeer2.ejb.dummy;
 
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
+import iii.vop2016.verkeer2.ejb.components.Route;
 import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +18,17 @@ import java.util.List;
  */
 public class GeneralDAODummy implements IGeneralDAO{
 
+    private List<IGeoLocation> geolocations;
+    private List<IRoute> routes;
+
+    public GeneralDAODummy(){
+        geolocations = new ArrayList<>();
+        routes = new ArrayList<>();
+    }
+    
     @Override
     public List<IRoute> getRoutes() {
-        return new ArrayList<>();
+        return routes;
     }
 
     @Override
@@ -29,17 +38,26 @@ public class GeneralDAODummy implements IGeneralDAO{
 
     @Override
     public void addRoute(IRoute route) {
-        
+        if(route != null){
+            routes.add(route);
+            for(IGeoLocation location : route.getGeolocations()){
+                addGeoLocation(location);
+            }
+            addRoute(route.getInverseRoute());
+            route.setId(routes.size()-1);
+        }
     }
 
     @Override
     public void removeRoute(IRoute route) {
-        
+        int i = routes.indexOf(route);
+        routes.add(i, new Route());
     }
 
     @Override
     public void addGeoLocation(IGeoLocation geolocation) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        geolocations.add(geolocation);
+        geolocation.setId(geolocations.size()-1);
     }
     
 }
