@@ -47,16 +47,15 @@ public class RouteEntity implements Serializable, IRoute {
     }
 
     
-    private long id;
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
-        return id;
+        return this.component.getId();
     }
     
     public void setId(long id) {
-        this.id = id;
+        this.component.setId(id);
     }
        
 
@@ -78,10 +77,10 @@ public class RouteEntity implements Serializable, IRoute {
     
     
     @Override
-    @OneToOne(targetEntity = RouteEntity.class, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-    //@Transient
+    //@OneToOne(targetEntity = RouteEntity.class, optional=true, cascade=CascadeType.PERSIST, fetch=FetchType.EAGER)
+    @Transient
     public IRoute getInverseRoute() {
-        return this.component.getInverseRoute();
+        return new RouteEntity(this.component.getInverseRoute());
     }
     
     @Override
@@ -151,9 +150,9 @@ public class RouteEntity implements Serializable, IRoute {
             return false;
         }
         RouteEntity other = (RouteEntity) object;
-        //if ((getId() == null && other.getId() != null) || (id != null && !id.equals(other.getId()))) {
-        //    return false;
-        //}
+        if ((getId() == 0 || other.getId() == 0) || (getId() != other.getId())) {
+            return false;
+        }
         return true;
     }
 

@@ -22,6 +22,7 @@ public interface IGeoLocation {
     public IRoute getRoute();
     public void setRoute(IRoute route);
     
-    
+    public long getId();
+    public void setId(long id);
     
 }

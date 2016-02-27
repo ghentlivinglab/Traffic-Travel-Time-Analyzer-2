@@ -13,11 +13,23 @@ import java.util.Date;
  */
 public class RouteData implements IRouteData {
 
+    private long id;
     private IRoute route;
     private int duration;
     private int distance;
     private Date timestamp;
     
+    
+    
+    @Override
+    public long getId() {
+        return this.id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
+    }
     
     @Override
     public IRoute getRoute() {
@@ -58,5 +70,6 @@ public class RouteData implements IRouteData {
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
+
     
 }

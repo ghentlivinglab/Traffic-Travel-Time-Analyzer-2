@@ -16,25 +16,38 @@ import java.util.Set;
  */
 public class Route implements IRoute{
 
+    private long id;
     private String name;
     private IRoute inv;
     private Set<IGeoLocation> geolocations;
 
     public Route() {
         geolocations = new HashSet<>();
+        this.name = null;
+        this.inv = null;
+        this.id = 0;
     }
     
     public Route(String name) {
         this.name = name;
         geolocations = new HashSet<>();
+        this.inv = null;
+        this.id = 0;
     }
     
     
     
     @Override
     public long getId() {
-        return 0;
+        return this.id;
     }
+    
+    @Override
+    public void setId(long id) {
+        this.id = id;
+    }
+    
+    
 
     @Override
     public String getName() {
@@ -91,9 +104,6 @@ public class Route implements IRoute{
         geolocations.remove(location);
     }
 
-    @Override
-    public void setId(long id) {
-        
-    }
+
     
 }
