@@ -58,7 +58,7 @@ public class GeneralDAONoDB implements GeneralDAONoDBRemote {
             location.setRoute(route);
         }
         System.out.println("Bevat systeem "+route.getInverseRoute()+"?: " + routes.contains(route.getInverseRoute()));
-        if(route.getInverseRoute() != null && route.getInverseRoute() != route && !routes.contains(route.getInverseRoute())){
+        if(route.getInverseRoute() != null && !route.getInverseRoute().equals(route) && !isRouteStored(route.getInverseRoute())){
             addRoute(route.getInverseRoute());          
         }
         routes.add(route); 
@@ -76,6 +76,14 @@ public class GeneralDAONoDB implements GeneralDAONoDBRemote {
     public void addGeoLocation(IGeoLocation geolocation) {
         geolocations.add(geolocation);
         geolocation.setId(++lastGeoLocationIndex);
+    }
+
+    private boolean isRouteStored(IRoute route) {
+        for(IRoute r : routes){
+            if(r.equals(route))
+                return true;
+        }
+        return false;
     }
 
 }

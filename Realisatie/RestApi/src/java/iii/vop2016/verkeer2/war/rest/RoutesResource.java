@@ -109,7 +109,7 @@ public class RoutesResource {
         geolocation2.setName("Olee");
         geolocation2.setRoute(r2);
         r2.addGeolocation(geolocation2);
-        analyzer.addRoute(r2);
+        r2 = analyzer.addRoute(r2);
         
         List<IRoute> routes = beans.getGeneralDAO().getRoutes();
         for(IRoute route : routes){
