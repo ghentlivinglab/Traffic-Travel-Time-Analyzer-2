@@ -21,8 +21,8 @@ public class TrafficDataAnalyzerDummy implements IAnalyzer{
     }
 
     @Override
-    public boolean addRoute(IRoute route) {
-        return true;
+    public IRoute addRoute(IRoute route) {
+        return null;
     }
 
     @Override

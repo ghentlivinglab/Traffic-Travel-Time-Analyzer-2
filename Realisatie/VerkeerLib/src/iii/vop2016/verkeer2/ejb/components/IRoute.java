@@ -5,6 +5,7 @@
  */
 package iii.vop2016.verkeer2.ejb.components;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -12,7 +13,7 @@ import java.util.Set;
  *
  * @author Mike
  */
-public interface IRoute {
+public interface IRoute extends Serializable {
     
     public long getId();
     public String getName();

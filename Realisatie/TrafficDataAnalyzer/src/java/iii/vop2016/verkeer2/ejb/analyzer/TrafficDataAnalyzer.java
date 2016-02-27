@@ -49,10 +49,10 @@ public class TrafficDataAnalyzer implements TrafficDataAnalyzerRemote {
         return "Verkeer-2";
     }
 
+    
     @Override
-    public boolean addRoute(IRoute route) {
-        beans.getGeneralDAO().addRoute(route);
-        return true;
+    public IRoute addRoute(IRoute route) {
+        return beans.getGeneralDAO().addRoute(route);
     }
 
     @Override

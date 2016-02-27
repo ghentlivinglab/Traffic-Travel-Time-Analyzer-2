@@ -28,4 +28,7 @@
   <module>
     <ejb>GoogleMapsSourceAdapter.jar</ejb>
   </module>
+  <module>
+    <ejb>GeneralDAONoDB.jar</ejb>
+  </module>
 </application>

@@ -61,8 +61,7 @@ public class RoutesResource {
         } catch (NamingException ex) {
             Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //beans = BeanFactory.getInstance(ctx, sctx);
-        beans = BeanFactoryDummy.getInstance();
+        beans = BeanFactory.getInstance(ctx, sctx);
     }
 
     /**
@@ -97,16 +96,29 @@ public class RoutesResource {
         */
         
         IRoute r = new Route("R4 Gent");
-        //r2.setInverseRoute(r);
-        IGeoLocation geolocation = new GeoLocation(50.6, 51.5);
+        //r.setInverseRoute(r);
+        IGeoLocation geolocation = new GeoLocation(50, 51);
         geolocation.setName("Home Fabiola");
         geolocation.setRoute(r);
         r.addGeolocation(geolocation);
-        analyzer.addRoute(r);
+        r = analyzer.addRoute(r);
+        
+        IRoute r2 = new Route("R20 Leuven");
+        r2.setInverseRoute(r);
+        IGeoLocation geolocation2 = new GeoLocation(85, 38);
+        geolocation2.setName("Olee");
+        geolocation2.setRoute(r2);
+        r2.addGeolocation(geolocation2);
+        analyzer.addRoute(r2);
         
         List<IRoute> routes = beans.getGeneralDAO().getRoutes();
         for(IRoute route : routes){
-            System.out.println(route);
+            System.out.println("");
+            System.out.println("Ik ben een Route met volgende eigenschappen:");
+            System.out.println("ID: "+route.getId());
+            System.out.println("Name: "+route.getName());
+            System.out.println("Inverse: "+route.getInverseRoute());
+            System.out.println("Geolocaties: "+route.getGeolocations());
         }
         
         

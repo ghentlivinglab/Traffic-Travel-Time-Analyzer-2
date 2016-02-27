@@ -77,20 +77,21 @@ public class GeneralDAO implements GeneralDAORemote {
     }
 
     @Override
-    public void addRoute(IRoute route) {
-
+    public IRoute addRoute(IRoute route) {
+        RouteEntity r = new RouteEntity(route);
         try {
             for(IGeoLocation location : route.getGeolocations()){
                 //GeoLocationEntity loc2 = new GeoLocationEntity(location);
                 //loc2.setRoute(route);
                 //addGeoLocation(location);
             }
-            em.persist(new RouteEntity(route)); 
+            
+            em.persist(r); 
+            
         } catch (Exception ex) {
             Logger.getLogger(GeneralDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        
+        return r;
     }
 
     @Override

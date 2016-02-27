@@ -5,9 +5,11 @@
  */
 package iii.vop2016.verkeer2.ejb.components;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -103,6 +105,41 @@ public class Route implements IRoute{
     public void removeGeoLocation(IGeoLocation location) {
         geolocations.remove(location);
     }
+    
+    @Override
+    public String toString(){
+        return "Route ("+id+", "+name+")" + hashCode();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + (int) (this.id ^ (this.id >>> 32));
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Route other = (Route) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
+    }
+
+    
+    
+    
+    
 
 
     

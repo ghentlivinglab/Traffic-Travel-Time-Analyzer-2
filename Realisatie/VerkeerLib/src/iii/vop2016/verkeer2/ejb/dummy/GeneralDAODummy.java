@@ -37,7 +37,7 @@ public class GeneralDAODummy implements IGeneralDAO{
     }
 
     @Override
-    public void addRoute(IRoute route) {
+    public IRoute addRoute(IRoute route) {
         if(route != null){
             routes.add(route);
             for(IGeoLocation location : route.getGeolocations()){
@@ -46,6 +46,7 @@ public class GeneralDAODummy implements IGeneralDAO{
             addRoute(route.getInverseRoute());
             route.setId(routes.size()-1);
         }
+        return route;
     }
 
     @Override

@@ -5,13 +5,14 @@
  */
 package iii.vop2016.verkeer2.ejb.components;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author Mike
  */
-public interface IPeriod {
+public interface IPeriod extends Serializable {
     
     public Date getStart();
     public Date getEnd();
