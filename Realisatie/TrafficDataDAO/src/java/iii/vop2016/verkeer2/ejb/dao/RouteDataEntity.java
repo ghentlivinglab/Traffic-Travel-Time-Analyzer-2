@@ -38,22 +38,20 @@ public class RouteDataEntity implements Serializable, IRouteData {
     
     private static final long serialVersionUID = 1L;
   
-    private long id;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long getId() {
-        return id;
+        return this.component.getId();
     }
 
     public void setId(long id) {
-        this.id = id;
+        this.component.setId(id);
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) id;
+        hash += (int) getId();
         return hash;
     }
 
@@ -64,7 +62,7 @@ public class RouteDataEntity implements Serializable, IRouteData {
             return false;
         }
         RouteDataEntity other = (RouteDataEntity) object;
-        if (this.id != other.id) {
+        if (this.getId() != other.getId()) {
             return false;
         }
         return true;
@@ -72,7 +70,7 @@ public class RouteDataEntity implements Serializable, IRouteData {
 
     @Override
     public String toString() {
-        return "iii.vop2016.verkeer2.ejb.dao.TrafficDataEntity[ id=" + id + " ]";
+        return "iii.vop2016.verkeer2.ejb.dao.TrafficDataEntity[ id=" + getId() + " ]";
     }
 
     @Override

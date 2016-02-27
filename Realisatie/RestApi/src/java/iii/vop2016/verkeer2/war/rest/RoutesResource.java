@@ -72,23 +72,25 @@ public class RoutesResource {
         IAnalyzer analyzer = beans.getAnalyzer();
         
         IRoute r = new Route();
-        r.setName("test");
+        r.setName("test1");
+        r.setInverseRoute(new Route());
         IGeoLocation geolocation1 = new GeoLocation(50.6565, 51.2566);
         geolocation1.setName("De Brug");
         geolocation1.setRoute(r);
         r.addGeolocation(geolocation1);
         analyzer.addRoute(r);
         
-        /*
+        
         IRoute r2 = new Route();
         r2.setName("test2");
         r2.setInverseRoute(r);
-        IGeoLocation geolocation2 = new GeoLocation(50.6565, 51.2566);
-        analyzer.addGeoLocation(geolocation2);
+        IGeoLocation geolocation2 = new GeoLocation(50.6, 51.5);
+        geolocation1.setName("Home Fabiola");
+        geolocation1.setRoute(r2);
         r2.addGeolocation(geolocation2);
         
         analyzer.addRoute(r2);
-        */
+        
         
         //TODO return proper representation object
         return "<test>"+analyzer.getProjectName()+"</test>";

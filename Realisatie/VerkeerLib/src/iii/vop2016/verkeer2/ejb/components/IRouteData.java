@@ -13,6 +13,8 @@ import java.util.Date;
  */
 public interface IRouteData {
     
+    public long getId();
+    public void setId(long id);
     
     public IRoute getRoute();
     public int getDuration();

@@ -11,19 +11,38 @@ package iii.vop2016.verkeer2.ejb.components;
  */
 public class GeoLocation implements IGeoLocation {
 
+    private long id;
     private double longitude;
     private double latitude;
     private String name;
     private IRoute route;
     
     public GeoLocation(){
-        
+        this.longitude = 0;
+        this.latitude = 0;
+        this.id = 0;
+        this.name = null;
+        this.route = null;
     }
     
     public GeoLocation(double longitude, double latitude){
         this.longitude = longitude;
         this.latitude = latitude;
+        this.id = 0;
+        this.name = null;
+        this.route = null;
     }
+    
+    @Override
+    public long getId() {
+        return this.id;
+    }
+    
+    @Override
+    public void setId(long id) {
+        this.id = id;
+    }
+    
     
     @Override
     public double getLongitude() {
@@ -64,5 +83,7 @@ public class GeoLocation implements IGeoLocation {
     public void setRoute(IRoute route) {
         this.route = route;
     }
+
+
     
 }

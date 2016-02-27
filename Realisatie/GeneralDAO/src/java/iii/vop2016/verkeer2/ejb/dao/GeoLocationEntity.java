@@ -31,6 +31,9 @@ public class GeoLocationEntity implements Serializable, IGeoLocation {
     private IGeoLocation component;
     private IRoute route;
     
+    private static final long serialVersionUID = 1L;
+    
+    
     public GeoLocationEntity() {
         component = new GeoLocation();
         route = null;
@@ -41,24 +44,23 @@ public class GeoLocationEntity implements Serializable, IGeoLocation {
         route = null;
     }
 
-    private static final long serialVersionUID = 1L;
+
     
-    private long id;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
-        return id;
+        return this.component.getId();
     }
 
     public void setId(long id) {
-        this.id = id;
+        this.component.setId(id);
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) id;
+        hash += (int) getId();
         return hash;
     }
 
@@ -69,7 +71,7 @@ public class GeoLocationEntity implements Serializable, IGeoLocation {
             return false;
         }
         GeoLocationEntity other = (GeoLocationEntity) object;
-        if (this.id != other.id) {
+        if (getId() != other.getId()) {
             return false;
         }
         return true;
@@ -77,7 +79,7 @@ public class GeoLocationEntity implements Serializable, IGeoLocation {
 
     @Override
     public String toString() {
-        return "iii.vop2016.verkeer2.ejb.dao.GeoLocationEntity[ id=" + id + " ]";
+        return "iii.vop2016.verkeer2.ejb.dao.GeoLocationEntity[ id=" + getId() + " ]";
     }
 
     @Override
