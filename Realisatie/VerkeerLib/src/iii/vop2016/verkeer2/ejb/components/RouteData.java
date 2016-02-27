@@ -71,5 +71,9 @@ public class RouteData implements IRouteData {
         this.timestamp = timestamp;
     }
 
+    @Override
+    public String toString(){
+        return "RouteData (dis:"+distance+", dur:"+duration+")";
+    }
     
 }

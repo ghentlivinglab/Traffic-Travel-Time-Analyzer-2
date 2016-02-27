@@ -47,7 +47,7 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
         int duration=0;
         int distance=0;
         
-        Set<IGeoLocation> geoLocations= route.getGeolocations();
+        List<IGeoLocation> geoLocations= route.getGeolocations();
         String URL=createURL(geoLocations);
 
         try {
@@ -112,23 +112,23 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
     }
 
     //Method to create the correct Google API URL, based on all the geoLocations
-    private String createURL(Set<IGeoLocation> geoLocations){
+    private String createURL(List<IGeoLocation> geoLocations){
         StringBuilder sb= new StringBuilder(basicURL);
         sb.append("origins=");
         //Loop to put all the origins in the URL = all the geoLocations, except for the last one
-        for (IGeoLocation location : geoLocations){
-            sb.append(location.getLatitude());
+        for (int i=0;i<geoLocations.size()-1;i++){
+            sb.append(geoLocations.get(i).getLatitude());
             sb.append(",");
-            sb.append(location.getLongitude());
+            sb.append(geoLocations.get(i).getLongitude());
             sb.append("|");
         }
         sb.deleteCharAt(sb.length() - 1); //Delete the last '|' sign
         sb.append("&destinations=");
         //Loop to put all the destinations in the URL = all the geoLocations, except for the first one
-        for (IGeoLocation location : geoLocations){
-            sb.append(location.getLatitude());
+        for (int i=1;i<geoLocations.size();i++){
+            sb.append(geoLocations.get(i).getLatitude());
             sb.append(",");
-            sb.append(location.getLongitude());
+            sb.append(geoLocations.get(i).getLongitude());
             sb.append("|");
         }
         sb.deleteCharAt(sb.length() - 1); //Delete the last '|' sign

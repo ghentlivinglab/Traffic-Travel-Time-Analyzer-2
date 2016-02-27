@@ -91,15 +91,15 @@ public class RouteEntity implements Serializable, IRoute {
     
     @Override
     @OneToMany(targetEntity = GeoLocationEntity.class, cascade = CascadeType.ALL, mappedBy = "route", fetch=FetchType.EAGER)
-    public Set<IGeoLocation> getGeolocations() {
-        Set<IGeoLocation> list = new HashSet<>();
+    public List<IGeoLocation> getGeolocations() {
+        List<IGeoLocation> list = new ArrayList<>();
         for(IGeoLocation location : this.component.getGeolocations())
             list.add(new GeoLocationEntity(location));
         return list;
     }
     
     @Override
-    public void setGeolocations(Set<IGeoLocation> locations) {
+    public void setGeolocations(List<IGeoLocation> locations) {
         this.component.setGeolocations(locations);
     }
     

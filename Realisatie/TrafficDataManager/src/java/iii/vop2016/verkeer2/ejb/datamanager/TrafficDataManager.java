@@ -87,7 +87,7 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
     //method triggered by timer
     @Override
     public void downloadNewData() {
-        /*
+        
         //Ophalen van alle routes
         List<IRoute> routes = generalDAO.getRoutes();
 
@@ -99,8 +99,10 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
              trafficDataDAO.addData(data);
         }
         
-        //initRoutes();
-        */
+        List<IRouteData> allData = trafficDataDAO.getAllData();
+        for(IRouteData d : allData)
+            System.out.println(d);
+        
     }
 
     

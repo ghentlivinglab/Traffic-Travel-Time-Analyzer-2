@@ -21,10 +21,10 @@ public class Route implements IRoute{
     private long id;
     private String name;
     private IRoute inv;
-    private Set<IGeoLocation> geolocations;
+    private List<IGeoLocation> geolocations;
 
     public Route() {
-        geolocations = new HashSet<>();
+        geolocations = new ArrayList<>();
         this.name = null;
         this.inv = null;
         this.id = 0;
@@ -32,7 +32,7 @@ public class Route implements IRoute{
     
     public Route(String name) {
         this.name = name;
-        geolocations = new HashSet<>();
+        geolocations = new ArrayList<>();
         this.inv = null;
         this.id = 0;
     }
@@ -62,18 +62,24 @@ public class Route implements IRoute{
     }
 
     @Override
-    public Set<IGeoLocation> getGeolocations() {
+    public List<IGeoLocation> getGeolocations() {
         return geolocations;
     }
 
     @Override
     public IGeoLocation getStartLocation() {
-        return null;
+        if(geolocations.size()>0)
+            return geolocations.get(0);
+        else
+            return null;
     }
 
     @Override
     public IGeoLocation getEndLocation() {
-        return null;
+        if(geolocations.size()>0)
+            return geolocations.get(geolocations.size()-1);
+        else
+            return null;
     }
 
     @Override
@@ -87,7 +93,7 @@ public class Route implements IRoute{
     }
 
     @Override
-    public void setGeolocations(Set<IGeoLocation> locations) {
+    public void setGeolocations(List<IGeoLocation> locations) {
         geolocations = locations;
     }
 
@@ -98,7 +104,7 @@ public class Route implements IRoute{
 
     @Override
     public void addGeolocation(IGeoLocation location, int i) {
-        geolocations.add(location);
+        geolocations.add(i, location);
     }
 
     @Override

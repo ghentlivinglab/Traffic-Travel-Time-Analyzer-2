@@ -73,17 +73,18 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
     }
 
     @Override
-    public void addData(IRouteData data) {
+    public IRouteData addData(IRouteData data) {
         List<IRouteData> allData = new ArrayList<>();
         allData.add(data);
         addData(allData);
+        return data;
     }
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 
     @Override
-    public void addData(List<IRouteData> allData) {
+    public List<IRouteData> addData(List<IRouteData> allData) {
         EntityManager em = null;
         try{
             em = emFactory.createEntityManager();
@@ -102,6 +103,6 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
                 em.close();
             }
         }
-        
+        return allData;
     }
 }
