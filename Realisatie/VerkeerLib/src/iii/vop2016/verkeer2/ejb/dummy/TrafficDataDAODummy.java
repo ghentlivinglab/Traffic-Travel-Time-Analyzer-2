@@ -7,11 +7,14 @@ package iii.vop2016.verkeer2.ejb.dummy;
 
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
+import iii.vop2016.verkeer2.ejb.components.Route;
+import iii.vop2016.verkeer2.ejb.components.RouteData;
 import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
 import iii.vop2016.verkeer2.ejb.provider.ISourceAdapter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -19,14 +22,55 @@ import java.util.List;
  */
 public class TrafficDataDAODummy implements ITrafficDataDAO{
 
+    private List<IRouteData> data;
+    private Random r = new Random();
+
+    public TrafficDataDAODummy() {
+        data = new ArrayList<>();
+        
+        List<Date> dates = new ArrayList<>();
+        dates.add(new Date(System.currentTimeMillis()));
+        dates.add(new Date(System.currentTimeMillis() + 5*60000));
+        dates.add(new Date(System.currentTimeMillis() + 10*60000));
+        dates.add(new Date(System.currentTimeMillis() + 15*60000));
+        dates.add(new Date(System.currentTimeMillis() + 20*60000));
+        dates.add(new Date(System.currentTimeMillis() + 25*60000));
+        dates.add(new Date(System.currentTimeMillis() + 30*60000));
+        dates.add(new Date(System.currentTimeMillis() + 35*60000));
+        dates.add(new Date(System.currentTimeMillis() + 40*60000));
+        dates.add(new Date(System.currentTimeMillis() + 45*60000));
+        
+        
+        GeneralDAODummy routes = new GeneralDAODummy();
+        List<IRoute> rs = routes.getRoutes();
+        for(IRoute r: rs){
+            for(int i = 0;i<10;i++){
+                RouteData d = new RouteData();
+                d.setDistance(this.r.nextInt(100));
+                d.setDuration(this.r.nextInt(100));
+                d.setRoute(r);
+                d.setTimestamp(dates.get(i));
+                data.add(d);
+            }
+        }
+
+    }
+    
+    
+    
     @Override
     public List<IRouteData> getAllData() {
-        return new ArrayList<>();
+        return data;
     }
 
     @Override
     public List<IRouteData> getData(IRoute route) {
-        return new ArrayList<>();
+        List<IRouteData> d = new ArrayList<>();
+        for(IRouteData data : this.data){
+            if(data.getRoute().equals(route))
+                d.add(data);
+        }
+        return d;
     }
 
     @Override
@@ -36,12 +80,17 @@ public class TrafficDataDAODummy implements ITrafficDataDAO{
 
     @Override
     public List<IRouteData> getData(Date time1, Date time2) {
-        return new ArrayList<>();
+        List<IRouteData> d = new ArrayList<>();
+        for(IRouteData data : this.data){
+            if(data.getTimestamp().after(time1) && data.getTimestamp().before(time2))
+                d.add(data);
+        }
+        return d;
     }
 
     @Override
     public void addData(IRouteData data) {
-        
+        this.data.add(data);
     }
 
     @Override
@@ -50,5 +99,8 @@ public class TrafficDataDAODummy implements ITrafficDataDAO{
             addData(data);
         }
     }
+    
+    
+    
     
 }

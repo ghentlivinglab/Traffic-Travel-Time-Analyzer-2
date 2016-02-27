@@ -35,7 +35,7 @@ public class BeanFactoryDummy extends BeanFactory{
             try {
                 INSTANCE = new BeanFactoryDummy();
         } catch (ResourceFileMissingExcepion ex) {
-            Logger.getLogger(BeanFactoryDummy.class.getName()).log(Level.SEVERE, null, ex);
+
         }
         return INSTANCE;
     }
