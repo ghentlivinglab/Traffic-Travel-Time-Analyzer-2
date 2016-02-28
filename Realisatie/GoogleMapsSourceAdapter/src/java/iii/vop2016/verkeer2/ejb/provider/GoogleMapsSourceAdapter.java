@@ -38,6 +38,8 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
     //Free key for the Google API, connected to the project. Limited usage.
     private final String key = "AIzaSyDCx8SzAp2pjZHacrgJ9DDcC45UdGR_yQw";
     private final String basicURL = "https://maps.googleapis.com/maps/api/distancematrix/json?";
+    private static final String providerName = "GoogleMaps";
+
 
     @Override
     public IRouteData parse(IRoute route) throws URLException, DataAccessException{
@@ -90,6 +92,7 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
                 throw new DataAccessException("Cannot access data from Google Maps adapter");
             }
             rd = new RouteData();
+            rd.setProviderName(getProviderName());
             rd.setDistance(distance);
             rd.setDuration(duration);
             rd.setRoute(route);
@@ -140,4 +143,9 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+
+    @Override
+    public String getProviderName() {
+        return providerName;
+    }
 }

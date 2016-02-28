@@ -117,5 +117,15 @@ public class RouteDataEntity implements Serializable, IRouteData {
     public IRouteData getComponent(){
         return this.component;
     }
+
+    @Override
+    public String getProviderName() {
+        return this.component.getProviderName();
+    }
+
+    @Override
+    public void setProviderName(String providerName) {
+        this.component.setProviderName(providerName);
+    }
     
 }

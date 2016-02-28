@@ -34,6 +34,7 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
 
     private final String appId = "KcOsDG6cNwwshKhALecH";
     private final String appCode = "K-gS30K9dbNrznv5TonvHQ";
+    private static final String providerName = "Here";
 
     @Override
     public IRouteData parse(IRoute route) throws URLException,DataAccessException {
@@ -74,6 +75,7 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
             int distance = (int) summary.get("distance");
 
             rd = new RouteData();
+            rd.setProviderName(getProviderName());
             rd.setDistance(distance);
             rd.setDuration(seconds);
             rd.setRoute(route);
@@ -126,4 +128,9 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+
+    @Override
+    public String getProviderName() {
+        return providerName;
+    }
 }

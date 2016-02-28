@@ -18,6 +18,7 @@ public class RouteData implements IRouteData {
     private int duration;
     private int distance;
     private Date timestamp;
+    private String provider;
     
     
     
@@ -73,7 +74,17 @@ public class RouteData implements IRouteData {
 
     @Override
     public String toString(){
-        return "RouteData (dis:"+distance+", dur:"+duration+")";
+        return "RouteData ["+route.getName()+"] ["+provider+"] (dis:"+distance+", dur:"+duration+")";
+    }
+
+    @Override
+    public String getProviderName() {
+        return this.provider;
+    }
+
+    @Override
+    public void setProviderName(String providerName) {
+        this.provider = providerName;
     }
     
 }
