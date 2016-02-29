@@ -87,4 +87,42 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
         }
         return data;
     }
+
+    @Override
+    public List<IRouteData> getData(IRoute route, Date time1, Date time2) {
+        List<IRouteData> data = null;
+        try {
+            //get all routes
+            Query q = em.createQuery("SELECT r FROM RouteDataEntity r WHERE r.timestamp >= :time1 AND r.timestamp <= :time2 AND r.routeID = :routeID");
+            q.setParameter("time1", time1);
+            q.setParameter("time2", time2);
+            q.setParameter("routeID", route.getId());
+            data = q.getResultList();
+        } catch (Exception e) {
+            Logger logger = Logger.getLogger(this.getClass().getName());
+            logger.severe(e.getMessage());
+        } finally {
+
+        }
+        return data;
+    }
+
+    @Override
+    public List<IRouteData> getData(ISourceAdapter adapter, Date time1, Date time2) {       
+        List<IRouteData> data = null;
+        try {
+            //get all routes
+            Query q = em.createQuery("SELECT r FROM RouteDataEntity r WHERE r.timestamp >= :time1 AND r.timestamp <= :time2 AND r.providerName = :providerName");
+            q.setParameter("time1", time1);
+            q.setParameter("time2", time2);
+            q.setParameter("providerName", adapter.getProviderName());
+            data = q.getResultList();
+        } catch (Exception e) {
+            Logger logger = Logger.getLogger(this.getClass().getName());
+            logger.severe(e.getMessage());
+        } finally {
+
+        }
+        return data;
+    }
 }

@@ -17,6 +17,7 @@ public interface IGeneralDAO{
     
     public List<IRoute> getRoutes();
     public IRoute getRoute(String name);
+    public IRoute getRoute(long id);
     public IRoute addRoute(IRoute route);
     public void removeRoute(IRoute route);
     

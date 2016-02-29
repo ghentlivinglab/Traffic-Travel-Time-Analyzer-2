@@ -22,8 +22,8 @@ import javax.ejb.Singleton;
 @Singleton
 public class GeneralDAONoDB implements GeneralDAONoDBRemote {
 
-    private Set<IGeoLocation> geolocations;
-    private Set<IRoute> routes;
+    private List<IGeoLocation> geolocations;
+    private List<IRoute> routes;
     
     private long lastRouteIndex;
     private long lastGeoLocationIndex;
@@ -31,20 +31,33 @@ public class GeneralDAONoDB implements GeneralDAONoDBRemote {
     
     @PostConstruct
     private void init(){
-        geolocations = new HashSet<>();
-        routes = new HashSet<>();
+        geolocations = new ArrayList<>();
+        routes = new ArrayList<>();
         lastRouteIndex = 0;
         lastGeoLocationIndex = 0;
     }
     
     @Override
     public List<IRoute> getRoutes() {
-        return new ArrayList<>(routes);
+        return routes;
     }
 
     @Override
     public IRoute getRoute(String name) {
         return null;
+    }
+    
+    public IRoute getRoute(long id) {
+        IRoute result = null;
+        int i = 0;
+        while(i < routes.size()){
+            if(routes.get(i).getId() == id){
+                result = routes.get(i);
+                i = routes.size();
+            }
+            i++;
+        }
+        return result;  
     }
 
     @Override

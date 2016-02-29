@@ -35,6 +35,11 @@ public class GeneralDAODummy implements IGeneralDAO{
     public IRoute getRoute(String name) {
         return null;
     }
+    
+    @Override
+    public IRoute getRoute(long id) {
+        return null;
+    }
 
     @Override
     public IRoute addRoute(IRoute route) {
@@ -58,5 +63,7 @@ public class GeneralDAODummy implements IGeneralDAO{
         geolocations.add(geolocation);
         geolocation.setId(geolocations.size()-1);
     }
+
+
     
 }

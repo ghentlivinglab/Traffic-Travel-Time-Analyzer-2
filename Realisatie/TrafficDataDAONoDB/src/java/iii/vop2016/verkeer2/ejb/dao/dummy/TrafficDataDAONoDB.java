@@ -32,31 +32,6 @@ public class TrafficDataDAONoDB implements TrafficDataDAONoDBRemote {
     }
     
     @Override
-    public List<IRouteData> getAllData() {
-        return data;
-    }
-
-    @Override
-    public List<IRouteData> getData(IRoute route) {
-        List<IRouteData> results = new ArrayList<>();
-        for(IRouteData d : data){
-            if(d.getRoute().equals(route))
-                results.add(d);
-        }
-        return results;
-    }
-
-    @Override
-    public List<IRouteData> getData(ISourceAdapter adapter) {
-        List<IRouteData> results = new ArrayList<>();
-        for(IRouteData d : data){
-            //if(d.getRoute().equals(route))
-                results.add(d);
-        }
-        return results;
-    }
-
-    @Override
     public List<IRouteData> getData(Date time1, Date time2) {
         List<IRouteData> results = new ArrayList<>();
         for(IRouteData d : data){
@@ -86,4 +61,26 @@ public class TrafficDataDAONoDB implements TrafficDataDAONoDBRemote {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+
+    @Override
+    public List<IRouteData> getData(IRoute route, Date time1, Date time2) {
+        List<IRouteData> results = new ArrayList<>();
+        for(IRouteData d : data){
+            if(d.getTimestamp().compareTo(time1) > 0 && d.getTimestamp().compareTo(time2) < 0)
+                if(d.getRoute().equals(route))
+                    results.add(d);
+        }
+        return results;
+    }
+
+    @Override
+    public List<IRouteData> getData(ISourceAdapter adapter, Date time1, Date time2) {
+        List<IRouteData> results = new ArrayList<>();
+        for(IRouteData d : data){
+            if(d.getTimestamp().compareTo(time1) > 0 && d.getTimestamp().compareTo(time2) < 0)
+                if(d.getProviderName().equals(adapter.getProviderName()))
+                    results.add(d);
+        }
+        return results;
+    }
 }

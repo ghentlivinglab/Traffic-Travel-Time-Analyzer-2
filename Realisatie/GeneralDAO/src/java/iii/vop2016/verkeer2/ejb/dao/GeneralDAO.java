@@ -78,6 +78,26 @@ public class GeneralDAO implements GeneralDAORemote {
         }
         return route;
     }
+    
+    @Override
+    public IRoute getRoute(long id) {
+        IRoute route = null;
+        try {
+            //get all routes
+            Query q = em.createQuery("SELECT r FROM RouteEntity r WHERE r.id = :id");
+            q.setParameter("id", id);
+            List<IRoute> routes = q.getResultList();
+            if (routes.size() >= 1) {
+                route = routes.get(0);
+            }
+        } catch (Exception e) {
+            Logger logger = Logger.getLogger(this.getClass().getName());
+            logger.severe(e.getMessage());
+        } finally {
+
+        }
+        return route;
+    }
 
     @Override
     public IRoute addRoute(IRoute route) {

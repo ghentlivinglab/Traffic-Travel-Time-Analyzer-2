@@ -79,4 +79,24 @@ public class TrafficDataDAODummy implements ITrafficDataDAO{
         }
         return allData;
     }
+
+    @Override
+    public List<IRouteData> getData(IRoute route, Date time1, Date time2) {
+        List<IRouteData> result = new ArrayList<>();
+        for(IRouteData data : getData(time1,time2)){
+            if(data.getRoute().equals(route))
+                result.add(data);
+        }
+        return result;
+    }
+
+    @Override
+    public List<IRouteData> getData(ISourceAdapter adapter, Date time1, Date time2) {
+        List<IRouteData> result = new ArrayList<>();
+        for(IRouteData data : getData(time1,time2)){
+            if(data.getProviderName().equals(adapter.getProviderName()))
+                result.add(data);
+        }
+        return result;
+    }
 }

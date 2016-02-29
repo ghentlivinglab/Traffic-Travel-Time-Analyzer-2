@@ -18,6 +18,8 @@ import java.util.List;
 public interface ITrafficDataDAO {
 
     public List<IRouteData> getData(Date time1, Date time2);
+    public List<IRouteData> getData(IRoute route, Date time1, Date time2);
+    public List<IRouteData> getData(ISourceAdapter adapter, Date time1, Date time2);
     public IRouteData addData(IRouteData data);
     public List<IRouteData> addData(List<IRouteData> data);
     
