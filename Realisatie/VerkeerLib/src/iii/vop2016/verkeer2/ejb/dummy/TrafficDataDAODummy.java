@@ -68,11 +68,15 @@ public class TrafficDataDAODummy implements ITrafficDataDAO{
 
     @Override
     public IRouteData addData(IRouteData data) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.data.add(data);
+        return data;
     }
 
     @Override
-    public List<IRouteData> addData(List<IRouteData> data) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<IRouteData> addData(List<IRouteData> allData) {
+        for(IRouteData data : allData){
+            addData(data);
+        }
+        return allData;
     }
 }

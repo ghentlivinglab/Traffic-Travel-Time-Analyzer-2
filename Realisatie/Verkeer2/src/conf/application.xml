@@ -31,4 +31,7 @@
   <module>
     <ejb>GeneralDAONoDB.jar</ejb>
   </module>
+  <module>
+    <ejb>TrafficDataDAONoDB.jar</ejb>
+  </module>
 </application>

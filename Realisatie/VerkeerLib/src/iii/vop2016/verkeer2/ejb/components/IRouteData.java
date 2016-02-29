@@ -21,11 +21,13 @@ public interface IRouteData extends Serializable {
     public int getDuration();
     public int getDistance();
     public Date getTimestamp();
+    public String getProviderName();
     
     public void setRoute(IRoute route);
     public void setDuration(int duration);
     public void setDistance(int distance);
     public void setTimestamp(Date timestamp);
+    public void setProviderName(String providerName);
       
     
     

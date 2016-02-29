@@ -34,6 +34,7 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
 
     private final String appId = "KcOsDG6cNwwshKhALecH";
     private final String appCode = "K-gS30K9dbNrznv5TonvHQ";
+    private static final String providerName = "Here";
 
     @Override
     public IRouteData parse(IRoute route) throws URLException,DataAccessException {
@@ -52,13 +53,12 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
             List<IGeoLocation> waypoints = route.getGeolocations();
             IGeoLocation waypoint = null;
             StringBuilder builder = new StringBuilder("https://route.cit.api.here.com/routing/7.2/calculateroute.json?");
-            
-            int i = 0;
-            for (Iterator<IGeoLocation> it = waypoints.iterator(); it.hasNext();) {
-                waypoint = it.next();
+
+            for (int i = 0; i < waypoints.size(); i++) {
                 if (i != 0) {
                     builder.append("&");
                 }
+                waypoint = waypoints.get(i);
                 builder.append("waypoint").append(i).append("=").append(String.valueOf(waypoint.getLongitude()).replace(',', '.')).append(",").append(String.valueOf(waypoint.getLongitude()).replace(',', '.'));
             }
 
@@ -75,6 +75,7 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
             int distance = (int) summary.get("distance");
 
             rd = new RouteData();
+            rd.setProviderName(getProviderName());
             rd.setDistance(distance);
             rd.setDuration(seconds);
             rd.setRoute(route);
@@ -127,4 +128,9 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+
+    @Override
+    public String getProviderName() {
+        return providerName;
+    }
 }

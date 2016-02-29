@@ -8,6 +8,8 @@ package iii.vop2016.verkeer2.ejb.datamanager;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
+import iii.vop2016.verkeer2.ejb.helper.DataAccessException;
+import iii.vop2016.verkeer2.ejb.helper.URLException;
 import iii.vop2016.verkeer2.ejb.provider.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +76,8 @@ public class SourceManager implements ISourceManager{
         for(final ISourceAdapter adapter : adapters){
             futures.add(executor.submit(new Callable() {
                 @Override
-                public IRouteData call() throws Exception {
+                public IRouteData call() throws URLException, DataAccessException {
+                    System.out.println(adapter.getClass().getName()+"is uitgevoerd");
                     return adapter.parse(route);
                 }
             }));
@@ -82,13 +85,20 @@ public class SourceManager implements ISourceManager{
         
         List<Future<IRouteData>> toRemove = new ArrayList<>();
         while (!futures.isEmpty()) {
-            try {  
                 for(Future<IRouteData> future : futures){
                     if(future.isDone()){
-                        //wait indefinitely for future task to complete
-                        System.out.println("Future output="+future.get());
-                        result.add(future.get());
-                        toRemove.add(future);
+                        try{
+                            IRouteData data = future.get();
+                            //wait indefinitely for future task to complete
+                            System.out.println("Future output = "+data);
+                            if(data != null)
+                                result.add(future.get());
+                            toRemove.add(future);
+                        }catch(Exception ex){
+                            ex.getCause().printStackTrace();
+                            toRemove.add(future);
+                        }
+                        
                     }
                 }
                 if(!toRemove.isEmpty())
@@ -99,9 +109,6 @@ public class SourceManager implements ISourceManager{
                     //shut down executor service
                 }
                 //System.out.println("Waiting for other tasks to complete");
-            }catch (InterruptedException | ExecutionException e) {
-                Logger.getGlobal().log(Level.SEVERE, "Exception thrown caused by InterruptException or ExecutionException of a thread.");
-            }
         }
         
         executor.shutdown();

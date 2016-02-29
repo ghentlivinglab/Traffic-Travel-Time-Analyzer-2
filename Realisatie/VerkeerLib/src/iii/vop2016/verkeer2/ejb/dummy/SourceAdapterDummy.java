@@ -20,5 +20,10 @@ public class SourceAdapterDummy implements ISourceAdapter{
     public IRouteData parse(IRoute route) {
         return null;
     }
+
+    @Override
+    public String getProviderName() {
+        return "SourceAdapterDummy";
+    }
     
 }

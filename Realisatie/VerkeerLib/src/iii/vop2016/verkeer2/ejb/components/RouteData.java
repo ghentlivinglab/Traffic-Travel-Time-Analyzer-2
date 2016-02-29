@@ -18,9 +18,8 @@ public class RouteData implements IRouteData {
     protected int duration;
     protected int distance;
     protected Date timestamp;
-    
-    
-    
+    protected String provider;
+
     @Override
     public long getId() {
         return this.id;
@@ -71,5 +70,19 @@ public class RouteData implements IRouteData {
         this.timestamp = timestamp;
     }
 
+    @Override
+    public String toString(){
+        return "RouteData ["+route.getName()+"] ["+provider+"] (dis:"+distance+", dur:"+duration+")";
+    }
+
+    @Override
+    public String getProviderName() {
+        return this.provider;
+    }
+
+    @Override
+    public void setProviderName(String providerName) {
+        this.provider = providerName;
+    }
     
 }

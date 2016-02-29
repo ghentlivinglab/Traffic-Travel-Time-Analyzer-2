@@ -19,15 +19,15 @@ public class GeoLocation implements IGeoLocation {
     protected String name;
     
     public GeoLocation(){
-        this.longitude = 0;
         this.latitude = 0;
+        this.longitude = 0;
         this.id = 0;
         this.name = null;
     }
     
-    public GeoLocation(double longitude, double latitude){
-        this.longitude = longitude;
+    public GeoLocation(double latitude, double longitude){
         this.latitude = latitude;
+        this.longitude = longitude;
         this.id = 0;
         this.name = null;
     }
@@ -75,7 +75,7 @@ public class GeoLocation implements IGeoLocation {
     
     @Override
     public String toString(){
-        return "GeoLocatie \""+name+"\" ("+longitude+", "+latitude+")";
+        return "GeoLocatie \""+name+"\" ("+latitude+", "+longitude+")";
     }
 
     @Override

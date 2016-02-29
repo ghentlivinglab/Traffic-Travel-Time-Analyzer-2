@@ -17,14 +17,12 @@ public interface IRoute extends Serializable {
     
     public long getId();
     public String getName();
-    //public IRoute getInverseRoute();
     public List<IGeoLocation> getGeolocations();
     public IGeoLocation getStartLocation();
     public IGeoLocation getEndLocation();
     
     public void setId(long id);
     public void setName(String name);
-    //public void setInverseRoute(IRoute route);
     public void setGeolocations(List<IGeoLocation> locations);
     
     

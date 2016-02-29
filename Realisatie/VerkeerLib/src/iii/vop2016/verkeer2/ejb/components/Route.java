@@ -60,12 +60,18 @@ public class Route implements IRoute{
 
     @Override
     public IGeoLocation getStartLocation() {
-        return null;
+        if(geolocations.size()>0)
+            return geolocations.get(0);
+        else
+            return null;
     }
 
     @Override
     public IGeoLocation getEndLocation() {
-        return null;
+        if(geolocations.size()>0)
+            return geolocations.get(geolocations.size()-1);
+        else
+            return null;
     }
 
     @Override
@@ -85,7 +91,7 @@ public class Route implements IRoute{
 
     @Override
     public void addGeolocation(IGeoLocation location, int i) {
-        geolocations.add(location);
+        geolocations.add(i, location);
     }
 
     @Override

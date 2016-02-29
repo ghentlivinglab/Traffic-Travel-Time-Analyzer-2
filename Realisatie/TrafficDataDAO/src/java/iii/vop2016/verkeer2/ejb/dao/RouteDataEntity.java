@@ -48,6 +48,7 @@ public class RouteDataEntity extends RouteData{
         this.id = component.getId();
         this.route = component.getRoute();
         this.timestamp = component.getTimestamp();
+        this.provider = component.getProviderName();
     }
   
     @Id
@@ -109,6 +110,16 @@ public class RouteDataEntity extends RouteData{
     @Override
     public void setTimestamp(Date timestamp) {
         super.setTimestamp(timestamp); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getProviderName() {
+        return super.getProviderName();
+    }
+
+    @Override
+    public void setProviderName(String providerName) {
+        super.setProviderName(providerName);
     }
     
 }

@@ -64,13 +64,35 @@ public class RoutesResource {
         beans = BeanFactory.getInstance(ctx, sctx);
     }
 
+    
+    @GET
+    @Path("all")
+    @Produces("text/html")
+    public String getAllRoutes() {
+        
+        List<IRoute> routes = beans.getGeneralDAO().getRoutes();
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append("<h1>Alle routes</h1> <br>");
+        sb.append("<ul>");
+        for(int i=0; i<routes.size(); i++){
+            sb.append("<ol>"+routes.get(i)+"</ol>");
+        }
+        sb.append("</ul>");
+        return sb.toString();
+        
+    }
+    
+    
+    
     /**
      * Retrieves representation of an instance of iii.vop2016.verkeer2.war.rest.RoutesResource
      * @return an instance of java.lang.String
      */
     @GET
+    @Path("init")
     @Produces("application/xml")
-    public String getXml() {
+    public String initRoutes() {
                 
         IAnalyzer analyzer = beans.getAnalyzer();
         
@@ -97,16 +119,15 @@ public class RoutesResource {
         
         IRoute r = new Route("R4 Gent");
         //r.setInverseRoute(r);
-        IGeoLocation geolocation = new GeoLocation(50, 51);
-        geolocation.setName("Home Fabiola");
-        r.addGeolocation(geolocation);
+
+        IGeoLocation geolocation1 = new GeoLocation(51.039687, 3.726789);
+        IGeoLocation geolocation2 = new GeoLocation(51.022711, 3.686469);
+        geolocation1.setName("Home Fabiola");
+        geolocation2.setName("Ikea Gent");
+        r.addGeolocation(geolocation1);
+        r.addGeolocation(geolocation2);
         r = analyzer.addRoute(r);
         
-        IRoute r2 = new Route("R20 Leuven");
-        IGeoLocation geolocation2 = new GeoLocation(85, 38);
-        geolocation2.setName("Olee");
-        r2.addGeolocation(geolocation2);
-        r2 = analyzer.addRoute(r2);
         
         List<IRoute> routes = beans.getGeneralDAO().getRoutes();
         for(IRoute route : routes){
@@ -123,13 +144,5 @@ public class RoutesResource {
         return "<test>"+analyzer.getProjectName()+"</test>";
     }
 
-    /**
-     * PUT method for updating or creating an instance of RoutesResource
-     * @param content representation for the resource
-     * @return an HTTP response with content of the updated or created resource.
-     */
-    @PUT
-    @Consumes("application/xml")
-    public void putXml(String content) {
-    }
+
 }
