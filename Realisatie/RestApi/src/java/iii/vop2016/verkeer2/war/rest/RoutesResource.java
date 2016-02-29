@@ -99,15 +99,12 @@ public class RoutesResource {
         //r.setInverseRoute(r);
         IGeoLocation geolocation = new GeoLocation(50, 51);
         geolocation.setName("Home Fabiola");
-        geolocation.setRoute(r);
         r.addGeolocation(geolocation);
         r = analyzer.addRoute(r);
         
         IRoute r2 = new Route("R20 Leuven");
-        r2.setInverseRoute(r);
         IGeoLocation geolocation2 = new GeoLocation(85, 38);
         geolocation2.setName("Olee");
-        geolocation2.setRoute(r2);
         r2.addGeolocation(geolocation2);
         r2 = analyzer.addRoute(r2);
         
@@ -117,7 +114,6 @@ public class RoutesResource {
             System.out.println("Ik ben een Route met volgende eigenschappen:");
             System.out.println("ID: "+route.getId());
             System.out.println("Name: "+route.getName());
-            System.out.println("Inverse: "+route.getInverseRoute());
             System.out.println("Geolocaties: "+route.getGeolocations());
         }
         

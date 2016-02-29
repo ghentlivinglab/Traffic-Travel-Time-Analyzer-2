@@ -5,11 +5,13 @@
  */
 package iii.vop2016.verkeer2.ejb.datamanager;
 
+import java.util.Date;
+
 /**
  *
  * @author tobia
  */
 public interface ITrafficDataManager {
-    public void downloadNewData();
+    public void downloadNewData(Date timestamp);
     public void initRoutes();
 }

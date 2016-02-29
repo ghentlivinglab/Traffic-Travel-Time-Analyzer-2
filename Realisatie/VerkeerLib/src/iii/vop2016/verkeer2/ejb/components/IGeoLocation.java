@@ -5,11 +5,13 @@
  */
 package iii.vop2016.verkeer2.ejb.components;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Mike
  */
-public interface IGeoLocation {
+public interface IGeoLocation extends Serializable{
     
     
     public double getLongitude();
@@ -17,11 +19,7 @@ public interface IGeoLocation {
     public String getName();
     public void setLongitude(double longitude);
     public void setLatitude(double latitude);  
-    public void setName(String name);
-    
-    public IRoute getRoute();
-    public void setRoute(IRoute route);
-    
+    public void setName(String name);    
     public long getId();
     public void setId(long id);
     

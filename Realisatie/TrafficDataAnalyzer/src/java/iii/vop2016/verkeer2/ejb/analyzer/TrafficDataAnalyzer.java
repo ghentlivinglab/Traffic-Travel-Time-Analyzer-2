@@ -54,9 +54,4 @@ public class TrafficDataAnalyzer implements TrafficDataAnalyzerRemote {
     public IRoute addRoute(IRoute route) {
         return beans.getGeneralDAO().addRoute(route);
     }
-
-    @Override
-    public void addGeoLocation(IGeoLocation geolocation) {
-        beans.getGeneralDAO().addGeoLocation(geolocation);
-    }
 }

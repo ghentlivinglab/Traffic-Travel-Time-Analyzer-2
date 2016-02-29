@@ -43,7 +43,6 @@ public class GeneralDAODummy implements IGeneralDAO{
             for(IGeoLocation location : route.getGeolocations()){
                 addGeoLocation(location);
             }
-            addRoute(route.getInverseRoute());
             route.setId(routes.size()-1);
         }
         return route;
@@ -55,8 +54,7 @@ public class GeneralDAODummy implements IGeneralDAO{
         routes.add(i, new Route());
     }
 
-    @Override
-    public void addGeoLocation(IGeoLocation geolocation) {
+    private void addGeoLocation(IGeoLocation geolocation) {
         geolocations.add(geolocation);
         geolocation.setId(geolocations.size()-1);
     }

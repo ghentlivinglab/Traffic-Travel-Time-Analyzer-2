@@ -47,7 +47,7 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
         int duration=0;
         int distance=0;
         
-        Set<IGeoLocation> geoLocations= route.getGeolocations();
+        List<IGeoLocation> geoLocations= route.getGeolocations();
         String URL=createURL(geoLocations);
 
         try {
@@ -112,7 +112,7 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
     }
 
     //Method to create the correct Google API URL, based on all the geoLocations
-    private String createURL(Set<IGeoLocation> geoLocations){
+    private String createURL(List<IGeoLocation> geoLocations){
         StringBuilder sb= new StringBuilder(basicURL);
         sb.append("origins=");
         //Loop to put all the origins in the URL = all the geoLocations, except for the last one

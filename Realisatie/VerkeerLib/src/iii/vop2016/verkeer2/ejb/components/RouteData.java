@@ -13,11 +13,11 @@ import java.util.Date;
  */
 public class RouteData implements IRouteData {
 
-    private long id;
-    private IRoute route;
-    private int duration;
-    private int distance;
-    private Date timestamp;
+    protected long id;
+    protected IRoute route;
+    protected int duration;
+    protected int distance;
+    protected Date timestamp;
     
     
     
@@ -63,7 +63,7 @@ public class RouteData implements IRouteData {
 
     @Override
     public void setDistance(int distance) {
-        this.distance = duration;
+        this.distance = distance;
     }
 
     @Override

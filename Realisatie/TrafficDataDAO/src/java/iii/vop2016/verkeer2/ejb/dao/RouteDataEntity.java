@@ -7,14 +7,24 @@ package iii.vop2016.verkeer2.ejb.dao;
 
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
+import iii.vop2016.verkeer2.ejb.components.Route;
 import iii.vop2016.verkeer2.ejb.components.RouteData;
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 /**
@@ -23,99 +33,82 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name="routedata")
-public class RouteDataEntity implements Serializable, IRouteData {
+@Access(AccessType.PROPERTY)
+public class RouteDataEntity extends RouteData{
 
-    private IRouteData component;
 
     public RouteDataEntity() {
-        component = new RouteData();
+        super();
     }
 
     public RouteDataEntity(IRouteData component) {
-        this.component = component;
+        super();
+        this.distance = component.getDistance();
+        this.duration = component.getDuration();
+        this.id = component.getId();
+        this.route = component.getRoute();
+        this.timestamp = component.getTimestamp();
     }
-    
-    
-    private static final long serialVersionUID = 1L;
   
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Override
     public long getId() {
-        return this.component.getId();
-    }
-
-    public void setId(long id) {
-        this.component.setId(id);
+        return super.getId();
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (int) getId();
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof RouteDataEntity)) {
-            return false;
-        }
-        RouteDataEntity other = (RouteDataEntity) object;
-        if (this.getId() != other.getId()) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "iii.vop2016.verkeer2.ejb.dao.TrafficDataEntity[ id=" + getId() + " ]";
-    }
-
-    @Override
+    @Transient
     public IRoute getRoute() {
-        return this.component.getRoute();
+        return super.getRoute();
+    }
+    
+    public long getRouteID(){
+        if(route == null)
+            return 0;
+        return super.getRoute().getId();
+    }
+    
+    public void setRouteID(long id){
+        if(route == null)
+            route = new Route();
+        route.setId(id);
     }
 
     @Override
     public int getDuration() {
-        return this.component.getDuration();
+        return super.getDuration();
     }
 
     @Override
     public int getDistance() {
-        return this.component.getDistance();
+        return super.getDistance();
     }
 
     @Override
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getTimestamp() {
-        return this.component.getTimestamp();
-    }
-
-    @Override
-    public void setRoute(IRoute route) {
-        this.component.setRoute(route);
-    }
-
-    @Override
-    public void setDuration(int duration) {
-        this.component.setDuration(duration);
+        return super.getTimestamp();
     }
 
     @Override
     public void setDistance(int distance) {
-        this.component.setDistance(distance);
+        super.setDistance(distance); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setDuration(int duration) {
+        super.setDuration(duration); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setId(long id) {
+        super.setId(id); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void setTimestamp(Date timestamp) {
-        this.component.setTimestamp(timestamp);
-    }
-    
-    @Transient
-    public IRouteData getComponent(){
-        return this.component;
+        super.setTimestamp(timestamp); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

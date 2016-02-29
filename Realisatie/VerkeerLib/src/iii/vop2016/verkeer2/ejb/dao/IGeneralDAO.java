@@ -19,7 +19,5 @@ public interface IGeneralDAO{
     public IRoute getRoute(String name);
     public IRoute addRoute(IRoute route);
     public void removeRoute(IRoute route);
-
-    public void addGeoLocation(IGeoLocation geolocation);
     
 }

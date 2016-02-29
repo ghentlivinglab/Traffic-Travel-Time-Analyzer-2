@@ -12,6 +12,7 @@ import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -160,7 +161,7 @@ public class TimerSchedular implements TimerSchedularRemote {
         ITrafficDataManager managementBean = beans.getDataManager();
         if (managementBean != null) {
             System.out.println("Tick Tick It's me");
-            managementBean.downloadNewData();
+            managementBean.downloadNewData(new Date());
         } else {
             Logger.getGlobal().log(Level.SEVERE, "Could not access dataManagement bean to trigger Timed function");
         }

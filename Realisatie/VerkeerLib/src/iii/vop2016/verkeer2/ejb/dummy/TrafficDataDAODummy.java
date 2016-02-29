@@ -55,28 +55,6 @@ public class TrafficDataDAODummy implements ITrafficDataDAO{
         }
 
     }
-    
-    
-    
-    @Override
-    public List<IRouteData> getAllData() {
-        return data;
-    }
-
-    @Override
-    public List<IRouteData> getData(IRoute route) {
-        List<IRouteData> d = new ArrayList<>();
-        for(IRouteData data : this.data){
-            if(data.getRoute().equals(route))
-                d.add(data);
-        }
-        return d;
-    }
-
-    @Override
-    public List<IRouteData> getData(ISourceAdapter adapter) {
-        return new ArrayList<>();
-    }
 
     @Override
     public List<IRouteData> getData(Date time1, Date time2) {
@@ -89,18 +67,12 @@ public class TrafficDataDAODummy implements ITrafficDataDAO{
     }
 
     @Override
-    public void addData(IRouteData data) {
-        this.data.add(data);
+    public IRouteData addData(IRouteData data) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void addData(List<IRouteData> allData) {
-        for(IRouteData data : allData){
-            addData(data);
-        }
+    public List<IRouteData> addData(List<IRouteData> data) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
-    
-    
 }

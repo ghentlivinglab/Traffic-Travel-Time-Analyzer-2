@@ -24,10 +24,5 @@ public class TrafficDataAnalyzerDummy implements IAnalyzer{
     public IRoute addRoute(IRoute route) {
         return null;
     }
-
-    @Override
-    public void addGeoLocation(IGeoLocation geolocation1) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
 }

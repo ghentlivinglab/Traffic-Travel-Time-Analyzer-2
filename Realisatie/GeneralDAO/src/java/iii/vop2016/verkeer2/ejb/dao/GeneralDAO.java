@@ -12,18 +12,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.ejb.Singleton;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
+import javax.persistence.Query;
 
 /**
  *
@@ -32,62 +26,70 @@ import javax.transaction.UserTransaction;
 @Singleton
 public class GeneralDAO implements GeneralDAORemote {
 
-    @PersistenceContext(name="GeneralDBPU")
+    @PersistenceContext(name = "GeneralDBPU")
     EntityManager em;
     private InitialContext ctx;
-    
-    public GeneralDAO(){
-        
+
+    public GeneralDAO() {
+
     }
-    
+
     @PostConstruct
-    public void init(){
+    public void init() {
         try {
-            //emFactory = Persistence.createEntityManagerFactory("GeneralDBPU");
             ctx = new InitialContext();
         } catch (NamingException ex) {
             Logger.getLogger(GeneralDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
+
     @Override
     public List<IRoute> getRoutes() {
-        
-        
-        List<IRoute> routes = new ArrayList<>();
+        List<IRoute> routes = null;
         try {
-            em.getTransaction().begin();
+            //get all routes
             routes = em.createQuery("SELECT r FROM RouteEntity r").getResultList();
-            em.getTransaction().commit();
         } catch (Exception e) {
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.severe(e.getMessage());
         } finally {
-            if (em != null) {
-                em.close();
-            }
+
         }
         return routes;
     }
 
     @Override
     public IRoute getRoute(String name) {
-        return null;
+        IRoute route = null;
+        try {
+            //get all routes
+            Query q = em.createQuery("SELECT r FROM RouteEntity r WHERE r.name = :name");
+            q.setParameter("name", name);
+
+            List<IRoute> routes = q.getResultList();
+            if (routes.size() >= 1) {
+                route = routes.get(0);
+            }
+        } catch (Exception e) {
+            Logger logger = Logger.getLogger(this.getClass().getName());
+            logger.severe(e.getMessage());
+        } finally {
+
+        }
+        return route;
     }
 
     @Override
     public IRoute addRoute(IRoute route) {
         RouteEntity r = new RouteEntity(route);
+        List<IGeoLocation> l = new ArrayList<>();
+        for (IGeoLocation loc : r.getGeolocations()) {
+            l.add(new GeoLocationEntity(loc));
+        }
+        r.setGeolocations(l);
+
         try {
-            for(IGeoLocation location : route.getGeolocations()){
-                //GeoLocationEntity loc2 = new GeoLocationEntity(location);
-                //loc2.setRoute(route);
-                //addGeoLocation(location);
-            }
-            
-            em.persist(r); 
-            
+            em.persist(r);
         } catch (Exception ex) {
             Logger.getLogger(GeneralDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -96,18 +98,18 @@ public class GeneralDAO implements GeneralDAORemote {
 
     @Override
     public void removeRoute(IRoute route) {
-        
+        if (route instanceof RouteEntity) {
+            route = em.merge(route);
+            em.remove(route);
+        } else if (route.getId() != 0) {
+            for(IGeoLocation loc : route.getGeolocations()){
+                Query q = em.createQuery("Delete FROM GeoLocationEntity r WHERE r.id = :name");
+                q.setParameter("name", loc.getId());
+                q.executeUpdate();
+            }
+            Query q = em.createQuery("Delete FROM RouteEntity r WHERE r.id = :name");
+            q.setParameter("name", route.getId());
+            q.executeUpdate();
+        }
     }
-
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
-
-    @Override
-    public void addGeoLocation(IGeoLocation geolocation) {
- 
-            em.persist(new GeoLocationEntity(geolocation));
-
-    }
-
-    
 }

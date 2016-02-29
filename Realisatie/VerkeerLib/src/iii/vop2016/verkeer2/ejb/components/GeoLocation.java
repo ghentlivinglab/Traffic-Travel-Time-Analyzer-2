@@ -5,24 +5,24 @@
  */
 package iii.vop2016.verkeer2.ejb.components;
 
+import java.util.Objects;
+
 /**
  *
  * @author Mike
  */
 public class GeoLocation implements IGeoLocation {
 
-    private long id;
-    private double longitude;
-    private double latitude;
-    private String name;
-    private IRoute route;
+    protected long id;
+    protected double longitude;
+    protected double latitude;
+    protected String name;
     
     public GeoLocation(){
         this.longitude = 0;
         this.latitude = 0;
         this.id = 0;
         this.name = null;
-        this.route = null;
     }
     
     public GeoLocation(double longitude, double latitude){
@@ -30,7 +30,6 @@ public class GeoLocation implements IGeoLocation {
         this.latitude = latitude;
         this.id = 0;
         this.name = null;
-        this.route = null;
     }
     
     @Override
@@ -73,16 +72,6 @@ public class GeoLocation implements IGeoLocation {
     public void setName(String name) {
         this.name=name;
     }
-
-    @Override
-    public IRoute getRoute() {
-        return this.route;
-    }
-
-    @Override
-    public void setRoute(IRoute route) {
-        this.route = route;
-    }
     
     @Override
     public String toString(){
@@ -91,10 +80,10 @@ public class GeoLocation implements IGeoLocation {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 59 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 59 * hash + (int) (Double.doubleToLongBits(this.longitude) ^ (Double.doubleToLongBits(this.longitude) >>> 32));
-        hash = 59 * hash + (int) (Double.doubleToLongBits(this.latitude) ^ (Double.doubleToLongBits(this.latitude) >>> 32));
+        int hash = 3;
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.longitude) ^ (Double.doubleToLongBits(this.longitude) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.latitude) ^ (Double.doubleToLongBits(this.latitude) >>> 32));
+        hash = 97 * hash + Objects.hashCode(this.name);
         return hash;
     }
 
@@ -106,23 +95,21 @@ public class GeoLocation implements IGeoLocation {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (!(obj instanceof IGeoLocation)) {
             return false;
         }
-        final GeoLocation other = (GeoLocation) obj;
-        if (this.id != other.id) {
+        final IGeoLocation other = (IGeoLocation) obj;
+        if (Double.doubleToLongBits(this.longitude) != Double.doubleToLongBits(other.getLongitude())) {
             return false;
         }
-        if (Double.doubleToLongBits(this.longitude) != Double.doubleToLongBits(other.longitude)) {
+        if (Double.doubleToLongBits(this.latitude) != Double.doubleToLongBits(other.getLatitude())) {
             return false;
         }
-        if (Double.doubleToLongBits(this.latitude) != Double.doubleToLongBits(other.latitude)) {
+        if (!Objects.equals(this.name, other.getName())) {
             return false;
         }
         return true;
     }
-
     
-
     
 }

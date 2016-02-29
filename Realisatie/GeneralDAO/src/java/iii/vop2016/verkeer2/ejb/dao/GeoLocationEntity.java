@@ -9,6 +9,9 @@ import iii.vop2016.verkeer2.ejb.components.GeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import java.io.Serializable;
+import java.util.Objects;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,109 +29,61 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name="geolocations")
-public class GeoLocationEntity implements Serializable, IGeoLocation {
-    
-    private IGeoLocation component;
-    private IRoute route;
-    
-    private static final long serialVersionUID = 1L;
-    
+@Access(AccessType.PROPERTY)
+public class GeoLocationEntity extends GeoLocation {
     
     public GeoLocationEntity() {
-        component = new GeoLocation();
-        route = null;
+        super();
     }
 
     public GeoLocationEntity(IGeoLocation component) {
-        this.component = component;
-        route = null;
+        super();
+        this.id = component.getId();
+        this.longitude = component.getLongitude();
+        this.latitude = component.getLatitude();
+        this.name = component.getName();
     }
-
-
-    
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Override
     public long getId() {
-        return this.component.getId();
-    }
-
-    public void setId(long id) {
-        this.component.setId(id);
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (int) getId();
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof GeoLocationEntity)) {
-            return false;
-        }
-        GeoLocationEntity other = (GeoLocationEntity) object;
-        if (getId() != other.getId()) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "iii.vop2016.verkeer2.ejb.dao.GeoLocationEntity[ id=" + getId() + " ]";
+        return id;
     }
 
     @Override
     public double getLongitude() {
-        return this.component.getLongitude();
+        return longitude;
     }
 
     @Override
     public double getLatitude() {
-        return this.component.getLatitude();
+        return latitude;
     }
 
     @Override
     public String getName() {
-        return this.component.getName();
+        return name;
     }
 
     @Override
-    public void setLongitude(double longitude) {
-        this.component.setLongitude(longitude);
+    public void setId(long id) {
+        super.setId(id); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void setLatitude(double latitude) {
-        this.component.setLatitude(latitude);
+        super.setLatitude(latitude); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setLongitude(double longitude) {
+        super.setLongitude(longitude); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void setName(String name) {
-        this.component.setName(name);
+        super.setName(name); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    @Transient
-    public IGeoLocation getComponent(){
-        return this.component;
-    }
-    
-    
-    @Override
-    @ManyToOne(targetEntity = RouteEntity.class, optional = false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-    @JoinColumn(referencedColumnName="id")
-    public IRoute getRoute(){
-        return route;
-    }
-    
-    @Override
-    public void setRoute(IRoute route){
-        this.route = route;
-    }
-    
     
 }

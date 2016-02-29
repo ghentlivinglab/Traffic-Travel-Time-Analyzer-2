@@ -18,22 +18,19 @@ import java.util.Set;
  */
 public class Route implements IRoute{
 
-    private long id;
-    private String name;
-    private IRoute inv;
-    private Set<IGeoLocation> geolocations;
+    protected long id;
+    protected String name;
+    protected List<IGeoLocation> geolocations;
 
     public Route() {
-        geolocations = new HashSet<>();
+        geolocations = new ArrayList<>();
         this.name = null;
-        this.inv = null;
         this.id = 0;
     }
     
     public Route(String name) {
         this.name = name;
-        geolocations = new HashSet<>();
-        this.inv = null;
+        geolocations = new ArrayList<>();
         this.id = 0;
     }
     
@@ -57,12 +54,7 @@ public class Route implements IRoute{
     }
 
     @Override
-    public IRoute getInverseRoute() {
-        return inv;
-    }
-
-    @Override
-    public Set<IGeoLocation> getGeolocations() {
+    public List<IGeoLocation> getGeolocations() {
         return geolocations;
     }
 
@@ -82,12 +74,7 @@ public class Route implements IRoute{
     }
 
     @Override
-    public void setInverseRoute(IRoute route) {
-        inv = route;
-    }
-
-    @Override
-    public void setGeolocations(Set<IGeoLocation> locations) {
+    public void setGeolocations(List<IGeoLocation> locations) {
         geolocations = locations;
     }
 
@@ -114,7 +101,7 @@ public class Route implements IRoute{
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 79 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 97 * hash + Objects.hashCode(this.name);
         return hash;
     }
 
@@ -126,15 +113,17 @@ public class Route implements IRoute{
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (!(obj instanceof IRoute)) {
             return false;
         }
-        final Route other = (Route) obj;
-        if (this.id != other.id) {
+        final IRoute other = (IRoute) obj;
+        if (!Objects.equals(this.name, other.getName())) {
             return false;
         }
         return true;
     }
+
+    
 
     
     

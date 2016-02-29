@@ -5,19 +5,25 @@
  */
 package iii.vop2016.verkeer2.ejb.dao;
 
+import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.provider.ISourceAdapter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -26,82 +32,59 @@ import javax.persistence.Persistence;
 @Singleton
 public class TrafficDataDAO implements TrafficDataDAORemote {
     
-    private EntityManagerFactory emFactory;
+    @PersistenceContext(name = "TrafficDataDBPU")
+    EntityManager em;
+    private InitialContext ctx;
+    
+    @PostConstruct
+    public void init() {
+        try {
+            ctx = new InitialContext();
+        } catch (NamingException ex) {
+            Logger.getLogger(TrafficDataDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
             
     public TrafficDataDAO(){
         
     }
-    
-    @PostConstruct
-    public void init(){
-        emFactory = Persistence.createEntityManagerFactory("TrafficDataDBPU");
-    }
 
     @Override
-    public List<IRouteData> getAllData() {
-        EntityManager em = null;
-        List<IRouteData> data = new ArrayList<>();
+    public List<IRouteData> getData(Date time1, Date time2) {
+        List<IRouteData> routes = null;
         try {
-            em = emFactory.createEntityManager();
-            em.getTransaction().begin();
-            data = em.createQuery("SELECT d FROM RouteDataEntity d").getResultList();
-            em.getTransaction().commit();
+            //get all routes
+            Query q = em.createQuery("SELECT r FROM RouteDataEntity r WHERE r.timestamp >= :time1 AND r.timestamp <= :time2");
+            q.setParameter("time1", time1);
+            q.setParameter("time2", time2);
+            routes = q.getResultList();
         } catch (Exception e) {
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.severe(e.getMessage());
         } finally {
-            if (em != null) {
-                em.close();
-            }
+
+        }
+        return routes;
+    }
+
+    @Override
+    public IRouteData addData(IRouteData data) {
+        RouteDataEntity r = new RouteDataEntity(data);
+        try {
+            em.persist(r);
+        } catch (Exception ex) {
+            Logger.getLogger(TrafficDataDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return r;
+    }
+
+    @Override
+    public List<IRouteData> addData(List<IRouteData> allData) {
+        List<IRouteData> data = new ArrayList<>();
+        for(IRouteData d : allData){
+            data.add(addData(d));
         }
         return data;
-    }
-
-    @Override
-    public List<IRouteData> getData(IRoute route) {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public List<IRouteData> getData(ISourceAdapter adapter) {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public List<IRouteData> getData(Date time1, Date time2) {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public void addData(IRouteData data) {
-        List<IRouteData> allData = new ArrayList<>();
-        allData.add(data);
-        addData(allData);
-    }
-
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
-
-    @Override
-    public void addData(List<IRouteData> allData) {
-        EntityManager em = null;
-        try{
-            em = emFactory.createEntityManager();
-            em.getTransaction().begin();
-            for(IRouteData data : allData){
-                em.persist(new RouteDataEntity(data));
-            }
-            em.getTransaction().commit();
-        }catch(Exception e){
-            e.printStackTrace();
-            if(em != null){
-                em.getTransaction().rollback();                
-            }
-        }finally{
-            if(em != null){
-                em.close();
-            }
-        }
-        
     }
 }

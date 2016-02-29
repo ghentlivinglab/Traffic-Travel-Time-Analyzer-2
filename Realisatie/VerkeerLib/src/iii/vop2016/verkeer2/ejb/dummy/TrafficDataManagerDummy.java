@@ -6,6 +6,7 @@
 package iii.vop2016.verkeer2.ejb.dummy;
 
 import iii.vop2016.verkeer2.ejb.datamanager.ITrafficDataManager;
+import java.util.Date;
 
 /**
  *
@@ -14,7 +15,7 @@ import iii.vop2016.verkeer2.ejb.datamanager.ITrafficDataManager;
 public class TrafficDataManagerDummy implements ITrafficDataManager{
 
     @Override
-    public void downloadNewData() {
+    public void downloadNewData(Date timestamp) {
         
     }
 
