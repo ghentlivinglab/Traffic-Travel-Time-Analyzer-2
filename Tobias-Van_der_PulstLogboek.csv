@@ -9,3 +9,12 @@ Datum,Start,Einde,Plaats,Categorie,Omschrijving,Issue #,Opmerkingen
 18/02/16,10:30,11:00,School,Presentatie,presentaties jobinfo,,
 18/02/16,12:45,17:00,School,Projectwerk,Lessen pollefliet en jobbeurs en definieren interfaces,12,
 19/02/16,19:30,21:30,Thuis,Implementatie,Creatie factory voor ophalen beans,9,
+20/02/16,14:00,18:00,Thuis,Implementatie,Restfull services basis,,
+21/02/16,14:00,16:30,Thuis,Implementatie,Creatie van dummies en dumm factory,,
+21/02/16,18:30,21:30,Thuis,Documentatie,onderzoek naar unit tests,,
+23/02/16,08:15,12:15,School,Projectwerk,External libraries toevoegen,,paar fixes en error throwings voor resource files
+25/02/16,13:30,15:00,School,Projectwerk,Lessen pollefliet,,
+25/02/16,15:00,17:45,School,Projectwerk,Project deployable krijgen na syncup,,
+27/02/16,13:00,17:00,Thuis,Implementatie,JPA werkend krijgen binnenin java ee,,
+28/02/16,15:00,20:00,Thuis,Implementatie,afwerking databaseconnectie,,
+29/02/16,18:00,21:00,Thuis,Implementatie,foutafhandeling jpa en datamanager link tussen adapters en database,,
