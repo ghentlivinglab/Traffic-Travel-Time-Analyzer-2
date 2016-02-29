@@ -39,6 +39,8 @@ public class TrafficDataAnalyzer implements TrafficDataAnalyzerRemote {
             Logger.getLogger(TrafficDataAnalyzer.class.getName()).log(Level.SEVERE, null, ex);
         }
         beans = BeanFactory.getInstance(ctx, sctx);
+        
+        Logger.getLogger("logger").log(Level.INFO, "TrafficDataAnalyzer has been initialized."); 
     }
 
     // Add business logic below. (Right-click in editor and choose

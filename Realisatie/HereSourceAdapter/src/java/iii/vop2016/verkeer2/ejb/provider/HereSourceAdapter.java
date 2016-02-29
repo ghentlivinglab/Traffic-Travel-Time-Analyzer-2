@@ -20,6 +20,9 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +39,11 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
     private final String appCode = "K-gS30K9dbNrznv5TonvHQ";
     private static final String providerName = "Here";
 
+    @PostConstruct
+    private void init(){
+        Logger.getLogger("logger").log(Level.INFO, "HereSourceAdapter has been initialized.");  
+    }
+    
     @Override
     public IRouteData parse(IRoute route) throws URLException,DataAccessException {
 

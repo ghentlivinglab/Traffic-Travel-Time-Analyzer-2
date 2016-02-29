@@ -13,5 +13,4 @@ import java.util.Date;
  */
 public interface ITrafficDataManager {
     public void downloadNewData(Date timestamp);
-    public void initRoutes();
 }

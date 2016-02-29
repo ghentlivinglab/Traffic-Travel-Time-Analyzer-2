@@ -27,31 +27,34 @@ import javax.naming.NamingException;
 @Singleton
 @Startup
 public class Logger implements LoggerRemote {
-    
+
     protected java.util.logging.Logger l;
 
-    @PostConstruct
-    private void init(){
+    public Logger() {
         try {
             FileHandler h;
-            h = new FileHandler("c:/temp/log.txt",true);
+            h = new FileHandler("c:/temp/log.txt", true);
             l = java.util.logging.Logger.getLogger("logger");
             l.addHandler(h);
-            
+
             l.log(Level.INFO, "Started Logging at " + new Date());
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(Logger.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SecurityException ex) {
             java.util.logging.Logger.getLogger(Logger.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
-    
+
+    @PostConstruct
+    private void init() {
+
+    }
+
     @PreDestroy
-    private void destroy(){
+    private void destroy() {
         l.log(Level.INFO, "Ended Logging at " + new Date());
-        for(Handler handler : l.getHandlers()){
-            if(handler instanceof FileHandler){
+        for (Handler handler : l.getHandlers()) {
+            if (handler instanceof FileHandler) {
                 FileHandler f = (FileHandler) handler;
                 f.close();
             }

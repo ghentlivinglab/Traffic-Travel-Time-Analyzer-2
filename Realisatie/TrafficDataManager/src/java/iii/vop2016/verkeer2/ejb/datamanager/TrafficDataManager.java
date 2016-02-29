@@ -31,6 +31,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
 import javax.ejb.Singleton;
@@ -65,7 +66,6 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
         Logger.getGlobal().log(Level.INFO, "TrafficDataManager init...");
 
         //Initialize bean and its context
-        //Initialize bean and its context
         try {
             ctx = new InitialContext();
         } catch (NamingException ex) {
@@ -79,7 +79,7 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
 
         sourceManager = new SourceManager();
 
-        Logger.getGlobal().log(Level.INFO, "TrafficDataManager has been initialized.");
+        Logger.getLogger("logger").log(Level.INFO, "TrafficDataManager has been initialized.");
 
     }
 
@@ -90,28 +90,24 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
         List<IRoute> routes = generalDAO.getRoutes();
         if (routes != null) {
             List<IRouteData> data;
+            
             for (IRoute route : routes) {
+                
                 //opvragen van de data
                 data = sourceManager.parse(route);
+                
                 //opslaan van de verkregen data
-                trafficDataDAO.addData(data);
+                if(data != null && data.size() != 0)
+                    trafficDataDAO.addData(data);
             }
         }else{
             Logger.getLogger("logger").log(Level.WARNING,"No routes available to scrape data for");
         }
 
     }
-
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
-    @Override
-    public void initRoutes() {
-        IRoute route = new Route("Test route 1");
-
-        IGeoLocation geolocation = new GeoLocation(50.6565, 51.2566);
-        route.addGeolocation(geolocation);
-        generalDAO.addRoute(route);
+    
+    @PreDestroy
+    private void destroy(){
+        sourceManager.destroy();
     }
-
-
 }

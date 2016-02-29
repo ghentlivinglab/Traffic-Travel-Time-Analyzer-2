@@ -17,5 +17,6 @@ import java.util.concurrent.Future;
 public interface ISourceManager {
     
     public List<IRouteData> parse(IRoute route);
+    public void destroy();
     
 }

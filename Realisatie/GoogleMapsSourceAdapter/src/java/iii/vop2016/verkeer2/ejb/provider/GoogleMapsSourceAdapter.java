@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -40,6 +41,10 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
     private final String basicURL = "https://maps.googleapis.com/maps/api/distancematrix/json?";
     private static final String providerName = "GoogleMaps";
 
+    @PostConstruct
+    public void init(){
+        Logger.getLogger("logger").log(Level.INFO, "GoogleMapsSourceAdaptor has been initialized.");  
+    }
 
     @Override
     public IRouteData parse(IRoute route) throws URLException, DataAccessException{

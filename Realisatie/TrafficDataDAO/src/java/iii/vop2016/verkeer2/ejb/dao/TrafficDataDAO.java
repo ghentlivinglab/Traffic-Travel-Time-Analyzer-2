@@ -43,6 +43,8 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
         } catch (NamingException ex) {
             Logger.getLogger(TrafficDataDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        Logger.getLogger("logger").log(Level.INFO, "TrafficDataDAO has been initialized."); 
     }
 
             

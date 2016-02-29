@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
 import javax.ejb.Singleton;
@@ -75,11 +76,12 @@ public class TimerSchedular implements TimerSchedularRemote {
         //Get properties file for bean
         properties = HelperFunctions.RetrievePropertyFile(JNDILOOKUP_PROPERTYFILE, ctx, Logger.getGlobal());
 
+        Logger.getLogger("logger").log(Level.INFO, "TimerScheduler has been initialized.");  
+        
         //Get interval to closest time for timer from properties file
         int currentTime = getIndexedCurrentTime();
         interval = getIntervalForClosestTime(currentTime);
-        Logger.getGlobal().log(Level.INFO, "Interval for Timer set to " + interval);
-        
+        Logger.getLogger("logger").log(Level.INFO, "Interval for Timer set to " + interval);   
         
 
         //Create timer with specified interval
@@ -109,7 +111,7 @@ public class TimerSchedular implements TimerSchedularRemote {
             
             interval = i;
             ticks = 1;
-            Logger.getGlobal().log(Level.INFO, "Interval for Timer set to " + interval);
+            Logger.getLogger("logger").log(Level.INFO, "Interval for Timer set to " + interval); 
         }
 
     }
@@ -160,12 +162,16 @@ public class TimerSchedular implements TimerSchedularRemote {
         //lookup datamanager bean and trigger timed function
         ITrafficDataManager managementBean = beans.getDataManager();
         if (managementBean != null) {
-            System.out.println("Tick Tick It's me");
             managementBean.downloadNewData(new Date());
         } else {
-            Logger.getGlobal().log(Level.SEVERE, "Could not access dataManagement bean to trigger Timed function");
+            Logger.getLogger("logger").log(Level.SEVERE, "Could not access dataManagement bean to trigger Timed function");
         }
 
+    }
+    
+    @PreDestroy
+    private void destroy(){
+        t.cancel();
     }
 
 }

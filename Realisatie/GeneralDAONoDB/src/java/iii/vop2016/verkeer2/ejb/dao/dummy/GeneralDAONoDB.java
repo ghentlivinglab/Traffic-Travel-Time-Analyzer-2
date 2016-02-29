@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 
@@ -35,6 +37,7 @@ public class GeneralDAONoDB implements GeneralDAONoDBRemote {
         routes = new ArrayList<>();
         lastRouteIndex = 0;
         lastGeoLocationIndex = 0;
+        Logger.getLogger("logger").log(Level.INFO, "GeneralNoDB has been initialized.");  
     }
     
     @Override

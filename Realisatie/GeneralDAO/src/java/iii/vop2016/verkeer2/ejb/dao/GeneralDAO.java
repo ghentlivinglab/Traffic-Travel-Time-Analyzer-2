@@ -41,6 +41,8 @@ public class GeneralDAO implements GeneralDAORemote {
         } catch (NamingException ex) {
             Logger.getLogger(GeneralDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        Logger.getLogger("logger").log(Level.INFO, "GeneralDAO has been initialized.");  
     }
 
     @Override

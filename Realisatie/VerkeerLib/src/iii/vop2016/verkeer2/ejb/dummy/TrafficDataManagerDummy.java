@@ -18,10 +18,5 @@ public class TrafficDataManagerDummy implements ITrafficDataManager{
     public void downloadNewData(Date timestamp) {
         
     }
-
-    @Override
-    public void initRoutes() {
-    
-    }
     
 }
