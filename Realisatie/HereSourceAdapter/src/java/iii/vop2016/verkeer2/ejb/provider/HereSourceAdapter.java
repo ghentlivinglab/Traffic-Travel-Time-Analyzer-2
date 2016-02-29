@@ -59,7 +59,7 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
                     builder.append("&");
                 }
                 waypoint = waypoints.get(i);
-                builder.append("waypoint").append(i).append("=").append(String.valueOf(waypoint.getLongitude()).replace(',', '.')).append(",").append(String.valueOf(waypoint.getLongitude()).replace(',', '.'));
+                builder.append("waypoint").append(i).append("=").append(String.valueOf(waypoint.getLatitude()).replace(',', '.')).append(",").append(String.valueOf(waypoint.getLongitude()).replace(',', '.'));
             }
 
             builder.append("&mode=fastest%3Bcar%3Btraffic%3Aenabled&app_id=").append(appId).append("&app_code=").append(appCode).append("&departure=now");

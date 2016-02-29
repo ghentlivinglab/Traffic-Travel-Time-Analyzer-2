@@ -117,13 +117,13 @@ public class RoutesResource {
         analyzer.addRoute(r2);
         */
         
-        IRoute r = new Route("R4 Gent");
+        IRoute r = new Route("R4 Zelzate");
         //r.setInverseRoute(r);
 
-        IGeoLocation geolocation1 = new GeoLocation(51.039687, 3.726789);
-        IGeoLocation geolocation2 = new GeoLocation(51.022711, 3.686469);
-        geolocation1.setName("Home Fabiola");
-        geolocation2.setName("Ikea Gent");
+        IGeoLocation geolocation1 = new GeoLocation(51.192226, 3.776342);
+        IGeoLocation geolocation2 = new GeoLocation(51.086447, 3.672188);
+        geolocation1.setName("Zelzate");
+        geolocation2.setName("Gent");
         r.addGeolocation(geolocation1);
         r.addGeolocation(geolocation2);
         r = analyzer.addRoute(r);

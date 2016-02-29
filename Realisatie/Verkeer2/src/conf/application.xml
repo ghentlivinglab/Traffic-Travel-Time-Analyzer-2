@@ -5,25 +5,19 @@
     <ejb>TimerScheduler.jar</ejb>
   </module>
   <module>
-    <ejb>GeneralDAO.jar</ejb>
-  </module>
-  <module>
-    <ejb>TrafficDataAnalyzer.jar</ejb>
-  </module>
-  <module>
-    <ejb>TrafficDataDAO.jar</ejb>
-  </module>
-  <module>
-    <ejb>TrafficDataManager.jar</ejb>
-  </module>
-  <module>
     <web>
       <web-uri>RestApi.war</web-uri>
       <context-root>/rest</context-root>
     </web>
   </module>
   <module>
+    <ejb>GeneralDAO.jar</ejb>
+  </module>
+  <module>
     <ejb>HereSourceAdapter.jar</ejb>
+  </module>
+  <module>
+    <ejb>TrafficDataDAO.jar</ejb>
   </module>
   <module>
     <ejb>GoogleMapsSourceAdapter.jar</ejb>
@@ -32,6 +26,12 @@
     <ejb>GeneralDAONoDB.jar</ejb>
   </module>
   <module>
-    <ejb>TrafficDataDAONoDB.jar</ejb>
+    <ejb>TrafficDataManager.jar</ejb>
+  </module>
+  <module>
+    <ejb>TrafficDataAnalyzer.jar</ejb>
+  </module>
+  <module>
+    <ejb>Logger.jar</ejb>
   </module>
 </application>

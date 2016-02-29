@@ -86,42 +86,20 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
     //method triggered by timer
     @Override
     public void downloadNewData(Date timestamp) {
-        /*
         //Ophalen van alle routes
         List<IRoute> routes = generalDAO.getRoutes();
-
-        List<IRouteData> data;
-        for(IRoute route : routes){
-            //opvragen van de data
-             data = sourceManager.parse(route);
-             //opslaan van de verkregen data
-             trafficDataDAO.addData(data);
-        }
-        
-        //initRoutes();
-         */
-        System.out.println(timestamp);
-        
-        IRoute r = generalDAO.getRoute("R20 Leuven");
-        if (r != null) {
-            System.out.println(r.getId() + " - " + r.getName());
-
-            RouteData d = new RouteData();
-            d.setRoute(r);
-            d.setDistance(100);
-            d.setDuration(10);
-            d.setTimestamp(timestamp);
-
-            trafficDataDAO.addData(d);
+        if (routes != null) {
+            List<IRouteData> data;
+            for (IRoute route : routes) {
+                //opvragen van de data
+                data = sourceManager.parse(route);
+                //opslaan van de verkregen data
+                trafficDataDAO.addData(data);
+            }
         }else{
-            System.out.println("No route");
+            Logger.getLogger("logger").log(Level.WARNING,"No routes available to scrape data for");
         }
-        
-        List<IRouteData> l = trafficDataDAO.getData(new Date(new Date().getTime()-600000), new Date());
-        for(IRouteData l1:l)
-            System.out.println(" - "+l1.getTimestamp());
-        
-        System.out.println("l");
+
     }
 
     // Add business logic below. (Right-click in editor and choose
