@@ -70,7 +70,7 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
                 builder.append("waypoint").append(i).append("=").append(String.valueOf(waypoint.getLatitude()).replace(',', '.')).append(",").append(String.valueOf(waypoint.getLongitude()).replace(',', '.'));
             }
 
-            builder.append("&mode=fastest%3Bcar%3Btraffic%3Aenabled&app_id=").append(appId).append("&app_code=").append(appCode).append("&departure=now");
+            builder.append("&mode=shortest%3Bcar%3Btraffic%3Aenabled&app_id=").append(appId).append("&app_code=").append(appCode).append("&departure=now");
             //builder.append("&mode=fastest%3Bcar%3Btraffic%3Aenabled&app_id=KcOsDG6cNwwshKhALecH&app_code=K-gS30K9dbNrznv5TonvHQ&departure=now");
 
             JSONObject json = new JSONObject(readUrl(builder.toString()));
