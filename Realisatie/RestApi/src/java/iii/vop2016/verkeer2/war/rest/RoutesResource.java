@@ -59,6 +59,7 @@ public class RoutesResource {
     private Map<String, Boolean> visibleFields;
     Date startTime;
     Date endTime;
+    List<String> providers;
 
     /**
      * Creates a new instance of RoutesResource
@@ -76,8 +77,10 @@ public class RoutesResource {
         }
         beans = BeanFactory.getInstance(ctx, sctx);
         visibleFields = new HashMap<>();
+        providers = new ArrayList<>();
         initVisibleFields();
         setVisibleFields();
+        setParameters();
         setStartTime("1456761535931");
         setEndTime("2456761635931");
     }
@@ -133,7 +136,8 @@ public class RoutesResource {
     @Path("all")
     @Produces("application/json")
     public String getAllRoutes() {
-        return getRoutes("all");
+        List<IRoute> routes = beans.getGeneralDAO().getRoutes();
+        return JSONRoutes(routes);
     }
     
     
@@ -142,23 +146,14 @@ public class RoutesResource {
     @Path("{id}")
     @Produces("application/json")
     public String getRoutes(@PathParam("id") String sid) {
-        List<IRoute> routes;
-        if(sid.equals("all")){
-            routes = beans.getGeneralDAO().getRoutes();
-        }else{
-            routes = new ArrayList<>();
-            List<Long> ids = getIds(sid);
-            for (int i=0; i<ids.size(); i++) {
-                IRoute r = beans.getGeneralDAO().getRoute(ids.get(i));
-                if(r != null)
-                    routes.add(r);
-            }
+        List<IRoute> routes = new ArrayList<>();
+        List<Long> ids = getIds(sid);
+        for (int i=0; i<ids.size(); i++) {
+            IRoute r = beans.getGeneralDAO().getRoute(ids.get(i));
+            if(r != null)
+                routes.add(r);
         }
-        JSONArray result = new JSONArray();
-        for(IRoute route : routes){
-            result.put(transformRoute(route));
-        }
-        return result.toString(1);
+        return JSONRoutes(routes);
     }
     
     @GET
@@ -241,8 +236,8 @@ public class RoutesResource {
         if(visibleFields.get("route.geolocations"))
             obj.put("geolocations", transformGeoLocations(route.getGeolocations()));                    
         if(visibleFields.get("route.data"))
-            obj.put("data", transformRouteData(beans.getTrafficDataDAO().getData(route, startTime, endTime)));
-          
+            addRouteData(obj,route);
+         
         return obj;
     }
     
@@ -291,7 +286,6 @@ public class RoutesResource {
             for(String s : parts){
                 visibleFields.put(s, Boolean.TRUE);
             }
-            
         }
     }
 
@@ -309,6 +303,35 @@ public class RoutesResource {
         }catch(NumberFormatException e){
             Logger.getGlobal().log(Level.WARNING, endTime+" could not be converted to Long");
         }
+    }
+
+    private void setParameters() {
+        /* PROVIDERS */
+        String providers = context.getQueryParameters().getFirst("provider");
+        if(providers != null){
+            String[] parts = providers.split(",");
+            for(String s : parts){
+                this.providers.add(s);
+            }
+        }
+    }
+
+    private void addRouteData(JSONObject obj, IRoute route) {
+        List<IRouteData> data = beans.getTrafficDataDAO().getData(route, startTime, endTime);
+        List<IRouteData> result = new ArrayList<>();
+        for(IRouteData d : data){
+            if(providers.size()==0 || providers.contains(d.getProviderName()))
+                result.add(d);
+        }
+        obj.put("data", transformRouteData(result)); 
+    }
+
+    private String JSONRoutes(List<IRoute> routes) {
+        JSONArray result = new JSONArray();
+        for(IRoute route : routes){
+            result.put(transformRoute(route));
+        }
+        return result.toString(1);
     }
 
 
