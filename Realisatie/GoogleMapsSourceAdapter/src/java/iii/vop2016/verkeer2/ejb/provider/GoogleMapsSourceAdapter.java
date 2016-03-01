@@ -88,7 +88,7 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
                         //because of the way the URL is constructed, the only interesting data for this app are on the diagonal of the matrix
                         //the durations and distances are cumulated to get the total distance and duration from start- to endpoint
                         if (i == j) {
-                            duration = duration + elements.getJSONObject(j).getJSONObject("duration").getInt("value");
+                            duration = duration + elements.getJSONObject(j).getJSONObject("duration_in_traffic").getInt("value");
                             distance = distance + elements.getJSONObject(j).getJSONObject("distance").getInt("value");
                         }
                     }
@@ -140,7 +140,9 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
             sb.append("|");
         }
         sb.deleteCharAt(sb.length() - 1); //Delete the last '|' sign
+        sb.append("&traffic_model&departure_time=now");
         sb.append("&key=");
+        
         sb.append(key);
 
         return sb.toString();
