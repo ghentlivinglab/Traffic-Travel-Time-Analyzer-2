@@ -23,4 +23,8 @@ public interface IGeoLocation extends Serializable{
     public long getId();
     public void setId(long id);
     
+    public void setSortRank(int i);
+    public int getSortRank();
+    
+    
 }

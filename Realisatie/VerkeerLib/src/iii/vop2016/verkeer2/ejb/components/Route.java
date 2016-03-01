@@ -55,6 +55,7 @@ public class Route implements IRoute{
 
     @Override
     public List<IGeoLocation> getGeolocations() {
+        geolocations.sort(new GeoLocationComparator());
         return geolocations;
     }
 
@@ -82,16 +83,24 @@ public class Route implements IRoute{
     @Override
     public void setGeolocations(List<IGeoLocation> locations) {
         geolocations = locations;
+        for(int i=0; i<geolocations.size(); i++){
+            geolocations.get(i).setSortRank(i+1);
+        }
     }
 
     @Override
     public void addGeolocation(IGeoLocation location) {
         geolocations.add(location);
+        location.setSortRank(geolocations.size());
     }
 
     @Override
     public void addGeolocation(IGeoLocation location, int i) {
+        for(int j=i; j<geolocations.size(); j++){
+            geolocations.get(j).setSortRank(geolocations.get(j).getSortRank()+1);
+        }
         geolocations.add(i, location);
+        location.setSortRank(i+1);
     }
 
     @Override

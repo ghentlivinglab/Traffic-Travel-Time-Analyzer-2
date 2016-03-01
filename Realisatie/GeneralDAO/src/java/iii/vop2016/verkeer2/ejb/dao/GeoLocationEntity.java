@@ -85,5 +85,17 @@ public class GeoLocationEntity extends GeoLocation {
     public void setName(String name) {
         super.setName(name); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public int getSortRank() {
+        return super.getSortRank(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setSortRank(int i) {
+        super.setSortRank(i); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
     
 }

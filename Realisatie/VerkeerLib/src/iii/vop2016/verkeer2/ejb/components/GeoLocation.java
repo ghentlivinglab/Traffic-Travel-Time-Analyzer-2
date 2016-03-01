@@ -17,6 +17,7 @@ public class GeoLocation implements IGeoLocation {
     protected double longitude;
     protected double latitude;
     protected String name;
+    protected int sortRank;
     
     public GeoLocation(){
         this.latitude = 0;
@@ -109,6 +110,16 @@ public class GeoLocation implements IGeoLocation {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void setSortRank(int i) {
+        this.sortRank = i;
+    }
+
+    @Override
+    public int getSortRank() {
+        return this.sortRank;
     }
     
     
