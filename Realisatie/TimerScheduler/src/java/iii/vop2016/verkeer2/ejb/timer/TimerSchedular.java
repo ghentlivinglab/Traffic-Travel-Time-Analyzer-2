@@ -5,9 +5,7 @@
  */
 package iii.vop2016.verkeer2.ejb.timer;
 
-import com.sun.faces.facelets.util.DevTools;
 import iii.vop2016.verkeer2.ejb.datamanager.ITrafficDataManager;
-import iii.vop2016.verkeer2.ejb.datamanager.TrafficDataManagerRemote;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import java.text.SimpleDateFormat;

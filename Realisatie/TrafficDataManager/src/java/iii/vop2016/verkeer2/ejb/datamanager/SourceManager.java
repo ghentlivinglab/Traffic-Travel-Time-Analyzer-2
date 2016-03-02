@@ -49,7 +49,6 @@ public class SourceManager implements ISourceManager{
         beanFactory = BeanFactory.getInstance(ctx, ctxs);
         
         adapters = new ArrayList<ISourceAdapter>();
-        adapters.addAll(beanFactory.getSourceAdaptors());
         
         executor = Executors.newFixedThreadPool(10);
         
@@ -62,6 +61,9 @@ public class SourceManager implements ISourceManager{
     
     @Override
     public List<IRouteData> parse(final IRoute route) {
+        
+        if(adapters.size() == 0)
+            adapters.addAll(beanFactory.getSourceAdaptors());
         
         List<IRouteData> result = new ArrayList<>();
         

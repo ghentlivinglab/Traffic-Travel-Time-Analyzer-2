@@ -81,6 +81,8 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
     @Override
     public void downloadNewData(Date timestamp) {
         //Ophalen van alle routes
+         Logger.getLogger("logger").log(Level.INFO,"Started data scrubbing");
+        
         List<IRoute> routes = beanFactory.getGeneralDAO().getRoutes();
         if (routes != null) {
             List<IRouteData> data;
@@ -100,6 +102,8 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
         }else{
             Logger.getLogger("logger").log(Level.WARNING,"No routes available to scrape data for");
         }
+        
+         Logger.getLogger("logger").log(Level.INFO,"Data scrubbing done");
 
     }
     
