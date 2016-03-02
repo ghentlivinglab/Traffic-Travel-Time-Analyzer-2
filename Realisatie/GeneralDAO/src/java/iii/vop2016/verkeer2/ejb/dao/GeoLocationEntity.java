@@ -48,22 +48,22 @@ public class GeoLocationEntity extends GeoLocation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Override
     public long getId() {
-        return id;
+        return super.getId();
     }
 
     @Override
     public double getLongitude() {
-        return longitude;
+        return super.getLongitude();
     }
 
     @Override
     public double getLatitude() {
-        return latitude;
+        return super.getLatitude();
     }
 
     @Override
     public String getName() {
-        return name;
+        return super.getName();
     }
 
     @Override

@@ -3,5 +3,14 @@
         version="3.2"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/ejb-jar_3_2.xsd">
-
+<description>Analyzer for formatted output</description>
+    <display-name>TrafficDataAnalyzer</display-name>
+    <enterprise-beans>
+        <session>
+            <ejb-name>TrafficDataAnalyzer</ejb-name>
+            <remote>iii.vop2016.verkeer2.ejb.analyzer.TrafficDataAnalyzerRemote</remote>
+            <ejb-class>iii.vop2016.verkeer2.ejb.analyzer.TrafficDataAnalyzer</ejb-class>
+            <session-type>Singleton</session-type>
+        </session>
+    </enterprise-beans>
 </ejb-jar>

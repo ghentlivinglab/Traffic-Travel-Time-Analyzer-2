@@ -33,7 +33,7 @@ public class Logger implements LoggerRemote {
     public Logger() {
         try {
             FileHandler h;
-            h = new FileHandler("c:/temp/log.txt", true);
+            h = new FileHandler("/root/verkeer2/log.txt", true);
             l = java.util.logging.Logger.getLogger("logger");
             l.addHandler(h);
 

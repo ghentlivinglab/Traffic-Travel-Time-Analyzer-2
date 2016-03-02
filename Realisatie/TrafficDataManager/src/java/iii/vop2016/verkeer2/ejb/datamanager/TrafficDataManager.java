@@ -53,9 +53,6 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
     private BeanFactory beanFactory;
     private ISourceManager sourceManager;
 
-    private IGeneralDAO generalDAO;
-    private ITrafficDataDAO trafficDataDAO;
-
     public TrafficDataManager() {
 
     }
@@ -74,9 +71,6 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
 
         beanFactory = BeanFactory.getInstance(ctx, ctxs);
 
-        generalDAO = beanFactory.getGeneralDAO();
-        trafficDataDAO = beanFactory.getTrafficDataDAO();
-
         sourceManager = new SourceManager();
 
         Logger.getLogger("logger").log(Level.INFO, "TrafficDataManager has been initialized.");
@@ -87,7 +81,7 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
     @Override
     public void downloadNewData(Date timestamp) {
         //Ophalen van alle routes
-        List<IRoute> routes = generalDAO.getRoutes();
+        List<IRoute> routes = beanFactory.getGeneralDAO().getRoutes();
         if (routes != null) {
             List<IRouteData> data;
             
@@ -97,8 +91,11 @@ public class TrafficDataManager implements TrafficDataManagerRemote {
                 data = sourceManager.parse(route);
                 
                 //opslaan van de verkregen data
-                if(data != null && data.size() != 0)
-                    trafficDataDAO.addData(data);
+                if(data != null && data.size() != 0){
+                    for(IRouteData r : data)
+                        r.setTimestamp(timestamp);
+                    beanFactory.getTrafficDataDAO().addData(data);
+                }
             }
         }else{
             Logger.getLogger("logger").log(Level.WARNING,"No routes available to scrape data for");

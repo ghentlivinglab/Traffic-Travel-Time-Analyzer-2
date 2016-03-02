@@ -3,5 +3,14 @@
         version="3.2"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/ejb-jar_3_2.xsd">
-
+<description>Dao for routes with dummy list</description>
+    <display-name>GeneralDAONoDB</display-name>
+    <enterprise-beans>
+        <session>
+            <ejb-name>Logger</ejb-name>
+            <remote>iii.vop2016.verkeer2.ejb.dao.dummy.GeneralDAONoDBRemote</remote>
+            <ejb-class>iii.vop2016.verkeer2.ejb.dao.dummy.GeneralDAONoDB</ejb-class>
+            <session-type>Singleton</session-type>
+        </session>
+    </enterprise-beans>
 </ejb-jar>
