@@ -5,18 +5,18 @@
  */
 package iii.vop2016.verkeer2.ejb.dummy;
 
-import iii.vop2016.verkeer2.ejb.analyzer.IAnalyzer;
+import iii.vop2016.verkeer2.ejb.downstream.IAnalyzer;
 import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
-import iii.vop2016.verkeer2.ejb.datamanager.ITrafficDataManager;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
-import iii.vop2016.verkeer2.ejb.helper.ResourceFileMissingExcepion;
-import iii.vop2016.verkeer2.ejb.provider.ISourceAdapter;
+import iii.vop2016.verkeer2.ejb.helper.ResourceFileMissingException;
+import iii.vop2016.verkeer2.ejb.datasources.ISourceAdapter;
 import iii.vop2016.verkeer2.ejb.timer.ITimer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import iii.vop2016.verkeer2.ejb.datadownloader.ITrafficDataDownloader;
 
 /**
  *
@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  */
 public class BeanFactoryDummy extends BeanFactory{
     
-    private BeanFactoryDummy() throws ResourceFileMissingExcepion {
+    private BeanFactoryDummy() throws ResourceFileMissingException {
         super(null,null);
     }
     
@@ -34,7 +34,7 @@ public class BeanFactoryDummy extends BeanFactory{
         if(INSTANCE== null)
             try {
                 INSTANCE = new BeanFactoryDummy();
-        } catch (ResourceFileMissingExcepion ex) {
+        } catch (ResourceFileMissingException ex) {
 
         }
         return INSTANCE;
@@ -45,13 +45,9 @@ public class BeanFactoryDummy extends BeanFactory{
         return new TrafficDataAnalyzerDummy();
     }
 
-    @Override
-    public ITrafficDataDAO getDataDAO() {
-        return new TrafficDataDAODummy();
-    }
 
     @Override
-    public ITrafficDataManager getDataManager() {
+    public ITrafficDataDownloader getDataManager() {
         return new TrafficDataManagerDummy();
     }
 

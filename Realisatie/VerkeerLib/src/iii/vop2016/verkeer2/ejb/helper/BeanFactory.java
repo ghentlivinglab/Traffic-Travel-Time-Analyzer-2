@@ -5,11 +5,10 @@
  */
 package iii.vop2016.verkeer2.ejb.helper;
 
-import iii.vop2016.verkeer2.ejb.analyzer.IAnalyzer;
+import iii.vop2016.verkeer2.ejb.downstream.IAnalyzer;
 import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
-import iii.vop2016.verkeer2.ejb.datamanager.ITrafficDataManager;
-import iii.vop2016.verkeer2.ejb.provider.ISourceAdapter;
+import iii.vop2016.verkeer2.ejb.datasources.ISourceAdapter;
 import iii.vop2016.verkeer2.ejb.timer.ITimer;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.SessionContext;
 import javax.naming.InitialContext;
+import iii.vop2016.verkeer2.ejb.datadownloader.ITrafficDataDownloader;
 
 /**
  *
@@ -34,7 +34,7 @@ public class BeanFactory {
         if (instance == null) {
             try {
                 instance = new BeanFactory(ctx, sctx);
-            } catch (ResourceFileMissingExcepion ex) {
+            } catch (ResourceFileMissingException ex) {
                 Logger.getLogger(BeanFactory.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printSolution();
             }
@@ -48,14 +48,13 @@ public class BeanFactory {
     private Properties sourceAdaptorsProperties;
 
     private IAnalyzer analyzer = null;
-    private ITrafficDataManager dataManager = null;
-    private ITrafficDataDAO dataDAO = null;
+    private ITrafficDataDownloader dataManager = null;
     private IGeneralDAO generalDAO = null;
     private ITrafficDataDAO trafficDataDAO = null;
     private ITimer timer = null;
     private List<ISourceAdapter> adapters = null;
 
-    protected BeanFactory(InitialContext ctx, SessionContext sctx) throws ResourceFileMissingExcepion {
+    protected BeanFactory(InitialContext ctx, SessionContext sctx) throws ResourceFileMissingException {
         this.ctx = ctx;
         this.sctx = sctx;
         if (ctx != null) {
@@ -64,22 +63,22 @@ public class BeanFactory {
         }
 
         if (beanProperties == null) {
-            throw new ResourceFileMissingExcepion(JNDILOOKUP_BEANFILE);
+            throw new ResourceFileMissingException(JNDILOOKUP_BEANFILE);
         }
         if (sourceAdaptorsProperties == null) {
-            throw new ResourceFileMissingExcepion(JNDILOOKUP_SOURCEADAPORTSFILE);
+            throw new ResourceFileMissingException(JNDILOOKUP_SOURCEADAPORTSFILE);
         }
     }
 
     public IAnalyzer getAnalyzer() {
         if (analyzer == null && sctx != null) {
-            Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.analyzer, sctx, Logger.getGlobal());
+            Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.downstreamAnalyser, sctx, Logger.getGlobal());
             if (obj instanceof IAnalyzer) {
                 analyzer = (IAnalyzer) obj;
             }
         }
         if (analyzer == null && sctx == null) {
-            Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.analyzer, ctx, Logger.getGlobal());
+            Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.downstreamAnalyser, ctx, Logger.getGlobal());
             if (obj instanceof IAnalyzer) {
                 analyzer = (IAnalyzer) obj;
             }
@@ -87,36 +86,20 @@ public class BeanFactory {
         return analyzer;
     }
 
-    public ITrafficDataManager getDataManager() {
+    public ITrafficDataDownloader getDataManager() {
         if (dataManager == null && sctx != null) {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.dataManager, sctx, Logger.getGlobal());
-            if (obj instanceof ITrafficDataManager) {
-                dataManager = (ITrafficDataManager) obj;
+            if (obj instanceof ITrafficDataDownloader) {
+                dataManager = (ITrafficDataDownloader) obj;
             }
         }
         if (dataManager == null && sctx == null) {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.dataManager, ctx, Logger.getGlobal());
-            if (obj instanceof ITrafficDataManager) {
-                dataManager = (ITrafficDataManager) obj;
+            if (obj instanceof ITrafficDataDownloader) {
+                dataManager = (ITrafficDataDownloader) obj;
             }
         }
         return dataManager;
-    }
-
-    public ITrafficDataDAO getDataDAO() {
-        if (dataDAO == null && sctx != null) {
-            Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.dataDAO, sctx, Logger.getGlobal());
-            if (obj instanceof ITrafficDataDAO) {
-                dataDAO = (ITrafficDataDAO) obj;
-            }
-        }
-        if (dataDAO == null && sctx == null) {
-            Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.dataDAO, ctx, Logger.getGlobal());
-            if (obj instanceof ITrafficDataDAO) {
-                dataDAO = (ITrafficDataDAO) obj;
-            }
-        }
-        return dataDAO;
     }
 
     public ITimer getTimer() {

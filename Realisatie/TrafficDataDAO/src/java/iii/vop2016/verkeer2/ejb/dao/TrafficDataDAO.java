@@ -9,7 +9,7 @@ import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.RouteData;
-import iii.vop2016.verkeer2.ejb.provider.ISourceAdapter;
+import iii.vop2016.verkeer2.ejb.datasources.ISourceAdapter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

@@ -5,6 +5,7 @@
  */
 package iii.vop2016.verkeer2.ejb.provider;
 
+import iii.vop2016.verkeer2.ejb.datasources.HereSourceAdapterRemote;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;

@@ -7,7 +7,7 @@ package iii.vop2016.verkeer2.war.rest;
 
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
-import iii.vop2016.verkeer2.ejb.provider.ISourceAdapter;
+import iii.vop2016.verkeer2.ejb.datasources.ISourceAdapter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;

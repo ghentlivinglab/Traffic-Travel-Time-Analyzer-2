@@ -5,7 +5,7 @@
  */
 package iii.vop2016.verkeer2.war.rest;
 
-import iii.vop2016.verkeer2.ejb.analyzer.IAnalyzer;
+import iii.vop2016.verkeer2.ejb.downstream.IAnalyzer;
 import iii.vop2016.verkeer2.ejb.components.GeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
@@ -264,7 +264,7 @@ public class RoutesResource {
         obj.put("distance",data.getDistance());
         obj.put("duration",data.getDuration());
         obj.put("provider",data.getProviderName());
-        obj.put("timestamp",data.getTimestamp());
+        obj.put("timestamp",data.getTimestamp().getTime());
         return obj;
     }
     
