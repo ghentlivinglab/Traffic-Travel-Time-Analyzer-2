@@ -8,6 +8,7 @@ package iii.vop2016.verkeer2.ejb.dao;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
+import iii.vop2016.verkeer2.ejb.components.RouteData;
 import iii.vop2016.verkeer2.ejb.provider.ISourceAdapter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,13 +55,15 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
 
     @Override
     public List<IRouteData> getData(Date time1, Date time2) {
-        List<IRouteData> routes = null;
+        List<IRouteData> routes = new ArrayList<>();
         try {
             //get all routes
             Query q = em.createQuery("SELECT r FROM RouteDataEntity r WHERE r.timestamp >= :time1 AND r.timestamp <= :time2");
             q.setParameter("time1", time1);
             q.setParameter("time2", time2);
-            routes = q.getResultList();
+            List<IRouteData> routesEntities = q.getResultList();
+            for(IRouteData r : routesEntities)
+                routes.add(new RouteData(r));
         } catch (Exception e) {
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.severe(e.getMessage());
@@ -78,7 +81,7 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
         } catch (Exception ex) {
             Logger.getLogger(TrafficDataDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return r;
+        return new RouteData(r);
     }
 
     @Override
@@ -92,14 +95,16 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
 
     @Override
     public List<IRouteData> getData(IRoute route, Date time1, Date time2) {
-        List<IRouteData> data = null;
+        List<IRouteData> data = new ArrayList<>();
         try {
             //get all routes
             Query q = em.createQuery("SELECT r FROM RouteDataEntity r WHERE r.timestamp >= :time1 AND r.timestamp <= :time2 AND r.routeID = :routeID");
             q.setParameter("time1", time1);
             q.setParameter("time2", time2);
             q.setParameter("routeID", route.getId());
-            data = q.getResultList();
+            List<IRouteData> routesEntities = q.getResultList();
+            for(IRouteData r : routesEntities)
+                data.add(new RouteData(r));
         } catch (Exception e) {
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.severe(e.getMessage());
@@ -111,14 +116,16 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
 
     @Override
     public List<IRouteData> getData(ISourceAdapter adapter, Date time1, Date time2) {       
-        List<IRouteData> data = null;
+        List<IRouteData> data = new ArrayList<>();
         try {
             //get all routes
             Query q = em.createQuery("SELECT r FROM RouteDataEntity r WHERE r.timestamp >= :time1 AND r.timestamp <= :time2 AND r.providerName = :providerName");
             q.setParameter("time1", time1);
             q.setParameter("time2", time2);
             q.setParameter("providerName", adapter.getProviderName());
-            data = q.getResultList();
+            List<IRouteData> routesEntities = q.getResultList();
+            for(IRouteData r : routesEntities)
+                data.add(new RouteData(r));
         } catch (Exception e) {
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.severe(e.getMessage());

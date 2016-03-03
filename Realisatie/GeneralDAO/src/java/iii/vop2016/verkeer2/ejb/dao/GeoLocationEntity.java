@@ -37,11 +37,7 @@ public class GeoLocationEntity extends GeoLocation {
     }
 
     public GeoLocationEntity(IGeoLocation component) {
-        super();
-        this.id = component.getId();
-        this.longitude = component.getLongitude();
-        this.latitude = component.getLatitude();
-        this.name = component.getName();
+        super(component);
     }
 
     @Id

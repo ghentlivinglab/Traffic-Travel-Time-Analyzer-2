@@ -5,16 +5,10 @@
  */
 package iii.vop2016.verkeer2.ejb.dao;
 
-import com.sun.org.apache.xpath.internal.operations.Equals;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.Route;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
@@ -25,7 +19,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -43,10 +36,7 @@ public class RouteEntity extends Route {
     }
 
     public RouteEntity(IRoute component) {
-        super();
-        this.id = component.getId();
-        this.name = component.getName();
-        this.geolocations = component.getGeolocations();
+        super(component);
     }
 
     @Id

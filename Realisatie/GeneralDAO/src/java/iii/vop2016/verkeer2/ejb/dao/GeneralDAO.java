@@ -5,8 +5,10 @@
  */
 package iii.vop2016.verkeer2.ejb.dao;
 
+import iii.vop2016.verkeer2.ejb.components.GeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
+import iii.vop2016.verkeer2.ejb.components.Route;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -41,22 +43,32 @@ public class GeneralDAO implements GeneralDAORemote {
         } catch (NamingException ex) {
             Logger.getLogger(GeneralDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        Logger.getLogger("logger").log(Level.INFO, "GeneralDAO has been initialized.");  
+
+        Logger.getLogger("logger").log(Level.INFO, "GeneralDAO has been initialized.");
     }
 
     @Override
     public List<IRoute> getRoutes() {
-        List<IRoute> routes = null;
+        List<IRoute> routes = new ArrayList<>();
         try {
             //get all routes
-            routes = em.createQuery("SELECT r FROM RouteEntity r").getResultList();
+            List<IRoute> routesEntities = em.createQuery("SELECT r FROM RouteEntity r").getResultList();
+            for (IRoute r : routesEntities) {
+                IRoute newR = new Route(r);
+                List<IGeoLocation> list = new ArrayList<>();
+                for (IGeoLocation geo : r.getGeolocations()) {
+                    list.add(new GeoLocation(geo));
+                }
+                newR.setGeolocations(list);
+                routes.add(newR);
+            }
         } catch (Exception e) {
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.severe(e.getMessage());
         } finally {
 
         }
+
         return routes;
     }
 
@@ -71,6 +83,12 @@ public class GeneralDAO implements GeneralDAORemote {
             List<IRoute> routes = q.getResultList();
             if (routes.size() >= 1) {
                 route = routes.get(0);
+                route = new Route(route);
+                List<IGeoLocation> list = new ArrayList<>();
+                for (IGeoLocation geo : route.getGeolocations()) {
+                    list.add(new GeoLocation(geo));
+                }
+                route.setGeolocations(list);
             }
         } catch (Exception e) {
             Logger logger = Logger.getLogger(this.getClass().getName());
@@ -80,7 +98,7 @@ public class GeneralDAO implements GeneralDAORemote {
         }
         return route;
     }
-    
+
     @Override
     public IRoute getRoute(long id) {
         IRoute route = null;
@@ -91,6 +109,12 @@ public class GeneralDAO implements GeneralDAORemote {
             List<IRoute> routes = q.getResultList();
             if (routes.size() >= 1) {
                 route = routes.get(0);
+                route = new Route(route);
+                List<IGeoLocation> list = new ArrayList<>();
+                for (IGeoLocation geo : route.getGeolocations()) {
+                    list.add(new GeoLocation(geo));
+                }
+                route.setGeolocations(list);
             }
         } catch (Exception e) {
             Logger logger = Logger.getLogger(this.getClass().getName());
@@ -115,7 +139,15 @@ public class GeneralDAO implements GeneralDAORemote {
         } catch (Exception ex) {
             Logger.getLogger(GeneralDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return r;
+
+        route = new Route(r);
+        List<IGeoLocation> list = new ArrayList<>();
+        for (IGeoLocation geo : r.getGeolocations()) {
+            list.add(new GeoLocation(geo));
+        }
+        route.setGeolocations(list);
+
+        return route;
     }
 
     @Override
@@ -124,7 +156,7 @@ public class GeneralDAO implements GeneralDAORemote {
             route = em.merge(route);
             em.remove(route);
         } else if (route.getId() != 0) {
-            for(IGeoLocation loc : route.getGeolocations()){
+            for (IGeoLocation loc : route.getGeolocations()) {
                 Query q = em.createQuery("Delete FROM GeoLocationEntity r WHERE r.id = :name");
                 q.setParameter("name", loc.getId());
                 q.executeUpdate();

@@ -33,6 +33,13 @@ public class GeoLocation implements IGeoLocation {
         this.name = null;
     }
     
+    public GeoLocation(IGeoLocation component) {
+        this.id = component.getId();
+        this.longitude = component.getLongitude();
+        this.latitude = component.getLatitude();
+        this.name = component.getName();
+    }
+    
     @Override
     public long getId() {
         return this.id;

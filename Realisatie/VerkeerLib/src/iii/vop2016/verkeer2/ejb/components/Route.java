@@ -34,6 +34,12 @@ public class Route implements IRoute{
         this.id = 0;
     }
     
+    public Route(IRoute component) {
+        this.id = component.getId();
+        this.name = component.getName();
+        this.geolocations = component.getGeolocations();
+    }
+    
     
     
     @Override

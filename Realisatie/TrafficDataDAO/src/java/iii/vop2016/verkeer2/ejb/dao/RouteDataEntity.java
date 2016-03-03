@@ -42,13 +42,7 @@ public class RouteDataEntity extends RouteData{
     }
 
     public RouteDataEntity(IRouteData component) {
-        super();
-        this.distance = component.getDistance();
-        this.duration = component.getDuration();
-        this.id = component.getId();
-        this.route = component.getRoute();
-        this.timestamp = component.getTimestamp();
-        this.provider = component.getProviderName();
+        super(component);
     }
   
     @Id

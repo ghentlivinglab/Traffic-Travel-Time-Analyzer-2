@@ -20,6 +20,19 @@ public class RouteData implements IRouteData {
     protected Date timestamp;
     protected String provider;
 
+    public RouteData(){
+    
+    }
+    
+    public RouteData(IRouteData component) {
+        this.distance = component.getDistance();
+        this.duration = component.getDuration();
+        this.id = component.getId();
+        this.route = component.getRoute();
+        this.timestamp = component.getTimestamp();
+        this.provider = component.getProviderName();
+    }
+    
     @Override
     public long getId() {
         return this.id;
