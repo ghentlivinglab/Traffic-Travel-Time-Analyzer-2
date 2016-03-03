@@ -5,6 +5,7 @@
  */
 package iii.vop2016.verkeer2.ejb.components;
 
+import iii.vop2016.verkeer2.ejb.helper.InvalidCoordinateException;
 import java.util.Objects;
 
 /**
@@ -18,39 +19,48 @@ public class GeoLocation implements IGeoLocation {
     protected double latitude;
     protected String name;
     protected int sortRank;
-    
-    public GeoLocation(){
+
+    public GeoLocation() {
         this.latitude = 0;
         this.longitude = 0;
         this.id = 0;
         this.name = null;
     }
-    
-    public GeoLocation(double latitude, double longitude){
-        this.latitude = latitude;
-        this.longitude = longitude;
+
+    public GeoLocation(double latitude, double longitude) throws InvalidCoordinateException {
+        if (latitude > -85 && latitude < 85) {
+            this.latitude = latitude;
+        } else {
+            throw new InvalidCoordinateException("Latitude " + latitude + " isn't between -85 and 85.");
+        }
+
+        if (longitude > -180 && longitude < 180) {
+            this.longitude = longitude;
+        } else {
+            throw new InvalidCoordinateException("Longitude " + longitude + " isn't between -85 and 85.");
+        }
+
         this.id = 0;
         this.name = null;
     }
-    
+
     public GeoLocation(IGeoLocation component) {
         this.id = component.getId();
         this.longitude = component.getLongitude();
         this.latitude = component.getLatitude();
         this.name = component.getName();
     }
-    
+
     @Override
     public long getId() {
         return this.id;
     }
-    
+
     @Override
     public void setId(long id) {
         this.id = id;
     }
-    
-    
+
     @Override
     public double getLongitude() {
         return this.longitude;
@@ -68,22 +78,22 @@ public class GeoLocation implements IGeoLocation {
 
     @Override
     public void setLongitude(double longitude) {
-        this.longitude=longitude;
+        this.longitude = longitude;
     }
 
     @Override
     public void setLatitude(double latitude) {
-        this.latitude=latitude;
+        this.latitude = latitude;
     }
 
     @Override
     public void setName(String name) {
-        this.name=name;
+        this.name = name;
     }
-    
+
     @Override
-    public String toString(){
-        return "GeoLocatie \""+name+"\" ("+latitude+", "+longitude+")";
+    public String toString() {
+        return "GeoLocatie \"" + name + "\" (" + latitude + ", " + longitude + ")";
     }
 
     @Override
@@ -128,6 +138,5 @@ public class GeoLocation implements IGeoLocation {
     public int getSortRank() {
         return this.sortRank;
     }
-    
-    
+
 }
