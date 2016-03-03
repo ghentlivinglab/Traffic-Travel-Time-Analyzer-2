@@ -8,8 +8,8 @@
     <enterprise-beans>
         <session>
             <ejb-name>GoogleMapsSourceAdapter</ejb-name>
-            <remote>iii.vop2016.verkeer2.ejb.provider.GoogleMapsSourceAdapterRemote</remote>
-            <ejb-class>iii.vop2016.verkeer2.ejb.provider.GoogleMapsSourceAdapter</ejb-class>
+            <remote>iii.vop2016.verkeer2.ejb.datasources.GoogleMapsSourceAdapterRemote</remote>
+            <ejb-class>iii.vop2016.verkeer2.ejb.datasources.GoogleMapsSourceAdapter</ejb-class>
             <session-type>Singleton</session-type>
         </session>
     </enterprise-beans>
