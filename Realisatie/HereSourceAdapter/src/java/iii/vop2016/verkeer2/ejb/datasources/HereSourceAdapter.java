@@ -41,7 +41,7 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
     private static final String providerName = "Here";
 
     @PostConstruct
-    private void init(){
+    public void init(){
         Logger.getLogger("logger").log(Level.INFO, "HereSourceAdapter has been initialized.");  
     }
     

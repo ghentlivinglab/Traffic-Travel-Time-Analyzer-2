@@ -83,6 +83,14 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
                 JSONArray rows = jsonobj.getJSONArray("rows"); //Gets an array with all the 'rows' of the JSON,a row has one or more 'elements', one row for each origin
                 for (int i = 0; i < rows.length(); i++) {
                     JSONArray elements = rows.getJSONObject(i).getJSONArray("elements"); //Gets an array with all the 'elements' of the JSON, one 'element' for each destination
+                    
+                    //indien er geen resultaten zijn zal je als resultaat status: ZERO RESULTS krijgen in de elements array
+                    JSONObject status1 = elements.getJSONObject(0);
+                    String status = (String) status1.getString("status");
+                    if(status.equalsIgnoreCase("ZERO_RESULTS")){
+                        throw new DataAccessException("Cannot access data from Google Maps adapter");
+                    }
+                    
                     for (int j = 0; j < elements.length(); j++) {
 
                         //The API returns the distances and durations in a matrix (of origins and distinations)
