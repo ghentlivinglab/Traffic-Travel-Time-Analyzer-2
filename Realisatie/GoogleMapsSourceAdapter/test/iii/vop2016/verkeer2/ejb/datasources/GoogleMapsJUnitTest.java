@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package iii.vop2016.verkeer2.ejb.provider;
+package iii.vop2016.verkeer2.ejb.datasources;
 
 import iii.vop2016.verkeer2.ejb.components.*;
+import iii.vop2016.verkeer2.ejb.datasources.GoogleMapsSourceAdapter;
 import iii.vop2016.verkeer2.ejb.helper.DataAccessException;
 import iii.vop2016.verkeer2.ejb.helper.InvalidCoordinateException;
 import iii.vop2016.verkeer2.ejb.helper.URLException;

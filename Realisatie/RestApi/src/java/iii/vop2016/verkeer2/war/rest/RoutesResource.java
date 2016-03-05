@@ -13,6 +13,7 @@ import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.Route;
 import iii.vop2016.verkeer2.ejb.dummy.BeanFactoryDummy;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
+import iii.vop2016.verkeer2.ejb.helper.InvalidCoordinateException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -100,7 +101,7 @@ public class RoutesResource {
     @GET
     @Path("init")
     //@Produces("application/xml")
-    public Response initRoutes() {
+    public Response initRoutes() throws InvalidCoordinateException {
                 
         IAnalyzer analyzer = beans.getAnalyzer();
                
