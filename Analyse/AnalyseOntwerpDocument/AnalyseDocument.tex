@@ -60,6 +60,7 @@ Het Mobiliteitsbedrijf van de stad gent is sinds 2014 bezig met het opzetten van
 \end{enumerate}
 \section{Use Case}
 \diagram{UseCaseDiagram1}{Use Case}
+Er zijn twee actoren aan het werk. In de eerste plaats is er een timer, deze zal een trigger sturen naar het programma zodat data afkomstig van de verschillende providers opgehaald wordt. Verder is er nog een API-gebruiker, dit is een persoon die data kan ophalen uit de database gebruik makend van de REST Api.
 \section{Functieanalyse van de omgeving}
 \begin{enumerate}
 	\item Gebruikers
@@ -69,7 +70,7 @@ Het Mobiliteitsbedrijf van de stad gent is sinds 2014 bezig met het opzetten van
 		\item Operator in het verkeerscentrum
 	\end{enumerate}
 \item Doelstellingen\\
-De doelstellingen representeren onze product backlog en ze bevatten de taken die het systeem moet kunnen.
+De doelstellingen representeren de product backlog en ze bevatten de taken die het systeem moet kunnen.
 \begin{enumerate}
 	\item Basisfunctionaliteit
 		\begin{enumerate}
@@ -124,11 +125,11 @@ Hoe gebeurt dit? }}
 \subsubsection{Google Maps}
 Om de reistijden die Google Maps heeft verzameld te kunnen raadplegen, moet er gebruik gemaakt worden van de Google Maps Distance Matrix API \\(https://developers.google.com/maps/documentation/distance-matrix/) . In de URL kunnen verschillende start- en eindpunten worden meegegeven, alsook of het antwoord json dan wel XML moet teruggeven. Hou er wel rekening mee dat er voor elke combinatie van start- en eindpunt die worden meegegeven, een reistijd wordt opgenomen in het resultaat. Als er dus 3 startpunten en 3 eindpunten worden meegegeven, zal het resultaat een 3X3-matrix zijn. Dit komt dan ook overeen met 9 aanvragen naar de API. De limiet per URL is een 10X10-matrix.\\\\
 Om effectief de actuele reistijden te verkrijgen moeten de parameters \\‘traffic\_model’ en ‘departure\_time=now’ ook zeker in de URL opgenomen worden. Om deze aanvragen te kunnen doen moet er een sleutel aangevraagd worden, die gekoppeld wordt aan het project. Met een gratis sleutel kunnen 2500 elementen per dag opgevraagd worden (het aantal elementen is gelijk aan het aantal startpunten vermenigvuldigd met het aantal eindpunten). Indien dit overschreden wordt zal er per schijf van 1000 extra elementen 0.5 dollar aangerekend worden.\\\\
-Indien we voor onze 34 routes om de 5 minuten de reistijden gaan opvragen en dit 18u per dag, dan zitten we al aan meer dan 7300 aanvragen per dag. Er rekening mee houdend dat eventuele tussenpunten het aantal aanvragen bij deze API nog eens heel sterk doen oplopend, mag duidelijk zijn dat het gratis model niet zal volstaan. Er kan overgeschakeld worden het ‘Google Maps API’s Premium Plan’ zodat er tot 100 000 aanvragen per dag gedaan kunnen worden.\\
+Indien je voor de 34 routes om de 5 minuten de reistijden opvraagt en dit 18u per dag, dan zit je al aan meer dan 7300 aanvragen per dag. Er rekening mee houdend dat eventuele tussenpunten het aantal aanvragen bij deze API nog eens heel sterk doen oplopend, mag duidelijk zijn dat het gratis model niet zal volstaan. Er kan overgeschakeld worden het ‘Google Maps API’s Premium Plan’ zodat er tot 100 000 aanvragen per dag gedaan kunnen worden.\\
 
 \subsubsection{Here}
 Here stelt reistijden ter beschikking via zijn Routing API \\(https://developer.here.com/rest-apis/documentation/routing). In de URL geef je aan of je json of XML als antwoord wilt en kan je een route meegeven door de geoco\"ordinaten in te stellen voor start- en eindpunt en eventuele tussenpunten mee te geven. Verder moet voor de toepassing die hier ontworpen wordt steeds gekozen worden voor de kortste route in plaats van de snelste en moet er rekening gehouden worden met het huidige verkeer. Op deze manier zal steeds actuele info over een vaste route worden teruggeven.\\\\
-Om de API van Here te kunnen gebruiken moeten er 2 sleutels aangevraagd worden die gekoppeld worden aan de applicatie. De eerste 90 dagen kan dit gratis en mogen er tot 100 000 aanvragen per maand gedaan worden. Als we onze 34 routes om de 5 minuten willen opvragen komen we echter al aan meer dan 220 000 aanvragen per maand en zouden we sowieso al een betalende formule nodig hebben. Om tot 275 000 aanvragen per maand te kunnen doen moet er ingestapt worden in het standaard plan dat 99 euro per maand kost.\\
+Om de API van Here te kunnen gebruiken moeten er 2 sleutels aangevraagd worden die gekoppeld worden aan de applicatie. De eerste 90 dagen kan dit gratis en mogen er tot 100 000 aanvragen per maand gedaan worden. Als je de 34 routes om de 5 minuten wil opvragen komen je echter al aan meer dan 220 000 aanvragen per maand en zou je sowieso een betalende formule nodig hebben. Om tot 275 000 aanvragen per maand te kunnen doen moet er ingestapt worden in het standaard plan dat 99 euro per maand kost.\\
 \subsection{Structuur van de data (API)}
 De REST API bestaat uit 3 categorie\"en: trajecten, routedata en providers. Wanneer je hier aanvragen naar doet krijg je gegevens uit de database terug. In de komende secties wordt een korte toelichting gegeven per categorie, gevolg door een voorbeeld van aanvraag en antwoord in JSON-formaat. \\Er is een online API beschikbaar waarin je meer informatie kan terugvinden, hieronder krijg je alvast een kort overzicht.
 
@@ -229,6 +230,7 @@ Het is mogelijk om via de REST Api alle providers op te vragen, dit kan handig z
 \textcolor{red}{\subsection{Databank}
 Ik geloof dat er een optie is in SQL Developer om hiervan een mooie representatie te maken zoals: http://i.stack.imgur.com/Usrhr.png }
 \subsection{Klassediagram}
+\textcolor{red}{Hier moet misschien wel een woordje uitleg bij?}
 \diagram{Interface1}{Basiscomponenten}
 \diagram{Interface3}{Gegevensbeheer}
 \diagram{Interface2}{BeanFactory}
@@ -241,7 +243,7 @@ Ik geloof dat er een optie is in SQL Developer om hiervan een mooie representati
 	\hline
 	GeoLocation & bevat informatie over een locatie \\
 	\hline
-	RouteData & bevat verkeersinformatie van \"e\"en route, \"e\"en provider en dit op \"e\"en bepaald moment in de tijd \\
+	RouteData & bevat verkeersinformatie van \'e\'en route, \'e\'en provider en dit op \'e\'en bepaald moment in de tijd \\
 	\hline
 	IgnoredPeriod & vertegenwoordigt periodes die genegeerd moeten woden tijdens het berekenen van gemiddelde reistijd per dag\\
 	\hline
@@ -266,14 +268,37 @@ Ik geloof dat er een optie is in SQL Developer om hiervan een mooie representati
 	TrafficDataDAO & RouteData opslaan in de database\\	
 	\hline
 \end{tabular}
+\subsection{Modules}
+De volledige applicatie streeft naar de richtlijnen van een Line Of Business applicatie. 
+\subsubsection{Flexibel en Uitbreidbaar}
+Door gebruik te maken van Java EE, waarin de gehele applicatie in verschillende modules wordt opgedeeld, kunnen nieuwe modules eenvoudig afzonderlijk worden gecreëerd en worden toegevoegd. 
+\subsubsection{Onderhoudbaarheid}
+Dit analysedocument bevat alle nodige informatie over de klasses en hun onderlinge relaties na sprint 1. Op het einde van de ontwikkelingsperiode zal een documentatie worden voorzien met alle nodige informatie voor andere ontwikkelaars die de applicatie zouden willen wijzigen of uitbreiden.
+\subsubsection{Testbaarheid}
+De verschillende componenten werden getest gebruik makend van Unit-testen en integratietests.
+\subsubsection{Late Binding}
+Java EE biedt de mogelijkheid om een applicatie op te delen in verschillende modules die afzonderlijk van elkaar kunnen worden gecompileerd. Er werden twee DAO’s voorzien zodat de algemene data over routes en de verkeersinformatie over de routes kunnen worden opgeslagen in twee verschillende databases. Zo zal na de ontwikkelingsperiode de verkeersinformatie waarschijnlijk worden opgeslagen in een NoSQL-database, omdat de hoeveelheid data enorm groot zal worden. 
+\subsubsection{Parallelle ontwikkeling}
+Door opdeling in modules, die Java EE aanbiedt, kunnen programmeurs afzonderlijk van elkaar code implementeren.
+\subsubsection{Losse koppeling van objecten}
+Modules kunnen eenvoudig worden ontkoppeld en worden vervangen door een andere. De BeanFactory, die de module-objecten aanbiedt, wordt eenvoudig geconfigureerd in een propertiesbestand. Zo kan eenvoudig een nieuwe DAO worden toegevoegd daar de link in het configuratiebestand te wijzigen naar een andere DAO. Zo kan bijvoorbeeld de manier van opslaan van data eenvoudig worden gewijzigd van een SQL-database naar een NoSQL-database.
+\subsubsection{Crosscutting concerns (Logging)}
+De manier van logging kan eenvoudig worden gewijzigd door het hierboven beschreven principe van losse koppeling. Voor logging werd ook een module voorzien die kan worden gewijzigd door de link aan te passen in het propertiesbestand bij de BeanFactory.
 \subsection{Gegevensstroomdiagram}
 \diagram{dataflows2}{Gegevensstroomdiagram}
 De data van de verschillende providers wordt opgehaald met behulp van de SourceAdapters, per provider bestaat er een adapterklasse die de ISourceAdapter interface implementeert. De verschillende adapters bevinden zich in de \\SourceManager-klasse. Vanuit de TrafficDataManager wordt data per route aangevraagd, de SourceManager zal deze aanvragen doorsturen aan elke adapter en de ontvangen data teruggeven aan de TrafficDataManager. Om af te sluiten wordt de data doorgegeven aan de TrafficDataDAO, deze klasse zorgt ervoor dat de data in de database terechtkomt. De mogelijkheid bestaat om via Rest-aanvragen data uit de database te halen zoals hierboven reeds beschreven.
 \textcolor{red}{\subsection{Bestandstructuur}
 Iets over de splitings in beans denk ik dan?
-\subsection{Test}
-Adapters => Integration Testing\\
-Enkel db kan goed getest worden?
 }
+\subsection{Tests}
+\subsubsection{Databank}
+De databank werd gedurende het ontwikkelingsproces getest via het principe van integratietesting. De data die in de database werd opgeslagen kwam overeen met de data die gestuurd werd naar de database.
+\subsubsection{DataProviders}
+De dataproviders werden getest aan de hand van unittests en later integratietesting in combinatie met de database. In de unittests werd nagekeken of excepties werden opgegooid bij verkeerde invoer. Het vergelijken van data in onze database met de data die op de sites van de providers staat werd manueel uitgevoerd.
+\subsubsection{Sortering geolocaties}
+In \'e\'en route zitten meerdere geolocaties om te verzekeren dat het gevolgde pad correct is. Om zeker te zijn dat de sortering van de locaties correct gebeurt werd een unittest geschreven.
+\textcolor{red}{\subsubsection{REST}}
+\subsubsection{GeoLocation}
+In de klasse geolocation bestaan 2 variabelen om de co\"ordinaten te bepalen namelijk latitude en longitude. Deze moeten binnen bepaalde grenswaarden liggen, bijgevolg werd hiervoor een exceptie met bijkomende unittest geschreven.
 \end{document}
 

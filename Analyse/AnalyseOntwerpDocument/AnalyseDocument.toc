@@ -21,6 +21,19 @@
 \contentsline {subsection}{\numberline {2.3.3}Databank}{9}
 \contentsline {subsection}{\numberline {2.3.4}Klassediagram}{9}
 \contentsline {subsection}{\numberline {2.3.5}Verantwoordelijkheid per klasse}{11}
-\contentsline {subsection}{\numberline {2.3.6}Gegevensstroomdiagram}{12}
-\contentsline {subsection}{\numberline {2.3.7}Bestandstructuur}{12}
-\contentsline {subsection}{\numberline {2.3.8}Test}{12}
+\contentsline {subsection}{\numberline {2.3.6}Modules}{11}
+\contentsline {subsubsection}{Flexibel en Uitbreidbaar}{12}
+\contentsline {subsubsection}{Onderhoudbaarheid}{12}
+\contentsline {subsubsection}{Testbaarheid}{12}
+\contentsline {subsubsection}{Late Binding}{12}
+\contentsline {subsubsection}{Parallelle ontwikkeling}{12}
+\contentsline {subsubsection}{Losse koppeling van objecten}{12}
+\contentsline {subsubsection}{Crosscutting concerns (Logging)}{12}
+\contentsline {subsection}{\numberline {2.3.7}Gegevensstroomdiagram}{13}
+\contentsline {subsection}{\numberline {2.3.8}Bestandstructuur}{13}
+\contentsline {subsection}{\numberline {2.3.9}Tests}{13}
+\contentsline {subsubsection}{Databank}{13}
+\contentsline {subsubsection}{DataProviders}{13}
+\contentsline {subsubsection}{Sortering geolocaties}{13}
+\contentsline {subsubsection}{REST}{14}
+\contentsline {subsubsection}{GeoLocation}{14}
