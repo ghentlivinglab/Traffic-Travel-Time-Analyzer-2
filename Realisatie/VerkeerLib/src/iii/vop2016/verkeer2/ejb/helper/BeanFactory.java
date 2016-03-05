@@ -47,13 +47,6 @@ public class BeanFactory {
     private Properties beanProperties;
     private Properties sourceAdaptorsProperties;
 
-    private IAnalyzer analyzer = null;
-    private ITrafficDataDownloader dataManager = null;
-    private IGeneralDAO generalDAO = null;
-    private ITrafficDataDAO trafficDataDAO = null;
-    private ITimer timer = null;
-    private List<ISourceAdapter> adapters = null;
-
     protected BeanFactory(InitialContext ctx, SessionContext sctx) throws ResourceFileMissingException {
         this.ctx = ctx;
         this.sctx = sctx;
@@ -71,99 +64,96 @@ public class BeanFactory {
     }
 
     public IAnalyzer getAnalyzer() {
-        if (analyzer == null && sctx != null) {
+        if (sctx != null) {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.downstreamAnalyser, sctx, Logger.getGlobal());
             if (obj instanceof IAnalyzer) {
-                analyzer = (IAnalyzer) obj;
+                return (IAnalyzer) obj;
             }
-        }
-        if (analyzer == null && sctx == null) {
+        } else {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.downstreamAnalyser, ctx, Logger.getGlobal());
             if (obj instanceof IAnalyzer) {
-                analyzer = (IAnalyzer) obj;
+                return (IAnalyzer) obj;
             }
         }
-        return analyzer;
+        return null;
     }
 
     public ITrafficDataDownloader getDataManager() {
-        if (dataManager == null && sctx != null) {
+        if (sctx != null) {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.dataManager, sctx, Logger.getGlobal());
             if (obj instanceof ITrafficDataDownloader) {
-                dataManager = (ITrafficDataDownloader) obj;
+                return (ITrafficDataDownloader) obj;
             }
         }
-        if (dataManager == null && sctx == null) {
+        else{
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.dataManager, ctx, Logger.getGlobal());
             if (obj instanceof ITrafficDataDownloader) {
-                dataManager = (ITrafficDataDownloader) obj;
+                return (ITrafficDataDownloader) obj;
             }
         }
-        return dataManager;
+        return null;
     }
 
     public ITimer getTimer() {
-        if (timer == null && sctx != null) {
+        if (sctx != null) {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.Timer, sctx, Logger.getGlobal());
             if (obj instanceof ITimer) {
-                timer = (ITimer) obj;
+                return (ITimer) obj;
             }
         }
-        if (timer == null && sctx == null) {
+        else{
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.Timer, ctx, Logger.getGlobal());
             if (obj instanceof ITimer) {
-                timer = (ITimer) obj;
+                return (ITimer) obj;
             }
         }
-        return timer;
+        return null;
     }
 
     public IGeneralDAO getGeneralDAO() {
-        if (generalDAO == null && sctx != null) {
+        if (sctx != null) {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.generalDAO, sctx, Logger.getGlobal());
             if (obj instanceof IGeneralDAO) {
-                generalDAO = (IGeneralDAO) obj;
+                return (IGeneralDAO) obj;
             }
         }
-        if (generalDAO == null && sctx == null) {
+        else{
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.generalDAO, ctx, Logger.getGlobal());
             if (obj instanceof IGeneralDAO) {
-                generalDAO = (IGeneralDAO) obj;
+                return (IGeneralDAO) obj;
             }
         }
-        return generalDAO;
+        return null;
     }
-    
+
     public ITrafficDataDAO getTrafficDataDAO() {
-        if (trafficDataDAO == null && sctx != null) {
+        if (sctx != null) {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.trafficDataDAO, sctx, Logger.getGlobal());
             if (obj instanceof ITrafficDataDAO) {
-                trafficDataDAO = (ITrafficDataDAO) obj;
+                return (ITrafficDataDAO) obj;
             }
         }
-        if (generalDAO == null && sctx == null) {
+        else{
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.trafficDataDAO, ctx, Logger.getGlobal());
             if (obj instanceof ITrafficDataDAO) {
-                trafficDataDAO = (ITrafficDataDAO) obj;
+                return (ITrafficDataDAO) obj;
             }
         }
-        return trafficDataDAO;
+        return null;
     }
 
     public List<ISourceAdapter> getSourceAdaptors() {
-        if (adapters == null) {
-            adapters = new ArrayList<>();
-            for (Object jndi : sourceAdaptorsProperties.values()) {
-                if (jndi instanceof String) {
-                    Object bean = null;
-                    if (sctx != null) {
-                        bean = HelperFunctions.getBean((String) jndi, sctx, Logger.getGlobal());
-                    } else {
-                        bean = HelperFunctions.getBean((String) jndi, ctx, Logger.getGlobal());
-                    }
-                    if ((bean != null) && (bean instanceof ISourceAdapter)) {
-                        adapters.add((ISourceAdapter) bean);
-                    }
+        ArrayList<ISourceAdapter> adapters = new ArrayList<>();
+        for (Object jndi : sourceAdaptorsProperties.values()) {
+            if (jndi instanceof String) {
+                Object bean = null;
+                if (sctx != null) {
+                    bean = HelperFunctions.getBean((String) jndi, sctx, Logger.getGlobal());
+                } else {
+                    bean = HelperFunctions.getBean((String) jndi, ctx, Logger.getGlobal());
+                }
+                if ((bean != null) && (bean instanceof ISourceAdapter)) {
+                    adapters.add((ISourceAdapter) bean);
                 }
             }
         }

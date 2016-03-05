@@ -98,7 +98,7 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
         List<IRouteData> data = new ArrayList<>();
         try {
             //get all routes
-            Query q = em.createQuery("SELECT r FROM RouteDataEntity r WHERE r.timestamp >= :time1 AND r.timestamp <= :time2 AND r.routeID = :routeID");
+            Query q = em.createQuery("SELECT r FROM RouteDataEntity r WHERE r.timestamp >= :time1 AND r.timestamp <= :time2 AND r.routeId = :routeID");
             q.setParameter("time1", time1);
             q.setParameter("time2", time2);
             q.setParameter("routeID", route.getId());

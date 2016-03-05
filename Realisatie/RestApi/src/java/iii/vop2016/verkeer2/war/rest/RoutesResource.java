@@ -175,7 +175,7 @@ public class RoutesResource {
     public String getTrafficData(@PathParam("id") String sid, @PathParam("timeStart") String stimeStart, @PathParam("timeEnd") String stimeEnd) {
         visibleFields.put("route.data", Boolean.TRUE);
         setStartTime(stimeStart);
-        setEndTime(stimeStart);
+        setEndTime(stimeEnd);
         List<IRoute> routes;
         if(sid.equals("all")){
             routes = beans.getGeneralDAO().getRoutes();
