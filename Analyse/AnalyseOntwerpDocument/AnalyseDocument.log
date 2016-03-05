@@ -1,0 +1,494 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2016.2.27)  5 MAR 2016 16:16
+entering extended mode
+**./AnalyseDocument.tex
+(AnalyseDocument.tex
+LaTeX2e <2015/10/01> patch level 2
+Babel <3.9n> and hyphenation patterns for 69 languages loaded.
+("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\latex\base\report.cls"
+Document Class: report 2014/09/29 v1.4h Standard LaTeX document class
+("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\latex\base\size10.clo"
+File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) ("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\generic\babel\babel.st
+y"
+Package: babel 2016/01/08 3.9n The Babel package
+
+*************************************
+* Local config file bblopts.cfg used
+*
+
+("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\latex\00miktex\bblopts.c
+fg"
+File: bblopts.cfg 2006/07/31 v1.0 MiKTeX 'babel' configuration
+)
+("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\latex\babel-dutch\dutch.
+ldf"
+Language: dutch 2005/03/30 v3.8i Dutch support from the babel system
+
+("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\generic\babel\babel.def"
+File: babel.def 2016/01/08 3.9n Babel common definitions
+\babel@savecnt=\count88
+\U@D=\dimen103
+)
+Package babel Info: Making " an active character on input line 132.
+))
+("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\latex\graphics\graphicx.
+sty"
+Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+
+("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\latex\graphics\keyval.st
+y"
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\latex\graphics\graphics.
+sty"
+Package: graphics 2014/10/28 v1.0p Standard LaTeX Graphics (DPC,SPQR)
+
+("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\latex\graphics\trig.sty"
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\latex\00miktex\graphics.
+cfg"
+File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
+)
+Package graphics Info: Driver file: pdftex.def on input line 94.
+
+("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\latex\pdftex-def\pdftex.
+def"
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+
+("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\generic\oberdiek\infware
+rr.sty"
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+)
+("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds
+.sty"
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count89
+))
+\Gin@req@height=\dimen104
+\Gin@req@width=\dimen105
+) (iiirapport.sty
+Package: iiirapport 2014/03/24. Auteur: Jan Cnops
+
+("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\latex\base\ifthen.sty"
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+)
+("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\latex\tools\longtable.st
+y"
+Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)
+\LTleft=\skip43
+\LTright=\skip44
+\LTpre=\skip45
+\LTpost=\skip46
+\LTchunksize=\count90
+\LTcapwidth=\dimen106
+\LT@head=\box26
+\LT@firsthead=\box27
+\LT@foot=\box28
+\LT@lastfoot=\box29
+\LT@cols=\count91
+\LT@rows=\count92
+\c@LT@tables=\count93
+\c@LT@chunks=\count94
+\LT@p@ftn=\toks15
+) ("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\latex\float\float.sty"
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count95
+\float@exts=\toks16
+\float@box=\box30
+\@float@everytoks=\toks17
+\@floatcapt=\box31
+)
+("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\latex\titlesec\titlesec.
+sty"
+Package: titlesec 2011/12/15 v2.10.0 Sectioning titles
+\ttl@box=\box32
+\beforetitleunit=\skip47
+\aftertitleunit=\skip48
+\ttl@plus=\dimen107
+\ttl@minus=\dimen108
+\ttl@toksa=\toks18
+\titlewidth=\dimen109
+\titlewidthlast=\dimen110
+\titlewidthfirst=\dimen111
+)
+\c@diagram=\count96
+\@diagrambreedte=\skip49
+\c@studentuur=\count97
+\c@studentminuut=\count98
+\uurbreedte=\skip50
+\datumbreedte=\skip51
+\intervalbreedte=\skip52
+\taakbreedte=\skip53
+)
+("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\latex\hyphenat\hyphenat.
+sty"
+Package: hyphenat 2009/09/02 v2.3c hyphenation utilities
+\langwohyphens=\language70
+LaTeX Info: Redefining \_ on input line 43.
+)
+("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\latex\xcolor\xcolor.sty"
+Package: xcolor 2007/01/21 v2.11 LaTeX color extensions (UK)
+("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\latex\00miktex\color.cfg
+"
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package xcolor Info: Driver file: pdftex.def on input line 225.
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1337.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1341.
+Package xcolor Info: Model `RGB' extended on input line 1353.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1355.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1356.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1357.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1358.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1359.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1360.
+) ("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\latex\url\url.sty"
+\Urlmuskip=\muskip10
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+
+LaTeX Warning: Unused global option(s):
+    [ps].
+
+(AnalyseDocument.aux)
+\openout1 = `AnalyseDocument.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+
+("C:\Users\Simon\AppData\Local\Programs\MiKTeX 2.9\tex\context\base\supp-pdf.mk
+ii"
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count99
+\scratchdimen=\dimen112
+\scratchbox=\box33
+\nofMPsegments=\count100
+\nofMParguments=\count101
+\everyMPshowfont=\toks19
+\MPscratchCnt=\count102
+\MPscratchDim=\dimen113
+\MPnumerator=\count103
+\makeMPintoPDFobject=\count104
+\everyMPtoPDFconversion=\toks20
+) <logobalk.pdf, id=1, 512.49466pt x 61.14497pt>
+File: logobalk.pdf Graphic file (type pdf)
+ <use logobalk.pdf>
+Package pdftex.def Info: logobalk.pdf used on input line 37.
+(pdftex.def)             Requested size: 483.69684pt x 57.71138pt.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 37.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 37.
+
+Overfull \hbox (28.45276pt too wide) in paragraph at lines 37--37
+[][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 37--37
+
+ []
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 37.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 37.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 37.
+
+LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <12> not available
+(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 37.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 37--37
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 37--37
+
+ []
+
+
+Overfull \hbox (70.56079pt too wide) in paragraph at lines 37--37
+[]|  [] 
+ []
+
+[1
+
+{C:/Users/Simon/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <./logobalk.
+pdf>]
+
+LaTeX Font Warning: Font shape `OT1/cmr/bx/sc' undefined
+(Font)              using `OT1/cmr/bx/n' instead on input line 39.
+
+(AnalyseDocument.toc)
+\tf@toc=\write3
+\openout3 = `AnalyseDocument.toc'.
+
+ [1
+
+]
+Hoofdstuk 1.
+<UseCaseDiagram1.jpg, id=17, 424.58624pt x 358.33875pt>
+File: UseCaseDiagram1.jpg Graphic file (type jpg)
+
+<use UseCaseDiagram1.jpg>
+Package pdftex.def Info: UseCaseDiagram1.jpg used on input line 62.
+(pdftex.def)             Requested size: 424.5852pt x 358.33788pt.
+File: UseCaseDiagram1.jpg Graphic file (type jpg)
+ <use UseCaseDiagram1.jpg>
+Package pdftex.def Info: UseCaseDiagram1.jpg used on input line 62.
+(pdftex.def)             Requested size: 345.0pt x 291.18233pt.
+ [2
+
+] [3 <./UseCaseDiagram1.jpg>] [4]
+Hoofdstuk 2.
+Missing character: There is no ï in font cmti10!
+Missing character: There is no ƒ in font cmti10!
+Missing character: There is no ž in font cmti10!
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ˜ in font cmr10!
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ™ in font cmr10!
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ˜ in font cmr10!
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ™ in font cmr10!
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ˜ in font cmr10!
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ™ in font cmr10!
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ™ in font cmr10!
+
+Overfull \hbox (0.74153pt too wide) in paragraph at lines 125--128
+\OT1/cmr/m/n/10 (https://developers.google.com/maps/documentation/distance-matr
+ix/) . In de
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 125--128
+
+ []
+
+
+Overfull \hbox (13.11168pt too wide) in paragraph at lines 125--128
+\OT1/cmr/m/n/10 over-schre-den wordt zal er per schijf van 1000 ex-tra ele-men-
+ten 0.5 dol-lar aan-ge-re-kend
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 125--128
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 125--128
+
+ []
+
+[5
+
+]
+Overfull \hbox (0.46257pt too wide) in paragraph at lines 130--132
+\OT1/cmr/m/n/10 (https://developer.here.com/rest-apis/documentation/routing). I
+n de URL geef
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 130--132
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 130--132
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 136--137
+
+ []
+
+[6]
+Underfull \hbox (badness 10000) in paragraph at lines 138--144
+
+ []
+
+
+Overfull \hbox (3.40802pt too wide) in paragraph at lines 167--168
+\OT1/cmr/m/n/10 ver-schil-lende tijd-stip-pen. Je kan kie-zen voor welke rou-te
+s je data wil te-rug-krij-gen,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 167--168
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 167--168
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 170--177
+
+ []
+
+[7]
+Underfull \hbox (badness 10000) in paragraph at lines 214--222
+
+ []
+
+[8] <Interface1.png, id=43, 405.76593pt x 217.5628pt>
+File: Interface1.png Graphic file (type png)
+ <use Interface1.png>
+Package pdftex.def Info: Interface1.png used on input line 232.
+(pdftex.def)             Requested size: 405.76494pt x 217.56227pt.
+File: Interface1.png Graphic file (type png)
+
+<use Interface1.png>
+Package pdftex.def Info: Interface1.png used on input line 232.
+(pdftex.def)             Requested size: 345.0pt x 184.98569pt.
+ <Interface3.png, id=45, 413.29407pt x 542.77782pt>
+File: Interface3.png Graphic file (type png)
+
+<use Interface3.png>
+Package pdftex.def Info: Interface3.png used on input line 233.
+(pdftex.def)             Requested size: 413.29305pt x 542.77649pt.
+File: Interface3.png Graphic file (type png)
+ <use Interface3.png>
+Package pdftex.def Info: Interface3.png used on input line 233.
+(pdftex.def)             Requested size: 345.0pt x 453.09778pt.
+ [9 <./Interface1.png>]
+<Interface2.png, id=50, 191.9672pt x 153.57375pt>
+File: Interface2.png Graphic file (type png)
+ <use Interface2.png>
+Package pdftex.def Info: Interface2.png used on input line 234.
+(pdftex.def)             Requested size: 191.96672pt x 153.57336pt.
+File: Interface2.png Graphic file (type png)
+
+<use Interface2.png>
+Package pdftex.def Info: Interface2.png used on input line 234.
+(pdftex.def)             Requested size: 191.96672pt x 153.58273pt.
+ [10 <./Interface3.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 248--249
+[]\OT1/cmr/m/n/10 deze klas-sen ver-te-gen-woor-di-gen
+ []
+
+
+Underfull \hbox (badness 1596) in paragraph at lines 248--249
+\OT1/cmr/m/n/10 bo-ven-staande ob-jec-ten zo-dat ze in de
+ []
+
+
+Underfull \hbox (badness 3281) in paragraph at lines 252--253
+[]\OT1/cmr/m/n/10 omzetten van data, aan-ge-bo-den door
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 256--257
+[]\OT1/cmr/m/n/10 automatische trig-ge-ring voor op-ha-len
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 258--259
+[]\OT1/cmr/m/n/10 data af-kom-stig van Sour-ce-A-dap-ters
+ []
+
+
+Underfull \hbox (badness 5331) in paragraph at lines 258--259
+\OT1/cmr/m/n/10 con-tro-le-ren op cor-rect-heid en na-dien
+ []
+
+
+Underfull \hbox (badness 6268) in paragraph at lines 262--263
+[]\OT1/cmr/m/n/10 deze klasse zal de-pen-d-ency in-jec-tion
+ []
+
+
+Overfull \hbox (6.63763pt too wide) in paragraph at lines 236--269
+[] 
+ []
+
+<dataflows2.png, id=55, 1204.5pt x 557.08125pt>
+File: dataflows2.png Graphic file (type png)
+ <use dataflows2.png>
+Package pdftex.def Info: dataflows2.png used on input line 270.
+(pdftex.def)             Requested size: 1204.49707pt x 557.0799pt.
+File: dataflows2.png Graphic file (type png)
+
+<use dataflows2.png>
+Package pdftex.def Info: dataflows2.png used on input line 270.
+(pdftex.def)             Requested size: 345.0pt x 159.56033pt.
+ [11 <./Interface2.png>]
+Overfull \hbox (1.80612pt too wide) in paragraph at lines 271--277
+\OT1/cmr/m/n/10 Sour-ce-A-dap-ters, per pro-vi-der be-staat er een adap-ter-kla
+sse die de ISour-ce-A-dap-ter
+ []
+
+[12 <./dataflows2.png>] (AnalyseDocument.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 2733 strings out of 493634
+ 35496 string characters out of 3135239
+ 107738 words of memory out of 3000000
+ 6094 multiletter control sequences out of 15000+200000
+ 9987 words of font info for 35 fonts, out of 3000000 for 9000
+ 1025 hyphenation exceptions out of 8191
+ 27i,9n,37p,766b,318s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Users/Simon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts
+/cm/cmbx10.pfb><C:/Users/Simon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/pu
+blic/amsfonts/cm/cmbx12.pfb><C:/Users/Simon/AppData/Local/Programs/MiKTeX 2.9/f
+onts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/Users/Simon/AppData/Local/Program
+s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Simon/AppData/L
+ocal/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmss10.pfb><C:/Users/Si
+mon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmss12.pfb
+><C:/Users/Simon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/
+cm/cmss17.pfb><C:/Users/Simon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/pub
+lic/amsfonts/cm/cmti10.pfb><C:/Users/Simon/AppData/Local/Programs/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on AnalyseDocument.pdf (13 pages, 417673 bytes).
+PDF statistics:
+ 93 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
+

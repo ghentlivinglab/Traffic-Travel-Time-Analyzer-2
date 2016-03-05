@@ -1,0 +1,26 @@
+\select@language {dutch}
+\contentsline {chapter}{Inhoudsopgave}{1}
+\contentsline {chapter}{\numberline {1}Behoefteanalyse}{2}
+\contentsline {section}{\numberline {1.1}Beschrijving project}{2}
+\contentsline {section}{\numberline {1.2}Functionaliteiten}{2}
+\contentsline {section}{\numberline {1.3}Use Case}{3}
+\contentsline {section}{\numberline {1.4}Functieanalyse van de omgeving}{3}
+\contentsline {chapter}{\numberline {2}Ontwerp}{5}
+\contentsline {section}{\numberline {2.1}Functioneel ontwerp}{5}
+\contentsline {section}{\numberline {2.2}Technisch ontwerp}{5}
+\contentsline {subsection}{\numberline {2.2.1}Hardware}{5}
+\contentsline {subsection}{\numberline {2.2.2}Paketten}{5}
+\contentsline {section}{\numberline {2.3}Software ontwerp}{5}
+\contentsline {subsection}{\numberline {2.3.1}Dataproviders}{5}
+\contentsline {subsubsection}{Google Maps}{5}
+\contentsline {subsubsection}{Here}{6}
+\contentsline {subsection}{\numberline {2.3.2}Structuur van de data (API)}{6}
+\contentsline {subsubsection}{Routes}{6}
+\contentsline {subsubsection}{RouteData}{7}
+\contentsline {subsubsection}{Providers}{8}
+\contentsline {subsection}{\numberline {2.3.3}Databank}{9}
+\contentsline {subsection}{\numberline {2.3.4}Klassediagram}{9}
+\contentsline {subsection}{\numberline {2.3.5}Verantwoordelijkheid per klasse}{11}
+\contentsline {subsection}{\numberline {2.3.6}Gegevensstroomdiagram}{12}
+\contentsline {subsection}{\numberline {2.3.7}Bestandstructuur}{12}
+\contentsline {subsection}{\numberline {2.3.8}Test}{12}
