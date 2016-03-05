@@ -9,19 +9,13 @@ import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.Route;
 import iii.vop2016.verkeer2.ejb.components.RouteData;
-import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -50,24 +44,6 @@ public class RouteDataEntity extends RouteData{
     @Override
     public long getId() {
         return super.getId();
-    }
-
-    @Override
-    @Transient
-    public IRoute getRoute() {
-        return super.getRoute();
-    }
-    
-    public long getRouteID(){
-        if(route == null)
-            return 0;
-        return super.getRoute().getId();
-    }
-    
-    public void setRouteID(long id){
-        if(route == null)
-            route = new Route();
-        route.setId(id);
     }
 
     @Override
@@ -107,13 +83,23 @@ public class RouteDataEntity extends RouteData{
     }
 
     @Override
-    public String getProviderName() {
-        return super.getProviderName();
+    public String getProvider() {
+        return super.getProvider(); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void setProviderName(String providerName) {
-        super.setProviderName(providerName);
+    public void setProvider(String provider) {
+        super.setProvider(provider); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public long getRouteId() {
+        return super.getRouteId(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setRouteId(long id) {
+        super.setRouteId(id); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

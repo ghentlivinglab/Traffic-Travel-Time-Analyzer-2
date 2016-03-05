@@ -14,7 +14,7 @@ import java.util.Date;
 public class RouteData implements IRouteData {
 
     protected long id;
-    protected IRoute route;
+    protected long routeId;
     protected int duration;
     protected int distance;
     protected Date timestamp;
@@ -28,9 +28,9 @@ public class RouteData implements IRouteData {
         this.distance = component.getDistance();
         this.duration = component.getDuration();
         this.id = component.getId();
-        this.route = component.getRoute();
+        this.routeId = component.getRouteId();
         this.timestamp = component.getTimestamp();
-        this.provider = component.getProviderName();
+        this.provider = component.getProvider();
     }
     
     @Override
@@ -41,11 +41,6 @@ public class RouteData implements IRouteData {
     @Override
     public void setId(long id) {
         this.id = id;
-    }
-    
-    @Override
-    public IRoute getRoute() {
-        return route;
     }
 
     @Override
@@ -61,11 +56,6 @@ public class RouteData implements IRouteData {
     @Override
     public Date getTimestamp() {
         return timestamp;
-    }
-
-    @Override
-    public void setRoute(IRoute route) {
-        this.route = route;
     }
 
     @Override
@@ -85,17 +75,29 @@ public class RouteData implements IRouteData {
 
     @Override
     public String toString(){
-        return "RouteData ["+route.getName()+"] ["+provider+"] (dis:"+distance+", dur:"+duration+")";
+        return "RouteData ["+routeId+"] ["+provider+"] (dis:"+distance+", dur:"+duration+")";
     }
 
     @Override
-    public String getProviderName() {
-        return this.provider;
+    public String getProvider() {
+        return provider;
     }
 
     @Override
-    public void setProviderName(String providerName) {
-        this.provider = providerName;
+    public void setProvider(String provider) {
+        this.provider = provider;
     }
+
+    @Override
+    public long getRouteId() {
+        return routeId;
+    }
+
+    @Override
+    public void setRouteId(long id) {
+        this.routeId = id;
+    }
+
+    
     
 }

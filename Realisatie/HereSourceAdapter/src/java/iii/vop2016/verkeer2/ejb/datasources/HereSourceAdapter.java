@@ -84,10 +84,10 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
             int distance = (int) summary.get("distance");
 
             rd = new RouteData();
-            rd.setProviderName(getProviderName());
+            rd.setProvider(getProviderName());
             rd.setDistance(distance);
             rd.setDuration(seconds);
-            rd.setRoute(route);
+            rd.setRouteId(route.getId());
             rd.setTimestamp(new Date());
             //maakt nieuw Date object en initaliseert het met tijdstip van aanmaken
             // in principe kan je ook timestamp uit de json call zelf halen maar dit lijkt mij minder goed?

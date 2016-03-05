@@ -106,10 +106,10 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
                 throw new DataAccessException("Cannot access data from Google Maps adapter");
             }
             rd = new RouteData();
-            rd.setProviderName(getProviderName());
+            rd.setProvider(getProviderName());
             rd.setDistance(distance);
             rd.setDuration(duration);
-            rd.setRoute(route);
+            rd.setRouteId(route.getId());
             rd.setTimestamp(new Date());
 
             /*  } catch (IOException ex) {

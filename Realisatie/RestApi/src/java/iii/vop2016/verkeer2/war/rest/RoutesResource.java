@@ -13,6 +13,7 @@ import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.Route;
 import iii.vop2016.verkeer2.ejb.dummy.BeanFactoryDummy;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
+import iii.vop2016.verkeer2.ejb.helper.InvalidCoordinateException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -102,34 +103,39 @@ public class RoutesResource {
     //@Produces("application/xml")
     public Response initRoutes() {
                 
-        IAnalyzer analyzer = beans.getAnalyzer();
-               
-        IRoute r = new Route("R4 Zelzate");
-
-        //r.setInverseRoute(r);
-
-        IGeoLocation geolocation1 = new GeoLocation(51.192226, 3.776342);
-        IGeoLocation geolocation2 = new GeoLocation(51.086447, 3.672188);
-        geolocation1.setName("Zelzate");
-        geolocation2.setName("Gent");
-        r.addGeolocation(geolocation1);
-        r.addGeolocation(geolocation2);
-        r = analyzer.addRoute(r);
-        
-        
-        List<IRoute> routes = beans.getGeneralDAO().getRoutes();
-        for(IRoute route : routes){
-            System.out.println("");
-            System.out.println("Ik ben een Route met volgende eigenschappen:");
-            System.out.println("ID: "+route.getId());
-            System.out.println("Name: "+route.getName());
-            System.out.println("Geolocaties: "+route.getGeolocations());
+        try {
+            IAnalyzer analyzer = beans.getAnalyzer();
+            
+            IRoute r = new Route("R4 Zelzate");
+            
+            //r.setInverseRoute(r);
+            
+            IGeoLocation geolocation1 = new GeoLocation(51.192226, 3.776342);
+            IGeoLocation geolocation2 = new GeoLocation(51.086447, 3.672188);
+            geolocation1.setName("Zelzate");
+            geolocation2.setName("Gent");
+            r.addGeolocation(geolocation1);
+            r.addGeolocation(geolocation2);
+            r = analyzer.addRoute(r);
+            
+            
+            List<IRoute> routes = beans.getGeneralDAO().getRoutes();
+            for(IRoute route : routes){
+                System.out.println("");
+                System.out.println("Ik ben een Route met volgende eigenschappen:");
+                System.out.println("ID: "+route.getId());
+                System.out.println("Name: "+route.getName());
+                System.out.println("Geolocaties: "+route.getGeolocations());
+            }
+            
+            
+            
+            //TODO return proper representation object
+            return Response.status(Response.Status.OK).entity("Routes have been initialised").build();
+        } catch (Exception ex) {
+            Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("An error has occured").build();
         }
-        
-        
-        
-        //TODO return proper representation object
-        return Response.status(Response.Status.OK).entity("Routes have been initialised").build();
     }
 
     @GET
@@ -263,7 +269,7 @@ public class RoutesResource {
         JSONObject obj = new JSONObject();
         obj.put("distance",data.getDistance());
         obj.put("duration",data.getDuration());
-        obj.put("provider",data.getProviderName());
+        obj.put("provider",data.getProvider());
         obj.put("timestamp",data.getTimestamp().getTime());
         return obj;
     }
@@ -320,7 +326,7 @@ public class RoutesResource {
         List<IRouteData> data = beans.getTrafficDataDAO().getData(route, startTime, endTime);
         List<IRouteData> result = new ArrayList<>();
         for(IRouteData d : data){
-            if(providers.size()==0 || providers.contains(d.getProviderName()))
+            if(providers.size()==0 || providers.contains(d.getProvider()))
                 result.add(d);
         }
         obj.put("data", transformRouteData(result)); 

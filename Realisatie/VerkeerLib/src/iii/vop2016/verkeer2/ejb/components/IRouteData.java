@@ -17,17 +17,17 @@ public interface IRouteData extends Serializable {
     public long getId();
     public void setId(long id);
     
-    public IRoute getRoute();
+    public long getRouteId();
     public int getDuration();
     public int getDistance();
     public Date getTimestamp();
-    public String getProviderName();
+    public String getProvider();
     
-    public void setRoute(IRoute route);
+    public void setRouteId(long id);
     public void setDuration(int duration);
     public void setDistance(int distance);
     public void setTimestamp(Date timestamp);
-    public void setProviderName(String providerName);
+    public void setProvider(String provider);
       
     
     

@@ -48,7 +48,7 @@ public class TrafficDataDAODummy implements ITrafficDataDAO{
                 RouteData d = new RouteData();
                 d.setDistance(this.r.nextInt(100));
                 d.setDuration(this.r.nextInt(100));
-                d.setRoute(r);
+                d.setRouteId(r.getId());
                 d.setTimestamp(dates.get(i));
                 data.add(d);
             }
@@ -84,7 +84,7 @@ public class TrafficDataDAODummy implements ITrafficDataDAO{
     public List<IRouteData> getData(IRoute route, Date time1, Date time2) {
         List<IRouteData> result = new ArrayList<>();
         for(IRouteData data : getData(time1,time2)){
-            if(data.getRoute().equals(route))
+            if(data.getRouteId() ==  route.getId())
                 result.add(data);
         }
         return result;
@@ -94,7 +94,7 @@ public class TrafficDataDAODummy implements ITrafficDataDAO{
     public List<IRouteData> getData(ISourceAdapter adapter, Date time1, Date time2) {
         List<IRouteData> result = new ArrayList<>();
         for(IRouteData data : getData(time1,time2)){
-            if(data.getProviderName().equals(adapter.getProviderName()))
+            if(data.getProvider().equals(adapter.getProviderName()))
                 result.add(data);
         }
         return result;
