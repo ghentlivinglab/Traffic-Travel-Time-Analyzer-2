@@ -101,7 +101,7 @@ public class RoutesResource {
     @GET
     @Path("init")
     //@Produces("application/xml")
-    public Response initRoutes() {
+    public Response initRoutes() throws InvalidCoordinateException {
                 
         try {
             IAnalyzer analyzer = beans.getAnalyzer();
