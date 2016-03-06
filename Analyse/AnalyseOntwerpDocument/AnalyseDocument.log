@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2016.2.27)  5 MAR 2016 16:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2016.2.27)  6 MAR 2016 14:52
 entering extended mode
 **./AnalyseDocument.tex
 (AnalyseDocument.tex
@@ -256,23 +256,20 @@ LaTeX Font Warning: Font shape `OT1/cmr/bx/sc' undefined
 
 ]
 Hoofdstuk 1.
-<UseCaseDiagram1.jpg, id=17, 424.58624pt x 358.33875pt>
-File: UseCaseDiagram1.jpg Graphic file (type jpg)
+<UseCaseDiagram1.png, id=17, 334.24875pt x 359.84438pt>
+File: UseCaseDiagram1.png Graphic file (type png)
 
-<use UseCaseDiagram1.jpg>
-Package pdftex.def Info: UseCaseDiagram1.jpg used on input line 62.
-(pdftex.def)             Requested size: 424.5852pt x 358.33788pt.
-File: UseCaseDiagram1.jpg Graphic file (type jpg)
- <use UseCaseDiagram1.jpg>
-Package pdftex.def Info: UseCaseDiagram1.jpg used on input line 62.
-(pdftex.def)             Requested size: 345.0pt x 291.18233pt.
+<use UseCaseDiagram1.png>
+Package pdftex.def Info: UseCaseDiagram1.png used on input line 62.
+(pdftex.def)             Requested size: 334.24792pt x 359.84349pt.
+File: UseCaseDiagram1.png Graphic file (type png)
+ <use UseCaseDiagram1.png>
+Package pdftex.def Info: UseCaseDiagram1.png used on input line 62.
+(pdftex.def)             Requested size: 334.24792pt x 359.87094pt.
  [2
 
-] [3 <./UseCaseDiagram1.jpg>] [4]
+] [3 <./UseCaseDiagram1.png>] [4]
 Hoofdstuk 2.
-Missing character: There is no ï in font cmti10!
-Missing character: There is no ƒ in font cmti10!
-Missing character: There is no ž in font cmti10!
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no ˜ in font cmr10!
@@ -295,173 +292,191 @@ Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no ™ in font cmr10!
 
-Overfull \hbox (0.74153pt too wide) in paragraph at lines 126--129
+Overfull \hbox (0.74153pt too wide) in paragraph at lines 127--130
 \OT1/cmr/m/n/10 (https://developers.google.com/maps/documentation/distance-matr
 ix/) . In de
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 126--129
+Underfull \hbox (badness 10000) in paragraph at lines 127--130
 
  []
 
 
-Overfull \hbox (13.11168pt too wide) in paragraph at lines 126--129
+Overfull \hbox (13.11168pt too wide) in paragraph at lines 127--130
 \OT1/cmr/m/n/10 over-schre-den wordt zal er per schijf van 1000 ex-tra ele-men-
 ten 0.5 dol-lar aan-ge-re-kend
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 126--129
+Underfull \hbox (badness 10000) in paragraph at lines 127--130
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 126--129
+Underfull \hbox (badness 10000) in paragraph at lines 127--130
 
  []
 
 [5
 
 ]
-Overfull \hbox (0.46257pt too wide) in paragraph at lines 131--133
+Overfull \hbox (0.46257pt too wide) in paragraph at lines 132--134
 \OT1/cmr/m/n/10 (https://developer.here.com/rest-apis/documentation/routing). I
 n de URL geef
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 131--133
+Underfull \hbox (badness 10000) in paragraph at lines 132--134
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 131--133
+Underfull \hbox (badness 10000) in paragraph at lines 132--134
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 137--138
+Overfull \hbox (4.07245pt too wide) in paragraph at lines 135--136
+\OT1/cmr/m/n/10 De REST API be-staat uit 3 ca-te-go-rie[]en: rou-tes, rou-te-da
+ta en pro-vi-ders. Wan-neer
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 138--139
 
  []
 
 [6]
-Underfull \hbox (badness 10000) in paragraph at lines 139--145
+Underfull \hbox (badness 10000) in paragraph at lines 140--146
 
  []
 
 
-Overfull \hbox (3.40802pt too wide) in paragraph at lines 168--169
+Overfull \hbox (3.40802pt too wide) in paragraph at lines 169--170
 \OT1/cmr/m/n/10 ver-schil-lende tijd-stip-pen. Je kan kie-zen voor welke rou-te
 s je data wil te-rug-krij-gen,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 168--169
+Underfull \hbox (badness 10000) in paragraph at lines 169--170
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 168--169
+Underfull \hbox (badness 10000) in paragraph at lines 169--170
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 171--178
+Underfull \hbox (badness 10000) in paragraph at lines 172--179
 
  []
 
 [7]
-Underfull \hbox (badness 10000) in paragraph at lines 215--223
+Underfull \hbox (badness 10000) in paragraph at lines 216--224
 
  []
 
-[8] <Interface1.png, id=43, 405.76593pt x 217.5628pt>
-File: Interface1.png Graphic file (type png)
- <use Interface1.png>
-Package pdftex.def Info: Interface1.png used on input line 234.
-(pdftex.def)             Requested size: 405.76494pt x 217.56227pt.
+[8] <database.jpg, id=45, 565.11125pt x 227.85126pt>
+File: database.jpg Graphic file (type jpg)
+ <use database.jpg>
+Package pdftex.def Info: database.jpg used on input line 233.
+(pdftex.def)             Requested size: 565.10986pt x 227.8507pt.
+File: database.jpg Graphic file (type jpg)
+
+<use database.jpg>
+Package pdftex.def Info: database.jpg used on input line 233.
+(pdftex.def)             Requested size: 345.0pt x 139.10379pt.
+ <Interface1.png, id=46, 405.76593pt x 217.5628pt>
 File: Interface1.png Graphic file (type png)
 
 <use Interface1.png>
-Package pdftex.def Info: Interface1.png used on input line 234.
+Package pdftex.def Info: Interface1.png used on input line 236.
+(pdftex.def)             Requested size: 405.76494pt x 217.56227pt.
+File: Interface1.png Graphic file (type png)
+ <use Interface1.png>
+Package pdftex.def Info: Interface1.png used on input line 236.
 (pdftex.def)             Requested size: 345.0pt x 184.98569pt.
- <Interface3.png, id=45, 413.29407pt x 542.77782pt>
+ [9 <./database.jpg>]
+<Interface3.png, id=50, 413.29407pt x 542.77782pt>
+File: Interface3.png Graphic file (type png)
+ <use Interface3.png>
+Package pdftex.def Info: Interface3.png used on input line 237.
+(pdftex.def)             Requested size: 413.29305pt x 542.77649pt.
 File: Interface3.png Graphic file (type png)
 
 <use Interface3.png>
-Package pdftex.def Info: Interface3.png used on input line 235.
-(pdftex.def)             Requested size: 413.29305pt x 542.77649pt.
-File: Interface3.png Graphic file (type png)
- <use Interface3.png>
-Package pdftex.def Info: Interface3.png used on input line 235.
+Package pdftex.def Info: Interface3.png used on input line 237.
 (pdftex.def)             Requested size: 345.0pt x 453.09778pt.
- [9 <./Interface1.png>]
-<Interface2.png, id=50, 191.9672pt x 153.57375pt>
+ [10 <./Interface1.png>]
+<Interface2.png, id=55, 191.9672pt x 153.57375pt>
 File: Interface2.png Graphic file (type png)
  <use Interface2.png>
-Package pdftex.def Info: Interface2.png used on input line 236.
+Package pdftex.def Info: Interface2.png used on input line 238.
 (pdftex.def)             Requested size: 191.96672pt x 153.57336pt.
 File: Interface2.png Graphic file (type png)
 
 <use Interface2.png>
-Package pdftex.def Info: Interface2.png used on input line 236.
+Package pdftex.def Info: Interface2.png used on input line 238.
 (pdftex.def)             Requested size: 191.96672pt x 153.58273pt.
- [10 <./Interface3.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 250--251
+ [11 <./Interface3.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 252--253
 []\OT1/cmr/m/n/10 deze klas-sen ver-te-gen-woor-di-gen
  []
 
 
-Underfull \hbox (badness 1596) in paragraph at lines 250--251
+Underfull \hbox (badness 1596) in paragraph at lines 252--253
 \OT1/cmr/m/n/10 bo-ven-staande ob-jec-ten zo-dat ze in de
  []
 
 
-Underfull \hbox (badness 3281) in paragraph at lines 254--255
+Underfull \hbox (badness 3281) in paragraph at lines 256--257
 []\OT1/cmr/m/n/10 omzetten van data, aan-ge-bo-den door
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 258--259
+Underfull \hbox (badness 10000) in paragraph at lines 260--261
 []\OT1/cmr/m/n/10 automatische trig-ge-ring voor op-ha-len
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 260--261
+Underfull \hbox (badness 10000) in paragraph at lines 264--265
 []\OT1/cmr/m/n/10 data af-kom-stig van Sour-ce-A-dap-ters
  []
 
 
-Underfull \hbox (badness 5331) in paragraph at lines 260--261
+Underfull \hbox (badness 5331) in paragraph at lines 264--265
 \OT1/cmr/m/n/10 con-tro-le-ren op cor-rect-heid en na-dien
  []
 
 
-Underfull \hbox (badness 6268) in paragraph at lines 264--265
+Underfull \hbox (badness 6268) in paragraph at lines 266--267
 []\OT1/cmr/m/n/10 deze klasse zal de-pen-d-ency in-jec-tion
  []
 
 
-Overfull \hbox (6.63763pt too wide) in paragraph at lines 238--271
+Overfull \hbox (6.63763pt too wide) in paragraph at lines 240--273
 [] 
  []
 
+[12 <./Interface2.png>]
 Missing character: There is no Ã in font cmr10!
 Missing character: There is no « in font cmr10!
 
-Overfull \hbox (2.36177pt too wide) in paragraph at lines 274--275
+Overfull \hbox (2.36177pt too wide) in paragraph at lines 276--277
 \OT1/cmr/m/n/10 mo-du-les wordt op-ge-deeld, kun-nen nieuwe mo-du-les een-vou-d
 ig af-zon-der-lijk wor-den
  []
 
-[11 <./Interface2.png>]
-Overfull \hbox (9.61177pt too wide) in paragraph at lines 276--277
+
+Overfull \hbox (9.61177pt too wide) in paragraph at lines 278--279
 \OT1/cmr/m/n/10 Dit ana-ly-se-do-cu-ment be-vat alle no-dige in-for-ma-tie over
  de klas-ses en hun on-der-linge
  []
 
 
-Overfull \hbox (10.15802pt too wide) in paragraph at lines 276--277
+Overfull \hbox (10.15802pt too wide) in paragraph at lines 278--279
 \OT1/cmr/m/n/10 re-la-ties na sprint 1. Op het einde van de ont-wik-ke-lings-pe
 -ri-ode zal een do-cu-men-ta-tie
  []
@@ -470,64 +485,64 @@ Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no ™ in font cmr10!
 
-Overfull \hbox (9.83398pt too wide) in paragraph at lines 280--281
+Overfull \hbox (9.83398pt too wide) in paragraph at lines 282--283
 \OT1/cmr/m/n/10 na de ont-wik-ke-lings-pe-ri-ode de ver-keers-in-for-ma-tie waa
 r-schijn-lijk wor-den op-ge-sla-gen
  []
 
 
-Overfull \hbox (15.41637pt too wide) in paragraph at lines 282--283
+Overfull \hbox (15.41637pt too wide) in paragraph at lines 284--285
 \OT1/cmr/m/n/10 Door op-de-ling in mo-du-les, die Java EE aan-biedt, kun-nen pr
 o-gram-meurs af-zon-der-lijk
  []
 
 
-Overfull \hbox (18.69508pt too wide) in paragraph at lines 286--287
+Overfull \hbox (18.69508pt too wide) in paragraph at lines 288--289
 \OT1/cmr/m/n/10 voor-zien die kan wor-den ge-wij-zigd door de link aan te pas-s
 en in het pro-per-ties-be-stand
  []
 
-<dataflows2.png, id=59, 1204.5pt x 557.08125pt>
-File: dataflows2.png Graphic file (type png)
- <use dataflows2.png>
-Package pdftex.def Info: dataflows2.png used on input line 288.
-(pdftex.def)             Requested size: 1204.49707pt x 557.0799pt.
-File: dataflows2.png Graphic file (type png)
+<dataflow3.png, id=65, 1511.6475pt x 511.9125pt>
+File: dataflow3.png Graphic file (type png)
+ <use dataflow3.png>
+Package pdftex.def Info: dataflow3.png used on input line 290.
+(pdftex.def)             Requested size: 1511.64383pt x 511.91125pt.
+File: dataflow3.png Graphic file (type png)
 
-<use dataflows2.png>
-Package pdftex.def Info: dataflows2.png used on input line 288.
-(pdftex.def)             Requested size: 345.0pt x 159.56033pt.
- [12]
-Overfull \hbox (1.80612pt too wide) in paragraph at lines 289--292
+<use dataflow3.png>
+Package pdftex.def Info: dataflow3.png used on input line 290.
+(pdftex.def)             Requested size: 345.0pt x 116.8313pt.
+ [13]
+Overfull \hbox (1.80612pt too wide) in paragraph at lines 292--293
 \OT1/cmr/m/n/10 Sour-ce-A-dap-ters, per pro-vi-der be-staat er een adap-ter-kla
 sse die de ISour-ce-A-dap-ter
  []
 
 
-Overfull \hbox (8.88947pt too wide) in paragraph at lines 297--298
-\OT1/cmr/m/n/10 De da-ta-pro-vi-ders wer-den ge-test aan de hand van unit-tests
- en la-ter in-te-gra-tie-tes-ting
+Overfull \hbox (18.05612pt too wide) in paragraph at lines 302--303
+\OT1/cmr/m/n/10 De Sour-ce-A-dap-ters wer-den ge-test aan de hand van unit-test
+s en la-ter in-te-gra-tie-tes-ting
  []
 
 
-Overfull \hbox (0.9358pt too wide) in paragraph at lines 297--298
+Overfull \hbox (0.9358pt too wide) in paragraph at lines 302--303
 \OT1/cmr/m/n/10 wer-den op-ge-gooid bij ver-keerde in-voer. Het ver-ge-lij-ken 
 van data in onze da-ta-base
  []
 
-[13 <./dataflows2.png>] [14] (AnalyseDocument.aux)
+[14 <./dataflow3.png>] [15] (AnalyseDocument.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 2734 strings out of 493634
- 35504 string characters out of 3135239
+ 2739 strings out of 493634
+ 35578 string characters out of 3135239
  107738 words of memory out of 3000000
- 6095 multiletter control sequences out of 15000+200000
+ 6099 multiletter control sequences out of 15000+200000
  9987 words of font info for 35 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
- 27i,9n,37p,766b,380s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 27i,9n,37p,766b,278s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/Simon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts
 /cm/cmbx10.pfb><C:/Users/Simon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/pu
 blic/amsfonts/cm/cmbx12.pfb><C:/Users/Simon/AppData/Local/Programs/MiKTeX 2.9/f
@@ -539,9 +554,9 @@ mon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmss12.pfb
 cm/cmss17.pfb><C:/Users/Simon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/pub
 lic/amsfonts/cm/cmti10.pfb><C:/Users/Simon/AppData/Local/Programs/MiKTeX 2.9/fo
 nts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on AnalyseDocument.pdf (15 pages, 422904 bytes).
+Output written on AnalyseDocument.pdf (16 pages, 418148 bytes).
 PDF statistics:
- 99 PDF objects out of 1000 (max. 8388607)
+ 104 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 31 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 36 words of extra memory for PDF output out of 10000 (max. 10000000)
 

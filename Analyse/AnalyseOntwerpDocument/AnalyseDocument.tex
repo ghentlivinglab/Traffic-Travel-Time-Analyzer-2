@@ -49,7 +49,7 @@ Het Mobiliteitsbedrijf van de stad gent is sinds 2014 bezig met het opzetten van
 \item Ophalen van kwalitatieve en vergelijkbare data bij verschillende bronnen
 \item Real-time overzicht van de verkeersdruke op vooraf vastgelegde trajecten
 \item Analyse op basis van opgehaalde data
-\item Aanbieden van gegevens aan externen via REST Api
+\item Aanbieden van gegevens aan externen via REST API
 \item Kwaliteitscontrole van de verkregen data
 %\end{enumerate}
 %\subsection{Extra}
@@ -60,7 +60,7 @@ Het Mobiliteitsbedrijf van de stad gent is sinds 2014 bezig met het opzetten van
 \end{enumerate}
 \section{Use Case}
 \diagram{UseCaseDiagram1}{Use Case}
-Er zijn twee actoren aan het werk. In de eerste plaats is er een timer, deze zal een trigger sturen naar het programma zodat data afkomstig van de verschillende providers opgehaald wordt. Verder is er nog een API-gebruiker, dit is een persoon die data kan ophalen uit de database gebruik makend van de REST Api.
+Er zijn drie actoren aan het werk. In de eerste plaats is er een timer, deze zal een trigger sturen naar het programma zodat data afkomstig van de verschillende providers opgehaald wordt. Verder is er nog een API-gebruiker, dit is een persoon die data kan ophalen uit de database gebruik makend van de REST API. Als laatste is er nog een administrator, hij kan routes toevoegen aan de database zodat ook van deze routes data wordt opgehaald.
 \section{Functieanalyse van de omgeving}
 \begin{enumerate}
 	\item Gebruikers
@@ -107,17 +107,18 @@ De doelstellingen representeren de product backlog en ze bevatten de taken die h
 \end{enumerate}
 \chapter{Ontwerp}
 \section{Functioneel ontwerp}
-\textcolor{red}{\textit{. Functioneel ontwerp: beschrijft de taken en de
-verantwoordelijkheden van de mensen
- Wie verzorgt de invoer? Wanneer gebeurt dit?
-Hoe gebeurt dit? }}
-\section{Technisch ontwerp}
+%\textcolor{red}{\textit{. Functioneel ontwerp: beschrijft de taken en de
+%verantwoordelijkheden van de mensen
+% Wie verzorgt de invoer? Wanneer gebeurt dit?
+%Hoe gebeurt dit? }}
+Er zijn 2 types gebruikers in het systeem. Enerzijds zijn er de API-gebruikers, zij hebben de mogelijkheid om data uit de API op te vragen en eventueel verder te verwerken. Anderzijds is er een administrator, deze gebruiker kan routes toevoegen aan het systeem.
+\textcolor{red}{\section{Technisch ontwerp (Tobias)}
 \subsection{Hardware}
-\textcolor{red}{Tijdens de ontwikkelingsfase zal beroep gedaan worden op de servers van de UGent.
+Tijdens de ontwikkelingsfase zal beroep gedaan worden op de servers van de UGent.
 \subsection{Paketten}
 \begin{enumerate}
 	\item Java EE
-	\item Php MyAdmin
+	\item Glassfish
 \end{enumerate}
 }
 \section{Software ontwerp}
@@ -131,7 +132,7 @@ Indien je voor de 34 routes om de 5 minuten de reistijden opvraagt en dit 18u pe
 Here stelt reistijden ter beschikking via zijn Routing API \\(https://developer.here.com/rest-apis/documentation/routing). In de URL geef je aan of je json of XML als antwoord wilt en kan je een route meegeven door de geoco\"ordinaten in te stellen voor start- en eindpunt en eventuele tussenpunten mee te geven. Verder moet voor de toepassing die hier ontworpen wordt steeds gekozen worden voor de kortste route in plaats van de snelste en moet er rekening gehouden worden met het huidige verkeer. Op deze manier zal steeds actuele info over een vaste route worden teruggeven.\\\\
 Om de API van Here te kunnen gebruiken moeten er 2 sleutels aangevraagd worden die gekoppeld worden aan de applicatie. De eerste 90 dagen kan dit gratis en mogen er tot 100 000 aanvragen per maand gedaan worden. Als je de 34 routes om de 5 minuten wil opvragen komen je echter al aan meer dan 220 000 aanvragen per maand en zou je sowieso een betalende formule nodig hebben. Om tot 275 000 aanvragen per maand te kunnen doen moet er ingestapt worden in het standaard plan dat 99 euro per maand kost.\\
 \subsection{Structuur van de data (API)}
-De REST API bestaat uit 3 categorie\"en: trajecten, routedata en providers. Wanneer je hier aanvragen naar doet krijg je gegevens uit de database terug. In de komende secties wordt een korte toelichting gegeven per categorie, gevolg door een voorbeeld van aanvraag en antwoord in JSON-formaat. \\Er is een online API beschikbaar waarin je meer informatie kan terugvinden, hieronder krijg je alvast een kort overzicht.
+De REST API bestaat uit 3 categorie\"en: routes, routedata en providers. Wanneer je hier aanvragen naar doet krijg je gegevens uit de database terug. In de komende secties wordt een korte toelichting gegeven per categorie, gevolg door een voorbeeld van aanvraag en antwoord in JSON-formaat. Er is een online API beschikbaar waarin je meer informatie kan terugvinden, hieronder krijg je alvast een kort overzicht.
 
 \subsubsection{Routes}
 De routes zijn de trajecten waar realtime data van opgeroepen wordt. Er kan gekozen worden om naam, id en/of alle tussenpunten te tonen voor de trajecten, indien je geen parameters meegeeft zullen standaard naam, id en tussenpunten teruggegeven worden. In de toekomst zal het ook mogelijk zijn om routes toe te voegen via de API.\\
@@ -212,7 +213,7 @@ route.id,route.geolocations\&provider=GoogleMaps,Here\\
 ]\end{verbatim}
 \noindent\rule[0.5ex]{\linewidth}{1pt}
 \subsubsection{Providers}
-Het is mogelijk om via de REST Api alle providers op te vragen, dit kan handig zijn om in bijvoorbeeld RouteData te gebruiken als parameter.\\
+Het is mogelijk om via de REST API alle providers op te vragen, dit kan handig zijn om in bijvoorbeeld RouteData te gebruiken als parameter.\\
 \noindent\rule[0.5ex]{\linewidth}{1pt}
 \textit{Patroon}\\
 \textbf{GET} ../providers\\\\
@@ -227,11 +228,12 @@ Het is mogelijk om via de REST Api alle providers op te vragen, dit kan handig z
 ]
 \end{verbatim}
 \noindent\rule[0.5ex]{\linewidth}{1pt}
-\textcolor{red}{\subsection{Databank}
-Ik geloof dat er een optie is in SQL Developer om hiervan een mooie representatie te maken zoals: http://i.stack.imgur.com/Usrhr.png }
-\subsection{Klassediagram}
-\textcolor{red}{Hier moet misschien wel een woordje uitleg bij?}
-\diagram{Interface1}{Basiscomponenten}
+\subsection{Databank}
+De database bestaat uit 3 tabellen. RouteData is op termijn de grootste tabel, hierin worden alle opgehaalde gegevens bewaard. In routes staan alle trajecten waarvan data zal worden opgehaald. Deze routes bestaan uit geolocaties die het traject bepalen.
+\diagram{database}{Databank}
+\subsection{Klassendiagram}
+In dit onderdeel vindt u 3 klassendiagrammen, al kan je het in dit geval ook interfacediagrammen noemen. Om te beginnen is er een diagram voor de basiscomponenten, de meest elementaire klassen in het systeem. Deze klassen vormen ook de database. Hierna komt het diagram van het gegevensbeheer, deze bevat de samenwerking van klassen die data ophalen en verwerken. Als laatste, maar daarom niet minder belangrijk, vindt u de BeanFactory. Dit diagram bevat slechts 1 klasse die de klassen uit diagram 3 zal beheren.
+\diagram{Interface1}{Basiscomponenten/Database}
 \diagram{Interface3}{Gegevensbeheer}
 \diagram{Interface2}{BeanFactory}
 \subsection{Verantwoordelijkheid per klasse}
@@ -257,9 +259,9 @@ Ik geloof dat er een optie is in SQL Developer om hiervan een mooie representati
 	\hline
 	TimerScheduler & automatische triggering voor ophalen nieuwe data\\	
 	\hline
-	TrafficDataDownstreamAnalyser & data afkomstig van SourceAdapters controleren op correctheid en nadien verdere acties ondernemen indien nodig\\	
+	TrafficDataDownloader & beheren van routes en geeft commando om routedata op te halen door\\	
 	\hline
-	? & data beschikbaar stellen aan de API\\	
+	TrafficDataDownstreamAnalyser & data afkomstig van SourceAdapters controleren op correctheid en nadien verdere acties ondernemen indien nodig\\		
 	\hline
 	BeanFactory & deze klasse zal dependency injection vertegenwoordigen in alle klassen \\	
 	\hline
@@ -275,7 +277,7 @@ Door gebruik te maken van Java EE, waarin de gehele applicatie in verschillende 
 \subsubsection{Onderhoudbaarheid}
 Dit analysedocument bevat alle nodige informatie over de klasses en hun onderlinge relaties na sprint 1. Op het einde van de ontwikkelingsperiode zal een documentatie worden voorzien met alle nodige informatie voor andere ontwikkelaars die de applicatie zouden willen wijzigen of uitbreiden.
 \subsubsection{Testbaarheid}
-De verschillende componenten werden getest gebruik makend van Unit-testen en integratietests.
+De verschillende componenten werden getest gebruik makend van unittests en integratietests.
 \subsubsection{Late Binding}
 Java EE biedt de mogelijkheid om een applicatie op te delen in verschillende modules die afzonderlijk van elkaar kunnen worden gecompileerd. Er werden twee DAO’s voorzien zodat de algemene data over routes en de verkeersinformatie over de routes kunnen worden opgeslagen in twee verschillende databases. Zo zal na de ontwikkelingsperiode de verkeersinformatie waarschijnlijk worden opgeslagen in een NoSQL-database, omdat de hoeveelheid data enorm groot zal worden. 
 \subsubsection{Parallelle ontwikkeling}
@@ -285,19 +287,23 @@ Modules kunnen eenvoudig worden ontkoppeld en worden vervangen door een andere. 
 \subsubsection{Crosscutting concerns (Logging)}
 De manier van logging kan eenvoudig worden gewijzigd door het hierboven beschreven principe van losse koppeling. Voor logging werd ook een module voorzien die kan worden gewijzigd door de link aan te passen in het propertiesbestand bij de BeanFactory.
 \subsection{Gegevensstroomdiagram}
-\diagram{dataflows2}{Gegevensstroomdiagram}
-De data van de verschillende providers wordt opgehaald met behulp van de SourceAdapters, per provider bestaat er een adapterklasse die de ISourceAdapter interface implementeert. De verschillende adapters bevinden zich in de \\SourceManager-klasse. Vanuit de TrafficDataManager wordt data per route aangevraagd, de SourceManager zal deze aanvragen doorsturen aan elke adapter en de ontvangen data teruggeven aan de TrafficDataManager. Om af te sluiten wordt de data doorgegeven aan de TrafficDataDAO, deze klasse zorgt ervoor dat de data in de database terechtkomt. De mogelijkheid bestaat om via Rest-aanvragen data uit de database te halen zoals hierboven reeds beschreven.
-\textcolor{red}{\subsection{Bestandstructuur}
+\diagram{dataflow3}{Gegevensstroomdiagram}
+\subsubsection{Downstream}
+De data van de verschillende providers wordt opgehaald met behulp van de SourceAdapters, per provider bestaat er een adapterklasse die de ISourceAdapter interface implementeert. De verschillende adapters bevinden zich in de \\SourceManager-klasse. Vanuit de TrafficDataDownloader wordt data per route aangevraagd, de SourceManager zal deze aanvragen doorsturen aan elke adapter en de ontvangen data per adapter teruggeven aan de TrafficDataDownloader. Vervolgens passeert de data ook nog de TrafficDataDownstreamAnalyser die controleert of de data geldig is en eventueel meldingen genereert. Om af te sluiten wordt de data doorgegeven aan de TrafficDataDAO, deze klasse zorgt ervoor dat de data in de database terechtkomt. 
+\subsubsection{Upstream}
+De mogelijkheid bestaat om via API-aanvragen data uit de database te halen, dit gebeurt via de TrafficDataDAO die contact heeft met de database.
+\textcolor{red}{\subsection{Bestandsstructuur (Tobias)}
 Iets over de splitings in beans denk ik dan?
 }
 \subsection{Tests}
 \subsubsection{Databank}
 De databank werd gedurende het ontwikkelingsproces getest via het principe van integratietesting. De data die in de database werd opgeslagen kwam overeen met de data die gestuurd werd naar de database.
-\subsubsection{DataProviders}
-De dataproviders werden getest aan de hand van unittests en later integratietesting in combinatie met de database. In de unittests werd nagekeken of excepties werden opgegooid bij verkeerde invoer. Het vergelijken van data in onze database met de data die op de sites van de providers staat werd manueel uitgevoerd.
+\subsubsection{SourceAdapters}
+De SourceAdapters werden getest aan de hand van unittests en later integratietesting in combinatie met de database. In de unittests werd nagekeken of excepties werden opgegooid bij verkeerde invoer. Het vergelijken van data in onze database met de data die op de sites van de providers staat werd manueel uitgevoerd.
 \subsubsection{Sortering geolocaties}
 In \'e\'en route zitten meerdere geolocaties om te verzekeren dat het gevolgde pad correct is. Om zeker te zijn dat de sortering van de locaties correct gebeurt werd een unittest geschreven.
-\textcolor{red}{\subsubsection{REST}}
+\subsubsection{REST API}
+De gegevens uit de database worden correct weergegeven via de REST API.
 \subsubsection{GeoLocation}
 In de klasse geolocation bestaan 2 variabelen om de co\"ordinaten te bepalen namelijk latitude en longitude. Deze moeten binnen bepaalde grenswaarden liggen, bijgevolg werd hiervoor een exceptie met bijkomende unittest geschreven.
 \end{document}
