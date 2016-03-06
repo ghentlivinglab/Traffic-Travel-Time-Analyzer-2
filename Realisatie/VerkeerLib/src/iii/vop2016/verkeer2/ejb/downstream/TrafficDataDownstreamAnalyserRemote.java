@@ -12,6 +12,6 @@ import javax.ejb.Remote;
  * @author tobia
  */
 @Remote
-public interface TrafficDataDownstreamAnalyserRemote extends IAnalyzer{
+public interface TrafficDataDownstreamAnalyserRemote extends ITrafficDataDownstreamAnalyzer{
     
 }

@@ -7,7 +7,9 @@ package iii.vop2016.verkeer2.ejb.downstream;
 
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
+import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -51,9 +53,14 @@ public class TrafficDataDownstreamAnalyser implements TrafficDataDownstreamAnaly
         return "Verkeer-2";
     }
 
-    
+
     @Override
-    public IRoute addRoute(IRoute route) {
-        return beans.getGeneralDAO().addRoute(route);
+    public IRouteData addData(IRouteData data) {
+        return beans.getTrafficDataDAO().addData(data);
+    }
+
+    @Override
+    public List<IRouteData> addData(List<IRouteData> data) {
+        return beans.getTrafficDataDAO().addData(data);
     }
 }

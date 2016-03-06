@@ -7,12 +7,16 @@ package iii.vop2016.verkeer2.ejb.downstream;
 
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
+import iii.vop2016.verkeer2.ejb.components.IRouteData;
+import java.util.List;
 
 /**
  *
  * @author tobia
  */
-public interface IAnalyzer {
+public interface ITrafficDataDownstreamAnalyzer {
     String getProjectName();
-    public IRoute addRoute(IRoute route);
+    
+    public IRouteData addData(IRouteData data);
+    public List<IRouteData> addData(List<IRouteData> data);
 }

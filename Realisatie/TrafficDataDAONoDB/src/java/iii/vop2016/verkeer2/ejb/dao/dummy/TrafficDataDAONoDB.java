@@ -31,7 +31,7 @@ public class TrafficDataDAONoDB implements TrafficDataDAONoDBRemote {
         lastIndex = 0;
     }
     
-    @Override
+
     public List<IRouteData> getData(Date time1, Date time2) {
         List<IRouteData> results = new ArrayList<>();
         for(IRouteData d : data){

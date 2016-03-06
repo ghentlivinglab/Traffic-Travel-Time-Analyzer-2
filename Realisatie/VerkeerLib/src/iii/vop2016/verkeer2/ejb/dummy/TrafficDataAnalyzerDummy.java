@@ -5,15 +5,17 @@
  */
 package iii.vop2016.verkeer2.ejb.dummy;
 
-import iii.vop2016.verkeer2.ejb.downstream.IAnalyzer;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
+import iii.vop2016.verkeer2.ejb.components.IRouteData;
+import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyzer;
+import java.util.List;
 
 /**
  *
  * @author Tobias
  */
-public class TrafficDataAnalyzerDummy implements IAnalyzer{
+public class TrafficDataAnalyzerDummy implements ITrafficDataDownstreamAnalyzer{
 
     @Override
     public String getProjectName() {
@@ -21,8 +23,14 @@ public class TrafficDataAnalyzerDummy implements IAnalyzer{
     }
 
     @Override
-    public IRoute addRoute(IRoute route) {
+    public IRouteData addData(IRouteData data) {
         return null;
     }
+
+    @Override
+    public List<IRouteData> addData(List<IRouteData> data) {
+        return null;
+    }
+
     
 }

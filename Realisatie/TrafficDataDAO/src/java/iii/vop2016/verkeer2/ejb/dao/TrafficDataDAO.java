@@ -53,7 +53,6 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
         
     }
 
-    @Override
     public List<IRouteData> getData(Date time1, Date time2) {
         List<IRouteData> routes = new ArrayList<>();
         try {

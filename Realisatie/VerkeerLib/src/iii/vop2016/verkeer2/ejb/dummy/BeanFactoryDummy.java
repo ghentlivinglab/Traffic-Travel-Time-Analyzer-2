@@ -5,7 +5,6 @@
  */
 package iii.vop2016.verkeer2.ejb.dummy;
 
-import iii.vop2016.verkeer2.ejb.downstream.IAnalyzer;
 import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
@@ -17,6 +16,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import iii.vop2016.verkeer2.ejb.datadownloader.ITrafficDataDownloader;
+import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyzer;
 
 /**
  *
@@ -41,7 +41,7 @@ public class BeanFactoryDummy extends BeanFactory{
     }
 
     @Override
-    public IAnalyzer getAnalyzer() {
+    public ITrafficDataDownstreamAnalyzer getTrafficDataDownstreamAnalyzer() {
         return new TrafficDataAnalyzerDummy();
     }
 

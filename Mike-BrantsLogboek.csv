@@ -33,4 +33,7 @@ Datum,Start,Einde,Plaats,Categorie,Omschrijving,Issue #,Opmerkingen
 03/03/16,12:30,16:30,School,Les,Les communicatie,,
 03/03/16,16:30,18:00,School,Analyse,Maken diagrammen + overlopen einde sprint 1,,
 05/03/16,17:50,23:59,Thuis,Presentatie,Maken powerpoint voor presentatie,,
-05/03/16,00:00,00:40,Thuis,Presentatie,Maken powerpoint voor presentatie,,
+06/03/16,00:00,00:40,Thuis,Presentatie,Maken powerpoint voor presentatie,,
+06/03/16,10:30,11:30,Thuis,Projectwerk,Toevoegen huidige verkeerssituatie aan REST,51,
+06/03/16,14:00,16:00,Thuis,Analyse,Aanpassen diagrammen,,
+06/03/16,16:00,16:30,Thuis,Projectwerk,Implement DownstreamAnalyser,,

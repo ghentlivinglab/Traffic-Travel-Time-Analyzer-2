@@ -56,7 +56,6 @@ public class TrafficDataDAODummy implements ITrafficDataDAO{
 
     }
 
-    @Override
     public List<IRouteData> getData(Date time1, Date time2) {
         List<IRouteData> d = new ArrayList<>();
         for(IRouteData data : this.data){

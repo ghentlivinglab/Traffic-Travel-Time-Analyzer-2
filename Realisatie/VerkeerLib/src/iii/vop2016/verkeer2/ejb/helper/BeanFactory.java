@@ -5,7 +5,6 @@
  */
 package iii.vop2016.verkeer2.ejb.helper;
 
-import iii.vop2016.verkeer2.ejb.downstream.IAnalyzer;
 import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
 import iii.vop2016.verkeer2.ejb.datasources.ISourceAdapter;
@@ -18,6 +17,7 @@ import java.util.logging.Logger;
 import javax.ejb.SessionContext;
 import javax.naming.InitialContext;
 import iii.vop2016.verkeer2.ejb.datadownloader.ITrafficDataDownloader;
+import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyzer;
 
 /**
  *
@@ -63,16 +63,16 @@ public class BeanFactory {
         }
     }
 
-    public IAnalyzer getAnalyzer() {
+    public ITrafficDataDownstreamAnalyzer getTrafficDataDownstreamAnalyzer() {
         if (sctx != null) {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.downstreamAnalyser, sctx, Logger.getGlobal());
-            if (obj instanceof IAnalyzer) {
-                return (IAnalyzer) obj;
+            if (obj instanceof ITrafficDataDownstreamAnalyzer) {
+                return (ITrafficDataDownstreamAnalyzer) obj;
             }
         } else {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.downstreamAnalyser, ctx, Logger.getGlobal());
-            if (obj instanceof IAnalyzer) {
-                return (IAnalyzer) obj;
+            if (obj instanceof ITrafficDataDownstreamAnalyzer) {
+                return (ITrafficDataDownstreamAnalyzer) obj;
             }
         }
         return null;

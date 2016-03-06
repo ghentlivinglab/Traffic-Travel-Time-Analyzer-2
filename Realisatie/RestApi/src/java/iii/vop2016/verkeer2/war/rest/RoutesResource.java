@@ -5,7 +5,6 @@
  */
 package iii.vop2016.verkeer2.war.rest;
 
-import iii.vop2016.verkeer2.ejb.downstream.IAnalyzer;
 import iii.vop2016.verkeer2.ejb.components.GeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
@@ -39,6 +38,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyzer;
 
 /**
  * REST Web Service
@@ -106,7 +106,7 @@ public class RoutesResource {
     public Response initRoutes() throws InvalidCoordinateException {
                 
         try {
-            IAnalyzer analyzer = beans.getAnalyzer();
+            ITrafficDataDownstreamAnalyzer analyzer = beans.getTrafficDataDownstreamAnalyzer();
             
             IRoute r = new Route("R4 Zelzate");
             
@@ -118,7 +118,7 @@ public class RoutesResource {
             geolocation2.setName("Gent");
             r.addGeolocation(geolocation1);
             r.addGeolocation(geolocation2);
-            r = analyzer.addRoute(r);
+            r = beans.getGeneralDAO().addRoute(r);
             
             
             List<IRoute> routes = beans.getGeneralDAO().getRoutes();
