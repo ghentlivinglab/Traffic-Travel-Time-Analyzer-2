@@ -22,8 +22,8 @@ Datum,Start,Einde,Plaats,Categorie,Omschrijving,Issue #,Opmerkingen
 01/03/16,18:00,21:00,Thuis,Bugfixing,Aanpassen Bean systeem voor server deployment,,
 02/03/16,16:00,18:00,Thuis,Bugfixing,External libraries voor server deployment,,
 02/03/16,20:00,22:00,Thuis,Bugfixing,External libraries voor server deployment,,
-03/02/16,16:30,17:45,School,Projectwerk,Aanpassen DAOs voor server deployment,,Errors door non shared objects
-03/02/16,20:00,22:30,Thuis,Implementatie,Aanpassen DAOs voor server deployment en Server scripts voot auto deployment undeployment en start stop,,
-04/02/16,20:00,21:00,Thuis,Bugfixing,Aanpassen DAOs voor server deployment,,Errors op non existing functions
-05/02/16,10:30,12:00,Thuis,Bugfixing,Aanpassen DAOs en lib voor server deployment,,
-05/02/16,13:30,17:00,Thuis,Bugfixing,Monitoring sever voor succesvolle data retrievel en hotfixes bij kleine errors,,
+03/03/16,16:30,17:45,School,Projectwerk,Aanpassen DAOs voor server deployment,,Errors door non shared objects
+03/03/16,20:00,22:30,Thuis,Implementatie,Aanpassen DAOs voor server deployment en Server scripts voot auto deployment undeployment en start stop,,
+04/03/16,20:00,21:00,Thuis,Bugfixing,Aanpassen DAOs voor server deployment,,Errors op non existing functions
+05/03/16,10:30,12:00,Thuis,Bugfixing,Aanpassen DAOs en lib voor server deployment,,
+05/03/16,13:30,17:00,Thuis,Bugfixing,Monitoring sever voor succesvolle data retrievel en hotfixes bij kleine errors,,
