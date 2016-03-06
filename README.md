@@ -38,7 +38,7 @@ EJB Bean: Logger
 
 __[TimerScheduler](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/TimerScheduler)__
 
-Deze bean start mee op met de server en creeert een timer via java ee TimerServices die volgens het patroon gedefineerd in properties file 'TimerScheduler' triggert.
+Deze bean start mee op met de server en creeert een timer via java ee TimerServices die volgens het patroon gedefineerd in properties file '[TimerScheduler](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/TimerScheduler.properties)' triggert.
 ````
 Package name: iii.vop2016.verkeer2.ejb.timer
 
