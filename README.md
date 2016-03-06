@@ -156,3 +156,34 @@ Resources: /providers (ProviderResource), /routes (RoutesResource)
 ````
 
 ***
+
+## Uitvoeren project
+
+Vooraleer dit project kan worden uitgevoerd zullen enkele aanpassingen nodig zijn aan glassfish.
+
+Dit project werd getest met het systeem [hier beschreven](nil).
+
+Volgend stappenplan moet doorlopen worden vooraleerst het project kan worden gedeployed.
+* Voer allereerst alle [fixes](https://github.ugent.be/iii-vop2016/verkeer-2/wiki/Glassfish---Fixes) door in glassfish
+* Voeg de [externe libraries](https://github.ugent.be/iii-vop2016/verkeer-2/wiki/Externe-libraries) toe aan glassfish
+* Herstart glassfish
+* Voeg [JNDI resources](https://github.ugent.be/iii-vop2016/verkeer-2/wiki/Glassfish-Resources) toe
+* Voeg [JDBC connectie](https://github.ugent.be/iii-vop2016/verkeer-2/wiki/Glassfish---JDBC) toe
+* Start Mysql server en maak zeker dat een database 'verkeer2' bestaat en leeg is
+ 
+Afhankelijk van een locale server of remote server dient een iets ander stappenplan te worden gevolgd.
+
+Lokale server
+* Verifeer dat de [Beans](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/Beans.properties) en [SourceAdapter](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/SourceAdaptors.properties) property files de applicatie naam voor hun jndi naam hebben staan. Deze moeten voldoen aan volgend formaat:  java:global/ApplicatieNaam/ContainerNaam/BeanNaam. voorbeeld= java:global/Verkeer2/TrafficDataDAO/TrafficDataDAO
+* 'Clean and build' allereerst VerkeersLib, hierna iedere bean en vervolgens de applicatie zelf.
+* Vanuit netbeans kan het project onmiddelijk deployed worden via de java ee applicatie 'Verkeer2'
+
+Externe server (hier wordt iedere bean apart gedeployed)
+* Verifeer dat de [Beans](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/Beans.properties) en [SourceAdapter](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/SourceAdaptors.properties) property files de applicatie naam niet voor hun jndi naam hebben staan. Deze moeten voldoen aan volgend formaat:  java:global/ContainerNaam/BeanNaam. voorbeeld= java:global/TrafficDataDAO/TrafficDataDAO
+* 'Clean and build' allereerst VerkeersLib, hierna iedere bean en vervolgens de applicatie zelf.
+* In de glassfish admin console, voeg iedere applicatie toe onder de 'Applications' tab. Deploy steeds met alle libraries op te geven in het veld 'libraries'. Voor de Rest applicatie geef als context root api op.
+* Herstart de server
+* Na herstart zou het project volledig werkend moeten starten.
+
+
+***
