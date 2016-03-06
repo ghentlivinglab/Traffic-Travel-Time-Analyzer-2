@@ -10,32 +10,50 @@
 \contentsline {section}{\numberline {2.2}Technisch ontwerp (Tobias)}{5}
 \contentsline {subsection}{\numberline {2.2.1}Hardware}{5}
 \contentsline {subsection}{\numberline {2.2.2}Paketten}{5}
-\contentsline {section}{\numberline {2.3}Software ontwerp}{5}
-\contentsline {subsection}{\numberline {2.3.1}Dataproviders}{5}
-\contentsline {subsubsection}{Google Maps}{5}
-\contentsline {subsubsection}{Here}{6}
-\contentsline {subsection}{\numberline {2.3.2}Structuur van de data (API)}{6}
-\contentsline {subsubsection}{Routes}{6}
-\contentsline {subsubsection}{RouteData}{7}
-\contentsline {subsubsection}{Providers}{8}
-\contentsline {subsection}{\numberline {2.3.3}Databank}{9}
-\contentsline {subsection}{\numberline {2.3.4}Klassendiagram}{9}
-\contentsline {subsection}{\numberline {2.3.5}Verantwoordelijkheid per klasse}{12}
-\contentsline {subsection}{\numberline {2.3.6}Modules}{13}
-\contentsline {subsubsection}{Flexibel en Uitbreidbaar}{13}
-\contentsline {subsubsection}{Onderhoudbaarheid}{13}
-\contentsline {subsubsection}{Testbaarheid}{13}
-\contentsline {subsubsection}{Late Binding}{13}
-\contentsline {subsubsection}{Parallelle ontwikkeling}{13}
-\contentsline {subsubsection}{Losse koppeling van objecten}{13}
-\contentsline {subsubsection}{Crosscutting concerns (Logging)}{13}
-\contentsline {subsection}{\numberline {2.3.7}Gegevensstroomdiagram}{14}
-\contentsline {subsubsection}{Downstream}{14}
-\contentsline {subsubsection}{Upstream}{14}
-\contentsline {subsection}{\numberline {2.3.8}Bestandsstructuur (Tobias)}{14}
-\contentsline {subsection}{\numberline {2.3.9}Tests}{14}
-\contentsline {subsubsection}{Databank}{14}
-\contentsline {subsubsection}{SourceAdapters}{14}
-\contentsline {subsubsection}{Sortering geolocaties}{15}
-\contentsline {subsubsection}{REST API}{15}
-\contentsline {subsubsection}{GeoLocation}{15}
+\contentsline {subsubsection}{JSF}{6}
+\contentsline {subsubsection}{Contexts and Dependency Injection}{6}
+\contentsline {subsubsection}{EJB}{6}
+\contentsline {subsubsection}{JPA}{6}
+\contentsline {subsubsection}{JTA}{7}
+\contentsline {subsubsection}{JAX-RS}{7}
+\contentsline {subsubsection}{JNDI}{7}
+\contentsline {subsubsection}{JDBC Connection Pools}{7}
+\contentsline {section}{\numberline {2.3}Software ontwerp}{7}
+\contentsline {subsection}{\numberline {2.3.1}Dataproviders}{7}
+\contentsline {subsubsection}{Google Maps}{7}
+\contentsline {subsubsection}{Here}{8}
+\contentsline {subsection}{\numberline {2.3.2}Structuur van de data (API)}{8}
+\contentsline {subsubsection}{Routes}{8}
+\contentsline {subsubsection}{RouteData}{9}
+\contentsline {subsubsection}{Providers}{10}
+\contentsline {subsubsection}{Parameters}{11}
+\contentsline {subsection}{\numberline {2.3.3}Databank}{11}
+\contentsline {subsection}{\numberline {2.3.4}Klassendiagram}{11}
+\contentsline {subsection}{\numberline {2.3.5}Verantwoordelijkheid per klasse}{13}
+\contentsline {subsection}{\numberline {2.3.6}Modules}{14}
+\contentsline {subsubsection}{Flexibel en Uitbreidbaar}{14}
+\contentsline {subsubsection}{Onderhoudbaarheid}{14}
+\contentsline {subsubsection}{Testbaarheid}{14}
+\contentsline {subsubsection}{Late Binding}{14}
+\contentsline {subsubsection}{Parallelle ontwikkeling}{14}
+\contentsline {subsubsection}{Losse koppeling van objecten}{14}
+\contentsline {subsubsection}{Crosscutting concerns (Logging)}{14}
+\contentsline {subsection}{\numberline {2.3.7}Gegevensstroomdiagram}{15}
+\contentsline {subsubsection}{Downstream}{15}
+\contentsline {subsubsection}{Upstream}{15}
+\contentsline {subsection}{\numberline {2.3.8}Bestandsstructuur (Tobias)}{15}
+\contentsline {subsubsection}{Logger}{15}
+\contentsline {subsubsection}{TimerScheduler}{15}
+\contentsline {subsubsection}{TrafficDataDownloader}{15}
+\contentsline {subsubsection}{TrafficDataDownstreamAnalyser}{16}
+\contentsline {subsubsection}{GoogleMapsSourceAdapter/HereSourceAdapter}{16}
+\contentsline {subsubsection}{GeneralDAO}{16}
+\contentsline {subsubsection}{TrafficDataDAO}{16}
+\contentsline {subsubsection}{GeneralDAONoDB/TrafficDataDAONoDB}{16}
+\contentsline {subsubsection}{RESTAPI}{16}
+\contentsline {subsection}{\numberline {2.3.9}Tests}{16}
+\contentsline {subsubsection}{Databank}{16}
+\contentsline {subsubsection}{SourceAdapters}{16}
+\contentsline {subsubsection}{Sortering geolocaties}{16}
+\contentsline {subsubsection}{REST API}{17}
+\contentsline {subsubsection}{GeoLocation}{17}
