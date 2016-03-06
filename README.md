@@ -161,7 +161,7 @@ Resources: /providers (ProviderResource), /routes (RoutesResource)
 
 Vooraleer dit project kan worden uitgevoerd zullen enkele aanpassingen nodig zijn aan glassfish.
 
-Dit project werd getest met het systeem [hier beschreven](nil).
+Dit project werd getest met het systeem [hier beschreven](https://github.ugent.be/iii-vop2016/verkeer-2/wiki/Hardware).
 
 Volgend stappenplan moet doorlopen worden vooraleerst het project kan worden gedeployed.
 * Voer allereerst alle [fixes](https://github.ugent.be/iii-vop2016/verkeer-2/wiki/Glassfish---Fixes) door in glassfish
