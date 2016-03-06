@@ -7,7 +7,7 @@
 \contentsline {section}{\numberline {1.4}Functieanalyse van de omgeving}{3}
 \contentsline {chapter}{\numberline {2}Ontwerp}{5}
 \contentsline {section}{\numberline {2.1}Functioneel ontwerp}{5}
-\contentsline {section}{\numberline {2.2}Technisch ontwerp (Tobias)}{5}
+\contentsline {section}{\numberline {2.2}Technisch ontwerp}{5}
 \contentsline {subsection}{\numberline {2.2.1}Hardware}{5}
 \contentsline {subsection}{\numberline {2.2.2}Paketten}{5}
 \contentsline {subsubsection}{JSF}{6}
@@ -25,35 +25,35 @@
 \contentsline {subsection}{\numberline {2.3.2}Structuur van de data (API)}{8}
 \contentsline {subsubsection}{Routes}{8}
 \contentsline {subsubsection}{RouteData}{9}
-\contentsline {subsubsection}{Providers}{10}
+\contentsline {subsubsection}{Providers}{11}
 \contentsline {subsubsection}{Parameters}{11}
 \contentsline {subsection}{\numberline {2.3.3}Databank}{11}
-\contentsline {subsection}{\numberline {2.3.4}Klassendiagram}{11}
-\contentsline {subsection}{\numberline {2.3.5}Verantwoordelijkheid per klasse}{13}
+\contentsline {subsection}{\numberline {2.3.4}Klassendiagram}{12}
+\contentsline {subsection}{\numberline {2.3.5}Verantwoordelijkheid per klasse}{14}
 \contentsline {subsection}{\numberline {2.3.6}Modules}{14}
 \contentsline {subsubsection}{Flexibel en Uitbreidbaar}{14}
 \contentsline {subsubsection}{Onderhoudbaarheid}{14}
-\contentsline {subsubsection}{Testbaarheid}{14}
-\contentsline {subsubsection}{Late Binding}{14}
-\contentsline {subsubsection}{Parallelle ontwikkeling}{14}
-\contentsline {subsubsection}{Losse koppeling van objecten}{14}
-\contentsline {subsubsection}{Crosscutting concerns (Logging)}{14}
-\contentsline {subsection}{\numberline {2.3.7}Gegevensstroomdiagram}{15}
-\contentsline {subsubsection}{Downstream}{15}
-\contentsline {subsubsection}{Upstream}{15}
-\contentsline {subsection}{\numberline {2.3.8}Bestandsstructuur (Tobias)}{15}
-\contentsline {subsubsection}{Logger}{15}
-\contentsline {subsubsection}{TimerScheduler}{15}
-\contentsline {subsubsection}{TrafficDataDownloader}{15}
-\contentsline {subsubsection}{TrafficDataDownstreamAnalyser}{16}
-\contentsline {subsubsection}{GoogleMapsSourceAdapter/HereSourceAdapter}{16}
-\contentsline {subsubsection}{GeneralDAO}{16}
-\contentsline {subsubsection}{TrafficDataDAO}{16}
-\contentsline {subsubsection}{GeneralDAONoDB/TrafficDataDAONoDB}{16}
-\contentsline {subsubsection}{RESTAPI}{16}
-\contentsline {subsection}{\numberline {2.3.9}Tests}{16}
-\contentsline {subsubsection}{Databank}{16}
-\contentsline {subsubsection}{SourceAdapters}{16}
-\contentsline {subsubsection}{Sortering geolocaties}{16}
-\contentsline {subsubsection}{REST API}{17}
-\contentsline {subsubsection}{GeoLocation}{17}
+\contentsline {subsubsection}{Testbaarheid}{15}
+\contentsline {subsubsection}{Late Binding}{15}
+\contentsline {subsubsection}{Parallelle ontwikkeling}{15}
+\contentsline {subsubsection}{Losse koppeling van objecten}{15}
+\contentsline {subsubsection}{Crosscutting concerns (Logging)}{15}
+\contentsline {subsection}{\numberline {2.3.7}Gegevensstroomdiagram}{16}
+\contentsline {subsubsection}{Downstream}{16}
+\contentsline {subsubsection}{Upstream}{16}
+\contentsline {subsection}{\numberline {2.3.8}Bestandsstructuur}{16}
+\contentsline {subsubsection}{Logger}{16}
+\contentsline {subsubsection}{TimerScheduler}{16}
+\contentsline {subsubsection}{TrafficDataDownloader}{16}
+\contentsline {subsubsection}{TrafficDataDownstreamAnalyser}{17}
+\contentsline {subsubsection}{GoogleMapsSourceAdapter/HereSourceAdapter}{17}
+\contentsline {subsubsection}{GeneralDAO}{17}
+\contentsline {subsubsection}{TrafficDataDAO}{17}
+\contentsline {subsubsection}{GeneralDAONoDB/TrafficDataDAONoDB}{17}
+\contentsline {subsubsection}{RESTAPI}{17}
+\contentsline {subsection}{\numberline {2.3.9}Tests}{17}
+\contentsline {subsubsection}{Databank}{17}
+\contentsline {subsubsection}{SourceAdapters}{17}
+\contentsline {subsubsection}{Sortering geolocaties}{17}
+\contentsline {subsubsection}{REST API}{18}
+\contentsline {subsubsection}{GeoLocation}{18}
