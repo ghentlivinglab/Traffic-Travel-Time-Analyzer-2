@@ -7,11 +7,11 @@ __[Root](https://github.ugent.be/iii-vop2016/verkeer-2)__
 
 Bevat de logboeken, dit readme bestand en GNU license.
 
-__[Analyse](https://github.ugent.be/iii-vop2016/verkeer-2/Analyse)__
+__[Analyse](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Analyse)__
 
 Bevat alle analysedocumenten van het project.
 
-__[Realisatie](https://github.ugent.be/iii-vop2016/verkeer-2/Realisatie)__
+__[Realisatie](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie)__
 
 Bevat alle source code van het project, alsook de property files gebruikt tijdens deployment.
 
