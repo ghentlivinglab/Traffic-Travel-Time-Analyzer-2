@@ -3,15 +3,15 @@
 ***
 
 ## Structuur repository
-__Root__
+__[Root](https://github.ugent.be/iii-vop2016/verkeer-2)__
 
 Bevat de logboeken, dit readme bestand en GNU license.
 
-__Analyse__
+__[Analyse](https://github.ugent.be/iii-vop2016/verkeer-2/Analyse)__
 
 Bevat alle analysedocumenten van het project.
 
-__Realisatie__
+__[Realisatie](https://github.ugent.be/iii-vop2016/verkeer-2/Realisatie)__
 
 Bevat alle source code van het project, alsook de property files gebruikt tijdens deployment.
 
