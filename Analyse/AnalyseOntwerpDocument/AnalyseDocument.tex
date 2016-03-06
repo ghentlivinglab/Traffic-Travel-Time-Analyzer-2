@@ -139,11 +139,10 @@ Alle beans verwachten diensten waarvan zijzelf afhangen. Zo wordt bij de Data Ac
 JavaBeans zijn door software beheerde modulaire bouwblokken. In deze beans wordt de \textit{business logic} voor een Enterprise Applicatie verwerkt. De grootste kenmerken voor deze beans zijn hun modulariteit, onafhankelijkheid van elkaar en schaalbaarheid.\\\\
 \textit{Modulariteit}\\
 Iedere module (JavaBean) in het project is uitwisselbaar met een nieuwe module. Dit is aan te passen in een extern properties bestand. Zo kan op ieder moment bijvoorbeeld een leverancier worden toegevoegd, een database worden vervangen door een andere of een nieuwe \textit{web service} worden toegevoegd.\\\\
-\textcolor{red}{\textit{Onafhankelijkheid}\\
-Alle beans zijn onafhankelijk. Naast de gemeenschappelijke bibliotheek waar beanoverschrijdende objecten (zoals interfaces) in staan zal geen enkele bean een invloed ondervinden bij het uitwisselen van andere modules. Toegang na vervangen van een module blijft via naamopvraging naar JNDI, welke de nieuwe module in plaats van de oude zal teruggeven.\\\\
+\textit{Onafhankelijkheid}\\
+Alle beans zijn onafhankelijk. Alle objecten die voorkomen in meerdere beans (zoals interfaces) zijn gebundeld in een gemeenschappelijke bibliotheek. Hierdoor zullen beans geen enkele invloed ondervinden wanneer een andere bean wijzigt.\\\\
 \textit{Uitbreidbaarheid}\\
-De modules staan niet enkel op zich, maar hebben eveneens geen band met de locatie waar ze werken. Zo kan een database bean op een andere server draaien dan de analyser bean. De enige vereiste hiervoor is dat JNDI van de ene server gelinked is aan de JNDI van de andere server. De beans zullen hun paramaters en return values steeds serialiseren en doorsturen naar de 'remote' bean.
-}
+De modules zijn niet enkel onafhankelijk, maar hebben eveneens geen vaste relatie met de locatie waar ze werken. Zo kan een \textit{database bean} op een andere server staan dan de \textit{analyser bean}. De enige vereiste hiervoor is dat JNDI van de ene server gelinkt is aan de JNDI van de andere server. De beans zullen hun parameters en teruggeefwaardes steeds serialiseren en doorsturen naar de zogenaamde \textit{remote bean}.
 \subsubsection{JPA}
 De Java variant voor Object Relational Mapping (ORM) laat toe de gegevens in een databank rechtstreeks af te beelden op objecten door middel van annotaties. Deze manier van interactie met de databank laat een zeer eenvoudige werking toe. Het zal echter niet de performantie van handmatige SQL-commando's evenaren.
 \subsubsection{JTA}

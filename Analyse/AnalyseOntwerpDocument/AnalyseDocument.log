@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2016.2.27)  6 MAR 2016 19:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2016.2.27)  6 MAR 2016 20:27
 entering extended mode
 **./AnalyseDocument.tex
 (AnalyseDocument.tex
@@ -279,28 +279,34 @@ s maar van de ap-pli-ca-tie-ser-ver.
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 139--147
+Underfull \hbox (badness 10000) in paragraph at lines 139--146
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 139--147
+Underfull \hbox (badness 10000) in paragraph at lines 139--146
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 139--147
+Overfull \hbox (1.8247pt too wide) in paragraph at lines 139--146
+\OT1/cmr/m/n/10 (zo-als in-ter-fa-ces) zijn ge-bun-deld in een ge-meen-schap-pe
+-lijke bi-bli-o-theek. Hier-door
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 139--146
 
  []
 
 
-Overfull \hbox (2.86053pt too wide) in paragraph at lines 150--151
+Overfull \hbox (2.86053pt too wide) in paragraph at lines 149--150
 \OT1/cmr/m/n/10 Deze API start (zon-der enige con-fi-gu-ra-tie) steeds een tran
 s-ac-tie bij het aan-roe-pen
  []
 
 [6]
-Overfull \hbox (7.19511pt too wide) in paragraph at lines 156--157
+Overfull \hbox (7.19511pt too wide) in paragraph at lines 155--156
 \OT1/cmr/m/n/10 da-ta-bank bij en maakt deze be-schik-baar aan de ap-pli-ca-tie
 s van de ap-pli-ca-tie-ser-ver.
  []
@@ -327,173 +333,173 @@ Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no ™ in font cmr10!
 
-Overfull \hbox (0.74153pt too wide) in paragraph at lines 160--163
+Overfull \hbox (0.74153pt too wide) in paragraph at lines 159--162
 \OT1/cmr/m/n/10 (https://developers.google.com/maps/documentation/distance-matr
 ix/) . In de
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 160--163
+Underfull \hbox (badness 10000) in paragraph at lines 159--162
 
  []
 
 
-Overfull \hbox (13.11168pt too wide) in paragraph at lines 160--163
+Overfull \hbox (13.11168pt too wide) in paragraph at lines 159--162
 \OT1/cmr/m/n/10 over-schre-den wordt zal er per schijf van 1000 ex-tra ele-men-
 ten 0.5 dol-lar aan-ge-re-kend
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 160--163
+Underfull \hbox (badness 10000) in paragraph at lines 159--162
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 160--163
+Underfull \hbox (badness 10000) in paragraph at lines 159--162
 
  []
 
 [7]
-Overfull \hbox (0.46257pt too wide) in paragraph at lines 165--167
+Overfull \hbox (0.46257pt too wide) in paragraph at lines 164--166
 \OT1/cmr/m/n/10 (https://developer.here.com/rest-apis/documentation/routing). I
 n de URL geef
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 165--167
+Underfull \hbox (badness 10000) in paragraph at lines 164--166
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 165--167
+Underfull \hbox (badness 10000) in paragraph at lines 164--166
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 171--172
+Underfull \hbox (badness 10000) in paragraph at lines 170--171
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 173--180
+Underfull \hbox (badness 10000) in paragraph at lines 172--179
 
  []
 
 [8]
-Overfull \hbox (3.40802pt too wide) in paragraph at lines 204--205
+Overfull \hbox (3.40802pt too wide) in paragraph at lines 203--204
 \OT1/cmr/m/n/10 ver-schil-lende tijd-stip-pen. Je kan kie-zen voor welke rou-te
 s je data wil te-rug-krij-gen,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 204--205
+Underfull \hbox (badness 10000) in paragraph at lines 203--204
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 204--205
+Underfull \hbox (badness 10000) in paragraph at lines 203--204
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 207--216
+Underfull \hbox (badness 10000) in paragraph at lines 206--215
 
  []
 
 
-Overfull \hbox (16.4024pt too wide) in paragraph at lines 207--216
+Overfull \hbox (16.4024pt too wide) in paragraph at lines 206--215
 \OT1/cmr/bx/n/10 GET \OT1/cmr/m/n/10 http://verkeer-2.bp.tiwi.be/api/v2/routes/
 1,2,3/data/1456761535931/huidig
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 207--216
+Underfull \hbox (badness 10000) in paragraph at lines 206--215
 
  []
 
 [9]
-Underfull \hbox (badness 10000) in paragraph at lines 254--262
+Underfull \hbox (badness 10000) in paragraph at lines 253--261
 
  []
 
 [10] <database.png, id=51, 1668.2325pt x 587.19376pt>
 File: database.png Graphic file (type png)
  <use database.png>
-Package pdftex.def Info: database.png used on input line 277.
+Package pdftex.def Info: database.png used on input line 276.
 (pdftex.def)             Requested size: 1668.22845pt x 587.19232pt.
 File: database.png Graphic file (type png)
 
 <use database.png>
-Package pdftex.def Info: database.png used on input line 277.
+Package pdftex.def Info: database.png used on input line 276.
 (pdftex.def)             Requested size: 345.0pt x 121.43275pt.
  <Interface1.png, id=52, 405.76593pt x 217.5628pt>
 File: Interface1.png Graphic file (type png)
 
 <use Interface1.png>
-Package pdftex.def Info: Interface1.png used on input line 280.
+Package pdftex.def Info: Interface1.png used on input line 279.
 (pdftex.def)             Requested size: 405.76494pt x 217.56227pt.
 File: Interface1.png Graphic file (type png)
  <use Interface1.png>
-Package pdftex.def Info: Interface1.png used on input line 280.
+Package pdftex.def Info: Interface1.png used on input line 279.
 (pdftex.def)             Requested size: 345.0pt x 184.98569pt.
  [11 <./database.png>]
 <Interface3.png, id=56, 507.39563pt x 553.31718pt>
 File: Interface3.png Graphic file (type png)
  <use Interface3.png>
-Package pdftex.def Info: Interface3.png used on input line 281.
+Package pdftex.def Info: Interface3.png used on input line 280.
 (pdftex.def)             Requested size: 507.3944pt x 553.31583pt.
 File: Interface3.png Graphic file (type png)
 
 <use Interface3.png>
-Package pdftex.def Info: Interface3.png used on input line 281.
+Package pdftex.def Info: Interface3.png used on input line 280.
 (pdftex.def)             Requested size: 345.0pt x 376.23381pt.
  <Interface2.png, id=57, 245.41687pt x 164.11313pt>
 File: Interface2.png Graphic file (type png)
 
 <use Interface2.png>
-Package pdftex.def Info: Interface2.png used on input line 282.
+Package pdftex.def Info: Interface2.png used on input line 281.
 (pdftex.def)             Requested size: 245.41626pt x 164.11272pt.
 File: Interface2.png Graphic file (type png)
  <use Interface2.png>
-Package pdftex.def Info: Interface2.png used on input line 282.
+Package pdftex.def Info: Interface2.png used on input line 281.
 (pdftex.def)             Requested size: 245.41626pt x 164.11772pt.
  [12 <./Interface1.png> <./Interface3.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 296--297
+Underfull \hbox (badness 10000) in paragraph at lines 295--296
 []\OT1/cmr/m/n/10 deze klas-sen ver-te-gen-woor-di-gen
  []
 
 
-Underfull \hbox (badness 1596) in paragraph at lines 296--297
+Underfull \hbox (badness 1596) in paragraph at lines 295--296
 \OT1/cmr/m/n/10 bo-ven-staande ob-jec-ten zo-dat ze in de
  []
 
 
-Underfull \hbox (badness 3281) in paragraph at lines 300--301
+Underfull \hbox (badness 3281) in paragraph at lines 299--300
 []\OT1/cmr/m/n/10 omzetten van data, aan-ge-bo-den door
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 304--305
+Underfull \hbox (badness 10000) in paragraph at lines 303--304
 []\OT1/cmr/m/n/10 automatische trig-ge-ring voor op-ha-len
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 308--309
+Underfull \hbox (badness 10000) in paragraph at lines 307--308
 []\OT1/cmr/m/n/10 data af-kom-stig van Sour-ce-A-dap-ters
  []
 
 
-Underfull \hbox (badness 5331) in paragraph at lines 308--309
+Underfull \hbox (badness 5331) in paragraph at lines 307--308
 \OT1/cmr/m/n/10 con-tro-le-ren op cor-rect-heid en na-dien
  []
 
 
-Underfull \hbox (badness 6268) in paragraph at lines 310--311
+Underfull \hbox (badness 6268) in paragraph at lines 309--310
 []\OT1/cmr/m/n/10 deze klasse zal de-pen-d-ency in-jec-tion
  []
 
 
-Overfull \hbox (6.63763pt too wide) in paragraph at lines 284--317
+Overfull \hbox (6.63763pt too wide) in paragraph at lines 283--316
 [] 
  []
 
@@ -501,19 +507,19 @@ Overfull \hbox (6.63763pt too wide) in paragraph at lines 284--317
 Missing character: There is no Ã in font cmr10!
 Missing character: There is no « in font cmr10!
 
-Overfull \hbox (2.36177pt too wide) in paragraph at lines 320--321
+Overfull \hbox (2.36177pt too wide) in paragraph at lines 319--320
 \OT1/cmr/m/n/10 mo-du-les wordt op-ge-deeld, kun-nen nieuwe mo-du-les een-vou-d
 ig af-zon-der-lijk wor-den
  []
 
 
-Overfull \hbox (9.61177pt too wide) in paragraph at lines 322--323
+Overfull \hbox (9.61177pt too wide) in paragraph at lines 321--322
 \OT1/cmr/m/n/10 Dit ana-ly-se-do-cu-ment be-vat alle no-dige in-for-ma-tie over
  de klas-ses en hun on-der-linge
  []
 
 
-Overfull \hbox (10.15802pt too wide) in paragraph at lines 322--323
+Overfull \hbox (10.15802pt too wide) in paragraph at lines 321--322
 \OT1/cmr/m/n/10 re-la-ties na sprint 1. Op het einde van de ont-wik-ke-lings-pe
 -ri-ode zal een do-cu-men-ta-tie
  []
@@ -522,19 +528,19 @@ Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no ™ in font cmr10!
 
-Overfull \hbox (9.83398pt too wide) in paragraph at lines 326--327
+Overfull \hbox (9.83398pt too wide) in paragraph at lines 325--326
 \OT1/cmr/m/n/10 na de ont-wik-ke-lings-pe-ri-ode de ver-keers-in-for-ma-tie waa
 r-schijn-lijk wor-den op-ge-sla-gen
  []
 
 
-Overfull \hbox (15.41637pt too wide) in paragraph at lines 328--329
+Overfull \hbox (15.41637pt too wide) in paragraph at lines 327--328
 \OT1/cmr/m/n/10 Door op-de-ling in mo-du-les, die Java EE aan-biedt, kun-nen pr
 o-gram-meurs af-zon-der-lijk
  []
 
 
-Overfull \hbox (18.69508pt too wide) in paragraph at lines 332--333
+Overfull \hbox (18.69508pt too wide) in paragraph at lines 331--332
 \OT1/cmr/m/n/10 voor-zien die kan wor-den ge-wij-zigd door de link aan te pas-s
 en in het pro-per-ties-be-stand
  []
@@ -542,39 +548,39 @@ en in het pro-per-ties-be-stand
 <dataflow3.png, id=68, 1511.6475pt x 511.9125pt>
 File: dataflow3.png Graphic file (type png)
  <use dataflow3.png>
-Package pdftex.def Info: dataflow3.png used on input line 334.
+Package pdftex.def Info: dataflow3.png used on input line 333.
 (pdftex.def)             Requested size: 1511.64383pt x 511.91125pt.
 File: dataflow3.png Graphic file (type png)
 
 <use dataflow3.png>
-Package pdftex.def Info: dataflow3.png used on input line 334.
+Package pdftex.def Info: dataflow3.png used on input line 333.
 (pdftex.def)             Requested size: 345.0pt x 116.8313pt.
  [14]
-Overfull \hbox (1.80612pt too wide) in paragraph at lines 336--337
+Overfull \hbox (1.80612pt too wide) in paragraph at lines 335--336
 \OT1/cmr/m/n/10 Sour-ce-A-dap-ters, per pro-vi-der be-staat er een adap-ter-kla
 sse die de ISour-ce-A-dap-ter
  []
 
 [15 <./dataflow3.png>]
-Overfull \hbox (20.25537pt too wide) in paragraph at lines 352--353
+Overfull \hbox (20.25537pt too wide) in paragraph at lines 351--352
 \OT1/cmr/m/n/10 ge-hou-den. De ver-kre-gen data uit het pro-gramma wordt om-hul
 t in Ge-o-Lo-ca-ti-o-nEn-tity
  []
 
 
-Overfull \hbox (5.88841pt too wide) in paragraph at lines 354--355
+Overfull \hbox (5.88841pt too wide) in paragraph at lines 353--354
 \OT1/cmr/m/n/10 De Traf-ficData-DAO houdt alle data bij van de rou-tes ver-kre-
 gen door de ap-pli-ca-tie.
  []
 
 
-Overfull \hbox (18.05612pt too wide) in paragraph at lines 363--364
+Overfull \hbox (18.05612pt too wide) in paragraph at lines 362--363
 \OT1/cmr/m/n/10 De Sour-ce-A-dap-ters wer-den ge-test aan de hand van unit-test
 s en la-ter in-te-gra-tie-tes-ting
  []
 
 
-Overfull \hbox (0.9358pt too wide) in paragraph at lines 363--364
+Overfull \hbox (0.9358pt too wide) in paragraph at lines 362--363
 \OT1/cmr/m/n/10 wer-den op-ge-gooid bij ver-keerde in-voer. Het ver-ge-lij-ken 
 van data in onze da-ta-base
  []
@@ -603,7 +609,7 @@ mon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmss12.pfb
 cm/cmss17.pfb><C:/Users/Simon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/pub
 lic/amsfonts/cm/cmti10.pfb><C:/Users/Simon/AppData/Local/Programs/MiKTeX 2.9/fo
 nts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on AnalyseDocument.pdf (18 pages, 504684 bytes).
+Output written on AnalyseDocument.pdf (18 pages, 504917 bytes).
 PDF statistics:
  110 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
