@@ -25,7 +25,7 @@ De lib directory bevat de gebruikte external libraries.
 
 ### Business logic
 
-__Logger__
+__[Logger](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/Logger)__
 
 Deze bean start mee op met de server en creeert een datasink voor logging naar een bestand. (log.txt)
 ````
@@ -36,7 +36,7 @@ EJB Bean: Logger
   Library interface: LoggerRemote
 ````
 
-__TimerScheduler__
+__[TimerScheduler](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/TimerScheduler)__
 
 Deze bean start mee op met de server en creeert een timer via java ee TimerServices die volgens het patroon gedefineerd in properties file 'TimerScheduler' triggert.
 ````
@@ -47,7 +47,7 @@ EJB Bean: TimerScheduler
   Library interface: ITimer
 ````
 
-__TrafficDataDownloader__
+__[TrafficDataDownloader](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/TrafficDataDownloader)__
 
 De downloader staat in voor de connectie tussen de providers en de databases. Hij wordt getriggerd vanuit de TimerServices, vraagt data van de routes,verkregen uit de general dao, aan de providers. Deze data pusht hij vervolgens naar de trafficdata dao voor dataopslag en naar de analyzer voor generatie meldingen. De providers worden beheerd doo de extra klasse SourceManager.
 ````
@@ -59,7 +59,7 @@ EJB Bean: TrafficDataDownloader
   extra class: SourceManager implements ISourceManager
 ````
 
-__TrafficDataDownstreamAnalyzer__
+__[TrafficDataDownstreamAnalyzer](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/TrafficDataDownstreamAnalyzer)__
 
 Deze analyzer staat in voor generatie van meldingen. Hij wordt iedere keer als er data wordt gescrubt voorzien van deze nieuwe data om vergelijkingen uit te voeren.
 ````
@@ -72,7 +72,7 @@ EJB Bean: TrafficDataDownstreamAnalyser
 
 ### Providers
 
-__GoogleMapsSourceAdapter__
+__[GoogleMapsSourceAdapter](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/GoogleMapsSourceAdapter)__
 
 Providers leveren nieuwe trajectdata aan de applicatie. Hiervoor maken ze api calls naar hun target of scrubben ze de website.
 ````
@@ -83,7 +83,7 @@ EJB Bean: GoogleMapsSourceAdapter
   Library interface: ISourceAdapter
 ````
 
-__HereSourceAdapter__
+__[HereSourceAdapter](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/HereSourceAdapter)__
 
 Providers leveren nieuwe trajectdata aan de applicatie. Hiervoor maken ze api calls naar hun target of scrubben ze de website.
 ````
@@ -96,7 +96,7 @@ EJB Bean: GoogleMapsSourceAdapter
 
 ### Data access Objects
 
-__GeneralDAO__
+__[GeneralDAO](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/GeneralDAO)__
 
 De general dao houdt de routes bij die door de applicatie dienen in de gaten te worden gehouden. Dit wordt bijgehouden aan de hand van geolocaties gelinkt als tussenpunten in routes. De verkregen data uit het programma wordt omhult in GeoLocationEntity en RouteEntity om deze compatibel te maken voor de achterliggende databank.
 ````
@@ -108,7 +108,7 @@ EJB Bean: GeneralDAO
   extra class: GeoLocationEntity extends GeoLocation, RouteEntity extends Route
 ````
 
-__TrafficDataDAO__
+__[TrafficDataDAO](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/TrafficDataDAO)__
 
 De trafficdata dao houdt alle data bij van de routes verkregen door de applicatie. De verkregen data uit het programma wordt omhult in RouteDataEntity om deze compatibel te maken voor de achterliggende databank.
 ````
@@ -120,7 +120,7 @@ EJB Bean: TrafficDataDAO
   extra class: RouteDataEntity extends RouteData
 ````
 
-__GeneralDAONoDB__
+__[GeneralDAONoDB](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/GeneralDAONoDB)__
 
 De general dao dummy is een dummy database voor opslag van routes. Deze kan worden gebruikt voor het uitvoeren van tests, zonder de echte databank te bevuilen.
 ````
@@ -131,7 +131,7 @@ EJB Bean: GeneralDAONoDB
   Library interface: GeneralDAONoDBRemoete
 ````
 
-__TrafficDataDAONoDB__
+__[TrafficDataDAONoDB](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/TrafficDataDAONoDB)__
 
 De trafficdata dao summy is een dummy database voor opslag van routedata. Deze kan worden gebruikt voor het uitvoeren van tests, zonder de echte databank te bevuilen.
 ````
@@ -144,7 +144,7 @@ EJB Bean: TrafficDataDAONoDB
 
 ### Presentation logic
 
-__RestApi__
+__[RestApi](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/RestApi)__
 
 Deze bean omhult de Rest service van het project. De restservice trekt data uit een analyzer of dao en geeft deze terug in json formaat. Data ophalen gebeurt aan de hand van url paths.
 ````
