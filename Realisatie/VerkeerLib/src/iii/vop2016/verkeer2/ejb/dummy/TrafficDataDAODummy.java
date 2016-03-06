@@ -99,4 +99,18 @@ public class TrafficDataDAODummy implements ITrafficDataDAO{
         }
         return result;
     }
+
+    @Override
+    public List<IRouteData> getCurrentTrafficSituation(IRoute route) {
+        return null;
+    }
+
+    @Override
+    public List<IRouteData> getCurrentTrafficSituation(IRoute route, ISourceAdapter adapter) {
+        return null;
+    }
+    
+
+    
+    
 }

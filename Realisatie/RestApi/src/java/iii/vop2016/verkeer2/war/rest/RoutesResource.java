@@ -61,6 +61,7 @@ public class RoutesResource {
     Date startTime;
     Date endTime;
     List<String> providers;
+    String dataType; //data, current, summary
 
     /**
      * Creates a new instance of RoutesResource
@@ -84,6 +85,7 @@ public class RoutesResource {
         setParameters();
         setStartTime("1456761535931");
         setEndTime("2456761635931");
+        dataType = "data";
     }
     
     private void initVisibleFields() {
@@ -197,14 +199,28 @@ public class RoutesResource {
     
     
     @GET
-    @Path("{id}/actual")
+    @Path("{id}/current")
     @Produces("application/json")
-    public String getActualTraffic(@PathParam("id") String id) {
-        
-        List<IRoute> routes = beans.getGeneralDAO().getRoutes();
-        
-        return null;
-        
+    public String getCurrentTrafficData(@PathParam("id") String sid) {
+        visibleFields.put("route.data", Boolean.TRUE);
+        dataType = "current";
+        List<IRoute> routes;
+        if(sid.equals("all")){
+            routes = beans.getGeneralDAO().getRoutes();
+        }else{
+            routes = new ArrayList<>();
+            List<Long> ids = getIds(sid);
+            for (int i=0; i<ids.size(); i++) {
+                IRoute r = beans.getGeneralDAO().getRoute(ids.get(i));
+                if(r != null)
+                    routes.add(r);
+            }
+        }
+        JSONArray result = new JSONArray();
+        for(IRoute route : routes){
+            result.put(transformRoute(route));
+        }
+        return result.toString(1);
     }
     
     
@@ -323,7 +339,12 @@ public class RoutesResource {
     }
 
     private void addRouteData(JSONObject obj, IRoute route) {
-        List<IRouteData> data = beans.getTrafficDataDAO().getData(route, startTime, endTime);
+        List<IRouteData> data = null;
+        switch(dataType){
+            case "data" : data = beans.getTrafficDataDAO().getData(route, startTime, endTime); break;
+            case "current" : data = beans.getTrafficDataDAO().getCurrentTrafficSituation(route); break;
+            case "summary" : data = beans.getTrafficDataDAO().getCurrentTrafficSituation(route); break;
+        }
         List<IRouteData> result = new ArrayList<>();
         for(IRouteData d : data){
             if(providers.size()==0 || providers.contains(d.getProvider()))

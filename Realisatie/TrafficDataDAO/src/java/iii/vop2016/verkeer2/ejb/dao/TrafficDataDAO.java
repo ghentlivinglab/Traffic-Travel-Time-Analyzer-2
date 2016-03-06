@@ -134,4 +134,33 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
         }
         return data;
     }
+
+
+
+    @Override
+    public List<IRouteData> getCurrentTrafficSituation(IRoute route) {
+        List<IRouteData> data = new ArrayList<>();
+        try {
+            //get all routes
+            Query q = em.createQuery("SELECT r FROM RouteDataEntity r LEFT JOIN RouteDataEntity r2 ON r.timestamp<r2.timestamp WHERE r2.id IS NULL AND r.routeId = :routeId");
+            q.setParameter("routeId", route.getId());
+            List<IRouteData> routesEntities = q.getResultList();
+            for(IRouteData r : routesEntities)
+                data.add(new RouteData(r));
+        } catch (Exception e) {
+            Logger logger = Logger.getLogger(this.getClass().getName());
+            logger.severe(e.getMessage());
+        } finally {
+
+        }
+        return data;
+    }
+
+    @Override
+    public List<IRouteData> getCurrentTrafficSituation(IRoute route, ISourceAdapter adapter) {
+        return null;
+    }
+    
+    
+    
 }

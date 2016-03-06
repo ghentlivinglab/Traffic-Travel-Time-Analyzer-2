@@ -67,7 +67,7 @@ public class TrafficDataDAONoDB implements TrafficDataDAONoDBRemote {
         List<IRouteData> results = new ArrayList<>();
         for(IRouteData d : data){
             if(d.getTimestamp().compareTo(time1) > 0 && d.getTimestamp().compareTo(time2) < 0)
-                if(d.getRoute().equals(route))
+                if(d.getRouteId() == route.getId())
                     results.add(d);
         }
         return results;
@@ -78,9 +78,21 @@ public class TrafficDataDAONoDB implements TrafficDataDAONoDBRemote {
         List<IRouteData> results = new ArrayList<>();
         for(IRouteData d : data){
             if(d.getTimestamp().compareTo(time1) > 0 && d.getTimestamp().compareTo(time2) < 0)
-                if(d.getProviderName().equals(adapter.getProviderName()))
+                if(d.getProvider().equals(adapter.getProviderName()))
                     results.add(d);
         }
         return results;
     }
+
+    @Override
+    public List<IRouteData> getCurrentTrafficSituation(IRoute route) {
+        return null;
+    }
+
+    @Override
+    public List<IRouteData> getCurrentTrafficSituation(IRoute route, ISourceAdapter adapter) {
+        return null;
+    }
+
+    
 }
