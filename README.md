@@ -142,7 +142,7 @@ EJB Bean: TrafficDataDAONoDB
   Library interface: TrafficDataDAONoDBRemote
 ````
 
-### Presenation logic
+### Presentation logic
 
 __RestApi__
 
