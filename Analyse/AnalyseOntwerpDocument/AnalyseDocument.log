@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2016.2.27)  7 MAR 2016 17:45
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2016.2.27)  7 MAR 2016 18:21
 entering extended mode
 **./AnalyseDocument.tex
 (AnalyseDocument.tex
@@ -345,8 +345,6 @@ Underfull \hbox (badness 10000) in paragraph at lines 160--163
 
  []
 
-Missing character: There is no Ã in font cmr10!
-Missing character: There is no ¶ in font cmr10!
 
 Underfull \hbox (badness 10000) in paragraph at lines 165--168
 
@@ -612,29 +610,15 @@ sse die de ISour-ce-A-dap-ter
 
 [17
 
- <./dataflow3.png>]
-Overfull \hbox (20.25537pt too wide) in paragraph at lines 450--451
-\OT1/cmr/m/n/10 ge-hou-den. De ver-kre-gen data uit het pro-gramma wordt om-hul
-t in Ge-o-Lo-ca-ti-o-nEn-tity
- []
-
-
-Overfull \hbox (5.88841pt too wide) in paragraph at lines 452--453
-\OT1/cmr/m/n/10 De Traf-ficData-DAO houdt alle data bij van de rou-tes ver-kre-
-gen door de ap-pli-ca-tie.
- []
-
-[18
+ <./dataflow3.png>] [18
 
 ]
-Overfull \hbox (18.05612pt too wide) in paragraph at lines 462--463
+Overfull \hbox (18.05612pt too wide) in paragraph at lines 461--462
 \OT1/cmr/m/n/10 De Sour-ce-A-dap-ters wer-den ge-test aan de hand van unit-test
 s en la-ter in-te-gra-tie-tes-ting
  []
 
-[19
-
-] (AnalyseDocument.aux)
+[19] (AnalyseDocument.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
@@ -642,7 +626,7 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Here is how much of TeX's memory you used:
  2759 strings out of 493634
  35954 string characters out of 3135239
- 108738 words of memory out of 3000000
+ 107738 words of memory out of 3000000
  6115 multiletter control sequences out of 15000+200000
  10601 words of font info for 37 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
@@ -660,7 +644,7 @@ public/amsfonts/cm/cmss12.pfb><C:/Users/Simon/AppData/Local/Programs/MiKTeX 2.9
 /fonts/type1/public/amsfonts/cm/cmss17.pfb><C:/Users/Simon/AppData/Local/Progra
 ms/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/Simon/AppData
 /Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on AnalyseDocument.pdf (20 pages, 534559 bytes).
+Output written on AnalyseDocument.pdf (20 pages, 535160 bytes).
 PDF statistics:
  125 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

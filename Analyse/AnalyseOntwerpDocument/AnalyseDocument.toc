@@ -9,7 +9,7 @@
 \contentsline {section}{\numberline {2.1}Functioneel ontwerp}{5}
 \contentsline {section}{\numberline {2.2}Technisch ontwerp}{5}
 \contentsline {subsection}{\numberline {2.2.1}Hardware}{5}
-\contentsline {subsection}{\numberline {2.2.2}Paketten}{5}
+\contentsline {subsection}{\numberline {2.2.2}Pakketten}{5}
 \contentsline {subsubsection}{JSF}{6}
 \contentsline {subsubsection}{Contexts and Dependency Injection}{6}
 \contentsline {subsubsection}{EJB}{6}
@@ -50,7 +50,7 @@
 \contentsline {subsubsection}{GeneralDAO}{18}
 \contentsline {subsubsection}{TrafficDataDAO}{18}
 \contentsline {subsubsection}{GeneralDAONoDB/TrafficDataDAONoDB}{18}
-\contentsline {subsubsection}{RESTAPI}{18}
+\contentsline {subsubsection}{RESTAPI}{19}
 \contentsline {subsection}{\numberline {2.3.9}Tests}{19}
 \contentsline {subsubsection}{Databank}{19}
 \contentsline {subsubsection}{SourceAdapters}{19}

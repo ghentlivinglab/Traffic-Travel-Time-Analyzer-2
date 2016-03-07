@@ -60,7 +60,7 @@ Het Mobiliteitsbedrijf van de stad Gent is sinds 2014 bezig met het opzetten van
 \end{enumerate}
 \section{Use Case}
 \diagram{UseCaseDiagram1}{Use Case}
-Er zijn vier actoren aan het werk. In de eerste plaats is er een timer, deze zal een trigger sturen naar het programma zodat data afkomstig van de verschillende providers opgehaald wordt. Verder is er nog een API-gebruiker, dit is een persoon die data kan ophalen uit de database gebruikmakend van de REST API. Een andere actor is de operator in het verkeerscentrum, hij zal via het dashboard de verkeersdat monitoren en de mogelijkheid hebben om analyses uit te voeren. Als laatste is er nog een administrator, hij kan routes toevoegen aan de database zodat ook van deze routes data worden opgehaald.
+Er zijn vier actoren aan het werk. In de eerste plaats is er een timer, deze zal een trigger sturen naar het programma zodat data afkomstig van de verschillende providers opgehaald wordt. Verder is er nog een API-gebruiker, dit is een persoon die data kan ophalen uit de database gebruikmakend van de REST API. Een andere actor is de operator in het verkeerscentrum, hij zal via het dashboard de verkeersdata monitoren en de mogelijkheid hebben om analyses uit te voeren. Als laatste is er nog een administrator, hij kan routes toevoegen aan de database zodat ook van deze routes data worden opgehaald.
 \clearpage
 \section{Functieanalyse van de omgeving}
 \begin{enumerate}
@@ -108,13 +108,13 @@ De doelstellingen representeren de product backlog en ze bevatten de taken die h
 %verantwoordelijkheden van de mensen
 % Wie verzorgt de invoer? Wanneer gebeurt dit?
 %Hoe gebeurt dit? }}
-Er zijn 2 types gebruikers in het systeem. Enerzijds zijn er de API-gebruikers, zij hebben de mogelijkheid om data uit de API op te vragen en eventueel verder te verwerken. Anderzijds is er een administrator, deze gebruiker kan routes toevoegen aan het systeem.
+Er zijn drie types gebruikers in het systeem. Enerzijds zijn er de API-gebruikers, zij hebben de mogelijkheid om data uit de API op te vragen en eventueel verder te verwerken. Anderzijds zijn er de operatoren in het verkeerscentrum, zij hebben de mogelijkheid om via het dashboard live data te monitoren en analyses uit te voeren. Om af te sluiten is er een administrator, deze gebruiker kan routes toevoegen aan het systeem.
 \section{Technisch ontwerp}
 \subsection{Hardware}
 De gevraagde applicatie is geprogrammeerd in Java, dit laat toe om op alle besturingssystemen te draaien zolang deze Java ondersteunen. Er zijn dan ook geen eisen aan de hardware voor deze applicatie, enkel softwarepakketten zijn vereist voor het draaien van deze software.
 
 Er is steeds een actieve internetverbinding vereist om de data van de databronnen te ontvangen.
-\subsection{Paketten}
+\subsection{Pakketten}
 Dit project wordt uitgewerkt in Java met behulp van het Java EE (Enterprise Edition) \textit{framework}. Dit \textit{framework} omvat verschillende technologie\"en die worden gebruikt in deze applicatie.
 \begin{enumerate}	
 	\item JavaServer Faces (JSF) 2.2
@@ -163,8 +163,8 @@ Om aanvragen te doen naar de API, is er een unieke toegangssleutel nodig, die ka
 
 \subsubsection{Here}
 \textit{URL: https://developer.here.com/rest-apis/documentation/routing}\\\\
-Here stelt reistijden ter beschikking via zijn Routing API. In de URL kan je een route meegeven door de coördinaten in te stellen voor start- en eindpunt. Ook eventuele tussenpunten kunnen worden vermeld. Verder moet voor de toepassing die hier ontworpen wordt steeds aangegeven worden dat men de kortste route wil en dat men informatie baseert op het huidige verkeer. Op deze manier zal steeds actuele verkeersinformatie over een vaste route worden teruggeven.\\\\
-Om de API van Here te kunnen gebruiken moeten er twee sleutels aangevraagd worden. De eerste 90 dagen kan dit gratis en mogen er tot 100 000 aanvragen per maand gedaan worden. In de huidige situatie waarbij er 34 routes elke vijf minuten data wordt opgevraagd en dit 18u per dag, is er nood aan 220 000 aanvragen per maand. Dit betekent dat je sowieso een betalende formule nodig hebt. Om tot 275 000 aanvragen per maand te kunnen doen, moet er gekozen worden voor het standaardplan dat 99 euro per maand kost.
+Here stelt reistijden ter beschikking via zijn Routing API. In de URL kan je een route meegeven door de co\"ordinaten in te stellen voor start- en eindpunt. Ook eventuele tussenpunten kunnen worden vermeld. Verder moet voor de toepassing die hier ontworpen wordt steeds aangegeven worden dat men de kortste route wil en dat men informatie baseert op het huidige verkeer. Op deze manier zal steeds actuele verkeersinformatie over een vaste route worden teruggeven.\\\\
+Om de API van Here te kunnen gebruiken moeten er twee sleutels aangevraagd worden. De eerste 90 dagen kan dit gratis en mogen er tot 100 000 aanvragen per maand gedaan worden. In de huidige situatie waarbij er voor 34 routes elke vijf minuten data wordt opgevraagd en dit 18u per dag, is er nood aan 220 000 aanvragen per maand. Dit betekent dat er sowieso een betalende formule nodig is. Om tot 275 000 aanvragen per maand te kunnen doen, moet er gekozen worden voor het standaardplan dat 99 euro per maand kost.
 \clearpage
 \subsection{Structuur van de data (API)}
 De REST API geeft info terug uit de database, hier heb je de keuze uit drie opties: Routes, RouteData en Providers. Wanneer je hier aanvragen naar doet krijg je gegevens uit de database terug. In de komende secties wordt een korte toelichting gegeven per optie, gevolg door een voorbeeld van aanvraag en antwoord in JSON-formaat. Er is een online API beschikbaar waarin je meer informatie kan terugvinden, hieronder krijg je alvast een kort overzicht.
@@ -215,7 +215,7 @@ De routes zijn de trajecten waar realtime data van opgeroepen wordt. Indien je g
 \subsubsection{2.3.2.b RouteData}
 De RouteData is de opgehaalde data per route van de verschillende databronnen op verschillende tijdstippen. Je kan kiezen van welke routes je data wil terugkrijgen.\\\\
 \textbf{Data in een bepaald interval}\\
-De eerste mogelijkheid is om begin- en eindpunt van de periode instellen. Dit laatste is nuttig om data in een bepaald interval terug te krijgen.\\
+De eerste mogelijkheid is om begin- en eindpunt van de periode in te stellen. Dit laatste is nuttig om data in een bepaald interval terug te krijgen.\\
 \noindent\rule[0.5ex]{\linewidth}{1pt}
 \textbf{Vraag}
 
@@ -423,14 +423,14 @@ Java EE biedt de mogelijkheid om een applicatie op te delen in verschillende mod
 \subsubsection{Parallelle ontwikkeling}
 Door opdeling in modules, die Java EE aanbiedt, kunnen programmeurs afzonderlijk van elkaar code implementeren.
 \subsubsection{Losse koppeling van objecten}
-Modules kunnen eenvoudig worden ontkoppeld en worden vervangen door een andere. De BeanFactory, die de module-objecten aanbiedt, wordt eenvoudig geconfigureerd in een propertiesbestand. Zo kan eenvoudig een nieuwe DAO worden toegevoegd daar de link in het configuratiebestand te wijzigen naar een andere DAO. Zo kan bijvoorbeeld de manier van opslaan van data eenvoudig worden gewijzigd van een SQL-database naar een NoSQL-database.
+Modules kunnen eenvoudig worden ontkoppeld en worden vervangen door een andere. De BeanFactory, die de module-objecten aanbiedt, wordt eenvoudig geconfigureerd in een propertiesbestand. Zo kan eenvoudig een nieuwe DAO worden toegevoegd door de link in het configuratiebestand te wijzigen naar een andere DAO. Zo kan bijvoorbeeld de manier van opslaan van data eenvoudig worden gewijzigd van een SQL-database naar een NoSQL-database.
 \subsubsection{Crosscutting concerns (Logging)}
 De manier van logging kan eenvoudig worden gewijzigd door het hierboven beschreven principe van losse koppeling. Voor logging werd ook een module voorzien die kan worden gewijzigd door de link aan te passen in het propertiesbestand bij de BeanFactory.
 \clearpage
 \subsection{Gegevensstroomdiagram}
 \diagram{dataflow3}{Gegevensstroomdiagram}
 \subsubsection{Downstream}
-De data van de verschillende databronnen wordt opgehaald met behulp van de SourceAdapters, per databron bestaat er een adapterklasse die de ISourceAdapter interface implementeert. De verschillende adapters bevinden zich in de \\SourceManager-klasse. Vanuit de TrafficDataDownloader wordt data per route aangevraagd, de SourceManager zal deze aanvragen doorsturen aan elke adapter en de ontvangen data per adapter teruggeven aan de TrafficDataDownloader. Vervolgens passeert de data ook nog de TrafficDataDownstreamAnalyser die controleert of de data geldig zijn en eventueel meldingen genereert. Om af te sluiten worden de data doorgegeven aan de TrafficDataDAO, deze klasse zorgt ervoor dat de data in de database terechtkomen. 
+De data van de verschillende databronnen worden opgehaald met behulp van de SourceAdapters, per databron bestaat er een adapterklasse die de ISourceAdapter interface implementeert. De verschillende adapters bevinden zich in de \\SourceManager-klasse. Vanuit de TrafficDataDownloader wordt data per route aangevraagd, de SourceManager zal deze aanvragen doorsturen aan elke adapter en de ontvangen data per adapter teruggeven aan de TrafficDataDownloader. Vervolgens passeren de data ook nog de TrafficDataDownstreamAnalyser die controleert of de data geldig zijn en eventueel meldingen genereert. Om af te sluiten worden de data doorgegeven aan de TrafficDataDAO, deze klasse zorgt ervoor dat de data in de database terechtkomen. 
 \subsubsection{Upstream}
 De mogelijkheid bestaat om via API-aanvragen data uit de database te halen, dit gebeurt via de TrafficDataDAO die contact heeft met de database.
 \clearpage
@@ -439,22 +439,21 @@ Het project is opgedeeld in verschillende beans die hieronder worden behandeld.
 \subsubsection{Logger}
 Deze bean start tegelijk met de server en maakt logging naar een bestand (log.txt) mogelijk.
 \subsubsection{TimerScheduler}
-Deze bean start tegelijk met de server en stuurt triggers volgens het patroon dat opgegeven wordt aan de bean in een \textit{properties}-bestand. Deze timer wordt gecre\"eerd via Java EE TimerServices.
+Deze bean start tegelijk met de server en stuurt triggers volgens het patroon dat opgegeven wordt aan de bean in een \textit{properties}-bestand. De triggers roepen op om data te downloaden. Deze timer wordt gecre\"eerd via Java EE TimerServices.
 \subsubsection{TrafficDataDownloader}
 De downloader staat in voor de connectie tussen de adapters en de DAO. Deze bean wordt getriggerd door de TimerScheduler.
 \subsubsection{TrafficDataDownstreamAnalyser}
-Deze analyzer staat in voor generatie van meldingen bij opmerkelijke data.
+Deze \textit{analyser} staat in voor generatie van meldingen bij verkeersproblemen en controleren op geldigheid van nieuwe data. De nieuwe data zal via deze klassen kunnen worden toegevoegd aan de databank.
 \subsubsection{GoogleMapsSourceAdapter/HereSourceAdapter}
 Databronnen leveren nieuwe RouteData-objecten aan de applicatie. Deze data worden verkregen via API-aanroepen.
 \subsubsection{GeneralDAO}
-De GeneralDAO houdt de routes bij die door de applicatie in de gaten worden gehouden. De verkregen data uit het programma wordt omhult in GeoLocationEntity en RouteEntity om deze compatibel te maken voor de achterliggende databank.
+De GeneralDAO is verantwoordelijk voor het beheer van de routes die door de applicatie in de gaten worden gehouden. Deze worden gedefinieerd door een opeenvolging van geolocaties. De data wordt verpakt door GeoLocationEntity en RouteEntity om deze compatibel te maken met de achterliggende databank.
 \subsubsection{TrafficDataDAO}
-De TrafficDataDAO houdt alle data bij van de routes verkregen door de applicatie. De RouteData uit het programma wordt omhult in RouteDataEntity om deze compatibel te maken voor de achterliggende databank.
+De TrafficDataDAO is verantwoordelijk voor het beheer van data die betrekking heeft op de verkeerssituatie op een bepaald moment. De data wordt verpakt door RouteDataEntity om deze compatibel te maken met de achterliggende databank.
 \subsubsection{GeneralDAONoDB/TrafficDataDAONoDB}
 Dit zijn twee dummy-objecten die gebruikt kunnen worden voor tests zonder de echte databank te gebruiken.
 \subsubsection{RESTAPI}
-Deze bean bevat de API-service van het project.
-\clearpage
+Deze bean representeert de REST-service van het project. De REST-service onttrekt data uit het systeem en geeft deze vervolgens aan de gebruiker in JSON-formaat.
 \subsection{Tests}
 \subsubsection{Databank}
 De databank werd gedurende het ontwikkelingsproces getest via het principe van integratietesting. De data die in de database werden opgeslagen kwamen overeen met de data die gestuurd werden naar de database.
