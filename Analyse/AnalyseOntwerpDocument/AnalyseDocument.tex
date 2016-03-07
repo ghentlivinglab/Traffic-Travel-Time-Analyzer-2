@@ -111,9 +111,7 @@ De doelstellingen representeren de product backlog en ze bevatten de taken die h
 Er zijn drie types gebruikers in het systeem. Enerzijds zijn er de API-gebruikers, zij hebben de mogelijkheid om data uit de API op te vragen en eventueel verder te verwerken. Anderzijds zijn er de operatoren in het verkeerscentrum, zij hebben de mogelijkheid om via het dashboard live data te monitoren en analyses uit te voeren. Om af te sluiten is er een administrator, deze gebruiker kan routes toevoegen aan het systeem.
 \section{Technisch ontwerp}
 \subsection{Hardware}
-De gevraagde applicatie is geprogrammeerd in Java, dit laat toe om op alle besturingssystemen te draaien zolang deze Java ondersteunen. Er zijn dan ook geen eisen aan de hardware voor deze applicatie, enkel softwarepakketten zijn vereist voor het draaien van deze software.
-
-Er is steeds een actieve internetverbinding vereist om de data van de databronnen te ontvangen.
+De gevraagde applicatie is geprogrammeerd in Java, dit laat toe om op alle besturingssystemen te draaien zolang deze Java ondersteunen. Er zijn dan ook geen eisen aan de hardware voor deze applicatie, enkel softwarepakketten zijn vereist voor het draaien van deze software. Er is steeds een actieve internetverbinding vereist om de data van de databronnen te ontvangen.
 \subsection{Pakketten}
 Dit project wordt uitgewerkt in Java met behulp van het Java EE (Enterprise Edition) \textit{framework}. Dit \textit{framework} omvat verschillende technologie\"en die worden gebruikt in deze applicatie.
 \begin{enumerate}	
@@ -167,7 +165,8 @@ Here stelt reistijden ter beschikking via zijn Routing API. In de URL kan je een
 Om de API van Here te kunnen gebruiken moeten er twee sleutels aangevraagd worden. De eerste 90 dagen kan dit gratis en mogen er tot 100 000 aanvragen per maand gedaan worden. In de huidige situatie waarbij er voor 34 routes elke vijf minuten data wordt opgevraagd en dit 18u per dag, is er nood aan 220 000 aanvragen per maand. Dit betekent dat er sowieso een betalende formule nodig is. Om tot 275 000 aanvragen per maand te kunnen doen, moet er gekozen worden voor het standaardplan dat 99 euro per maand kost.
 \clearpage
 \subsection{Structuur van de data (API)}
-De REST API geeft info terug uit de database, hier heb je de keuze uit drie opties: Routes, RouteData en Providers. Wanneer je hier aanvragen naar doet krijg je gegevens uit de database terug. In de komende secties wordt een korte toelichting gegeven per optie, gevolg door een voorbeeld van aanvraag en antwoord in JSON-formaat. Er is een online API beschikbaar waarin je meer informatie kan terugvinden, hieronder krijg je alvast een kort overzicht.
+\textit{URL: http://docs.verkeerscentrumgent.apiary.io/}\\\\
+De REST API geeft info terug uit de database, hier heb je de keuze uit drie opties: Routes, RouteData en Providers. Wanneer je hier aanvragen naar doet krijg je gegevens uit de database terug. In de komende secties wordt een korte toelichting gegeven per optie, gevolg door een voorbeeld van aanvraag en antwoord in JSON-formaat.
 
 \subsubsection{2.3.2.a Routes}
 De routes zijn de trajecten waar realtime data van opgeroepen wordt. Indien je geen parameters meegeeft zullen naam, id en tussenpunten teruggegeven worden. In de toekomst zal het ook mogelijk zijn om routes toe te voegen via de API.\\
