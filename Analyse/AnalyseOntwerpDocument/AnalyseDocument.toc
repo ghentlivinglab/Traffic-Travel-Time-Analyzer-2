@@ -3,6 +3,8 @@
 \contentsline {chapter}{\numberline {1}Behoefteanalyse}{2}
 \contentsline {section}{\numberline {1.1}Beschrijving project}{2}
 \contentsline {section}{\numberline {1.2}Functionaliteiten}{2}
+\contentsline {subsection}{\numberline {1.2.1}Basis}{2}
+\contentsline {subsection}{\numberline {1.2.2}Extra}{2}
 \contentsline {section}{\numberline {1.3}Use Case}{3}
 \contentsline {section}{\numberline {1.4}Functieanalyse van de omgeving}{4}
 \contentsline {chapter}{\numberline {2}Ontwerp}{5}
@@ -26,13 +28,13 @@
 \contentsline {subsubsection}{2.3.2.a Routes}{9}
 \contentsline {subsubsection}{2.3.2.b RouteData}{10}
 \contentsline {subsubsection}{2.3.2.c Providers}{12}
-\contentsline {subsubsection}{Parameters}{12}
+\contentsline {subsubsection}{Filters}{12}
 \contentsline {subsection}{\numberline {2.3.3}Databank}{13}
 \contentsline {subsection}{\numberline {2.3.4}Klassendiagram}{13}
 \contentsline {subsection}{\numberline {2.3.5}Verantwoordelijkheid per klasse}{15}
-\contentsline {subsection}{\numberline {2.3.6}Modules}{15}
+\contentsline {subsection}{\numberline {2.3.6}Line Of Business}{15}
 \contentsline {subsubsection}{Flexibel en Uitbreidbaar}{15}
-\contentsline {subsubsection}{Onderhoudbaarheid}{15}
+\contentsline {subsubsection}{Onderhoudbaarheid}{16}
 \contentsline {subsubsection}{Testbaarheid}{16}
 \contentsline {subsubsection}{Late Binding}{16}
 \contentsline {subsubsection}{Parallelle ontwikkeling}{16}

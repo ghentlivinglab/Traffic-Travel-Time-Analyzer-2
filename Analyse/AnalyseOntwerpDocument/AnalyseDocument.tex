@@ -44,16 +44,16 @@ Het doel van dit project is het opzetten van een database voor de verkeersgegeve
 \section{Beschrijving project}
 Het Mobiliteitsbedrijf van de stad Gent is sinds 2014 bezig met het opzetten van een regionaal verkeerscentrum. Het is de bedoeling dat op termijn het verkeer in de regio constant gemonitord wordt, op semi-automatische basis op normale werkdagen en bemand tijdens piekmomenten en evenementen. Tijdens de week is het de bedoeling dat onverwachte incidenten, calamiteiten of significante verhogingen van de reistijden automatisch gesignaleerd worden aan de\\ verantwoordelijke, die dan de nodige acties kan ondernemen. De gegevens zouden ook constant beschikbaar zijn voor het publiek via een website, sociale media en open data. Op die manier kunnen mensen de beste route en het beste moment kiezen om hun verplaatsingen te maken in de regio.
 \section{Functionaliteiten}
-%\subsection{Basis}
+\subsection{Basis}
 \begin{enumerate}
 \item Ophalen van kwalitatieve en vergelijkbare data bij verschillende bronnen
+\item Opgehaalde data opslaan in database
+\end{enumerate}
+\subsection{Extra}
+\begin{enumerate}
 \item Real-time overzicht van de verkeersdrukte op vooraf vastgelegde trajecten
-\item Analyse op basis van opgehaalde data
+\item Analyse en kwaliteitscontrole op basis van opgehaalde data
 \item Aanbieden van gegevens aan externen via REST API
-\item Kwaliteitscontrole van de verkregen data
-%\end{enumerate}
-%\subsection{Extra}
-%\begin{enumerate}
 \item Platform gelinkt met sociale media om snelle communicatie aan te bieden
 \item Meldingen genereren wanneer reistijden overschreden worden
 \item Bepalen van de oorzaak van een vertraging
@@ -340,7 +340,7 @@ http://verkeer-2.bp.tiwi.be/api/v2/routes/\textbf{\{id\}}/data/current/\\
    ]\end{verbatim}
 \noindent\rule[0.5ex]{\linewidth}{1pt}
 \subsubsection{2.3.2.c Providers}
-Het is mogelijk om via de REST API alle databronnen op te vragen, dit kan handig zijn om in bijvoorbeeld RouteData te gebruiken als parameter.\\
+Het is mogelijk om via de REST API alle databronnen op te vragen, dit kan handig zijn om in bijvoorbeeld RouteData te gebruiken als filter.\\
 \noindent\rule[0.5ex]{\linewidth}{1pt}
 \textbf{Vraag}
 
@@ -361,8 +361,8 @@ Het is mogelijk om via de REST API alle databronnen op te vragen, dit kan handig
    ]
 \end{verbatim}
 \noindent\rule[0.5ex]{\linewidth}{1pt}
-\subsubsection{Parameters}
-Er zijn 2 types parameters die je kan meegeven op het einde van je URL: \textit{fields} en \textit{provider}. In \textit{fields} kan je beslissen wat weergegeven moet worden in het antwoord en bij \textit{provider} kan je ervoor kiezen om enkel data van bepaalde databronnen weer te geven.\\
+\subsubsection{Filters}
+Er zijn 2 types filters die je kan meegeven op het einde van je URL: \textit{fields} en \textit{provider}. In \textit{fields} kan je beslissen wat weergegeven moet worden in het antwoord en bij \textit{provider} kan je ervoor kiezen om enkel data van bepaalde databronnen weer te geven.\\
 \noindent\rule[0.5ex]{\linewidth}{1pt}
 \textit{Voorbeeld}\\
 ?fields=route.name,route.id,route.geolocations\&provider=GoogleMaps,Here\\
@@ -386,31 +386,31 @@ In dit onderdeel vindt u drie klassendiagrammen, al kan je het in dit geval ook 
 	GeoLocation & bevat informatie over een locatie \\
 	\hline
 	RouteData & bevat verkeersinformatie van \'e\'en route, \'e\'en databron en dit op \'e\'en bepaald moment in de tijd \\
+%	\hline
+%	IgnoredPeriod & vertegenwoordigt periodes die genegeerd moeten woden tijdens het berekenen van gemiddelde reistijd per dag\\
 	\hline
-	IgnoredPeriod & vertegenwoordigt periodes die genegeerd moeten woden tijdens het berekenen van gemiddelde reistijd per dag\\
+	[Object]Entity & deze klassen vertegenwoordigen de drie bovenstaande klassen zodat ze in de database kunnen opgeslagen worden\\
 	\hline
-	[Object]Entity & deze klassen vertegenwoordigen bovenstaande objecten zodat ze in de database kunnen opgeslagen worden\\
+	HereSourceAdapter & omzetten van data, aangeboden door Here, naar RouteData voor \'e\'en Route\\	
 	\hline
-	HereSourceAdapter & omzetten van data, aangeboden door Here, naar RouteData\\	
+	GoogleMapsSourceAdapter & omzetten van data, aangeboden door Google Maps, naar RouteData voor \'e\'en Route\\	
 	\hline
-	GoogleMapsSourceAdapter & omzetten van data, aangeboden door Google Maps, naar RouteData\\	
+	SourceManager & beheert alle adapters en zorgt ervoor dat de verschillende RouteData voor \'e\'en Route bij elke adapter worden opgehaald\\	
 	\hline
-	SourceManager & beheren van adapters\\	
+	TimerScheduler & automatische triggering voor ophalen nieuwe data, het interval van deze timer is wijzigbaar op tijdstippen naar keuze\\	
 	\hline
-	TimerScheduler & automatische triggering voor ophalen nieuwe data\\	
-	\hline
-	TrafficDataDownloader & beheren van routes en geeft commando om RouteData op te halen\\	
+	TrafficDataDownloader & beheren van alle routes en geef commando om RouteData op te halen door aan de SourceManager die per opgegeven route alle adapters zal aanspreken\\	
 	\hline
 	TrafficDataDownstreamAnalyser & data afkomstig van SourceAdapters controleren op correctheid en nadien verdere acties ondernemen indien nodig\\		
 	\hline
-	BeanFactory & deze klasse zal dependency injection vertegenwoordigen in alle klassen \\	
+	BeanFactory & deze klasse zal dependency injection vertegenwoordigen in alle klassen, deze klasse wordt altijd aangesproken om tussen beans te communiceren \\	
 	\hline
-	GeneralDAO & verbinding vormen tussen core en database\\	
+	GeneralDAO & verbinding tussen core en database, zorgt voor de opslag van Route en GeoLocation in de database\\	
 	\hline
-	TrafficDataDAO & RouteData opslaan in de database\\	
+	TrafficDataDAO & zorgt voor de opslag van RouteData in de database\\	
 	\hline
 \end{tabular}
-\subsection{Modules}
+\subsection{Line Of Business}
 De volledige applicatie streeft naar de richtlijnen van een Line Of Business applicatie. 
 \subsubsection{Flexibel en Uitbreidbaar}
 Door gebruik te maken van Java EE, waarin de gehele applicatie in verschillende modules wordt opgedeeld, kunnen nieuwe modules eenvoudig afzonderlijk worden gecre\"eerd en worden toegevoegd. 
