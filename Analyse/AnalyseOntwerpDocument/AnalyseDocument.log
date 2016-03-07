@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2016.2.27)  7 MAR 2016 19:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2016.2.27)  7 MAR 2016 19:49
 entering extended mode
 **./AnalyseDocument.tex
 (AnalyseDocument.tex
@@ -278,12 +278,6 @@ Package pdftex.def Info: UseCaseDiagram1.png used on input line 62.
 
 ]
 Hoofdstuk 2.
-
-Overfull \hbox (18.5746pt too wide) in paragraph at lines 114--115
-\OT1/cmr/m/n/10 ver-eist voor het draaien van deze soft-ware. Er is steeds een 
-ac-tieve in-ter-net-ver-bin-ding
- []
-
 
 Overfull \hbox (4.33914pt too wide) in paragraph at lines 116--117
 \OT1/cmr/m/n/10 Edi-tion) \OT1/cmr/m/it/10 fra-me-work\OT1/cmr/m/n/10 . Dit \OT
@@ -643,7 +637,7 @@ public/amsfonts/cm/cmss12.pfb><C:/Users/Simon/AppData/Local/Programs/MiKTeX 2.9
 /fonts/type1/public/amsfonts/cm/cmss17.pfb><C:/Users/Simon/AppData/Local/Progra
 ms/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/Simon/AppData
 /Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on AnalyseDocument.pdf (20 pages, 538412 bytes).
+Output written on AnalyseDocument.pdf (20 pages, 535521 bytes).
 PDF statistics:
  125 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
