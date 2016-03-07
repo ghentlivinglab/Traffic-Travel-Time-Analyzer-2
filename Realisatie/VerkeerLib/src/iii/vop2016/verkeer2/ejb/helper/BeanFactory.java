@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 import javax.ejb.SessionContext;
 import javax.naming.InitialContext;
 import iii.vop2016.verkeer2.ejb.datadownloader.ITrafficDataDownloader;
-import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyzer;
+import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyser;
 
 /**
  *
@@ -63,16 +63,16 @@ public class BeanFactory {
         }
     }
 
-    public ITrafficDataDownstreamAnalyzer getTrafficDataDownstreamAnalyzer() {
+    public ITrafficDataDownstreamAnalyser getTrafficDataDownstreamAnalyser() {
         if (sctx != null) {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.downstreamAnalyser, sctx, Logger.getGlobal());
-            if (obj instanceof ITrafficDataDownstreamAnalyzer) {
-                return (ITrafficDataDownstreamAnalyzer) obj;
+            if (obj instanceof ITrafficDataDownstreamAnalyser) {
+                return (ITrafficDataDownstreamAnalyser) obj;
             }
         } else {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.downstreamAnalyser, ctx, Logger.getGlobal());
-            if (obj instanceof ITrafficDataDownstreamAnalyzer) {
-                return (ITrafficDataDownstreamAnalyzer) obj;
+            if (obj instanceof ITrafficDataDownstreamAnalyser) {
+                return (ITrafficDataDownstreamAnalyser) obj;
             }
         }
         return null;

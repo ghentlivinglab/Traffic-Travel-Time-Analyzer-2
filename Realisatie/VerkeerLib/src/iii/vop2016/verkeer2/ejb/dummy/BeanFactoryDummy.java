@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import iii.vop2016.verkeer2.ejb.datadownloader.ITrafficDataDownloader;
-import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyzer;
+import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyser;
 
 /**
  *
@@ -41,7 +41,7 @@ public class BeanFactoryDummy extends BeanFactory{
     }
 
     @Override
-    public ITrafficDataDownstreamAnalyzer getTrafficDataDownstreamAnalyzer() {
+    public ITrafficDataDownstreamAnalyser getTrafficDataDownstreamAnalyser() {
         return new TrafficDataAnalyzerDummy();
     }
 
