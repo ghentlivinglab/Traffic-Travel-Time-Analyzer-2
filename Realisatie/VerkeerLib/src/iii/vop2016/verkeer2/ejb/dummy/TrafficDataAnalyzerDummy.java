@@ -8,14 +8,14 @@ package iii.vop2016.verkeer2.ejb.dummy;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
-import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyzer;
 import java.util.List;
+import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyser;
 
 /**
  *
  * @author Tobias
  */
-public class TrafficDataAnalyzerDummy implements ITrafficDataDownstreamAnalyzer{
+public class TrafficDataAnalyzerDummy implements ITrafficDataDownstreamAnalyser{
 
     @Override
     public String getProjectName() {

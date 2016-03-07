@@ -38,7 +38,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyzer;
+import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyser;
 
 /**
  * REST Web Service
@@ -106,7 +106,7 @@ public class RoutesResource {
     public Response initRoutes() throws InvalidCoordinateException {
                 
         try {
-            ITrafficDataDownstreamAnalyzer analyzer = beans.getTrafficDataDownstreamAnalyzer();
+            ITrafficDataDownstreamAnalyser analyser = beans.getTrafficDataDownstreamAnalyser();
             
             IRoute r = new Route("R4 Zelzate");
             
@@ -164,12 +164,56 @@ public class RoutesResource {
         return JSONRoutes(routes);
     }
     
+    
+    @GET
+    @Path("{id}/data/current")
+    @Produces("application/json")
+    public String getCurrentTrafficData(@PathParam("id") String sid) {
+        visibleFields.put("route.data", Boolean.TRUE);
+        dataType = "current";
+        List<IRoute> routes;
+        if(sid.equals("all")){
+            routes = beans.getGeneralDAO().getRoutes();
+        }else{
+            routes = new ArrayList<>();
+            List<Long> ids = getIds(sid);
+            for (int i=0; i<ids.size(); i++) {
+                IRoute r = beans.getGeneralDAO().getRoute(ids.get(i));
+                if(r != null)
+                    routes.add(r);
+            }
+        }
+        JSONArray result = new JSONArray();
+        for(IRoute route : routes){
+            result.put(transformRoute(route));
+        }
+        return result.toString(1);
+    }
+    
+    
+    @GET
+    @Path("{id}/data/summary")
+    @Produces("application/json")
+    public String getTrafficSummary(@PathParam("id") String id) {
+        
+        List<IRoute> routes = beans.getGeneralDAO().getRoutes();
+        
+        return null;
+        
+    }
+    
+    
+    
     @GET
     @Path("{id}/data/{timeStart}")
     @Produces("application/json")
     public String getTrafficData(@PathParam("id") String sid, @PathParam("timeStart") String stimeStart) {
         return getTrafficData(sid, stimeStart, ""+(new Date()).getTime());
     }
+    
+    
+    
+    
     
     @GET
     @Path("{id}/data/{timeStart}/{timeEnd}")
@@ -198,42 +242,6 @@ public class RoutesResource {
     }
     
     
-    @GET
-    @Path("{id}/current")
-    @Produces("application/json")
-    public String getCurrentTrafficData(@PathParam("id") String sid) {
-        visibleFields.put("route.data", Boolean.TRUE);
-        dataType = "current";
-        List<IRoute> routes;
-        if(sid.equals("all")){
-            routes = beans.getGeneralDAO().getRoutes();
-        }else{
-            routes = new ArrayList<>();
-            List<Long> ids = getIds(sid);
-            for (int i=0; i<ids.size(); i++) {
-                IRoute r = beans.getGeneralDAO().getRoute(ids.get(i));
-                if(r != null)
-                    routes.add(r);
-            }
-        }
-        JSONArray result = new JSONArray();
-        for(IRoute route : routes){
-            result.put(transformRoute(route));
-        }
-        return result.toString(1);
-    }
-    
-    
-    @GET
-    @Path("{id}/summary")
-    @Produces("application/json")
-    public String getTrafficSummary(@PathParam("id") String id) {
-        
-        List<IRoute> routes = beans.getGeneralDAO().getRoutes();
-        
-        return null;
-        
-    }
     
     private List<Long> getIds(String ids){
         List<Long> result = new ArrayList<>();

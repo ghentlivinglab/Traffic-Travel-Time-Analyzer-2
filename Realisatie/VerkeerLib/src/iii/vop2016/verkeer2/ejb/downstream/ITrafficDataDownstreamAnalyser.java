@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author tobia
  */
-public interface ITrafficDataDownstreamAnalyzer {
+public interface ITrafficDataDownstreamAnalyser {
     String getProjectName();
     
     public IRouteData addData(IRouteData data);

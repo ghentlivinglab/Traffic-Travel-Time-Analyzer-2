@@ -98,7 +98,7 @@ public class TrafficDataDownloader implements TrafficDataDownloaderRemote {
                 if(data != null && data.size() != 0){
                     for(IRouteData r : data)
                         r.setTimestamp(timestamp);
-                    beanFactory.getTrafficDataDownstreamAnalyzer().addData(data);
+                    beanFactory.getTrafficDataDownstreamAnalyser().addData(data);
                 }
             }
         }else{
