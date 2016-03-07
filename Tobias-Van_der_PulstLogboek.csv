@@ -27,3 +27,7 @@ Datum,Start,Einde,Plaats,Categorie,Omschrijving,Issue #,Opmerkingen
 04/03/16,20:00,21:00,Thuis,Bugfixing,Aanpassen DAOs voor server deployment,,Errors op non existing functions
 05/03/16,10:30,12:00,Thuis,Bugfixing,Aanpassen DAOs en lib voor server deployment,,
 05/03/16,13:30,17:00,Thuis,Bugfixing,Monitoring sever voor succesvolle data retrievel en hotfixes bij kleine errors,,
+06/03/16,10:30,12:00,Thuis,Documentatie,Wiki bijwerken met info over java ee,,
+06/03/16,13:00,18:00,Thuis,Documentatie,Wiki bijwerken en structureren,,
+07/03/16,10:00,11:30,School,Presentatie,Overleg powerpoint en aanpassingen analyse,,
+07/03/16,19:00,22:00,Thuis,Presentatie,Opzetten server voor test sprint 1 en powerpoint,,apiary werkende krijgen voor calls naar server
