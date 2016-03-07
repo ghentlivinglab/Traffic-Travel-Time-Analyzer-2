@@ -27,7 +27,7 @@ De map 'lib/' bevat de gebruikte externe libraries.
 
 __[Logger](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/Logger)__
 
-Deze bean start mee op met de server en creëert een datasink voor logging naar een bestand. (log.txt)
+Deze bean start mee op met de server en creÃ«ert een datasink voor logging naar een bestand. (log.txt)
 ````
 Package name: iii.vop2016.verkeer2.ejb.logger
 
@@ -38,7 +38,7 @@ EJB Bean: Logger
 
 __[TimerScheduler](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/TimerScheduler)__
 
-Deze bean start mee op met de server en creëert een timer via Java EE TimerServices die volgens een patroon, gedefineerd in properties file '[TimerScheduler](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/TimerScheduler.properties)', de download van data triggert.
+Deze bean start mee op met de server en creÃ«ert een timer via Java EE TimerServices die volgens een patroon, gedefinieerd in properties file '[TimerScheduler](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/TimerScheduler.properties)', de download van data triggert.
 ````
 Package name: iii.vop2016.verkeer2.ejb.timer
 
@@ -49,7 +49,7 @@ EJB Bean: TimerScheduler
 
 __[TrafficDataDownloader](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/TrafficDataDownloader)__
 
-De downloader staat in voor de connectie tussen de providers en de databases. Deze klasse, met slechts één enkele methode, wordt getriggerd vanuit de TimerServices, vraagt data over de routes en vraagt de verkeerssituatie op aan de providers. Deze data wordt vervolgens naar de trafficDataDAO voor dataopslag gepushed via de DownstreamAnalyser, die de desbetreffende data zal controleren en eventuele meldingen zal genereren. De providers worden beheerd door de extra klasse SourceManager.
+De downloader staat in voor de connectie tussen de providers en de databases. Deze klasse, met slechts Ã©Ã©n enkele methode, wordt getriggerd vanuit de TimerServices, vraagt data over de routes en vraagt de verkeerssituatie op aan de providers. Deze data wordt vervolgens naar de trafficDataDAO voor dataopslag gepushed via de DownstreamAnalyser, die de desbetreffende data zal controleren en eventuele meldingen zal genereren. De providers worden beheerd door de extra klasse SourceManager.
 ````
 Package name: iii.vop2016.verkeer2.ejb.datadownloader
 
@@ -98,7 +98,7 @@ EJB Bean: GoogleMapsSourceAdapter
 
 __[GeneralDAO](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/GeneralDAO)__
 
-De generalDAO is verantwoordelijk voor het beheer van routes die door de applicatie dienen in de gaten te worden gehouden. Deze worden gedefinieerd door een opeenvolging van geolocaties. De data wordt verpakt door GeoLocationEntity en RouteEntity om deze compatibel te maken met de achterliggende databank.
+De generalDAO is verantwoordelijk voor het beheer van routes die door de applicatie dienen in de gaten te worden gehouden. Deze worden gedefinieerd door een opeenvolging van geolocaties. De data worden verpakt door GeoLocationEntity en RouteEntity om deze compatibel te maken met de achterliggende databank.
 ````
 Package name: iii.vop2016.verkeer2.ejb.dao
 
@@ -110,7 +110,7 @@ EJB Bean: GeneralDAO
 
 __[TrafficDataDAO](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/TrafficDataDAO)__
 
-De trafficDataDAO is verantwoordelijk voor het beheer van data die betrekking heeft op de verkeerssituatie op een bepaald moment. De data wordt verpakt door RouteDataEntity om deze compatibel te maken met de achterliggende databank.
+De trafficDataDAO is verantwoordelijk voor het beheer van data die betrekking hebben op de verkeerssituatie op een bepaald moment. De data worden verpakt door RouteDataEntity om deze compatibel te maken met de achterliggende databank.
 ````
 Package name: iii.vop2016.verkeer2.ejb.dao
 
@@ -146,7 +146,7 @@ EJB Bean: TrafficDataDAONoDB
 
 __[RestApi](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/RestApi)__
 
-Deze bean representeert de REST-service van het project. De REST-service onttrekt data uit het systeem en geeft deze vervolgens aan de gebruiker in JSON-formaat. Data ophalen gebeurt aan de hand van url-patronen.
+Deze bean representeert de REST-service van het project. De REST-service onttrekt data uit het systeem en geeft deze vervolgens aan de gebruiker in JSON-formaat. Data ophalen gebeurt aan de hand van URL-patronen.
 ````
 Package name: iii.vop2016.verkeer2.war.rest.
 
@@ -169,14 +169,14 @@ Volgend stappenplan moet doorlopen worden vooraleer het project kan worden gedep
 * Herstart Glassfish
 * Voeg [JNDI resources](https://github.ugent.be/iii-vop2016/verkeer-2/wiki/Glassfish-Resources) toe
 * Voeg [JDBC connectie](https://github.ugent.be/iii-vop2016/verkeer-2/wiki/Glassfish---JDBC) toe
-* Start MySQL-server en maak zeker dat een database 'verkeer2' bestaat en leeg is
+* Start MySQL-server en zorg ervoor dat er een database 'verkeer2' bestaat die leeg is
  
-Afhankelijk van een locale server of remote server dient een iets ander stappenplan te worden gevolgd.
+Afhankelijk van een lokale server of remote server dient een iets ander stappenplan te worden gevolgd.
 
 Lokale server
 * Verifieer dat de [Beans](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/Beans.properties) en [SourceAdapter](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/SourceAdaptors.properties) property-bestanden de applicatienaam voor hun JNDI naam hebben staan. Deze moeten voldoen aan volgend formaat:  java:global/ApplicatieNaam/ContainerNaam/BeanNaam. voorbeeld= java:global/Verkeer2/TrafficDataDAO/TrafficDataDAO
 * 'Clean and build' allereerst VerkeersLib, hierna iedere bean en vervolgens de applicatie zelf.
-* Vanuit netbeans kan het project onmiddelijk deployed worden via de java ee applicatie 'Verkeer2'
+* Vanuit netbeans kan het project onmiddellijk deployed worden via de java ee applicatie 'Verkeer2'
 
 Externe server (hier wordt iedere bean apart gedeployed)
 * Verifieer dat de [Beans](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/Beans.properties) en [SourceAdapter](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/SourceAdaptors.properties) property-bestanden de applicatienaam niet voor hun JNDI naam hebben staan. Deze moeten voldoen aan volgend formaat:  java:global/ContainerNaam/BeanNaam. voorbeeld= java:global/TrafficDataDAO/TrafficDataDAO
