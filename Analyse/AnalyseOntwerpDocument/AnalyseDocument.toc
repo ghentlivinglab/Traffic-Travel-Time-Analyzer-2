@@ -4,7 +4,7 @@
 \contentsline {section}{\numberline {1.1}Beschrijving project}{2}
 \contentsline {section}{\numberline {1.2}Functionaliteiten}{2}
 \contentsline {section}{\numberline {1.3}Use Case}{3}
-\contentsline {section}{\numberline {1.4}Functieanalyse van de omgeving}{3}
+\contentsline {section}{\numberline {1.4}Functieanalyse van de omgeving}{4}
 \contentsline {chapter}{\numberline {2}Ontwerp}{5}
 \contentsline {section}{\numberline {2.1}Functioneel ontwerp}{5}
 \contentsline {section}{\numberline {2.2}Technisch ontwerp}{5}
@@ -13,21 +13,21 @@
 \contentsline {subsubsection}{JSF}{6}
 \contentsline {subsubsection}{Contexts and Dependency Injection}{6}
 \contentsline {subsubsection}{EJB}{6}
-\contentsline {subsubsection}{JPA}{6}
+\contentsline {subsubsection}{JPA}{7}
 \contentsline {subsubsection}{JTA}{7}
 \contentsline {subsubsection}{JAX-RS}{7}
 \contentsline {subsubsection}{JNDI}{7}
 \contentsline {subsubsection}{JDBC Connection Pools}{7}
-\contentsline {section}{\numberline {2.3}Software ontwerp}{7}
-\contentsline {subsection}{\numberline {2.3.1}Databronnen}{7}
-\contentsline {subsubsection}{Google Maps}{7}
+\contentsline {section}{\numberline {2.3}Software ontwerp}{8}
+\contentsline {subsection}{\numberline {2.3.1}Databronnen}{8}
+\contentsline {subsubsection}{Google Maps}{8}
 \contentsline {subsubsection}{Here}{8}
-\contentsline {subsection}{\numberline {2.3.2}Structuur van de data (API)}{8}
-\contentsline {subsubsection}{2.3.2.a Routes}{8}
-\contentsline {subsubsection}{2.3.2.b RouteData}{9}
+\contentsline {subsection}{\numberline {2.3.2}Structuur van de data (API)}{9}
+\contentsline {subsubsection}{2.3.2.a Routes}{9}
+\contentsline {subsubsection}{2.3.2.b RouteData}{10}
 \contentsline {subsubsection}{2.3.2.c Providers}{12}
 \contentsline {subsubsection}{Parameters}{12}
-\contentsline {subsection}{\numberline {2.3.3}Databank}{12}
+\contentsline {subsection}{\numberline {2.3.3}Databank}{13}
 \contentsline {subsection}{\numberline {2.3.4}Klassendiagram}{13}
 \contentsline {subsection}{\numberline {2.3.5}Verantwoordelijkheid per klasse}{15}
 \contentsline {subsection}{\numberline {2.3.6}Modules}{15}
@@ -41,19 +41,19 @@
 \contentsline {subsection}{\numberline {2.3.7}Gegevensstroomdiagram}{17}
 \contentsline {subsubsection}{Downstream}{17}
 \contentsline {subsubsection}{Upstream}{17}
-\contentsline {subsection}{\numberline {2.3.8}Bestandsstructuur}{17}
-\contentsline {subsubsection}{Logger}{17}
-\contentsline {subsubsection}{TimerScheduler}{17}
-\contentsline {subsubsection}{TrafficDataDownloader}{17}
+\contentsline {subsection}{\numberline {2.3.8}Bestandsstructuur}{18}
+\contentsline {subsubsection}{Logger}{18}
+\contentsline {subsubsection}{TimerScheduler}{18}
+\contentsline {subsubsection}{TrafficDataDownloader}{18}
 \contentsline {subsubsection}{TrafficDataDownstreamAnalyser}{18}
 \contentsline {subsubsection}{GoogleMapsSourceAdapter/HereSourceAdapter}{18}
 \contentsline {subsubsection}{GeneralDAO}{18}
 \contentsline {subsubsection}{TrafficDataDAO}{18}
 \contentsline {subsubsection}{GeneralDAONoDB/TrafficDataDAONoDB}{18}
 \contentsline {subsubsection}{RESTAPI}{18}
-\contentsline {subsection}{\numberline {2.3.9}Tests}{18}
-\contentsline {subsubsection}{Databank}{18}
-\contentsline {subsubsection}{SourceAdapters}{18}
-\contentsline {subsubsection}{Sortering geolocaties}{18}
+\contentsline {subsection}{\numberline {2.3.9}Tests}{19}
+\contentsline {subsubsection}{Databank}{19}
+\contentsline {subsubsection}{SourceAdapters}{19}
+\contentsline {subsubsection}{Sortering geolocaties}{19}
 \contentsline {subsubsection}{REST API}{19}
 \contentsline {subsubsection}{GeoLocation}{19}

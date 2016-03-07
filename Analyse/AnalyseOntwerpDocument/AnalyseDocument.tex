@@ -60,7 +60,8 @@ Het Mobiliteitsbedrijf van de stad Gent is sinds 2014 bezig met het opzetten van
 \end{enumerate}
 \section{Use Case}
 \diagram{UseCaseDiagram1}{Use Case}
-Er zijn drie actoren aan het werk. In de eerste plaats is er een timer, deze zal een trigger sturen naar het programma zodat data afkomstig van de verschillende providers opgehaald wordt. Verder is er nog een API-gebruiker, dit is een persoon die data kan ophalen uit de database gebruikmakend van de REST API. Als laatste is er nog een administrator, hij kan routes toevoegen aan de database zodat ook van deze routes data worden opgehaald.
+Er zijn vier actoren aan het werk. In de eerste plaats is er een timer, deze zal een trigger sturen naar het programma zodat data afkomstig van de verschillende providers opgehaald wordt. Verder is er nog een API-gebruiker, dit is een persoon die data kan ophalen uit de database gebruikmakend van de REST API. Een andere actor is de operator in het verkeerscentrum, hij zal via het dashboard de verkeersdat monitoren en de mogelijkheid hebben om analyses uit te voeren. Als laatste is er nog een administrator, hij kan routes toevoegen aan de database zodat ook van deze routes data worden opgehaald.
+\clearpage
 \section{Functieanalyse van de omgeving}
 \begin{enumerate}
 	\item Gebruikers
@@ -141,6 +142,7 @@ Iedere module (EJB) in het project is uitwisselbaar met een nieuwe module. Dit i
 Alle beans zijn onafhankelijk. Alle objecten die voorkomen in meerdere beans (zoals interfaces) zijn gebundeld in een gemeenschappelijke bibliotheek. Hierdoor zullen beans niets merken wanneer een andere bean wijzigt.\\\\
 \textit{Uitbreidbaarheid}\\
 De modules zijn niet enkel onafhankelijk, maar hebben eveneens geen vaste relatie met de locatie waar ze werken. Zo kan een \textit{database-bean} op een andere server staan dan de \textit{analyser-bean}. De enige vereiste hiervoor is dat JNDI van de ene server gelinkt is aan de JNDI van de andere server. De beans zullen hun parameters en teruggeefwaardes steeds serialiseren en doorsturen naar de zogenaamde \textit{remote bean}.
+\clearpage
 \subsubsection{JPA}
 De Java variant voor Object Relational Mapping (ORM) laat toe de gegevens in een databank rechtstreeks af te beelden op objecten door middel van annotaties. Deze manier van interactie met de databank laat een zeer eenvoudige werking toe. Het zal echter niet de performantie van handmatige SQL-commando's evenaren.
 \subsubsection{JTA}
@@ -151,62 +153,71 @@ Deze API laat toe om services aan te bieden volgens het Representational State T
 Deze technologie laat toe data of objecten op te vragen via hun naam. Voor dit project werd de link naar de bronbestanden, de link naar de JDBC Connection Pool en de link naar alle beans opgenomen in JNDI.
 \subsubsection{JDBC Connection Pools}
 Een Connection Pool houdt een \textit{cache} van connecties naar een welbepaalde databank bij en maakt deze beschikbaar aan de applicaties van de applicatieserver. Dit alles zorgt voor een hogere effici\"entie want de connecties worden behouden en herbruikt. Hiernaast wordt er ook een hogere veiligheid aangeboden, de connectieparameters zijn namelijk niet langer in de applicatie zelf aanwezig.
+\clearpage
 \section{Software ontwerp}
 \subsection{Databronnen}
 \subsubsection{Google Maps}
 \textit{URL: https://developers.google.com/maps/documentation/distance-matrix/}\\\\
-Reistijden van Google Maps kunnen opgevraagd worden via de Google Maps Distance Matrix API (https://developers.google.com/maps/documentation/\\distance-matrix/). In de URL kunnen verschillende start- en eindpunten worden meegegeven. Hou er wel rekening mee dat er voor elke combinatie van start- en eindpunt een reistijd wordt opgenomen in het antwoord. Als er dus 3 startpunten en 3 eindpunten worden meegegeven, zal het resultaat een 3X3-matrix zijn. Dit komt dan ook overeen met 9 \textit{calls}. De limiet is een 10X10-matrix.\\\\
-Om de \textit{calls} te kunnen doen moet er een sleutel aangevraagd worden, die gekoppeld wordt aan het project. Met een gratis sleutel kunnen 2500 elementen (= aantal startpunten X aantal eindpunten) per dag opgevraagd worden. Indien dit overschreden wordt, zal er per schijf van 1000 extra elementen 0,50 dollar (= 0,4548 euro) aangerekend worden.\\\\
-Indien we voor onze 34 routes om de 5 minuten de reistijden gaan opvragen en dit 18u per dag, dan zitten we al aan meer dan 7300 \textit{calls} per dag. Er rekening mee houdend dat eventuele tussenpunten het aantal \textit{calls} bij deze API nog eens heel sterk doen oplopen, mag duidelijk zijn dat het gratis model niet zal volstaan. Er kan overgeschakeld worden op het ‘Google Maps API’s Premium Plan’ zodat er tot 100 000 calls per dag gedaan kunnen worden.
+Reistijden van Google Maps kunnen opgevraagd worden via de Google Maps Distance Matrix API. In de URL kunnen verschillende start- en eindpunten worden meegegeven. Er moet rekening gehouden worden dat er voor elke combinatie van start- en eindpunt een reistijd wordt opgenomen in het antwoord. Bij het opgeven van drie startpunten en drie eindpunten, zal het resultaat een 3X3-matrix zijn. Dit komt overeen met negen aanvragen. Er kunnen maximaal 10 start- en eindpunten worden opgegeven in \'e\'en aanvraag.\\\\
+Om aanvragen te doen naar de API, is er een unieke toegangssleutel nodig, die kan aangevraagd worden bij Google. Met de gratis sleutel zijn er 2500 aanvragen per dag mogelijk. Indien deze limiet overschreden is, wordt er 0,5 dollar (= 0,4548 euro)  per 1000 extra elementen aangerekend. In de huidige situatie waarbij er van 34 routes elke vijf minuten data wordt opgevraagd en dit 18u per dag, is er nood aan 7300 aanvragen per dag. Indien er rekening gehouden wordt met extra tussenpunten zal het aantal aanvragen sterk oplopen. Het gratis model van Google zal niet volstaan. Er kan worden overgeschakeld op het ‘Google Maps API's Premium Plan’ zodat er tot 100 000 aanvragen per dag gedaan kunnen worden.
 
 \subsubsection{Here}
 \textit{URL: https://developer.here.com/rest-apis/documentation/routing}\\\\
-Here stelt reistijden ter beschikking via zijn Routing API \\(https://developer.here.com/rest-apis/documentation/routing). In de URL kan je een route meegeven door de co\"ordinaten in te stellen voor start- en eindpunt en door eventuele tussenpunten mee te geven. Verder moet voor de toepassing die hier ontworpen wordt steeds gekozen worden voor de kortste route in plaats van de snelste en moet er rekening gehouden worden met het huidige verkeer. Op deze manier zal steeds actuele info over een vaste route worden teruggeven.\\\\
-Om de API van Here te kunnen gebruiken moeten er 2 sleutels aangevraagd worden die gekoppeld worden aan het project. De eerste 90 dagen kan dit gratis en mogen er tot 100 000 calls per maand gedaan worden. Als we 34 routes om de 5 minuten willen opvragen kom je echter al aan meer dan 220 000 calls per maand en zou je sowieso al een betalende formule nodig hebben. Om tot 275 000 calls per maand te kunnen doen, moet er gekozen worden voor het standaard plan dat 99 euro per maand kost.
+Here stelt reistijden ter beschikking via zijn Routing API. In de URL kan je een route meegeven door de coördinaten in te stellen voor start- en eindpunt. Ook eventuele tussenpunten kunnen worden vermeld. Verder moet voor de toepassing die hier ontworpen wordt steeds aangegeven worden dat men de kortste route wil en dat men informatie baseert op het huidige verkeer. Op deze manier zal steeds actuele verkeersinformatie over een vaste route worden teruggeven.\\\\
+Om de API van Here te kunnen gebruiken moeten er twee sleutels aangevraagd worden. De eerste 90 dagen kan dit gratis en mogen er tot 100 000 aanvragen per maand gedaan worden. In de huidige situatie waarbij er 34 routes elke vijf minuten data wordt opgevraagd en dit 18u per dag, is er nood aan 220 000 aanvragen per maand. Dit betekent dat je sowieso een betalende formule nodig hebt. Om tot 275 000 aanvragen per maand te kunnen doen, moet er gekozen worden voor het standaardplan dat 99 euro per maand kost.
+\clearpage
 \subsection{Structuur van de data (API)}
 De REST API geeft info terug uit de database, hier heb je de keuze uit drie opties: Routes, RouteData en Providers. Wanneer je hier aanvragen naar doet krijg je gegevens uit de database terug. In de komende secties wordt een korte toelichting gegeven per optie, gevolg door een voorbeeld van aanvraag en antwoord in JSON-formaat. Er is een online API beschikbaar waarin je meer informatie kan terugvinden, hieronder krijg je alvast een kort overzicht.
 
 \subsubsection{2.3.2.a Routes}
-De routes zijn de trajecten waar realtime data van opgeroepen wordt. Indien je geen parameters meegeeft zullen naam, id en tussenpunten teruggegeven worden. In de toekomst zal het ook mogelijk zijn om routes toe te voegen via de API.
-\clearpage
+De routes zijn de trajecten waar realtime data van opgeroepen wordt. Indien je geen parameters meegeeft zullen naam, id en tussenpunten teruggegeven worden. In de toekomst zal het ook mogelijk zijn om routes toe te voegen via de API.\\
 \noindent\rule[0.5ex]{\linewidth}{1pt}
-\textbf{Vraag}\\
-\textit{Patroon}\\
-\textbf{GET} http://verkeer-2.bp.tiwi.be/api/v2/routes/id\\\\
-\textit{Voorbeeld}\\
-\textbf{GET} http://verkeer-2.bp.tiwi.be/api/v2/routes/1,2,3\\
-\noindent\rule[0.5ex]{\linewidth}{1pt}
+\textbf{Vraag}
 
-\noindent\rule[0.5ex]{\linewidth}{1pt}
-\textbf{Antwoord}\\
+\textit{Patroon}
+
+\textbf{GET} http://verkeer-2.bp.tiwi.be/api/v2/routes/\textbf{\{id\}}\\
+
+\begin{tabular}{ | l | p{8.5cm}| }
+	\hline
+	\textbf{Parameter} & \textbf{Beschrijving}\\
+	\hline
+	id & lijst van id's gescheiden door een komma, ook het woord \textit{all} is toegestaan\\
+	\hline
+\end{tabular}\\\\
+
 \textit{Voorbeeld}
-\begin{verbatim}[
- {
-    "name": "R4 Zelzate",
-    "id": 2,
-    "geolocations": [
+
+\textbf{GET} http://verkeer-2.bp.tiwi.be/api/v2/routes/\textbf{1,2,3}\\\\
+\textbf{Antwoord}
+
+\textit{Voorbeeld}
+\begin{verbatim}
+   [
     {
-        "latitude": 51.192226,
-        "name": "Zelzate",
-        "longitude": 3.776342
-    },
-    {
-        "latitude": 51.086447,
-        "name": "Gent",
-        "longitude": 3.672188
+       "name": "R4 Zelzate",
+       "id": 1,
+       "geolocations": [
+       {
+           "latitude": 51.192226,
+           "name": "Zelzate",
+           "longitude": 3.776342
+       },
+       {
+           "latitude": 51.086447,
+           "name": "Gent",
+           "longitude": 3.672188
+       }
+      ]
     }
-   ]
- }
-]\end{verbatim}
+   ]\end{verbatim}
 \noindent\rule[0.5ex]{\linewidth}{1pt}
 \subsubsection{2.3.2.b RouteData}
 De RouteData is de opgehaalde data per route van de verschillende databronnen op verschillende tijdstippen. Je kan kiezen van welke routes je data wil terugkrijgen.\\\\
 \textbf{Data in een bepaald interval}\\
-De eerste mogelijkheid is om begin- en eindpunt van de periode instellen. Dit laatste is nuttig om data in een bepaald interval terug te krijgen.\\\\ 
-
-\clearpage
+De eerste mogelijkheid is om begin- en eindpunt van de periode instellen. Dit laatste is nuttig om data in een bepaald interval terug te krijgen.\\
 \noindent\rule[0.5ex]{\linewidth}{1pt}
-\textbf{Vraag}\\
+\textbf{Vraag}
 
 \textit{Patroon}
 
@@ -232,9 +243,8 @@ De eerste mogelijkheid is om begin- en eindpunt van de periode instellen. Dit la
 \textbf{\textit{GET}}
  http://verkeer-2.bp.tiwi.be/api/v2/routes/\textbf{1,2,3}/data/
  
- \textbf{1456761535931}/\textbf{2456829774992}/\\
- 
-\textbf{Antwoord}\\
+ \textbf{1456761535931}/\textbf{2456829774992}/\\\\ 
+\textbf{Antwoord}
 
 \textit{Voorbeeld}
 \begin{verbatim}
@@ -274,7 +284,7 @@ De eerste mogelijkheid is om begin- en eindpunt van de periode instellen. Dit la
 \textbf{Actuele informatie}\\
 Het is ook mogelijk om in plaats van twee tijdstippen enkel \textit{current} op te geven, in dat geval wordt de actuele informatie getoond.\\
 \noindent\rule[0.5ex]{\linewidth}{1pt}
-\textbf{Vraag}\\
+\textbf{Vraag}
 
 \textit{Patroon}
 
@@ -287,14 +297,14 @@ http://verkeer-2.bp.tiwi.be/api/v2/routes/\textbf{\{id\}}/data/current/\\
 	\hline
 	id & lijst van id's gescheiden door een komma, ook het woord \textit{all} is toegestaan\\
 	\hline
-	current & geeft meest actuele data\\
-	\hline
 \end{tabular}\\\\
 
 \textit{Voorbeeld}
 
 \textbf{\textit{GET}} http://verkeer-2.bp.tiwi.be/api/v2/routes/\textbf{1,2,3}/data/current/\\\\
 \textbf{Antwoord}
+
+\textit{Voorbeeld}
 \begin{verbatim}
    [
     {
@@ -332,27 +342,34 @@ http://verkeer-2.bp.tiwi.be/api/v2/routes/\textbf{\{id\}}/data/current/\\
 \subsubsection{2.3.2.c Providers}
 Het is mogelijk om via de REST API alle databronnen op te vragen, dit kan handig zijn om in bijvoorbeeld RouteData te gebruiken als parameter.\\
 \noindent\rule[0.5ex]{\linewidth}{1pt}
-\textit{Patroon}\\
+\textbf{Vraag}
+
+\textit{Patroon}
+
 \textbf{GET} http://verkeer-2.bp.tiwi.be/api/v2/providers\\\\
-\textit{Voorbeeld}\\
-\textbf{GET} http://verkeer-2.bp.tiwi.be/api/v2/providers\\
-\noindent\rule[0.5ex]{\linewidth}{1pt}
-\noindent\rule[0.5ex]{\linewidth}{1pt}
+
+\textit{Voorbeeld}
+
+\textbf{GET} http://verkeer-2.bp.tiwi.be/api/v2/providers\\\\
+\textbf{Antwoord}
+
+\textit{Voorbeeld}
 \begin{verbatim}
-[
- "Here",
- "GoogleMaps"
-]
+   [
+    "Here",
+    "GoogleMaps"
+   ]
 \end{verbatim}
 \noindent\rule[0.5ex]{\linewidth}{1pt}
 \subsubsection{Parameters}
-Er zijn 2 types parameters die je kan meegeven op het einde van je URL: \textit{fields} en \textit{provider}. In velden kan je beslissen wat weergegeven moet worden in het antwoord en bij provider kan je ervoor kiezen om enkel data van bepaalde databronnen weer te geven.\\
+Er zijn 2 types parameters die je kan meegeven op het einde van je URL: \textit{fields} en \textit{provider}. In \textit{fields} kan je beslissen wat weergegeven moet worden in het antwoord en bij \textit{provider} kan je ervoor kiezen om enkel data van bepaalde databronnen weer te geven.\\
 \noindent\rule[0.5ex]{\linewidth}{1pt}
 \textit{Voorbeeld}\\
 ?fields=route.name,route.id,route.geolocations\&provider=GoogleMaps,Here\\
 \noindent\rule[0.5ex]{\linewidth}{1pt}
+\clearpage
 \subsection{Databank}
-De database bestaat uit drie tabellen. RouteData is op termijn de grootste tabel, hierin worden alle opgehaalde gegevens bewaard. In routes staan alle trajecten waarvan data zullen worden opgehaald. Deze routes bestaan uit geolocaties die het traject bepalen.
+De database bestaat uit drie tabellen. RouteData is op termijn de grootste tabel, hierin worden alle opgehaalde gegevens bewaard. In Routes staan alle trajecten waarvan data zullen worden opgehaald. Deze trajecten bestaan uit GeoLocations die het traject bepalen.
 \diagram{database}{Databank}
 \subsection{Klassendiagram}
 In dit onderdeel vindt u drie klassendiagrammen, al kan je het in dit geval ook interfacediagrammen noemen. Om te beginnen is er een diagram voor de basiscomponenten, de meest elementaire klassen in het systeem. Deze klassen vormen ook de database. Hierna komt het diagram van het gegevensbeheer, deze bevat de samenwerking van klassen die data ophalen en verwerken. Als laatste, maar daarom niet minder belangrijk, vindt u de BeanFactory. Dit diagram bevat slechts \'e\'en klasse die de klassen uit diagram 3 zal beheren.
@@ -416,8 +433,9 @@ De manier van logging kan eenvoudig worden gewijzigd door het hierboven beschrev
 De data van de verschillende databronnen wordt opgehaald met behulp van de SourceAdapters, per databron bestaat er een adapterklasse die de ISourceAdapter interface implementeert. De verschillende adapters bevinden zich in de \\SourceManager-klasse. Vanuit de TrafficDataDownloader wordt data per route aangevraagd, de SourceManager zal deze aanvragen doorsturen aan elke adapter en de ontvangen data per adapter teruggeven aan de TrafficDataDownloader. Vervolgens passeert de data ook nog de TrafficDataDownstreamAnalyser die controleert of de data geldig zijn en eventueel meldingen genereert. Om af te sluiten worden de data doorgegeven aan de TrafficDataDAO, deze klasse zorgt ervoor dat de data in de database terechtkomen. 
 \subsubsection{Upstream}
 De mogelijkheid bestaat om via API-aanvragen data uit de database te halen, dit gebeurt via de TrafficDataDAO die contact heeft met de database.
+\clearpage
 \subsection{Bestandsstructuur}
-Het project is opgedeeld in verschillende beans die we hieronder behandelen.
+Het project is opgedeeld in verschillende beans die hieronder worden behandeld.
 \subsubsection{Logger}
 Deze bean start tegelijk met de server en maakt logging naar een bestand (log.txt) mogelijk.
 \subsubsection{TimerScheduler}
@@ -436,6 +454,7 @@ De TrafficDataDAO houdt alle data bij van de routes verkregen door de applicatie
 Dit zijn twee dummy-objecten die gebruikt kunnen worden voor tests zonder de echte databank te gebruiken.
 \subsubsection{RESTAPI}
 Deze bean bevat de API-service van het project.
+\clearpage
 \subsection{Tests}
 \subsubsection{Databank}
 De databank werd gedurende het ontwikkelingsproces getest via het principe van integratietesting. De data die in de database werden opgeslagen kwamen overeen met de data die gestuurd werden naar de database.
