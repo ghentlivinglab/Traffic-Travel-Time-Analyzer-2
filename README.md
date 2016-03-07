@@ -155,6 +155,8 @@ Context path: /api/v2
 Resources: /providers (ProviderResource), /routes (RoutesResource)
 ````
 
+Voor meer informatie wordt er verwezen naar de [documentatie](http://docs.verkeerscentrumgent.apiary.io/)__
+
 ***
 
 ## Uitvoeren project
