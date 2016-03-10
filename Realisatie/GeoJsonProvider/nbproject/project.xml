@@ -6,6 +6,7 @@
             <name>GeoJsonProvider</name>
             <minimum-ant-version>1.6.5</minimum-ant-version>
             <included-library dirs="200">reference.VerkeerLib.jar</included-library>
+            <included-library dirs="200">file.reference.json-20151123.jar</included-library>
             <source-roots>
                 <root id="src.dir"/>
             </source-roots>

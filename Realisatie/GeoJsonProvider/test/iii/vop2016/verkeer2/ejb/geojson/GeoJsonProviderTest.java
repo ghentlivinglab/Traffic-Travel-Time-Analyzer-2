@@ -10,7 +10,10 @@ import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.Route;
 import iii.vop2016.verkeer2.ejb.helper.InvalidCoordinateException;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -33,9 +36,19 @@ public class GeoJsonProviderTest {
     public GeoJsonProviderTest() {
     }
 
+    static GeoJsonProvider instance;
+    
     @BeforeClass
     public static void setUpClass() {
-
+        try {
+            instance = new GeoJsonProvider();
+            instance.properties = new Properties();
+            instance.properties.load(new FileInputStream("C:/Users/tobia/Documents/baproef/verkeer-2/Realisatie/GeoJsonProvider.properties"));
+            instance.init();
+        } catch (IOException ex) {
+            Logger.getLogger(GeoJsonProviderTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     @AfterClass
@@ -59,13 +72,9 @@ public class GeoJsonProviderTest {
         System.out.println("getGeoJson");
 
         IRoute r = CreateTestRoute();
-        GeoJsonProvider instance = new GeoJsonProvider();
-        instance.properties = new Properties();
-        instance.properties.load(getClass().getResourceAsStream("C:/Users/Tobias/Documents/verkeer-2/Realisatie/GeoJsonProvider.properties"));
-        
-        instance.getGeoJson(r);
+        List<IGeoLocation> list = instance.getGeoJson(r);
 
-        fail("The test case is a prototype.");
+        assertEquals(84,list.size());
     }
 
     private IRoute CreateTestRoute() {

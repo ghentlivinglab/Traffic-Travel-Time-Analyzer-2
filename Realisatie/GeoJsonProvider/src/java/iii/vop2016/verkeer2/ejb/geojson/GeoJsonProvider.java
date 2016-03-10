@@ -9,6 +9,11 @@ import iii.vop2016.verkeer2.ejb.components.GeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
+import iii.vop2016.verkeer2.ejb.helper.InvalidCoordinateException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -27,6 +32,9 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.net.ssl.HttpsURLConnection;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -51,26 +59,40 @@ public class GeoJsonProvider implements GeoJsonRemote {
             Logger.getLogger(GeoJsonProvider.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        if(properties == null)
+        if (properties == null) {
             properties = HelperFunctions.RetrievePropertyFile(JNDILOOKUP_PROPERTYFILE, ctx, Logger.getLogger("logger"));
+        }
 
         fillProperties();
     }
 
     @Override
-    public void getGeoJson(IRoute route) {
+    public List<IGeoLocation> getGeoJson(IRoute route) {
         try {
-            HttpURLConnection connection = null;
-
             String connectionString = getUrl();
 
             Map<String, String> routeProperties = getPropertiesFromRoute(route);
 
-            URL url = new URL(connectionString + "?" + getProperties(routeProperties) + getProperties(extraProperties));
+            URL url = new URL(connectionString + "?" + getProperties(routeProperties) + "&" + getProperties(extraProperties));
+
+            String resp = getResponse(url);
+
+            JSONObject root = new JSONObject(resp);
+
+            String geojson = getGeoJsonFromObject(root);
+
+            List<IGeoLocation> locations = DecodeGeoJson(geojson);
+
+            return locations;
 
         } catch (MalformedURLException ex) {
             Logger.getLogger(GeoJsonProvider.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(GeoJsonProvider.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidCoordinateException ex) {
+            Logger.getLogger(GeoJsonProvider.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     private String getUrl() {
@@ -78,6 +100,7 @@ public class GeoJsonProvider implements GeoJsonRemote {
     }
 
     private void fillProperties() {
+        extraProperties = new HashMap<>();
         String parser = properties.getProperty("properties");
         if (parser != null && (!parser.equals(""))) {
             String[] parserArray = parser.split(",");
@@ -119,7 +142,77 @@ public class GeoJsonProvider implements GeoJsonRemote {
     }
 
     private String FormatGeoLocation(IGeoLocation loc) {
-        return loc.getLatitude()+","+loc.getLongitude();
+        return loc.getLatitude() + "," + loc.getLongitude();
+    }
+
+    private String getResponse(URL url) throws IOException {
+        HttpsURLConnection connection = null;
+        connection = (HttpsURLConnection) url.openConnection();
+        InputStream is = connection.getInputStream();
+        BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+        StringBuilder response = new StringBuilder();
+        String line;
+        while ((line = rd.readLine()) != null) {
+            response.append(line);
+            response.append('\n');
+        }
+        rd.close();
+        return response.toString();
+    }
+
+    private String getGeoJsonFromObject(JSONObject root) {
+        if (!root.isNull("routes")) {
+            JSONArray array = root.getJSONArray("routes");
+            if (array != null && !array.isNull(0)) {
+                JSONObject obj = (JSONObject) array.get(0);
+                if (!obj.isNull("overview_polyline")) {
+                    JSONObject polyline = obj.getJSONObject("overview_polyline");
+                    if (polyline != null && !polyline.isNull("points")) {
+                        return polyline.getString("points");
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private List<IGeoLocation> DecodeGeoJson(String encoded) throws InvalidCoordinateException {
+        List<IGeoLocation> locations = new ArrayList<IGeoLocation>();
+
+        int index = 0;
+        int order = 0;
+        int lat = 0, lng = 0;
+
+        while (index < encoded.length()) {
+            int b, shift = 0, result = 0;
+            do {
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lat += dlat;
+
+            shift = 0;
+            result = 0;
+            
+            do {
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lng += dlng;
+
+            IGeoLocation p = new GeoLocation((double) lat / 100000, (double) lng / 100000);
+            p.setSortRank(order);
+            order++;
+
+            locations.add(p);
+
+        }
+        return locations;
+
     }
 
 }

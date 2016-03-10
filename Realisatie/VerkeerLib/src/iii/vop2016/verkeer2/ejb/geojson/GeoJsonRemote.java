@@ -5,7 +5,9 @@
  */
 package iii.vop2016.verkeer2.ejb.geojson;
 
+import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
+import java.util.List;
 import javax.ejb.Remote;
 
 /**
@@ -15,5 +17,5 @@ import javax.ejb.Remote;
 @Remote
 public interface GeoJsonRemote {
     
-    void getGeoJson(IRoute route);
+    List<IGeoLocation> getGeoJson(IRoute route);
 }
