@@ -2,36 +2,39 @@
 <application version="7" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/application_7.xsd">
   <display-name>Verkeer2</display-name>
   <module>
-    <ejb>TimerScheduler.jar</ejb>
-  </module>
-  <module>
-    <web>
-      <web-uri>RestApi.war</web-uri>
-      <context-root>/rest</context-root>
-    </web>
-  </module>
-  <module>
     <ejb>GeneralDAO.jar</ejb>
-  </module>
-  <module>
-    <ejb>HereSourceAdapter.jar</ejb>
-  </module>
-  <module>
-    <ejb>TrafficDataDAO.jar</ejb>
   </module>
   <module>
     <ejb>GoogleMapsSourceAdapter.jar</ejb>
   </module>
   <module>
+    <ejb>HereSourceAdapter.jar</ejb>
+  </module>
+  <module>
+    <ejb>TimerScheduler.jar</ejb>
+  </module>
+  <module>
+    <ejb>GeoJsonProvider.jar</ejb>
+  </module>
+  <module>
+    <ejb>TrafficDataDAO.jar</ejb>
+  </module>
+  <module>
     <ejb>GeneralDAONoDB.jar</ejb>
   </module>
   <module>
-    <ejb>TrafficDataDownloader.jar</ejb>
+    <web>
+      <web-uri>RestApi.war</web-uri>
+      <context-root>/RestApi</context-root>
+    </web>
+  </module>
+  <module>
+    <ejb>Logger.jar</ejb>
   </module>
   <module>
     <ejb>TrafficDataDownstreamAnalyser.jar</ejb>
   </module>
   <module>
-    <ejb>Logger.jar</ejb>
+    <ejb>TrafficDataDownloader.jar</ejb>
   </module>
 </application>
