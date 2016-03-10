@@ -16,12 +16,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -55,100 +52,93 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
         int duration=0;
         int distance=0;
         
+        String URL;
+        
         List<IGeoLocation> geoLocations= route.getGeolocations();
-        String URL=createURL(geoLocations);
+        
+        //every call is divided in several parts with each just one start and one endpoint to reduce the number of call to the API
+        for (int i=0;i<geoLocations.size()-1;i++){
+            
+            URL =createURL(geoLocations.get(i),geoLocations.get(i+1));
+            try{
+                URL obj = new URL(URL);
+                HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+                
+                //Optional, GET is default
+                con.setRequestMethod("GET");
 
-        try {
-            URL obj = new URL(URL);
-            //try {
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-            //Optional, GET is default
-            con.setRequestMethod("GET");
-
-            //This sections puts the HttpAnswer in a String
-            BufferedReader in = new BufferedReader(
+                //This sections puts the HttpAnswer in a String
+                BufferedReader in = new BufferedReader(
                     new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
+                String inputLine;
+                StringBuffer response = new StringBuffer();
 
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
 
-            //This section interpretes the JSON
-            JSONObject jsonobj = new JSONObject(response.toString());
-            //First check if statuscode of JSON is OK
-            if (jsonobj.getString("status").equalsIgnoreCase("Ok")) {
-                JSONArray rows = jsonobj.getJSONArray("rows"); //Gets an array with all the 'rows' of the JSON,a row has one or more 'elements', one row for each origin
-                for (int i = 0; i < rows.length(); i++) {
-                    JSONArray elements = rows.getJSONObject(i).getJSONArray("elements"); //Gets an array with all the 'elements' of the JSON, one 'element' for each destination
+                //This section interpretes the JSON
+                JSONObject jsonobj = new JSONObject(response.toString());
+                //First check if statuscode of JSON is OK
+                if (jsonobj.getString("status").equalsIgnoreCase("Ok")) {
+                    JSONArray rows = jsonobj.getJSONArray("rows"); //Gets an array with all the 'rows' of the JSON,a row has one or more 'elements', one row for each origin
+                        for (int j = 0; j < rows.length(); j++) {
+                        JSONArray elements = rows.getJSONObject(j).getJSONArray("elements"); //Gets an array with all the 'elements' of the JSON, one 'element' for each destination
                     
-                    //indien er geen resultaten zijn zal je als resultaat status: ZERO RESULTS krijgen in de elements array
-                    JSONObject status1 = elements.getJSONObject(0);
-                    String status = (String) status1.getString("status");
-                    if(status.equalsIgnoreCase("ZERO_RESULTS")){
-                        throw new DataAccessException("Cannot access data from Google Maps adapter");
-                    }
+                        //indien er geen resultaten zijn zal je als resultaat status: ZERO RESULTS krijgen in de elements array
+                        JSONObject status1 = elements.getJSONObject(0);
+                        String status = (String) status1.getString("status");
+                        if(status.equalsIgnoreCase("ZERO_RESULTS")){
+                            throw new DataAccessException("Cannot access data from Google Maps adapter");
+                        }
                     
-                    for (int j = 0; j < elements.length(); j++) {
+                        for (int k = 0; k < elements.length(); k++) {
 
-                        //The API returns the distances and durations in a matrix (of origins and distinations)
-                        //because of the way the URL is constructed, the only interesting data for this app are on the diagonal of the matrix
-                        //the durations and distances are cumulated to get the total distance and duration from start- to endpoint
-                        if (i == j) {
-                            duration = duration + elements.getJSONObject(j).getJSONObject("duration_in_traffic").getInt("value");
-                            distance = distance + elements.getJSONObject(j).getJSONObject("distance").getInt("value");
+                            //The API returns the distances and durations in a matrix (of origins and distinations)
+                            //because of the way the URL is constructed, the only interesting data for this app are on the diagonal of the matrix
+                            //the durations and distances are cumulated to get the total distance and duration from start- to endpoint
+                            if (j == k) {
+                                duration = duration + elements.getJSONObject(k).getJSONObject("duration_in_traffic").getInt("value");
+                                distance = distance + elements.getJSONObject(k).getJSONObject("distance").getInt("value");
+                            }
                         }
                     }
-                }
-            } else {
-                throw new DataAccessException("Cannot access data from Google Maps adapter");
+                } else {
+                    throw new DataAccessException("Cannot access data from Google Maps adapter");
             }
-            rd = new RouteData();
-            rd.setProvider(getProviderName());
-            rd.setDistance(distance);
-            rd.setDuration(duration);
-            rd.setRouteId(route.getId());
-            rd.setTimestamp(new Date());
-
-            /*  } catch (IOException ex) {
-                Logger.getLogger(GoogleMapsSourceAdapter.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
-        } catch (IOException ex) {
-            throw new URLException("Wrong URL for Google Maps adapter");
+            } 
+            catch (IOException ex) {
+                throw new URLException("Wrong URL for Google Maps adapter");
+            }
+            
         }
 
-        //TODO
+        rd = new RouteData();
+        rd.setProvider(getProviderName());
+        rd.setDistance(distance);
+        rd.setDuration(duration);
+        rd.setRouteId(route.getId());
+        rd.setTimestamp(new Date());
+        
         return rd;
 
-        //make IRouteDataobject and fill with distance, duration, timestamp and route
-        //where must this class be instantiated
-        //what to do when status is not ok?
-        //return null;
-    }
 
-    //Method to create the correct Google API URL, based on all the geoLocations
-    private String createURL(List<IGeoLocation> geoLocations){
+    }
+   
+    //Method to create the correct Google API URL, based on a start an end location
+    private String createURL(IGeoLocation start, IGeoLocation end){
         StringBuilder sb= new StringBuilder(basicURL);
         sb.append("origins=");
-        //Loop to put all the origins in the URL = all the geoLocations, except for the last one
-        for (int i=0;i<geoLocations.size()-1;i++){
-            sb.append(geoLocations.get(i).getLatitude());
-            sb.append(",");
-            sb.append(geoLocations.get(i).getLongitude());
-            sb.append("|");
-        }
-        sb.deleteCharAt(sb.length() - 1); //Delete the last '|' sign
+        sb.append(start.getLatitude());
+        sb.append(",");
+        sb.append(start.getLongitude());
+       
         sb.append("&destinations=");
-        //Loop to put all the destinations in the URL = all the geoLocations, except for the first one
-        for (int i=1;i<geoLocations.size();i++){
-            sb.append(geoLocations.get(i).getLatitude());
-            sb.append(",");
-            sb.append(geoLocations.get(i).getLongitude());
-            sb.append("|");
-        }
-        sb.deleteCharAt(sb.length() - 1); //Delete the last '|' sign
+        sb.append(end.getLatitude());
+        sb.append(",");
+        sb.append(end.getLongitude());
+        
         sb.append("&traffic_model&departure_time=now");
         sb.append("&key=");
         
