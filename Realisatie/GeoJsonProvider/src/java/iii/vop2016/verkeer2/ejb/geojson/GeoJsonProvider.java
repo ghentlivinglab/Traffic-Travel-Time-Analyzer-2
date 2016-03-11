@@ -67,7 +67,7 @@ public class GeoJsonProvider implements GeoJsonRemote {
     }
 
     @Override
-    public List<IGeoLocation> getGeoJson(IRoute route) {
+    public List<IGeoLocation> getRoutePlotGeoLocations(IRoute route) {
         try {
             String connectionString = getUrl();
 
@@ -93,6 +93,13 @@ public class GeoJsonProvider implements GeoJsonRemote {
             Logger.getLogger(GeoJsonProvider.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    @Override
+    public String getGeoJson(List<IGeoLocation> locations){
+        
+        
+        return "";
     }
 
     private String getUrl() {

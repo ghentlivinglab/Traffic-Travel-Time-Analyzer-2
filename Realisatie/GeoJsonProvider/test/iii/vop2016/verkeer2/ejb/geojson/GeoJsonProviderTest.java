@@ -40,6 +40,7 @@ public class GeoJsonProviderTest {
     
     @BeforeClass
     public static void setUpClass() {
+        System.out.println("Setup");
         try {
             instance = new GeoJsonProvider();
             instance.properties = new Properties();
@@ -48,6 +49,7 @@ public class GeoJsonProviderTest {
         } catch (IOException ex) {
             Logger.getLogger(GeoJsonProviderTest.class.getName()).log(Level.SEVERE, null, ex);
         }
+        System.out.println("Setup done");
         
     }
 
@@ -65,14 +67,14 @@ public class GeoJsonProviderTest {
     }
 
     /**
-     * Test of getGeoJson method, of class GeoJsonProvider.
+     * Test of getRoutePlotGeoLocations method, of class GeoJsonProvider.
      */
     @Test
-    public void testGetGeoJson() throws Exception {
-        System.out.println("getGeoJson");
+    public void testGetRoutePlotGeoLocations() throws Exception {
+        System.out.println("getRoutePlotGeoLocations");
 
         IRoute r = CreateTestRoute();
-        List<IGeoLocation> list = instance.getGeoJson(r);
+        List<IGeoLocation> list = instance.getRoutePlotGeoLocations(r);
 
         assertEquals(84,list.size());
     }
