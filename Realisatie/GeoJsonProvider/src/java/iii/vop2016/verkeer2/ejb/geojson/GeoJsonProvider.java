@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -30,6 +31,10 @@ import javax.annotation.Resource;
 import javax.ejb.SessionContext;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonValue;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.net.ssl.HttpsURLConnection;
@@ -94,12 +99,15 @@ public class GeoJsonProvider implements GeoJsonRemote {
         }
         return null;
     }
-    
+
     @Override
-    public String getGeoJson(List<IGeoLocation> locations){
-        
-        
-        return "";
+    public String getGeoJson(List<IGeoLocation> locations, IRoute route) {
+
+        //JsonObjectBuilder b = Json.createObjectBuilder();
+        //b.add("type", "FeatureCollection");
+        //b.add("features", getGeoJsonFeaturesArray(locations, route.getId()));
+
+        return getGeoJsonFeature(locations,route.getId()).build().toString();
     }
 
     private String getUrl() {
@@ -202,7 +210,7 @@ public class GeoJsonProvider implements GeoJsonRemote {
 
             shift = 0;
             result = 0;
-            
+
             do {
                 b = encoded.charAt(index++) - 63;
                 result |= (b & 0x1f) << shift;
@@ -220,6 +228,48 @@ public class GeoJsonProvider implements GeoJsonRemote {
         }
         return locations;
 
+    }
+
+    private JsonArrayBuilder getGeoJsonFeaturesArray(List<IGeoLocation> locations, long routeId) {
+        JsonArrayBuilder b = Json.createArrayBuilder();
+        b.add(getGeoJsonFeature(locations, routeId));
+        return b;
+    }
+
+    private JsonObjectBuilder getGeoJsonFeature(List<IGeoLocation> l, long routeId) {
+        JsonObjectBuilder b = Json.createObjectBuilder();
+        b.add("type", "Feature");
+        b.add("geomtry", getGeoJsonGeometry(l));
+        b.add("properties", getGeoJsonProperties(l, routeId));
+
+        return b;
+    }
+
+    private JsonObjectBuilder getGeoJsonGeometry(List<IGeoLocation> l) {
+        JsonObjectBuilder b = Json.createObjectBuilder();
+        b.add("type", "LineString");
+        b.add("coordinates", getGeoJsonLineString(l));
+        return b;
+    }
+
+    private JsonObjectBuilder getGeoJsonProperties(List<IGeoLocation> l, long routeId) {
+        JsonObjectBuilder b = Json.createObjectBuilder();
+        b.add("prop0", routeId);
+        b.add("color", "green");
+        return b;
+    }
+
+    private JsonArrayBuilder getGeoJsonLineString(List<IGeoLocation> l) {
+        JsonArrayBuilder array = Json.createArrayBuilder();
+        if (l.size() > 1) {
+            for (IGeoLocation geoloc: l) {
+                JsonArrayBuilder geoloc_array = Json.createArrayBuilder();
+                geoloc_array.add(geoloc.getLatitude());
+                geoloc_array.add(geoloc.getLongitude());
+                array.add(geoloc_array);
+            }
+        }
+        return array;
     }
 
 }

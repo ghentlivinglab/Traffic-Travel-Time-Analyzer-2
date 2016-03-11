@@ -79,6 +79,16 @@ public class GeoJsonProviderTest {
         assertEquals(84,list.size());
     }
 
+    @Test
+    public void testGetGeoJson() throws Exception{
+        System.out.println("getGeoJson");
+        IRoute r = CreateTestRoute();
+        List<IGeoLocation> list = instance.getRoutePlotGeoLocations(r);
+        String json = instance.getGeoJson(list, r);
+        
+        System.out.println("dq");
+    }
+    
     private IRoute CreateTestRoute() {
         try {
             IRoute r = new Route("R4 Zelzate");
@@ -96,5 +106,7 @@ public class GeoJsonProviderTest {
         }
         return null;
     }
+    
+    
 
 }

@@ -37,4 +37,10 @@
   <module>
     <ejb>TrafficDataDownloader.jar</ejb>
   </module>
+  <module>
+    <web>
+      <web-uri>LeafLetTest.war</web-uri>
+      <context-root>/LeafLetTest</context-root>
+    </web>
+  </module>
 </application>
