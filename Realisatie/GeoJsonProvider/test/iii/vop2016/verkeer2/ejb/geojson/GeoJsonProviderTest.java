@@ -12,6 +12,7 @@ import iii.vop2016.verkeer2.ejb.components.Route;
 import iii.vop2016.verkeer2.ejb.helper.InvalidCoordinateException;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +45,7 @@ public class GeoJsonProviderTest {
         try {
             instance = new GeoJsonProvider();
             instance.properties = new Properties();
-            instance.properties.load(new FileInputStream("C:/Users/tobia/Documents/baproef/verkeer-2/Realisatie/GeoJsonProvider.properties"));
+            instance.properties.load(new FileInputStream("C:/Users/Tobias/Documents/verkeer-2/Realisatie/GeoJsonProvider.properties"));
             instance.init();
         } catch (IOException ex) {
             Logger.getLogger(GeoJsonProviderTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -83,9 +84,17 @@ public class GeoJsonProviderTest {
     public void testGetGeoJson() throws Exception{
         System.out.println("getGeoJson");
         IRoute r = CreateTestRoute();
-        List<IGeoLocation> list = instance.getRoutePlotGeoLocations(r);
-        String json = instance.getGeoJson(list, r);
+        IRoute r2 = CreateTestRoute2();
+
         
+        List<IGeoLocation> list = instance.getRoutePlotGeoLocations(r);
+        List<IGeoLocation> list2 = instance.getRoutePlotGeoLocations(r2);
+        
+        Map<IRoute,List<IGeoLocation>> map = new HashMap<>();
+        map.put(r, list);
+        map.put(r2, list2);
+        
+        String json = instance.getGeoJson(map);
         System.out.println("dq");
     }
     
@@ -100,6 +109,25 @@ public class GeoJsonProviderTest {
             geolocation2.setName("Gent");
             r.addGeolocation(geolocation1);
             r.addGeolocation(geolocation2);
+            return r;
+        } catch (InvalidCoordinateException ex) {
+            Logger.getLogger(GeoJsonProviderTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+        private IRoute CreateTestRoute2() {
+        try {
+            IRoute r = new Route("R4 Zelzate andere");
+
+            //r.setInverseRoute(r);
+            IGeoLocation geolocation1 = new GeoLocation(51.195338, 3.828952);
+            IGeoLocation geolocation2 = new GeoLocation(51.085447, 3.755755);
+            geolocation1.setName("Zelzate");
+            geolocation2.setName("Gent");
+            r.addGeolocation(geolocation1);
+            r.addGeolocation(geolocation2);
+            r.setId(1);
             return r;
         } catch (InvalidCoordinateException ex) {
             Logger.getLogger(GeoJsonProviderTest.class.getName()).log(Level.SEVERE, null, ex);

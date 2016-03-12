@@ -14,7 +14,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -101,13 +100,17 @@ public class GeoJsonProvider implements GeoJsonRemote {
     }
 
     @Override
-    public String getGeoJson(List<IGeoLocation> locations, IRoute route) {
-
-        //JsonObjectBuilder b = Json.createObjectBuilder();
-        //b.add("type", "FeatureCollection");
-        //b.add("features", getGeoJsonFeaturesArray(locations, route.getId()));
-
-        return getGeoJsonFeature(locations,route.getId()).build().toString();
+    public String getGeoJson(Map<IRoute,List<IGeoLocation>> list) {
+        if(list.size() == 1){
+            Map.Entry<IRoute,List<IGeoLocation>> vals = list.entrySet().iterator().next();
+            return getGeoJsonFeature(vals.getValue(),vals.getKey().getId()).build().toString();
+        }
+        
+        JsonArrayBuilder arr = Json.createArrayBuilder();
+        for(Map.Entry<IRoute,List<IGeoLocation>> val : list.entrySet()){
+            arr.add(getGeoJsonFeature(val.getValue(),val.getKey().getId()));
+        }
+        return arr.build().toString();
     }
 
     private String getUrl() {
@@ -239,7 +242,7 @@ public class GeoJsonProvider implements GeoJsonRemote {
     private JsonObjectBuilder getGeoJsonFeature(List<IGeoLocation> l, long routeId) {
         JsonObjectBuilder b = Json.createObjectBuilder();
         b.add("type", "Feature");
-        b.add("geomtry", getGeoJsonGeometry(l));
+        b.add("geometry", getGeoJsonGeometry(l));
         b.add("properties", getGeoJsonProperties(l, routeId));
 
         return b;
@@ -254,8 +257,8 @@ public class GeoJsonProvider implements GeoJsonRemote {
 
     private JsonObjectBuilder getGeoJsonProperties(List<IGeoLocation> l, long routeId) {
         JsonObjectBuilder b = Json.createObjectBuilder();
-        b.add("prop0", routeId);
-        b.add("color", "green");
+        b.add("description", routeId);
+        b.add("color", "#33cc33");
         return b;
     }
 
@@ -264,8 +267,8 @@ public class GeoJsonProvider implements GeoJsonRemote {
         if (l.size() > 1) {
             for (IGeoLocation geoloc: l) {
                 JsonArrayBuilder geoloc_array = Json.createArrayBuilder();
-                geoloc_array.add(geoloc.getLatitude());
                 geoloc_array.add(geoloc.getLongitude());
+                geoloc_array.add(geoloc.getLatitude());
                 array.add(geoloc_array);
             }
         }
