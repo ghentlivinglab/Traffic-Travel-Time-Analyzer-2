@@ -49,6 +49,7 @@ public class GeoLocation implements IGeoLocation {
         this.longitude = component.getLongitude();
         this.latitude = component.getLatitude();
         this.name = component.getName();
+        this.sortRank = component.getSortRank();
     }
 
     @Override

@@ -16,7 +16,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.ejb.SessionContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -26,6 +25,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.ws.rs.PathParam;
+import javax.xml.ws.WebServiceContext;
 
 /**
  * REST Web Service
@@ -42,12 +42,11 @@ public class GeojsonResource {
     public GeojsonResource() {
     }
 
-        
     @Resource
-    private SessionContext sctx;
+    private WebServiceContext webServiceContext;
     private InitialContext ctx;
     private static BeanFactory beans;
-    
+
     @PostConstruct
     private void init() {
         try {
@@ -55,7 +54,7 @@ public class GeojsonResource {
         } catch (NamingException ex) {
             Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        beans = BeanFactory.getInstance(ctx, sctx);
+        beans = BeanFactory.getInstance(ctx, null);
     }
 
     @GET
@@ -64,15 +63,16 @@ public class GeojsonResource {
     public String getGeoJson(@PathParam("routeId") String routeString) {
         long routeId = Long.parseLong(routeString);
         IRoute route = beans.getGeneralDAO().getRoute(routeId);
-        if(route == null)
+        if (route == null) {
             return "";
-        
-        GeoJsonRemote provider =  beans.getGeoJsonProvider();
+        }
+
+        GeoJsonRemote provider = beans.getGeoJsonProvider();
         List<IGeoLocation> list = provider.getRoutePlotGeoLocations(route);
-        
-        Map<IRoute,List<IGeoLocation>> map = new HashMap<>();
+
+        Map<IRoute, List<IGeoLocation>> map = new HashMap<>();
         map.put(route, list);
-        
+
         return provider.getGeoJson(map);
     }
 }

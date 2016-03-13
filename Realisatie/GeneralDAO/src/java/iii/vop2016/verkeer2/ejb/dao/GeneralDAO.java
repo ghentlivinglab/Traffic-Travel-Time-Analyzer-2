@@ -6,10 +6,12 @@
 package iii.vop2016.verkeer2.ejb.dao;
 
 import iii.vop2016.verkeer2.ejb.components.GeoLocation;
+import iii.vop2016.verkeer2.ejb.components.GeoLocationComparator;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.Route;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -176,6 +178,8 @@ public class GeneralDAO implements GeneralDAORemote {
         List<IGeoLocation> ret =  new ArrayList<>();
         for(GeoLocationMappingEntity e : list)
             ret.add(new GeoLocation(e));
+        
+        Collections.sort(ret, new GeoLocationComparator());
         
         return ret;
     }

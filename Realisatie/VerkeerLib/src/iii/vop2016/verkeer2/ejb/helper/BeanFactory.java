@@ -82,12 +82,12 @@ public class BeanFactory {
     public GeoJsonRemote getGeoJsonProvider() {
         if (sctx != null) {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.GeoJsonProvider, sctx, Logger.getGlobal());
-            if (obj instanceof ITrafficDataDownstreamAnalyser) {
+            if (obj instanceof GeoJsonRemote) {
                 return (GeoJsonRemote) obj;
             }
         } else {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.GeoJsonProvider, ctx, Logger.getGlobal());
-            if (obj instanceof ITrafficDataDownstreamAnalyser) {
+            if (obj instanceof GeoJsonRemote) {
                 return (GeoJsonRemote) obj;
             }
         }
