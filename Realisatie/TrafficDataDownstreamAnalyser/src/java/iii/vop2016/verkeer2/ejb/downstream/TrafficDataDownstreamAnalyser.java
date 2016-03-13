@@ -45,9 +45,6 @@ public class TrafficDataDownstreamAnalyser implements TrafficDataDownstreamAnaly
         Logger.getLogger("logger").log(Level.INFO, "TrafficDataAnalyzer has been initialized."); 
     }
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
-
     @Override
     public String getProjectName() {
         return "Verkeer-2";

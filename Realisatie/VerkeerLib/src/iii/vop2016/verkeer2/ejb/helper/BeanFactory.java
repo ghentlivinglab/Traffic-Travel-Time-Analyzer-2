@@ -18,6 +18,7 @@ import javax.ejb.SessionContext;
 import javax.naming.InitialContext;
 import iii.vop2016.verkeer2.ejb.datadownloader.ITrafficDataDownloader;
 import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyser;
+import iii.vop2016.verkeer2.ejb.geojson.GeoJsonRemote;
 
 /**
  *
@@ -73,6 +74,21 @@ public class BeanFactory {
             Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.downstreamAnalyser, ctx, Logger.getGlobal());
             if (obj instanceof ITrafficDataDownstreamAnalyser) {
                 return (ITrafficDataDownstreamAnalyser) obj;
+            }
+        }
+        return null;
+    }
+    
+    public GeoJsonRemote getGeoJsonProvider() {
+        if (sctx != null) {
+            Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.GeoJsonProvider, sctx, Logger.getGlobal());
+            if (obj instanceof ITrafficDataDownstreamAnalyser) {
+                return (GeoJsonRemote) obj;
+            }
+        } else {
+            Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.GeoJsonProvider, ctx, Logger.getGlobal());
+            if (obj instanceof ITrafficDataDownstreamAnalyser) {
+                return (GeoJsonRemote) obj;
             }
         }
         return null;

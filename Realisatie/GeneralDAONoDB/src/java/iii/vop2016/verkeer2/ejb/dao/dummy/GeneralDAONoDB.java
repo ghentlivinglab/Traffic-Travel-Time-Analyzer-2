@@ -96,4 +96,14 @@ public class GeneralDAONoDB implements GeneralDAONoDBRemote {
         return false;
     }
 
+    @Override
+    public List<IGeoLocation> getRouteMappingGeolocations(IRoute route) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<IGeoLocation> setRouteMappingGeolocations(IRoute route, List<IGeoLocation> geolocs) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

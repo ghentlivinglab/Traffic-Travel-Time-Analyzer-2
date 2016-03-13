@@ -8,6 +8,8 @@ package iii.vop2016.verkeer2.ejb.geojson;
 import iii.vop2016.verkeer2.ejb.components.GeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
+import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
+import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import iii.vop2016.verkeer2.ejb.helper.InvalidCoordinateException;
 import java.io.BufferedReader;
@@ -50,6 +52,7 @@ public class GeoJsonProvider implements GeoJsonRemote {
     @Resource
     protected SessionContext ctxs;
     protected InitialContext ctx;
+    protected BeanFactory beans;
 
     protected static final String JNDILOOKUP_PROPERTYFILE = "resources/properties/GeoJsonProvider";
     protected Properties properties;
@@ -66,13 +69,27 @@ public class GeoJsonProvider implements GeoJsonRemote {
         if (properties == null) {
             properties = HelperFunctions.RetrievePropertyFile(JNDILOOKUP_PROPERTYFILE, ctx, Logger.getLogger("logger"));
         }
+        
+        beans = BeanFactory.getInstance(ctx, ctxs);
 
         fillProperties();
     }
 
     @Override
     public List<IGeoLocation> getRoutePlotGeoLocations(IRoute route) {
-        try {
+        IGeneralDAO dao = beans.getGeneralDAO();
+        List<IGeoLocation> locations = dao.getRouteMappingGeolocations(route);
+        
+        if(locations == null || locations.size() == 0){
+            locations = getRoutePlotGeoLocationsFromWeb(route);
+            dao.setRouteMappingGeolocations(route, locations);
+        }
+        
+        return locations;
+    }
+    
+    private List<IGeoLocation> getRoutePlotGeoLocationsFromWeb(IRoute route) {
+    try {
             String connectionString = getUrl();
 
             Map<String, String> routeProperties = getPropertiesFromRoute(route);

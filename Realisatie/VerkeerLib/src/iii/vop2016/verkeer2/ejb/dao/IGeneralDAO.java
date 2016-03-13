@@ -21,4 +21,8 @@ public interface IGeneralDAO{
     public IRoute addRoute(IRoute route);
     public void removeRoute(IRoute route);
     
+    public List<IGeoLocation> getRouteMappingGeolocations(IRoute route);
+    public List<IGeoLocation> setRouteMappingGeolocations(IRoute route, List<IGeoLocation> geolocs);
+    
+    
 }

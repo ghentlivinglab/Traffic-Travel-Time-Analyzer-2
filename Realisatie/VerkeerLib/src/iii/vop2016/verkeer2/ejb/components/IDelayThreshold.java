@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package iii.vop2016.verkeer2.ejb.helper;
+package iii.vop2016.verkeer2.ejb.components;
 
 /**
  *
- * @author Tobias
+ * @author tobia
  */
-public enum BeanSelector {
-    downstreamAnalyser,dataManager,generalDAO,trafficDataDAO,Timer,GeoJsonProvider
+public interface IDelayThreshold {
+    IRoute getRoute();
+    int getThreshold();
 }

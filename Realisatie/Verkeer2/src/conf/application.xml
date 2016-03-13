@@ -23,12 +23,6 @@
     <ejb>GeneralDAONoDB.jar</ejb>
   </module>
   <module>
-    <web>
-      <web-uri>RestApi.war</web-uri>
-      <context-root>/RestApi</context-root>
-    </web>
-  </module>
-  <module>
     <ejb>Logger.jar</ejb>
   </module>
   <module>
@@ -41,6 +35,12 @@
     <web>
       <web-uri>LeafLetTest.war</web-uri>
       <context-root>/LeafLetTest</context-root>
+    </web>
+  </module>
+  <module>
+    <web>
+      <web-uri>RestApi.war</web-uri>
+      <context-root>/RestApi</context-root>
     </web>
   </module>
 </application>

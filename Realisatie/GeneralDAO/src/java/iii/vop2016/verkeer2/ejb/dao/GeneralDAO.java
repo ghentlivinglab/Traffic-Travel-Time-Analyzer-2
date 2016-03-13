@@ -166,4 +166,32 @@ public class GeneralDAO implements GeneralDAORemote {
             q.executeUpdate();
         }
     }
+
+    @Override
+    public List<IGeoLocation> getRouteMappingGeolocations(IRoute route) {
+        Query q = em.createQuery("SELECT g FROM GeoLocationMappingEntity g WHERE g.route.id = :id");
+        q.setParameter("id", route.getId());
+        List<GeoLocationMappingEntity> list = q.getResultList();
+        
+        List<IGeoLocation> ret =  new ArrayList<>();
+        for(GeoLocationMappingEntity e : list)
+            ret.add(new GeoLocation(e));
+        
+        return ret;
+    }
+
+    @Override
+    public List<IGeoLocation> setRouteMappingGeolocations(IRoute route,List<IGeoLocation> geolocs) {
+        route = new RouteEntity(route);
+        List<IGeoLocation> retLocs = new ArrayList<>();
+        List<IGeoLocation> storedLocs = getRouteMappingGeolocations(route);
+        if(storedLocs.size() == 0){
+            for(IGeoLocation geoloc : geolocs){
+                GeoLocationMappingEntity location = new GeoLocationMappingEntity(geoloc, route);
+                em.persist(location);
+                retLocs.add(new GeoLocation(location));
+            }
+        }
+        return retLocs;
+    }
 }

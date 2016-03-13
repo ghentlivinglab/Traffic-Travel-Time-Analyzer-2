@@ -29,6 +29,7 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(iii.vop2016.verkeer2.war.rest.GeojsonResource.class);
         resources.add(iii.vop2016.verkeer2.war.rest.ProviderResource.class);
         resources.add(iii.vop2016.verkeer2.war.rest.RoutesResource.class);
     }

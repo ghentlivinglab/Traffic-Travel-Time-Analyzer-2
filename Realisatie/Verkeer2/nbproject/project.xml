@@ -20,10 +20,6 @@
                     <path-in-war>/</path-in-war>
                 </library>
                 <library>
-                    <file>${reference.RestApi.dist-ear}</file>
-                    <path-in-war>/</path-in-war>
-                </library>
-                <library>
                     <file>${reference.GoogleMapsSourceAdapter.dist-ear}</file>
                     <path-in-war>/</path-in-war>
                 </library>
@@ -53,6 +49,10 @@
                 </library>
                 <library>
                     <file>${reference.LeafLetTest.dist-ear}</file>
+                    <path-in-war>/</path-in-war>
+                </library>
+                <library>
+                    <file>${reference.RestApi.dist-ear}</file>
                     <path-in-war>/</path-in-war>
                 </library>
             </web-module-additional-libraries>

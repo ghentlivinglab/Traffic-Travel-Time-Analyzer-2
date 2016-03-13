@@ -64,6 +64,16 @@ public class GeneralDAODummy implements IGeneralDAO{
         geolocation.setId(geolocations.size()-1);
     }
 
+    @Override
+    public List<IGeoLocation> getRouteMappingGeolocations(IRoute route) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<IGeoLocation> setRouteMappingGeolocations(IRoute route, List<IGeoLocation> geolocs) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 
     
 }
