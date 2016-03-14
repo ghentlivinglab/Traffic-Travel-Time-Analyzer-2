@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+        <ui:composition template="./templates/HeaderBodySideRight.xhtml">
+            
+            <ui:define name="page"> Analyse </ui:define>
+
+            <ui:define name="content">
+                
+                <div class="container analyse">
+  
+                    <div class="page">
+                        <h3>Databronnen vergelijken</h3>
+                  
+                        <div class="row">
+                            <div class="col s10">
+                                 <h4>R4: Gent - Zelzate</h4>
+                            </div>
+                            <div class="col s2">
+                                <i class="material-icons">view_list</i>
+                            </div>
+                        </div>
+
+
+
+                        <img src="#{resourceURLimg}/grafiek.PNG" class="responsive-img" />
+
+
+                    
+                    </div>
+                
+                </div>
+                
+                
+            </ui:define>
+
+            <ui:define name="right">
+                <div class="sidebar fixed">
+                    <img src="#{resourceURLimg}/vcg.png" class="logo img-responsive" />
+                    <div class="navigation">
+                        <ul>
+                            <li>
+                                <h:link outcome="pretty:analyse-datasources">
+                                    <i class="material-icons">open_in_browser</i>
+                                    Databronnen vergelijken
+                                </h:link>
+                            </li>
+                            <li class="active">
+                                <a href="live">
+                                    <i class="material-icons">navigation</i>
+                                    Gemiddelde verkeerssituaties
+                                </a>
+                            </li>
+                            <li>
+                                <a href="live">
+                                    <i class="material-icons">query_builder</i>
+                                    Profiel van vertragingen per weekdag
+                               </a>
+                            </li>
+                            <li>
+                                <a href="live">
+                                    <i class="material-icons">settings_input_antenna</i>
+                                    Spitsuren tijdens werkdagen
+                               </a>
+                            </li>
+                            <li>
+                                <a href="live">
+                                    <i class="material-icons">settings</i>
+                                    Trajcten vergelijken
+                               </a>
+                            </li>
+                            <li>
+                                <a href="live">
+                                    <i class="material-icons">settings</i>
+                                    Perioden vergelijken
+                               </a>
+                            </li>
+                        </ul>
+                        
+                      
+                    </div>
+                          
+                    
+                </div>
+                
+            </ui:define>
+            
+                
+    
+            <ui:define name="javascript">
+                
+                
+            </ui:define>
+
+        </ui:composition>
+
+    
+    
+
+
+</html>
