@@ -75,4 +75,23 @@ public class GeojsonResource {
 
         return provider.getGeoJson(map);
     }
+
+    @GET
+    @Path("all")
+    @Produces("application/json")
+    public String getGeoJson() {
+        List<IRoute> routes = beans.getGeneralDAO().getRoutes();
+        if (routes == null) {
+            return "";
+        }
+
+        Map<IRoute, List<IGeoLocation>> map = new HashMap<>();
+        GeoJsonRemote provider = beans.getGeoJsonProvider();
+        for (IRoute route : routes) {
+            List<IGeoLocation> list = provider.getRoutePlotGeoLocations(route);
+            map.put(route, list);
+        }
+        
+        return provider.getGeoJson(map);
+    }
 }
