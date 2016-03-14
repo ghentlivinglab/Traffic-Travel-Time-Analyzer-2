@@ -1,0 +1,67 @@
+#map{
+    
+    width: 100%;
+    height: 100%;
+    
+    .mapSwitch {
+        z-index:99999999;
+        position:absolute;
+        right: 10px;
+    }
+    
+    .pagination{
+        
+        position: relative;
+        float: right;
+        right: 0;
+        
+             
+        li{
+            background-color:white; 
+
+            &.active { background-color: $primary-color; }
+        }
+
+    }
+
+}
+
+.trafficinfo{
+    
+    overflow-y: scroll;
+    max-height: 100%;
+    overflow-x: hidden;
+    
+    span.badge {
+        //position: relative;
+        font-weight: 300;
+        font-size: 0.8rem;
+        border-radius: 2px;
+        padding:2px 5px;
+
+        &.slow {
+          color: #fff;
+          background-color: $traffic-slow;
+        }
+
+        &.medium {
+          
+          color: #fff;
+          background-color: $traffic-medium;
+
+        }
+
+        &.fast {
+          
+          color: #fff;
+          background-color: $traffic-fast;
+
+        }
+    }
+    
+    .traffic-list li{
+        opacity: 0;
+    }
+
+}
+

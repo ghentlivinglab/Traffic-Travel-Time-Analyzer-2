@@ -1,0 +1,48 @@
+<pretty-config xmlns="http://ocpsoft.org/schema/rewrite-config-prettyfaces" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://ocpsoft.org/schema/rewrite-config-prettyfaces
+                      http://ocpsoft.org/xml/ns/prettyfaces/rewrite-config-prettyfaces.xsd">
+
+	<url-mapping id="index">
+		<pattern value="/" />
+		<view-id value="/faces/index.xhtml" />
+	</url-mapping>
+        
+        <url-mapping id="resources-img">
+		<pattern value="/resources/img" />
+                <view-id value="/resources/img" />
+	</url-mapping>
+        
+        <url-mapping id="resources-css">
+		<pattern value="/resources/css" />
+                <view-id value="/resources/css" />
+	</url-mapping>
+        
+        <url-mapping id="resources-js">
+		<pattern value="/resources/js" />
+                <view-id value="/resources/js" />
+	</url-mapping>
+        
+       
+        <url-mapping id="map">
+		<pattern value="/map" />
+		<view-id value="/faces/live.xhtml" />
+	</url-mapping>
+        
+        <url-mapping id="analyse">
+		<pattern value="/analyser" />
+		<view-id value="/faces/analyse.xhtml" />
+	</url-mapping>
+        
+        <url-mapping id="analyse-datasources">
+		<pattern value="/analyser/datasources" />
+		<view-id value="/faces/datasourcecompare.xhtml" />
+	</url-mapping>
+        
+        <url-mapping id="settings">
+		<pattern value="/settings" />
+		<view-id value="/faces/settings.xhtml" />
+	</url-mapping>
+        
+
+</pretty-config>
