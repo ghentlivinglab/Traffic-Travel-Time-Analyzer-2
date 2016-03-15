@@ -5,7 +5,6 @@
  */
 package iii.vop2016.verkeer2.ejb.datasources;
 
-import iii.vop2016.verkeer2.ejb.datasources.HereSourceAdapterRemote;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
@@ -18,9 +17,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -34,15 +31,14 @@ import org.json.JSONObject;
  * @author Simon
  */
 @Singleton
-public class HereSourceAdapter implements HereSourceAdapterRemote {
+public class TomTomSourceAdapter implements TomTomSourceAdapterRemote {
 
-    private final String appId = "KcOsDG6cNwwshKhALecH";
-    private final String appCode = "K-gS30K9dbNrznv5TonvHQ";
-    private static final String providerName = "Here";
+    private final String appCode = "rz6c5wupat8ts4wcq8yc8bwh";
+    private static final String providerName = "TomTom";
 
     @PostConstruct
     public void init() {
-        Logger.getLogger("logger").log(Level.INFO, "HereSourceAdapter has been initialized.");
+        Logger.getLogger("logger").log(Level.INFO, "TomTomSourceAdapter has been initialized.");
     }
 
     @Override
@@ -55,34 +51,31 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
             //https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.json%22%20AND%20a%3A%22json%22
             //https://github.com/stleary/JSON-java
             //opletten voor decimale komma die moet vervangen worden door punt
-            //AppId = KcOsDG6cNwwshKhALecH
-            //AppCode = K-gS30K9dbNrznv5TonvHQ
             //mode = shortest
-            //traffic = enabled
+            //traffic = true
             List<IGeoLocation> waypoints = route.getGeolocations();
             IGeoLocation waypoint = null;
-            StringBuilder builder = new StringBuilder("https://route.cit.api.here.com/routing/7.2/calculateroute.json?");
+            StringBuilder builder = new StringBuilder("https://api.tomtom.com/routing/1/calculateRoute/");
 
             for (int i = 0; i < waypoints.size(); i++) {
                 if (i != 0) {
-                    builder.append("&");
+                    builder.append(":");
                 }
                 waypoint = waypoints.get(i);
-                builder.append("waypoint").append(i).append("=").append(String.valueOf(waypoint.getLatitude()).replace(',', '.')).append(",").append(String.valueOf(waypoint.getLongitude()).replace(',', '.'));
+                builder.append(String.valueOf(waypoint.getLatitude()).replace(',', '.')).append(",").append(String.valueOf(waypoint.getLongitude()).replace(',', '.'));
             }
 
-            builder.append("&mode=shortest%3Bcar%3Btraffic%3Aenabled&app_id=").append(appId).append("&app_code=").append(appCode).append("&departure=now");
+            builder.append("/json?routeType=shortest&traffic=true&travelMode=car&key=").append(appCode);
             //builder.append("&mode=fastest%3Bcar%3Btraffic%3Aenabled&app_id=KcOsDG6cNwwshKhALecH&app_code=K-gS30K9dbNrznv5TonvHQ&departure=now");
-
+            //System.out.println(builder.toString());
             JSONObject json = new JSONObject(readUrl(builder.toString()));
-            JSONObject resp = (JSONObject) json.get("response");
-            JSONArray routear = (JSONArray) resp.get("route");
-            JSONObject routeob = (JSONObject) routear.getJSONObject(0);
-            JSONObject summary = (JSONObject) routeob.get("summary");
+            JSONArray routejson = json.getJSONArray("routes");
+            JSONObject summary = routejson.getJSONObject(0);
+            JSONObject data = summary.getJSONObject("summary");
 
-            int seconds = (int) summary.get("trafficTime");
-            int distance = (int) summary.get("distance");
-
+            int seconds = data.getInt("travelTimeInSeconds");
+            int distance = data.getInt("lengthInMeters");
+            System.out.println(seconds + " "+ distance);
             rd = new RouteData();
             rd.setProvider(getProviderName());
             rd.setDistance(distance);
@@ -102,9 +95,9 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
         }
              */
         } catch (URLException e) {
-            throw new URLException("Wrong URL for Here adapter");
+            throw new URLException("Wrong URL for TomTom adapter");
         } catch (JSONException | DataAccessException e) {
-            throw new DataAccessException("Cannot access data for Here adapter");
+            throw new DataAccessException("Cannot access data for TomTom adapter");
         }
         return rd;
     }
@@ -123,16 +116,16 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
             //System.out.println(buffer.toString());
             return buffer.toString();
         } catch (MalformedURLException ex) {
-            throw new URLException("Wrong URL for Here adapter");
+            throw new URLException("Wrong URL for TomTom adapter");
         } catch (IOException e) {
-            throw new DataAccessException("Cannot access data for Here adapter");
+            throw new DataAccessException("Cannot access data for TomTom adapter");
         } finally {
             try {
                 if (reader != null) {
                     reader.close();
                 }
             } catch (IOException e) {
-                throw new DataAccessException("Cannot access data for Here adapter");
+                throw new DataAccessException("Cannot access data for TomTom adapter");
             }
         }
     }
@@ -143,4 +136,7 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
     public String getProviderName() {
         return providerName;
     }
+
+    // Add business logic below. (Right-click in editor and choose
+    // "Insert Code > Add Business Method")
 }

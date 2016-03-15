@@ -33,14 +33,11 @@
   </module>
   <module>
     <web>
-      <web-uri>LeafLetTest.war</web-uri>
-      <context-root>/LeafLetTest</context-root>
-    </web>
-  </module>
-  <module>
-    <web>
       <web-uri>RestApi.war</web-uri>
       <context-root>/rest</context-root>
     </web>
+  </module>
+  <module>
+    <ejb>TomTomSourceAdapter.jar</ejb>
   </module>
 </application>

@@ -3,15 +3,15 @@
     <type>org.netbeans.modules.j2ee.ejbjarproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/j2ee-ejbjarproject/3">
-            <name>HereSourceAdapter</name>
+            <name>TomTomSourceAdapter</name>
             <minimum-ant-version>1.6.5</minimum-ant-version>
             <included-library dirs="200">reference.VerkeerLib.jar</included-library>
             <included-library dirs="200">file.reference.json-20151123.jar</included-library>
             <source-roots>
-                <root id="src.dir"/>
+                <root id="src.dir" name="Source Packages"/>
             </source-roots>
             <test-roots>
-                <root id="test.src.dir"/>
+                <root id="test.src.dir" name="Test Packages"/>
             </test-roots>
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
