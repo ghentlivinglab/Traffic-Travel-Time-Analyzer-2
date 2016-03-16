@@ -28,6 +28,17 @@ import javax.ejb.TimerConfig;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import iii.vop2016.verkeer2.ejb.datadownloader.ITrafficDataDownloader;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.text.NumberFormat;
+import java.time.DateTimeException;
+import org.apache.commons.net.ntp.NTPUDPClient;
+import org.apache.commons.net.ntp.NtpUtils;
+import org.apache.commons.net.ntp.NtpV3Packet;
+import org.apache.commons.net.ntp.TimeInfo;
+import org.apache.commons.net.ntp.TimeStamp;
+import org.apache.commons.net.time.TimeTCPClient;
 
 /**
  *
@@ -46,13 +57,14 @@ public class TimerScheduler implements TimerSchedulerRemote {
     protected SimpleDateFormat sdf = new SimpleDateFormat("HHmm");
     protected Pattern timeFormat = Pattern.compile("([0-9]{2})-([0-9]{2})");
     protected static final int DEFAULTINTERVAL = 5;
+    protected boolean isRunning;
 
     protected Pattern numberFormat = Pattern.compile("\\d+");
 
     protected InitialContext ctx;
     protected static final String JNDILOOKUP_PROPERTYFILE = "resources/properties/TimerScheduler";
-    protected Properties properties;
-    
+    //protected Properties properties;
+
     protected BeanFactory beans;
 
     /**
@@ -71,56 +83,85 @@ public class TimerScheduler implements TimerSchedulerRemote {
         }
         beans = BeanFactory.getInstance(ctx, ctxs);
 
-        //Get properties file for bean
-        properties = HelperFunctions.RetrievePropertyFile(JNDILOOKUP_PROPERTYFILE, ctx, Logger.getGlobal());
+        Logger.getLogger("logger").log(Level.INFO, "TimerScheduler has been initialized.");
 
-        Logger.getLogger("logger").log(Level.INFO, "TimerScheduler has been initialized.");  
-        
+        Properties prop = getProperties();
+
         //Get interval to closest time for timer from properties file
-        int currentTime = getIndexedCurrentTime();
-        interval = getIntervalForClosestTime(currentTime);
-        Logger.getLogger("logger").log(Level.INFO, "Interval for Timer set to " + interval);   
-        
+        int currentTime = getIndexedCurrentTime(prop);
+        interval = getIntervalForClosestTime(currentTime, prop);
+        Logger.getLogger("logger").log(Level.INFO, "Interval for Timer set to " + interval);
 
         //Create timer with specified interval
-        ticks=0;
+        ticks = 0;
         t = ctxs.getTimerService().createIntervalTimer(1000, 60000, new TimerConfig());
+        isRunning = true;
+    }
+
+    private Properties getProperties() {
+        return HelperFunctions.RetrievePropertyFile(JNDILOOKUP_PROPERTYFILE, ctx, Logger.getGlobal());
     }
 
     /**
-     * Ticks are driven by the Timers, they start the new download cycle for data
+     * Ticks are driven by the Timers, they start the new download cycle for
+     * data
      */
     @Override
     @Timeout
     public void Tick() {
-        int currentTime = getIndexedCurrentTime();
-        
-        if(ticks == interval){
+        if (!isRunning) {
+            return;
+        }
+
+        Properties prop = getProperties();
+
+        int currentTime = getIndexedCurrentTime(prop);
+
+        if (ticks == interval) {
             ticks = 1;
             DoTick();
-        }else{
+        } else {
             ticks++;
         }
 
         //get interval for current time, if different set the timer with specified interval
-        int i = getIntervalForClosestTime(currentTime);
+        int i = getIntervalForClosestTime(currentTime, prop);
         if (i != interval) {
-            DoTick();
-            
+            if (ticks != 1) {
+                DoTick();
+            }
+
             interval = i;
             ticks = 1;
-            Logger.getLogger("logger").log(Level.INFO, "Interval for Timer set to " + interval); 
+            Logger.getLogger("logger").log(Level.INFO, "Interval for Timer set to " + interval);
         }
 
     }
 
-    private int getIndexedCurrentTime() {
-        Calendar cal = Calendar.getInstance();
-        int currentTime = Integer.parseInt(sdf.format(cal.getTime()));
+    private int getIndexedCurrentTime(Properties prop) {
+        Date time = getCurrentTime(prop);
+        int currentTime = Integer.parseInt(sdf.format(time));
         return currentTime;
     }
 
-    private int getIntervalForClosestTime(int currentTime) {
+    private Date getCurrentTime(Properties prop) {
+        Date time = null;
+        int currentTime = -1;
+        try {
+            //retrieve current time from ntp server
+            time = getCurrentTime_ntpServer(prop);
+            if (time == null) {
+                throw new IOException();
+            }
+        } catch (Exception ex) {
+            //use local server time as backup
+            Calendar cal = Calendar.getInstance();
+            time = cal.getTime();
+        }
+        return time;
+    }
+
+    private int getIntervalForClosestTime(int currentTime, Properties properties) {
         if (properties == null) {
             return DEFAULTINTERVAL;
         }
@@ -156,7 +197,7 @@ public class TimerScheduler implements TimerSchedulerRemote {
         return interval;
     }
 
-    private void DoTick() {     
+    private void DoTick() {
         //lookup datamanager bean and trigger timed function
         ITrafficDataDownloader managementBean = beans.getDataManager();
         if (managementBean != null) {
@@ -166,10 +207,82 @@ public class TimerScheduler implements TimerSchedulerRemote {
         }
 
     }
-    
+
     @PreDestroy
-    private void destroy(){
+    private void destroy() {
         t.cancel();
     }
 
+    @Override
+    public void StopTimer() {
+        isRunning = false;
+    }
+
+    @Override
+    public boolean isTimerRunning() {
+        return isRunning;
+    }
+
+    @Override
+    public void StartTimer() {
+        isRunning = true;
+    }
+
+    @Override
+    public int getCurrentInterval() {
+        // interval in seconds
+        return interval * 60;
+    }
+
+    @Override
+    public long getCurrentTime() {
+        Properties prop = getProperties();
+        Date d = getCurrentTime(prop);
+        if (d != null) {
+            return d.getTime();
+        }
+        return -1;
+    }
+
+    private Date getCurrentTime_ntpServer(Properties properties) throws Exception {
+        NTPUDPClient client = new NTPUDPClient();
+        client.setDefaultTimeout(10000);
+        try {
+            client.open();
+            InetAddress hostAddr = InetAddress.getByName(properties.getProperty("ntpserver", ""));
+            TimeInfo info = client.getTime(hostAddr);
+            return processResponse(info);
+        } catch (IOException ioe) {
+            return null;
+        } finally {
+            client.close();
+        }
+    }
+
+    private static final NumberFormat nFormat = new java.text.DecimalFormat("0.00");
+
+    public Date processResponse(TimeInfo info) throws DateTimeException {
+        NtpV3Packet message = info.getMessage();
+        int stratum = message.getStratum();
+        String refType;
+        if (stratum <= 0) {
+            refType = "";
+            throw new DateTimeException("stratum: Unspecified or Unavailable");
+        } else {
+            double disp = message.getRootDispersionInMillisDouble();
+            System.out.println(" rootdelay=" + nFormat.format(message.getRootDelayInMillisDouble()) + ", rootdispersion(ms): " + nFormat.format(disp));
+
+            long destTime = info.getReturnTime();
+            
+            // Transmit time is time reply sent by server (t3)
+            TimeStamp xmitNtpTime = message.getTransmitTimeStamp();
+            info.computeDetails();
+            Long delayValue = info.getDelay();
+            
+            Date date = xmitNtpTime.getDate();
+            date = new Date(date.getTime() + delayValue);
+            
+            return date;
+        }
+    }
 }

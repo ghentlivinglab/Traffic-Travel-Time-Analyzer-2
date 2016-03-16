@@ -11,4 +11,9 @@ package iii.vop2016.verkeer2.ejb.timer;
  */
 public interface ITimer {
         void Tick();
+        void StopTimer();
+        boolean isTimerRunning();
+        void StartTimer();
+        int getCurrentInterval();
+        long getCurrentTime();
 }

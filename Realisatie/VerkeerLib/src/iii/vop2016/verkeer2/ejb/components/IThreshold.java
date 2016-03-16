@@ -9,7 +9,24 @@ package iii.vop2016.verkeer2.ejb.components;
  *
  * @author tobia
  */
-public interface IThreshold {
+public interface IThreshold{
+
+    boolean isThresholdReached(IRoute route, IRouteData data);
+    
+    long getId();
+    
+    void setId(long id);
+    
+    int getLevel();
+
+    void setLevel(int level);
+
+    int getDelayTriggerLevel();
+
+    void setDelayTriggerLevel(int delayTriggerLevel);
+
     IRoute getRoute();
-    int getThreshold();
+
+    void setRoute(IRoute route);
+   
 }
