@@ -40,4 +40,7 @@
   <module>
     <ejb>TomTomSourceAdapter.jar</ejb>
   </module>
+  <module>
+    <ejb>DataProvider.jar</ejb>
+  </module>
 </application>
