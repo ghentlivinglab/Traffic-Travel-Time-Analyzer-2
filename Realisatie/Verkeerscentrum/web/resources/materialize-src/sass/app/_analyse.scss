@@ -1,23 +1,124 @@
 
 .analyse{
     
+    .row{
+        clear: both;
+    }
+    
+    height: 100%;
+    
     .page{
         
-        h3{
-            color: $secondary-color;
-            margin-bottom: 40px;
+       //background: $secondary-color;
+        height: 100%;
+        overflow-y:auto;
+        
+        .header{
+            background: color("teal", "lighten-1");
+            
+            color: white;
+            padding: 50px 30px;
+            
+            h3{
+                margin: 0;
+                color: white;
+            }
         }
+        
+        .container{
+            width:90%;
+        }
+        
+        .content{
+            //height:100%;
+            //background: yellow;
+            padding: 20px;
+        }
+        
         
     }
     
     
     .sidebar{
         
+        //@extend .z-depth-2;
+       
         width: 100%;
+        //background:green;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        background: color("grey","lighten-3");
+        max-height: 100%;
+        height:100%;
         
         ul{
             //width: 100%;
         }
+        
+        .header {
+            display: block;
+            min-height: $collapsible-height;
+            line-height: $collapsible-height;
+            padding: 0 1rem;
+            //border-bottom: 1px solid gray;
+            background: color("amber", "lighten-2");
+            width:100%;
+
+            .row{
+                margin: 0;
+            }
+
+            .btn_back{
+
+            }
+
+            .title{
+                text-align: center;
+                font-weight: 700;
+            }
+
+            i {
+              width: 2rem;
+              font-size: 1.6rem;
+              line-height: $collapsible-height;
+              display: block;
+              float: left;
+              text-align: center;
+              margin-right: 1rem;
+              color: black;
+            }
+
+            span{
+                width:100%;
+                text-align: center;
+                margin: auto auto;
+            }
+
+        }
+
+        .content{
+            padding: 20px;
+            max-height: 100%;
+            height: 100%;
+            overflow-y: scroll;
+            
+            
+
+            i {
+              width: 2rem;
+              font-size: 1.6rem;
+              line-height: $collapsible-height;
+              display: block;
+              float: left;
+              text-align: center;
+              margin-right: 1rem;
+              color: black;
+            }
+
+           
+            
+        }
+
         
     }
     

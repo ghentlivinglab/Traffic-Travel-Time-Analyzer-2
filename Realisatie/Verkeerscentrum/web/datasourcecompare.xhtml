@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
     
     
 
@@ -11,28 +12,46 @@
 
             <ui:define name="content">
                 
-                <div class="container analyse">
-  
+                <div class="analyse">
                     <div class="page">
-                        <h3>Databronnen vergelijken</h3>
-                  
-                        <div class="row">
-                            <div class="col s10">
-                                 <h4>R4: Gent - Zelzate</h4>
-                            </div>
-                            <div class="col s2">
-                                <i class="material-icons">view_list</i>
-                            </div>
+                        <!-- <div class="header">
+                            <h3>Databronnen vergelijken</h3>
                         </div>
+                        -->
+                        <div class="content">
+                 
+                            
+                            <div class="container">
+                                <h5>R4: Gent - Zelzate</h5>
 
+                                <br /><br />
 
+                                <img src="#{requestScope.resourceURLimg}/grafiek.PNG" class="responsive-img" />
 
-                        <img src="#{resourceURLimg}/grafiek.PNG" class="responsive-img" />
+                                <br />
+                                
+                                <!--
+                                <h5>Databronnen vergelijken</h5>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                </p>
+                                <p>
+                                    Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit. Etiam tempor. Ut ullamcorper, ligula eu tempor congue, eros est euismod turpis, id tincidunt sapien risus a quam. Maecenas fermentum consequat mi. Donec fermentum. Pellentesque malesuada nulla a mi. Duis sapien sem, aliquet nec, commodo eget, consequat quis, neque. Aliquam faucibus, elit ut dictum aliquet, felis nisl adipiscing sapien, sed malesuada diam lacus eget erat. Cras mollis scelerisque nunc. Nullam arcu. Aliquam consequat. Curabitur augue lorem, dapibus quis, laoreet et, pretium ac, nisi. Aenean magna nisl, mollis quis, molestie eu, feugiat in, orci. In hac habitasse platea dictumst.
+                                </p>
 
-
-                    
+                                
+                                
+                                <i class="material-icons" style="font-size:500px;opacity: 0.05; position:absolute; top: 10%; left: 50%; 
+    -webkit-transform: translate(-50%, 0);">accessible</i>
+                                
+                                -->
+                                
+                                
+                            </div>
+                            
+                        </div>
                     </div>
-                
+                     
                 </div>
                 
                 
@@ -41,33 +60,151 @@
             <ui:define name="right">
                 <div class="analyse">
                     
-                    <div class="sidebar fixed">
-                    <div class="navigation">
-                        <ul class="menu">
-                            <li><a href="#">1. Menu</a>
-                                <ul>
-                                    <li><a href="#">1.1 Submenu</a></li>
-                                    <li><a href="#">1.2 Submenu</a></li>
-                                    <li><a href="#">1.3 Submenu</a></li>
-                                </ul>
-                            </li>
-                            <!-- etc... -->
-                        </ul>
-
-                    </div>
+                    <div class="sidebar">
+                   
+                            <div class="header">
+                                <div class="row">
+                                    <div class="col s1 btn_back">
+                                        <h:link outcome="pretty:analyse">
+                                            <i class="material-icons">keyboard_backspace</i>
+                                        </h:link>
+                                    </div>
+                                    <div class="col s11 title"><span> Databronnen vergelijken </span></div>
+                                </div>
+                            </div>
+                            
+                            <div class="content">
+                                
+                                <fieldset>
+                                    <legend>Periode</legend>
+                                    <div class="row">
+                                        <div class="col s5 valign-wrapper">
+                                            <p class="valign">Begin</p>
+                                          </div>
+                                        <div class="col s7"> <input type="text" class="datetimepicker" id="periodStart" /> </div>
+                                        <!--
+                                        <div class="col s1 valign-wrapper right-align pull-bottom"> 
+                                            <a href="#!" class="valign datetimepicker" data-refid="periodStart"><i class="material-icons">today</i></a> 
+                                        </div>
+                                        -->
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s5 valign-wrapper">
+                                            <p class="valign">Eind</p>
+                                          </div>
+                                        <div class="col s7"> <input type="text" class="datetimepicker" id="periodEnd" /> </div>
+                                        <!--
+                                        <div class="col s1 valign-wrapper right-align pull-bottom"> 
+                                            <a href="#!" class="valign datetimepicker" data-refid="periodEnd"><i class="material-icons">today</i></a> 
+                                        </div>
+                                        -->
+                                       
+                                    </div>
+                                </fieldset>
+                                
+                                <fieldset>
+                                    <legend>Periode</legend>
+                                    <ul>
+                                        <li>24 jul -> 26 jul</li>
+                                        <li>24 jul -> 26 jul</li>
+                                        <li>24 jul -> 26 jul</li>
+                                        <li>24 jul -> 26 jul</li>
+                                        
+                                    </ul>
+                                    <a href="#!" class="btn">Wijzigen</a>
+                                </fieldset>
+                                
+                                
+                                <fieldset>
+                                    <legend>Trajecten</legend>
+                                    
+                                    <ul id="routeList">
+                                        <li>R4: Gent - Zelzate</li>
+                                        <li>R4: Gent - Zelzate</li>
+                                        <li>R4: Gent - Zelzate</li>
+                                        <li>R4: Gent - Zelzate</li>
+                                    </ul>
+                                    
+                                    <a href="#!" class="btn" id="selectRoutes" data-multiplicity="single">Selecteer trajecten</a>
+                                </fieldset>
+                                
+                                
+                                
+                                
+                                
+                                <fieldset>
+                                    <legend>Databronnen</legend>
+                                    <ul>
+                                        <li>R4: Gent - Zelzate</li>
+                                        <li>R4: Gent - Zelzate</li>
+                                        <li>R4: Gent - Zelzate</li>
+                                        <li>R4: Gent - Zelzate</li>
+                                    </ul>
+                                    <a href="#!" class="btn">Selecteer databronnen</a>
+                                </fieldset>
+                                
+                                
+                                
+                            </div>
+                      
+                        
                     </div>
                 </div>
+                
+
+                <!-- Modal Structure -->
+                <div id="selectRoutesModel" class="modal modal-fixed-footer">
+                  <div class="modal-content">
+                    <h4>Trajecten selecteren</h4>
+                    <p>Selecteer een of meerdere traject(en) waarover je data wil vergelijken</p>
+                    <div class="row">
+                        <div class="col s6">
+                            
+                            <div class="multiselectsection">
+                                <ul id="availableRoutesList">
+
+                                </ul>
+                            </div>
+                            
+                        </div>
+                        <div class="col s6">
+                            <img src="" class="responsive-img" id="routePreview"  />
+                        </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Ok</a>
+                  </div>
+                </div>
+                
+     
             </ui:define>
             
                 
     
             <ui:define name="javascript">
                 
-               <script type="text/javascript">
-                $(document).ready(function() {
-                    $('.menu').navgoco();
-                });
-                </script>
+                
+               <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyseComponents.js" />
+                
+                <script>
+			(function() {
+				var selList = document.getElementById( 'availableRoutesList' ),
+					items = selList.querySelectorAll( 'li' );
+				
+				// fill the initial checked elements (mozilla)
+				[].slice.call( items ).forEach( function( el ) {
+					el.parentNode.className = el.checked ? 'selected' : '';
+				} );
+
+				function checkUncheck( el ) {
+					el.parentNode.className = el.checked ? '' : 'selected';
+					el.checked = !el.checked;
+				}
+
+
+			} )();
+		</script>
 
                 
             </ui:define>

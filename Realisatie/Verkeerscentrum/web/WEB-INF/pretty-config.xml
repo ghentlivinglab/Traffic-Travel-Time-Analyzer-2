@@ -30,7 +30,7 @@
 	</url-mapping>
         
         <url-mapping id="analyse">
-		<pattern value="/analyser" />
+		<pattern value="/analyse" />
 		<view-id value="/faces/analyse.xhtml" />
 	</url-mapping>
         
