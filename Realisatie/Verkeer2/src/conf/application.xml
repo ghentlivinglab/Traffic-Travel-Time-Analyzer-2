@@ -2,45 +2,45 @@
 <application version="7" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/application_7.xsd">
   <display-name>Verkeer2</display-name>
   <module>
-    <ejb>GeneralDAO.jar</ejb>
-  </module>
-  <module>
-    <ejb>GoogleMapsSourceAdapter.jar</ejb>
-  </module>
-  <module>
-    <ejb>HereSourceAdapter.jar</ejb>
-  </module>
-  <module>
     <ejb>TimerScheduler.jar</ejb>
   </module>
   <module>
-    <ejb>GeoJsonProvider.jar</ejb>
-  </module>
-  <module>
-    <ejb>TrafficDataDAO.jar</ejb>
-  </module>
-  <module>
-    <ejb>GeneralDAONoDB.jar</ejb>
-  </module>
-  <module>
-    <ejb>Logger.jar</ejb>
+    <web>
+      <web-uri>RestApi.war</web-uri>
+      <context-root>/RestApi</context-root>
+    </web>
   </module>
   <module>
     <ejb>TrafficDataDownstreamAnalyser.jar</ejb>
   </module>
   <module>
+    <ejb>TrafficDataDAO.jar</ejb>
+  </module>
+  <module>
+    <ejb>Logger.jar</ejb>
+  </module>
+  <module>
+    <ejb>GeneralDAO.jar</ejb>
+  </module>
+  <module>
+    <ejb>Thresholds.jar</ejb>
+  </module>
+  <module>
+    <ejb>GeoJsonProvider.jar</ejb>
+  </module>
+  <module>
+    <ejb>HereSourceAdapter.jar</ejb>
+  </module>
+  <module>
+    <ejb>GoogleMapsSourceAdapter.jar</ejb>
+  </module>
+  <module>
     <ejb>TrafficDataDownloader.jar</ejb>
   </module>
   <module>
-    <web>
-      <web-uri>LeafLetTest.war</web-uri>
-      <context-root>/LeafLetTest</context-root>
-    </web>
+    <ejb>TomTomSourceAdapter.jar</ejb>
   </module>
   <module>
-    <web>
-      <web-uri>RestApi.war</web-uri>
-      <context-root>/rest</context-root>
-    </web>
+    <ejb>DataProvider.jar</ejb>
   </module>
 </application>

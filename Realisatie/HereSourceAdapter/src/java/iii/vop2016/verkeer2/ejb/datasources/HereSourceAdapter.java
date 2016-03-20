@@ -41,12 +41,12 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
     private static final String providerName = "Here";
 
     @PostConstruct
-    public void init(){
-        Logger.getLogger("logger").log(Level.INFO, "HereSourceAdapter has been initialized.");  
+    public void init() {
+        Logger.getLogger("logger").log(Level.INFO, "HereSourceAdapter has been initialized.");
     }
-    
+
     @Override
-    public IRouteData parse(IRoute route) throws URLException,DataAccessException {
+    public IRouteData parse(IRoute route) throws URLException, DataAccessException {
 
         RouteData rd = null;
         try {
@@ -57,7 +57,7 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
             //opletten voor decimale komma die moet vervangen worden door punt
             //AppId = KcOsDG6cNwwshKhALecH
             //AppCode = K-gS30K9dbNrznv5TonvHQ
-            //mode = fastest
+            //mode = shortest
             //traffic = enabled
             List<IGeoLocation> waypoints = route.getGeolocations();
             IGeoLocation waypoint = null;
@@ -103,13 +103,13 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
              */
         } catch (URLException e) {
             throw new URLException("Wrong URL for Here adapter");
-        } catch(JSONException e) {
+        } catch (JSONException | DataAccessException e) {
             throw new DataAccessException("Cannot access data for Here adapter");
         }
         return rd;
     }
 
-    private String readUrl(String urlString) throws URLException {
+    private String readUrl(String urlString) throws URLException, DataAccessException {
         BufferedReader reader = null;
         try {
             URL url = new URL(urlString);
@@ -120,24 +120,25 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
             while ((read = reader.read(chars)) != -1) {
                 buffer.append(chars, 0, read);
             }
-            System.out.println(buffer.toString());
+            //System.out.println(buffer.toString());
             return buffer.toString();
+        } catch (MalformedURLException ex) {
+            throw new URLException("Wrong URL for Here adapter");
         } catch (IOException e) {
-            throw new URLException();
+            throw new DataAccessException("Cannot access data for Here adapter");
         } finally {
             try {
                 if (reader != null) {
                     reader.close();
                 }
             } catch (IOException e) {
-                throw new URLException("Wrong URL for Here adapter");
+                throw new DataAccessException("Cannot access data for Here adapter");
             }
         }
     }
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-
     @Override
     public String getProviderName() {
         return providerName;

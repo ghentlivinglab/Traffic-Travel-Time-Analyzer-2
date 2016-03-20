@@ -3,13 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package iii.vop2016.verkeer2.ejb.components;
+package iii.vop2016.verkeer2.ejb.threshold;
+
+import javax.ejb.Remote;
 
 /**
  *
- * @author tobia
+ * @author Tobias
  */
-public interface IDelayThreshold {
-    IRoute getRoute();
-    int getThreshold();
+@Remote
+public interface ThresholdManagerRemote extends IThresholdManager{
+    
 }

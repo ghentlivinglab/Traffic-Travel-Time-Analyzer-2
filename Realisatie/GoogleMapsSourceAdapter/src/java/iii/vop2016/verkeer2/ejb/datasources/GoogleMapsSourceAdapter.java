@@ -41,7 +41,7 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
 
     @PostConstruct
     public void init(){
-        Logger.getLogger("logger").log(Level.INFO, "GoogleMapsSourceAdaptor has been initialized.");  
+        Logger.getLogger("logger").log(Level.INFO, "GoogleMapsSourceAdapter has been initialized.");  
     }
 
     @Override
