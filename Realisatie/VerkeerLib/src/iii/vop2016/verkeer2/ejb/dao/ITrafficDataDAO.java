@@ -17,12 +17,17 @@ import java.util.List;
  */
 public interface ITrafficDataDAO {
 
-    public List<IRouteData> getData(IRoute route, Date time1, Date time2);
-    public List<IRouteData> getData(ISourceAdapter adapter, Date time1, Date time2);
     public IRouteData addData(IRouteData data);
     public List<IRouteData> addData(List<IRouteData> data);
+    
+    public List<IRouteData> getData(IRoute route, Date time1, Date time2);
+    public List<IRouteData> getData(String adapter, Date time1, Date time2);
 
     public List<IRouteData> getCurrentTrafficSituation(IRoute route);
-    public List<IRouteData> getCurrentTrafficSituation(IRoute route, ISourceAdapter adapter);
+    public List<IRouteData> getCurrentTrafficSituation(IRoute route, List<String> adapter);
+    
+    public IRouteData getDataByID(long id);
+    
+    void fillDummyData(long i);
     
 }

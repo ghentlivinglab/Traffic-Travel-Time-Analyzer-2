@@ -11,32 +11,41 @@ import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.RouteData;
 import iii.vop2016.verkeer2.ejb.datasources.ISourceAdapter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
+import javax.ejb.Startup;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
 
 /**
  *
  * @author tobia
  */
 @Singleton
+@Startup
 public class TrafficDataDAO implements TrafficDataDAORemote {
-    
+
     @PersistenceContext(name = "TrafficDataDBPU")
     EntityManager em;
     private InitialContext ctx;
-    
+    private BlockList blocklist;
+
     @PostConstruct
     public void init() {
         try {
@@ -44,32 +53,14 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
         } catch (NamingException ex) {
             Logger.getLogger(TrafficDataDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        Logger.getLogger("logger").log(Level.INFO, "TrafficDataDAO has been initialized."); 
+
+        generateBlockList();
+
+        Logger.getLogger("logger").log(Level.INFO, "TrafficDataDAO has been initialized.");
     }
 
-            
-    public TrafficDataDAO(){
-        
-    }
+    public TrafficDataDAO() {
 
-    public List<IRouteData> getData(Date time1, Date time2) {
-        List<IRouteData> routes = new ArrayList<>();
-        try {
-            //get all routes
-            Query q = em.createQuery("SELECT r FROM RouteDataEntity r WHERE r.timestamp >= :time1 AND r.timestamp <= :time2");
-            q.setParameter("time1", time1);
-            q.setParameter("time2", time2);
-            List<IRouteData> routesEntities = q.getResultList();
-            for(IRouteData r : routesEntities)
-                routes.add(new RouteData(r));
-        } catch (Exception e) {
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.severe(e.getMessage());
-        } finally {
-
-        }
-        return routes;
     }
 
     @Override
@@ -86,7 +77,7 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
     @Override
     public List<IRouteData> addData(List<IRouteData> allData) {
         List<IRouteData> data = new ArrayList<>();
-        for(IRouteData d : allData){
+        for (IRouteData d : allData) {
             data.add(addData(d));
         }
         return data;
@@ -95,15 +86,21 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
     @Override
     public List<IRouteData> getData(IRoute route, Date time1, Date time2) {
         List<IRouteData> data = new ArrayList<>();
-        try {
-            //get all routes
-            Query q = em.createQuery("SELECT r FROM RouteDataEntity r WHERE r.timestamp >= :time1 AND r.timestamp <= :time2 AND r.routeId = :routeID");
-            q.setParameter("time1", time1);
-            q.setParameter("time2", time2);
-            q.setParameter("routeID", route.getId());
-            List<IRouteData> routesEntities = q.getResultList();
-            for(IRouteData r : routesEntities)
-                data.add(new RouteData(r));
+        try {  
+            long[] range = blocklist.getIdRange(time1, time2);
+            if (range[0] == -1 || range[1] == -1) {
+                throw new NoResultException("Could not retrieve id segment from blocklist");
+            }
+
+            Parameter p0 = new Parameter("id", range[0], range[1], Operation.between);
+            Parameter p1 = new Parameter("routeId", route.getId(), Operation.eq);
+            Parameter p2 = new Parameter("timestamp", time1,time2, Operation.between);
+            Request r = new Request(true, 0).addParam(0, p0).addParam(1, p1).addParam(2, p2);
+            
+            List<IRouteData> routesEntities = r.PrepareQuery(em).getResultList();
+            for (IRouteData rdata : routesEntities) {
+                data.add(new RouteData(rdata));
+            }
         } catch (Exception e) {
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.severe(e.getMessage());
@@ -114,17 +111,18 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
     }
 
     @Override
-    public List<IRouteData> getData(ISourceAdapter adapter, Date time1, Date time2) {       
+    public List<IRouteData> getData(String adapter, Date time1, Date time2) {
         List<IRouteData> data = new ArrayList<>();
         try {
             //get all routes
             Query q = em.createQuery("SELECT r FROM RouteDataEntity r WHERE r.timestamp >= :time1 AND r.timestamp <= :time2 AND r.providerName = :providerName");
             q.setParameter("time1", time1);
             q.setParameter("time2", time2);
-            q.setParameter("providerName", adapter.getProviderName());
+            q.setParameter("providerName", adapter);
             List<IRouteData> routesEntities = q.getResultList();
-            for(IRouteData r : routesEntities)
+            for (IRouteData r : routesEntities) {
                 data.add(new RouteData(r));
+            }
         } catch (Exception e) {
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.severe(e.getMessage());
@@ -133,19 +131,48 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
         }
         return data;
     }
-
-
 
     @Override
     public List<IRouteData> getCurrentTrafficSituation(IRoute route) {
+        return getCurrentTrafficSituation(route, null);
+    }
+
+    @Override
+    public List<IRouteData> getCurrentTrafficSituation(IRoute route, List<String> adapters) {
         List<IRouteData> data = new ArrayList<>();
         try {
-            //get all routes
-            Query q = em.createQuery("SELECT r FROM RouteDataEntity r LEFT JOIN RouteDataEntity r2 ON r.timestamp<r2.timestamp WHERE r2.id IS NULL AND r.routeId = :routeId");
-            q.setParameter("routeId", route.getId());
-            List<IRouteData> routesEntities = q.getResultList();
-            for(IRouteData r : routesEntities)
-                data.add(new RouteData(r));
+            //get last record for the specified routeid by inverting table, limit to 1 result
+            Parameter p1 = new Parameter("routeId", route.getId(), Operation.eq);
+            Request r = new Request(false, 1);
+            r.addParam(0, p1);
+            if (adapters != null && adapters.size() != 0) {
+                Parameter p2 = new Parameter("provider", adapters, Operation.eq);
+                r.addParam(0, p2);
+            }
+            List<IRouteData> routesEntities = r.PrepareQuery(em).getResultList();
+
+            //only continue is there is a result
+            if (routesEntities.size() != 1) {
+                return data;
+            }
+
+            //get all data for that route with specified timestamp and source adaptors
+            Parameter p0 = new Parameter("id", routesEntities.get(0).getId() - 100, Operation.gt);
+            Date tbegin = new Date(routesEntities.get(0).getTimestamp().getTime() - 30000);
+            Date tend = new Date(routesEntities.get(0).getTimestamp().getTime() + 30000);
+            Parameter p2 = new Parameter("timestamp", tbegin, tend, Operation.between);
+            r = new Request(true, 0).addParam(0, p0).addParam(1, p1).addParam(2, p2);
+            if (adapters != null && adapters.size() != 0) {
+                Parameter p3 = new Parameter("provider", adapters, Operation.eq);
+                r.addParam(0, p3);
+            }
+            routesEntities = r.PrepareQuery(em).getResultList();
+
+            //transform all database objects to library objects via copy constructor
+            for (IRouteData rdata : routesEntities) {
+                data.add(new RouteData(rdata));
+            }
+
         } catch (Exception e) {
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.severe(e.getMessage());
@@ -155,11 +182,51 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
         return data;
     }
 
+    private void generateBlockList() {
+        Query q = em.createQuery("SELECT COUNT(r) FROM RouteDataEntity r");
+        Object obj = q.getSingleResult();
+        if (obj != null && obj instanceof Long) {
+            long size = (long) obj;
+            this.blocklist = new BlockList(size, this);
+        }
+    }
+
     @Override
-    public List<IRouteData> getCurrentTrafficSituation(IRoute route, ISourceAdapter adapter) {
+    public IRouteData getDataByID(long id) throws NoResultException {
+        Parameter p0 = new Parameter("id", id, Operation.eq);
+        Request r = new Request(true, 1).addParam(0, p0);
+        Object o = r.PrepareQuery(em).getSingleResult();
+        if (o != null && o instanceof IRouteData) {
+            return (IRouteData) o;
+        }
         return null;
     }
-    
-    
-    
+
+    public void fillDummyData(long i) {
+        for (long x = 1; x <= 30; x++) {
+            RouteDataEntity e = new RouteDataEntity();
+            e.setRouteId(x);
+            e.setDistance(1000 + Math.toIntExact(x));
+            e.setDuration(600 + Math.toIntExact(x));
+            e.setProvider("GoogleMaps");
+            e.setTimestamp(new Date(i));
+            em.persist(e);
+
+            RouteDataEntity e1 = new RouteDataEntity();
+            e1.setRouteId(x);
+            e1.setDistance(2000 + Math.toIntExact(x));
+            e1.setDuration(800 + Math.toIntExact(x));
+            e1.setProvider("Here");
+            e1.setTimestamp(new Date(i));
+            em.persist(e1);
+
+            RouteDataEntity e2 = new RouteDataEntity();
+            e2.setRouteId(x);
+            e2.setDistance(3000 + Math.toIntExact(x));
+            e2.setDuration(1000 + Math.toIntExact(x));
+            e2.setProvider("TomTom");
+            e2.setTimestamp(new Date(i));
+            em.persist(e2);
+        }
+    }
 }

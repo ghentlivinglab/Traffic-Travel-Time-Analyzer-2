@@ -14,6 +14,9 @@
     <ejb>TrafficDataDownstreamAnalyser.jar</ejb>
   </module>
   <module>
+    <ejb>TomTomSourceAdapter.jar</ejb>
+  </module>
+  <module>
     <ejb>TrafficDataDAO.jar</ejb>
   </module>
   <module>
@@ -26,21 +29,15 @@
     <ejb>Thresholds.jar</ejb>
   </module>
   <module>
-    <ejb>GeoJsonProvider.jar</ejb>
+    <ejb>HereSourceAdapter.jar</ejb>
   </module>
   <module>
-    <ejb>HereSourceAdapter.jar</ejb>
+    <ejb>GeoJsonProvider.jar</ejb>
   </module>
   <module>
     <ejb>GoogleMapsSourceAdapter.jar</ejb>
   </module>
   <module>
     <ejb>TrafficDataDownloader.jar</ejb>
-  </module>
-  <module>
-    <ejb>TomTomSourceAdapter.jar</ejb>
-  </module>
-  <module>
-    <ejb>DataProvider.jar</ejb>
   </module>
 </application>

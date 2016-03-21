@@ -10,6 +10,8 @@ import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.Route;
+import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
+import iii.vop2016.verkeer2.ejb.datasources.ISourceAdapter;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.InvalidCoordinateException;
 import java.util.ArrayList;
@@ -158,9 +160,38 @@ public class RoutesResource {
     }
 
     @GET
+    @Path("{id}/data/test")
+    @Produces("application/json")
+    public String getCurrentTrafficDataTest(@PathParam("id") String sid) {
+        beans.getTimer().StopTimer();
+        setParameters();
+        visibleFields.put("route.data", Boolean.TRUE);
+        dataType = "current";
+        List<IRoute> routes = null;
+        if (sid.equals("all")) {
+            routes = beans.getGeneralDAO().getRoutes();
+        }
+        
+        for(IRoute r:routes){
+            List<IRouteData> list = beans.getTrafficDataDAO().getCurrentTrafficSituation(r, providers);
+            System.out.println("test");
+        }
+        
+        /*long time = 1458012229000L;
+        long endtime = 1580012229000L;
+        ITrafficDataDAO dao = beans.getTrafficDataDAO();
+        for (long i = time; i < endtime; i += 300000) {
+            dao.fillDummyData(i);
+        }*/
+        return "";
+    }
+
+    @GET
     @Path("{id}/data/current")
     @Produces("application/json")
-    public String getCurrentTrafficData(@PathParam("id") String sid) {
+    public String getCurrentTrafficData(@PathParam("id") String sid
+    ) {
+        beans.getTimer().StopTimer();
         visibleFields.put("route.data", Boolean.TRUE);
         dataType = "current";
         List<IRoute> routes;
@@ -186,7 +217,8 @@ public class RoutesResource {
     @GET
     @Path("{id}/data/summary")
     @Produces("application/json")
-    public String getTrafficSummary(@PathParam("id") String id) {
+    public String getTrafficSummary(@PathParam("id") String id
+    ) {
 
         List<IRoute> routes = beans.getGeneralDAO().getRoutes();
 
@@ -197,14 +229,19 @@ public class RoutesResource {
     @GET
     @Path("{id}/data/{timeStart}")
     @Produces("application/json")
-    public String getTrafficData(@PathParam("id") String sid, @PathParam("timeStart") String stimeStart) {
+    public String getTrafficData(@PathParam("id") String sid,
+            @PathParam("timeStart") String stimeStart
+    ) {
         return getTrafficData(sid, stimeStart, "" + (new Date()).getTime());
     }
 
     @GET
     @Path("{id}/data/{timeStart}/{timeEnd}")
     @Produces("application/json")
-    public String getTrafficData(@PathParam("id") String sid, @PathParam("timeStart") String stimeStart, @PathParam("timeEnd") String stimeEnd) {
+    public String getTrafficData(@PathParam("id") String sid,
+            @PathParam("timeStart") String stimeStart,
+            @PathParam("timeEnd") String stimeEnd
+    ) {
         visibleFields.put("route.data", Boolean.TRUE);
         setStartTime(stimeStart);
         setEndTime(stimeEnd);
@@ -315,7 +352,7 @@ public class RoutesResource {
 
     private void setEndTime(String endTime) {
         try {
-            this.endTime = new Date();
+            this.endTime = new Date(Long.parseLong(endTime, 10));
         } catch (NumberFormatException e) {
             Logger.getGlobal().log(Level.WARNING, endTime + " could not be converted to Long");
         }
@@ -323,6 +360,7 @@ public class RoutesResource {
 
     private void setParameters() {
         /* PROVIDERS */
+        this.providers = new ArrayList<>();
         String providers = context.getQueryParameters().getFirst("provider");
         if (providers != null) {
             String[] parts = providers.split(",");

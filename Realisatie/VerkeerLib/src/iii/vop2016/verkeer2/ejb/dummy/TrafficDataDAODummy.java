@@ -90,26 +90,31 @@ public class TrafficDataDAODummy implements ITrafficDataDAO{
     }
 
     @Override
-    public List<IRouteData> getData(ISourceAdapter adapter, Date time1, Date time2) {
-        List<IRouteData> result = new ArrayList<>();
-        for(IRouteData data : getData(time1,time2)){
-            if(data.getProvider().equals(adapter.getProviderName()))
-                result.add(data);
-        }
-        return result;
+    public List<IRouteData> getData(String adapter, Date time1, Date time2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public List<IRouteData> getCurrentTrafficSituation(IRoute route) {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<IRouteData> getCurrentTrafficSituation(IRoute route, ISourceAdapter adapter) {
-        return null;
+    public List<IRouteData> getCurrentTrafficSituation(IRoute route, List<String> adapter) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
 
+    @Override
+    public IRouteData getDataByID(long id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void fillDummyData(long i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
     
     
 }

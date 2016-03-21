@@ -19,6 +19,9 @@ public class CurrentTime {
     public static void main(String[] args) {
         int min = 15;
         System.out.println(new Date().getTime()-min*1000*60);
+        
+        
+
     }
     
 }
