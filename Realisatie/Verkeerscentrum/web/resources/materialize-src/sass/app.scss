@@ -9,7 +9,10 @@
 @import "components/variables";
 @import "app/variables";
 
+
 // components
+@import "components/typography";
+@import "components/global";
 @import "app/global";
 @import "app/live";
 @import "app/index";

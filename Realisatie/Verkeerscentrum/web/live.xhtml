@@ -10,26 +10,23 @@
             <ui:define name="page"> Map </ui:define>
 
             <ui:define name="content">
-                <div id="map"></div>
+                <div class="map">
+                    <div id="map"></div>
+                </div>
             </ui:define>
 
             <ui:define name="right">
-                <div class="trafficinfo">
-                <div class="progress">
-                    <div class="determinate" id="timerProgress"></div>
-                </div>
-                <form>
-                                       
-                   <div id="traffic-list"></div>
-   
-                </form>
-                    
+                <div class="map">
+                    <div class="sidebar"> 
+                        <div class="progress">
+                            <div class="determinate" id="timerProgress"></div>
+                        </div>
 
-
-                    
-                    
+                        <div class="trafficinfo">
+                            <div id="traffic-list"></div>
+                        </div>
+                    </div>
                 </div>
-       
             </ui:define>
             
                 
@@ -41,8 +38,12 @@
                 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCG3pbrFs7g35VSYnL1X3jwftuQmm5s18g&amp;callback=initMap"
                 async="" defer=""></script>
                 
+                
+        <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+               
                <script src="/web/resources/js/map.js" />
                 
+        
                 
             </ui:define>
 
