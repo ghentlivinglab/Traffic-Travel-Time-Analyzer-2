@@ -32,6 +32,7 @@ public class ApplicationConfig extends Application {
         resources.add(iii.vop2016.verkeer2.war.rest.GeojsonResource.class);
         resources.add(iii.vop2016.verkeer2.war.rest.ProviderResource.class);
         resources.add(iii.vop2016.verkeer2.war.rest.RoutesResource.class);
+        resources.add(iii.vop2016.verkeer2.war.rest.TimersResource.class);
     }
     
 }

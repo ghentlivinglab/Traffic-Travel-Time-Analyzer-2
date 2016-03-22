@@ -11,6 +11,7 @@ import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.Route;
 import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
+import iii.vop2016.verkeer2.ejb.components.Weekdays;
 import iii.vop2016.verkeer2.ejb.datasources.ISourceAdapter;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.InvalidCoordinateException;
@@ -36,6 +37,7 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyser;
+import java.util.Calendar;
 import javax.xml.ws.WebServiceContext;
 
 /**
@@ -55,11 +57,13 @@ public class RoutesResource {
     private InitialContext ctx;
     private static BeanFactory beans;
 
-    private Map<String, Boolean> visibleFields;
     Date startTime;
     Date endTime;
+    Date avgStartTime;
+    Date avgEndTime;
+    List<Date> startTimes;
+    List<Date> endTimes;
     List<String> providers;
-    String dataType; //data, current, summary
 
     /**
      * Creates a new instance of RoutesResource
@@ -76,23 +80,12 @@ public class RoutesResource {
             Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         beans = BeanFactory.getInstance(ctx, null);
-        visibleFields = new HashMap<>();
-        providers = new ArrayList<>();
-        initVisibleFields();
-        setVisibleFields();
-        setParameters();
-        setStartTime("1456761535931");
-        setEndTime("2456761635931");
-        dataType = "data";
+        setNoProviders();
+        setProviders();
+        startTimes = new ArrayList<>();
+        endTimes = new ArrayList<>();
     }
 
-    private void initVisibleFields() {
-        visibleFields.put("route.data", Boolean.FALSE);
-        visibleFields.put("route.id", Boolean.TRUE);
-        visibleFields.put("route.name", Boolean.TRUE);
-        visibleFields.put("route.inverseRoute", Boolean.TRUE);
-        visibleFields.put("route.geolocations", Boolean.TRUE);
-    }
 
     /**
      * Retrieves representation of an instance of
@@ -139,163 +132,122 @@ public class RoutesResource {
     @GET
     @Path("all")
     @Produces("application/json")
-    public String getAllRoutes() {
-        List<IRoute> routes = beans.getGeneralDAO().getRoutes();
-        return JSONRoutes(routes);
+    public String getAllRoutesData() {
+        //Parameters
+        setBasicParameters();
+        
+        List<IRoute> routes = getRoutes("all");
+        return JSONRoutes(routes).toString();
     }
 
     @GET
     @Path("{id}")
     @Produces("application/json")
-    public String getRoutes(@PathParam("id") String sid) {
-        List<IRoute> routes = new ArrayList<>();
-        List<Long> ids = getIds(sid);
-        for (int i = 0; i < ids.size(); i++) {
-            IRoute r = beans.getGeneralDAO().getRoute(ids.get(i));
-            if (r != null) {
-                routes.add(r);
-            }
-        }
-        return JSONRoutes(routes);
+    public String getRoutesData(@PathParam("id") String sid) {
+        setBasicParameters();
+        
+        List<IRoute> routes = getRoutes(sid);
+        
+        return JSONRoutes(routes).toString();
     }
+    
 
-    @GET
-    @Path("{id}/data/test")
+    @Path("{id}/days")
     @Produces("application/json")
-    public String getCurrentTrafficDataTest(@PathParam("id") String sid) {
-        beans.getTimer().StopTimer();
-        setParameters();
-        visibleFields.put("route.data", Boolean.TRUE);
-        dataType = "current";
-        List<IRoute> routes = null;
-        if (sid.equals("all")) {
-            routes = beans.getGeneralDAO().getRoutes();
+    public String getDayData(@PathParam("id") String sid){
+        setAnalysisParameters();
+        
+        List<IRoute> routes=getRoutes(sid);
+        
+        
+        JSONArray result=JSONRoutes(routes);
+        for(int i=0; i<result.length();i++){
+            result.getJSONObject(i).put("data", JSONDaysData(routes.get(i)));
+
         }
         
-        for(IRoute r:routes){
-            List<IRouteData> list = beans.getTrafficDataDAO().getCurrentTrafficSituation(r, providers);
-            System.out.println("test");
+        return result.toString();
+    }
+    
+    @GET
+    @Path("{id}/rushhours")
+    @Produces("application/json")
+    public String getRushhourData(@PathParam("id") String sid){
+        setAnalysisParameters();
+        
+        
+        List<IRoute> routes=getRoutes(sid) ;
+        
+        JSONArray result=JSONRoutes(routes);
+        for(int i=0; i<result.length();i++){
+            result.getJSONObject(i).put("data", JSONRushhourData(routes.get(i)));
         }
         
-        /*long time = 1458012229000L;
-        long endtime = 1580012229000L;
-        ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        for (long i = time; i < endtime; i += 300000) {
-            dao.fillDummyData(i);
-        }*/
-        return "";
+        return result.toString();
+    }
+    
+    @GET
+    @Path("{id}/periodDifference/{startTimes}/{endTimes}")
+    @Produces("application/json")
+    public String getPeriodData(@PathParam("id") String sid, @PathParam("startTimes") String startTimes, @PathParam ("endTimes") String endTimes){
+        setBasicParameters();
+        
+        setStartTimes(startTimes);
+        setEndTimes(endTimes);
+        
+        List<IRoute> routes = getRoutes(sid) ;
+        
+        
+        JSONArray result=JSONRoutes(routes);
+        for(int i=0; i<result.length();i++){
+            result.getJSONObject(i).put("data", JSONPeriodsData(routes.get(i)));
+        }
+        return result.toString();
+    }
+    
+    @GET
+    @Path("{id}/providerDifference")
+    @Produces("application/json")
+    public String getProviderData(@PathParam("id") String sid){
+        setAnalysisParameters();
+
+        List<IRoute> routes = getRoutes(sid);
+        
+        JSONArray result=JSONRoutes(routes);
+        for(int i=0; i<result.length();i++){
+            result.getJSONObject(i).put("data", JSONProvidersData(routes.get(i)));
+        }
+        
+        return result.toString();
     }
 
-    @GET
-    @Path("{id}/data/current")
-    @Produces("application/json")
-    public String getCurrentTrafficData(@PathParam("id") String sid
-    ) {
-        beans.getTimer().StopTimer();
-        visibleFields.put("route.data", Boolean.TRUE);
-        dataType = "current";
-        List<IRoute> routes;
-        if (sid.equals("all")) {
-            routes = beans.getGeneralDAO().getRoutes();
-        } else {
-            routes = new ArrayList<>();
-            List<Long> ids = getIds(sid);
-            for (int i = 0; i < ids.size(); i++) {
-                IRoute r = beans.getGeneralDAO().getRoute(ids.get(i));
-                if (r != null) {
-                    routes.add(r);
+
+    //convertIDs
+    
+    private List<IRoute> getRoutes(String ids) {
+        List<IRoute> result = new ArrayList<>();
+        if(ids.equals("all")){
+            result=beans.getGeneralDAO().getRoutes();
+        }
+        else{
+            List<Long> idslist=new ArrayList<>();
+            String[] parts = ids.split(",");
+            for (String s : parts) {
+                try {
+                    idslist.add(Long.parseLong(s, 10));
+                } catch (NumberFormatException e) {
+                    Logger.getGlobal().log(Level.WARNING, s + " could not be converted to Long");
                 }
             }
+            result= beans.getGeneralDAO().getRoutes(idslist);
         }
-        JSONArray result = new JSONArray();
-        for (IRoute route : routes) {
-            result.put(transformRoute(route));
-        }
-        return result.toString(1);
-    }
-
-    @GET
-    @Path("{id}/data/summary")
-    @Produces("application/json")
-    public String getTrafficSummary(@PathParam("id") String id
-    ) {
-
-        List<IRoute> routes = beans.getGeneralDAO().getRoutes();
-
-        return null;
-
-    }
-
-    @GET
-    @Path("{id}/data/{timeStart}")
-    @Produces("application/json")
-    public String getTrafficData(@PathParam("id") String sid,
-            @PathParam("timeStart") String stimeStart
-    ) {
-        return getTrafficData(sid, stimeStart, "" + (new Date()).getTime());
-    }
-
-    @GET
-    @Path("{id}/data/{timeStart}/{timeEnd}")
-    @Produces("application/json")
-    public String getTrafficData(@PathParam("id") String sid,
-            @PathParam("timeStart") String stimeStart,
-            @PathParam("timeEnd") String stimeEnd
-    ) {
-        visibleFields.put("route.data", Boolean.TRUE);
-        setStartTime(stimeStart);
-        setEndTime(stimeEnd);
-        List<IRoute> routes;
-        if (sid.equals("all")) {
-            routes = beans.getGeneralDAO().getRoutes();
-        } else {
-            routes = new ArrayList<>();
-            List<Long> ids = getIds(sid);
-            for (int i = 0; i < ids.size(); i++) {
-                IRoute r = beans.getGeneralDAO().getRoute(ids.get(i));
-                if (r != null) {
-                    routes.add(r);
-                }
-            }
-        }
-        JSONArray result = new JSONArray();
-        for (IRoute route : routes) {
-            result.put(transformRoute(route));
-        }
-        return result.toString(1);
-    }
-
-    private List<Long> getIds(String ids) {
-        List<Long> result = new ArrayList<>();
-        String[] parts = ids.split(",");
-        for (String s : parts) {
-            try {
-                result.add(Long.parseLong(s, 10));
-            } catch (NumberFormatException e) {
-                Logger.getGlobal().log(Level.WARNING, s + " could not be converted to Long");
-            }
-        }
+        
         return result;
     }
 
-    private JSONObject transformRoute(IRoute route) {
-        JSONObject obj = new JSONObject();
-        if (visibleFields.get("route.id")) {
-            obj.put("id", route.getId());
-        }
-        if (visibleFields.get("route.name")) {
-            obj.put("name", route.getName());
-        }
-        if (visibleFields.get("route.geolocations")) {
-            obj.put("geolocations", transformGeoLocations(route.getGeolocations()));
-        }
-        if (visibleFields.get("route.data")) {
-            addRouteData(obj, route);
-        }
+    //JSONTRANSFORMATIONS
 
-        return obj;
-    }
-
+    
     private JSONObject transformGeoLocation(IGeoLocation location) {
         JSONObject obj = new JSONObject();
         obj.put("name", location.getName());
@@ -312,36 +264,317 @@ public class RoutesResource {
         return result;
     }
 
-    private JSONObject transformRouteData(IRouteData data) {
-        JSONObject obj = new JSONObject();
-        obj.put("distance", data.getDistance());
-        obj.put("duration", data.getDuration());
-        obj.put("provider", data.getProvider());
-        obj.put("timestamp", data.getTimestamp().getTime());
-        return obj;
-    }
 
-    private JSONArray transformRouteData(List<IRouteData> data) {
+
+
+  
+    private JSONArray JSONRoutes(List<IRoute> routes){
         JSONArray result = new JSONArray();
-        for (IRouteData d : data) {
-            result.put(transformRouteData(d));
+        for(IRoute route:routes){
+            result.put(JSONRoute(route));
         }
         return result;
     }
-
-    private void setVisibleFields() {
-        String fields = context.getQueryParameters().getFirst("fields");
-        if (fields != null) {
-            for (String key : visibleFields.keySet()) {
-                visibleFields.put(key, Boolean.FALSE);
-            }
-            String[] parts = fields.split(",");
-            for (String s : parts) {
-                visibleFields.put(s, Boolean.TRUE);
-            }
+    
+    private JSONObject JSONRoute(IRoute route){
+        JSONObject obj = new JSONObject();
+        obj.put("id", route.getId());
+        obj.put("name",route.getName());
+        List<IGeoLocation> geolocs = route.getGeolocations();
+        obj.put("geolocations",transformGeoLocations(geolocs));
+        
+        obj.put("currentDuration", beans.getDataProvider().getCurrentDuration(route,providers));
+        obj.put("currentVelocity", beans.getDataProvider().getCurrentVelocity(route,providers));
+        
+        obj.put("optimalDuration", beans.getDataProvider().getOptimalDuration(route,providers));
+        obj.put("optimalVelocity", beans.getDataProvider().getOptimalVelocity(route,providers));
+        
+        if(avgStartTime != null & avgEndTime != null){
+            obj.put("avgDuration", beans.getDataProvider().getAvgDuration(route,providers,avgStartTime,avgEndTime));
+            obj.put("avgVelocity", beans.getDataProvider().getAvgVelocity(route,providers,avgStartTime,avgEndTime));
+        }else{
+            obj.put("avgDuration", beans.getDataProvider().getAvgDuration(route,providers));
+            obj.put("avgVelocity", beans.getDataProvider().getAvgVelocity(route,providers));
+        }
+        
+        obj.put("trend", beans.getDataProvider().getTrend(route,providers));
+        obj.put("recentData",JSONRecentData(route));
+        
+        obj.put("currentDelayLevel", beans.getDataProvider().getCurrentDelayLevel(route,providers));
+        obj.put("distance",beans.getDataProvider().getDistance(route,providers));
+        
+        return obj;
+    }
+    
+    private JSONObject JSONRecentData(IRoute route){
+        JSONObject result = new JSONObject();
+        Map<Date,Integer> recentData = beans.getDataProvider().getRecentData(route,providers);
+        
+        List<Date> timestamps = new ArrayList<>();
+        timestamps.addAll(recentData.keySet());
+        List<Integer> durations = new ArrayList<>();
+        durations.addAll(recentData.values());
+        
+        result.put("duration", JSONData("TrendDurations "+route.getId(),
+                "This data are the durations over the last hour for route "+route.getId(),
+                timestamps,
+                durations));
+        return result;
+    }
+    
+    private JSONObject JSONData(String name, String description, List<Date> timestamps, List<Integer> data){
+        JSONObject result = new JSONObject();
+        result.put("name", name);
+        result.put("description",description);
+        JSONArray tm = new JSONArray();
+        for (Date d:timestamps){
+            tm.put(d);
+        }
+        result.put("x-ax",tm);
+        JSONArray datarow = new JSONArray();
+        for (int i:data){
+            datarow.put(i);
+        }
+        result.put("y-ax",datarow);
+        return result;
+    }
+    
+    private JSONObject JSONDaysData(IRoute route){
+        JSONObject result = new JSONObject();
+        Weekdays[] days =Weekdays.values();
+        for (Weekdays day : days) {
+            result.put(day.toString(), JSONDayData(route, day));
+        }
+        return result;
+    }
+    
+    private JSONObject JSONDayData(IRoute route, Weekdays day){
+        JSONObject result = new JSONObject();
+        Map<Date,Integer> mapDurations;
+        Map<Date,Integer> mapVelocities;
+        if(startTime != null & endTime != null){
+            mapDurations=beans.getDataProvider().getDataByDay(route,providers,startTime,endTime,day);
+            mapVelocities=beans.getDataProvider().getDataVelocityByDay(route,providers,startTime,endTime,day);      
+        }
+        else{
+            mapDurations=beans.getDataProvider().getDataByDay(route,providers,day);
+            mapVelocities=beans.getDataProvider().getDataVelocityByDay(route,providers,day);            
+        }
+        
+        List<Date> timestamps = new ArrayList<>();
+        timestamps.addAll(mapDurations.keySet());
+        List<Integer> durations = new ArrayList<>();
+        durations.addAll(mapDurations.values());
+        List<Integer> velocities = new ArrayList<>();
+        durations.addAll(mapVelocities.values());
+        
+        
+        result.put("duration",JSONData("durations "+day+" "+route.getId(),
+                "This data are the durations on a "+day+" for route "+route.getId(),
+                timestamps,durations));
+        result.put("velocity", JSONData("velocities "+day+" "+route.getId(),
+                "This data are the velocities on a "+day+" for route "+route.getId(),
+                timestamps,velocities));
+        return result;
+    }
+    
+    private JSONObject JSONRushhourData(IRoute route){
+        JSONObject result = new JSONObject();
+        Map<Date,Integer> mapDurations;
+        Map<Date,Integer> mapVelocities;
+        if(startTime != null & endTime != null){
+            mapDurations=beans.getDataProvider().getDataByDayInWorkWeek(route,providers,startTime,endTime);
+            mapVelocities=beans.getDataProvider().getDataVelocityByDayInWorkWeek(route,providers,startTime,endTime);      
+        }
+        else{
+            mapDurations=beans.getDataProvider().getDataByDayInWorkWeek(route,providers);
+            mapVelocities=beans.getDataProvider().getDataVelocityByDayInWorkWeek(route,providers);               
+        }
+        
+        List<Date> timestamps = new ArrayList<>();
+        timestamps.addAll(mapDurations.keySet());
+        List<Integer> durations = new ArrayList<>();
+        durations.addAll(mapDurations.values());
+        List<Integer> velocities = new ArrayList<>();
+        durations.addAll(mapVelocities.values());
+        
+        result.put("duration",JSONData("rushhourDurations "+route.getId(),
+                "This data are the durations for a workday for route "+route.getId(),
+                timestamps,durations));
+        result.put("velocity",JSONData("rushhourVelocities "+route.getId(),
+                "This data are the velocities for a workday for route "+route.getId(),
+                timestamps,velocities));
+        return result;
+    }
+    
+    private JSONArray JSONPeriodsData (IRoute route){
+        JSONArray result = new JSONArray();
+        for(int i=0;i<startTimes.size();i++){
+            result.put(JSONPeriodData(route,i));
+        }
+        return result;
+    }
+    
+    private JSONObject JSONPeriodData (IRoute route, int periodnumber){
+        JSONObject result=new JSONObject();
+        result.put("period","period"+periodnumber);
+        result.put("start",startTimes.get(periodnumber));
+        result.put("end",endTimes.get(periodnumber));
+        
+        JSONObject obj =new JSONObject();
+        Map<Date,Integer> mapDurations;
+        Map<Date,Integer> mapVelocities;
+        
+        mapDurations=beans.getDataProvider().getData(route,providers,startTimes.get(periodnumber),endTimes.get(periodnumber));
+        mapVelocities=beans.getDataProvider().getDataVelocity(route,providers,startTimes.get(periodnumber),endTimes.get(periodnumber));
+        
+        List<Date> timestamps = new ArrayList<>();
+        timestamps.addAll(mapDurations.keySet());
+        List<Integer> durations = new ArrayList<>();
+        durations.addAll(mapDurations.values());
+        List<Integer> velocities = new ArrayList<>();
+        durations.addAll(mapVelocities.values());
+        
+        obj.put("duration", JSONData("Period"+periodnumber+"Durations "+route.getId(),
+                "This data are the durations for period "+periodnumber+" for route "+route.getId(),
+                timestamps,durations));
+        obj.put("velocity", JSONData("Period"+periodnumber+"Velocities "+route.getId(),
+                "This data are the velocities for period "+periodnumber+" for route "+route.getId(),
+                timestamps,velocities));
+        
+        result.put("data",obj);
+        return result;
+    }
+    
+    private JSONArray JSONProvidersData (IRoute route){
+        JSONArray result = new JSONArray();
+        for(String provider:providers){
+            result.put(JSONProviderData(route, provider));
+        }
+        return result;
+    }
+    
+    private JSONObject JSONProviderData (IRoute route, String provider){
+        List<String> lprovider=new ArrayList<>();
+        lprovider.add(provider);
+        
+        JSONObject result = new JSONObject();
+        result.put("provider",provider);
+        
+        JSONObject obj = new JSONObject();
+        Map<Date,Integer> mapDurations;
+        Map<Date,Integer> mapVelocities;
+        
+        if(startTime != null & endTime != null){
+            mapDurations=beans.getDataProvider().getData(route,lprovider,startTime,endTime);
+            mapVelocities=beans.getDataProvider().getDataVelocity(route,lprovider,startTime,endTime);      
+        }
+        else{
+            mapDurations=beans.getDataProvider().getData(route,lprovider);
+            mapVelocities=beans.getDataProvider().getDataVelocity(route,lprovider);               
+        }
+        
+        List<Date> timestamps = new ArrayList<>();
+        timestamps.addAll(mapDurations.keySet());
+        List<Integer> durations = new ArrayList<>();
+        durations.addAll(mapDurations.values());
+        List<Integer> velocities = new ArrayList<>();
+        durations.addAll(mapVelocities.values());
+        
+        obj.put("duration",JSONData("providerDurations "+provider+" "+route.getId(),
+                "This data are the duration provided by "+provider+" for route "+route.getId(),
+                timestamps,durations));
+        obj.put("velocity", JSONData("providerVelocities "+provider+" "+route.getId(),
+                "This data are the velocities provided by "+provider+" for route "+route.getId(),
+                timestamps,velocities));
+        
+        result.put("data", obj);
+        return result;
+    }
+    
+    
+    
+    //SET PARAMETERS
+    
+    private void setAnalysisParameters(){
+        setBasicParameters();
+        String start=context.getQueryParameters().getFirst("start");
+        String end=context.getQueryParameters().getFirst("end");
+        if( start != null & end != null){
+            setStartTime(start);
+            setEndTime(end);
+        }
+        else{
+            startTime=null;
+            endTime=null;
+        }
+    }
+        
+    
+    private void setBasicParameters(){
+        setProviders();
+        String avgStart =context.getQueryParameters().getFirst("avgstart");
+        String avgEnd=context.getQueryParameters().getFirst("avgend");
+        if( avgStart != null & avgEnd != null){
+            setAVGStartTime(avgStart);
+            setAVGEndTime(avgEnd);
+        }
+        else{
+            avgStartTime=null;
+            avgEndTime=null;
+        }
+        
+    }
+    
+    
+    
+    private void setAVGStartTime(String startTime) {
+        try {
+            this.avgStartTime = new Date(Long.parseLong(startTime, 10));
+        } catch (NumberFormatException e) {
+            Logger.getGlobal().log(Level.WARNING, startTime + " could not be converted to Long");
         }
     }
 
+    private void setAVGEndTime(String endTime) {
+        try {
+            this.avgEndTime = new Date(Long.parseLong(endTime,10));
+
+        } catch (NumberFormatException e) {
+            Logger.getGlobal().log(Level.WARNING, endTime + " could not be converted to Long");
+        }
+    }
+
+    private void setProviders() {
+        /* PROVIDERS */
+        String providers = context.getQueryParameters().getFirst("providers");
+        if (providers != null) {
+            this.providers=new ArrayList<>();
+            String[] parts = providers.split(",");
+            for (String s : parts) {
+                this.providers.add(s);
+            }
+        }
+        else{
+            //setNoProviders();
+            setAllProviders(); 
+        }
+    }
+    
+
+    
+    private void setAllProviders (){
+        providers = new ArrayList<>();
+        for(ISourceAdapter adapter : beans.getSourceAdaptors()){
+            providers.add(adapter.getProviderName());
+        }
+    }
+    
+    private void setNoProviders (){
+        providers = new ArrayList<>();
+    }
+    
+    
     private void setStartTime(String startTime) {
         try {
             this.startTime = new Date(Long.parseLong(startTime, 10));
@@ -352,52 +585,40 @@ public class RoutesResource {
 
     private void setEndTime(String endTime) {
         try {
-            this.endTime = new Date(Long.parseLong(endTime, 10));
+            this.endTime = new Date(Long.parseLong(endTime,10));
         } catch (NumberFormatException e) {
             Logger.getGlobal().log(Level.WARNING, endTime + " could not be converted to Long");
         }
     }
-
-    private void setParameters() {
-        /* PROVIDERS */
-        this.providers = new ArrayList<>();
-        String providers = context.getQueryParameters().getFirst("provider");
-        if (providers != null) {
-            String[] parts = providers.split(",");
-            for (String s : parts) {
-                this.providers.add(s);
+    
+    private void setStartTimes (String startTimes){
+        
+        this.startTimes=new ArrayList<>();
+        String[] parts = startTimes.split(",");
+        for (String s: parts){
+            try{
+               this.startTimes.add(new Date(Long.parseLong(s,10)));
+            }
+            catch (NumberFormatException e){
+                Logger.getGlobal().log(Level.WARNING,s+" could not be converted to Long");
             }
         }
     }
-
-    private void addRouteData(JSONObject obj, IRoute route) {
-        List<IRouteData> data = null;
-        switch (dataType) {
-            case "data":
-                data = beans.getTrafficDataDAO().getData(route, startTime, endTime);
-                break;
-            case "current":
-                data = beans.getTrafficDataDAO().getCurrentTrafficSituation(route);
-                break;
-            case "summary":
-                data = beans.getTrafficDataDAO().getCurrentTrafficSituation(route);
-                break;
-        }
-        List<IRouteData> result = new ArrayList<>();
-        for (IRouteData d : data) {
-            if (providers.size() == 0 || providers.contains(d.getProvider())) {
-                result.add(d);
+    
+    private void setEndTimes (String endTimes){
+        
+        this.endTimes=new ArrayList<>();
+        String[] parts = endTimes.split(",");
+        for (String s: parts){
+            try{
+               this.endTimes.add(new Date(Long.parseLong(s,10)));
+            }
+            catch (NumberFormatException e){
+                Logger.getGlobal().log(Level.WARNING,s+" could not be converted to Long");
             }
         }
-        obj.put("data", transformRouteData(result));
     }
-
-    private String JSONRoutes(List<IRoute> routes) {
-        JSONArray result = new JSONArray();
-        for (IRoute route : routes) {
-            result.put(transformRoute(route));
-        }
-        return result.toString(1);
-    }
+    
+    
 
 }
