@@ -1,40 +1,118 @@
 
 .analyse{
     
+    .container{
+        width:90%;
+    }
+        
     .row{
         clear: both;
     }
     
     height: 100%;
     
+    .index{
+
+        .banner{
+            width: 100%;
+            height: 100%;
+            background-image: url("../img/homepage.jpg");
+            background-size: cover;
+        }
+
+        .slider {
+            display:none;
+            ul.slides{
+                background: color("grey","lighten-4");
+            }
+            li{
+                background:none;
+
+                .header{
+                    background: color("blue","darken-2");
+                    margin: 0;
+                    color: white;
+                }
+                .progress{
+                    background: color("grey","lighten-1");
+                    .determinate{
+                        background: color("yellow","darken-1");
+                    }
+                }
+                
+
+            }
+            ul.indicators{
+                padding:20px;
+                .indicator-item{
+                    background: color("grey","darken-1");
+                    &.active{
+                        background: color("blue","darken-1");
+                    }
+                }
+            }
+            section{
+                margin: 10px;
+                padding: 10px;
+            }
+
+        }
+
+
+    }
+   
+    
     .page{
         
        //background: $secondary-color;
         height: 100%;
         overflow-y:auto;
+
+        .viewSwitch {
+            
+            li{
+                
+                border: 1px solid color("blue", "darken-1");
+                padding: 0;
+                
+                a{
+                    display: block;
+                    padding: 0 20px;
+                }
+            
+                &.active{
+                    background: color("blue", "darken-1");
+                }
+            }
+            
+            
+            
+        }
+
         
         .header{
-            background: color("teal", "lighten-1");
+            background: color("blue", "darken-1");
             
             color: white;
-            padding: 50px 30px;
+            padding: 30px 30px;
             
             h3{
                 margin: 0;
                 color: white;
             }
+            
+            .btn{
+                @extend .white;
+                color: black;
+            }
+            
         }
-        
-        .container{
-            width:90%;
-        }
-        
+                
         .content{
             //height:100%;
             //background: yellow;
             padding: 20px;
         }
-        
         
     }
     
@@ -51,19 +129,15 @@
         max-height: 100%;
         height:100%;
         
-        ul{
-            //width: 100%;
-        }
-        
         .header {
             display: block;
             min-height: $collapsible-height;
             line-height: $collapsible-height;
             padding: 0 1rem;
             //border-bottom: 1px solid gray;
-            background: color("amber", "lighten-2");
+            background: color("blue-grey", "lighten-2");
             width:100%;
-
+            
             .row{
                 margin: 0;
             }
@@ -74,7 +148,8 @@
 
             .title{
                 text-align: center;
-                font-weight: 700;
+                font-weight: 500;
+                text-transform: uppercase;
             }
 
             i {
@@ -102,8 +177,6 @@
             height: 100%;
             overflow-y: scroll;
             
-            
-
             i {
               width: 2rem;
               font-size: 1.6rem;
@@ -114,10 +187,62 @@
               margin-right: 1rem;
               color: black;
             }
-
-           
             
+            section{
+                padding: 10px;
+                background: white;
+            }
         }
+        
+        .collapsible{
+            
+            background: white;
+            
+            
+            .collapsible-header{
+                background:  white;
+                i{
+                    color: color("deep-orange","darken-2");
+                }
+            }
+                
+            .collapsible-body {
+
+
+                section{
+                    margin: 20px;
+                }
+
+                ul{
+                    margin: 0;
+                    padding: 0;
+
+                    li{
+                        background: white;
+                        width: 100%;
+                        padding: 10px;
+                    }
+
+                    li:hover{
+                        background: grey;
+                    }
+                }
+                .btn{
+                    @extend .white;
+                    color: black;
+                    width: 100%;
+                    color: color("deep-orange","darken-2");
+                }
+                p{
+                    padding: 0;
+                    margin: auto 0;
+                }
+                input{
+                    height: 2rem;
+                }
+            }
+        }
+        
 
         
     }

@@ -35,7 +35,7 @@
 	</url-mapping>
         
         <url-mapping id="analyse-datasources">
-		<pattern value="/analyser/datasources" />
+		<pattern value="/analyse/datasources" />
 		<view-id value="/faces/datasourcecompare.xhtml" />
 	</url-mapping>
         

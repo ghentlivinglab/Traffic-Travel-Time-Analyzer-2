@@ -1,0 +1,371 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    
+    
+
+        <ui:composition template="./templates/HeaderBodySideRight.xhtml">
+            
+            <ui:define name="page"> Analyse </ui:define>
+
+            <ui:define name="content">
+                
+                
+                        
+                        <div id="st-container" class="st-container">
+			
+			<!-- content push wrapper -->
+			<div class="st-pusher">
+				<nav class="st-menu st-effect-3" id="menu-3">
+                                    
+                                    <div class="analyse">
+
+                                        <div class="sidebar">
+
+                                                <div class="header">
+                                                    <div class="row">
+                                                        <div class="col s1 btn_back">
+                                                            <h:link outcome="pretty:analyse">
+                                                                <i class="material-icons">keyboard_backspace</i>
+                                                            </h:link>
+                                                        </div>
+                                                        <div class="col s11 title"><span> Databronnen vergelijken </span></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="content">
+
+                                                    <fieldset>
+                                                        <legend>Periode</legend>
+                                                        <section>
+                                                            <div class="row">
+                                                                <div class="col s5 valign-wrapper">
+                                                                    <p class="valign">Begin</p>
+                                                                  </div>
+                                                                <div class="col s7"> 
+                                                                    <input type="text" class="datetimepicker" id="periodStart" /> </div>
+                                                                <!--
+                                                                <div class="col s1 valign-wrapper right-align pull-bottom"> 
+                                                                    <a href="#!" class="valign datetimepicker" data-refid="periodStart"><i class="material-icons">today</i></a> 
+                                                                </div>
+                                                                -->
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col s5 valign-wrapper">
+                                                                    <p class="valign">Eind</p>
+                                                                </div>
+                                                                <div class="col s7"> 
+                                                                    <input type="text" class="datetimepicker" id="periodEnd" /> </div>
+                                                                <!--
+                                                                <div class="col s1 valign-wrapper right-align pull-bottom"> 
+                                                                    <a href="#!" class="valign datetimepicker" data-refid="periodEnd"><i class="material-icons">today</i></a> 
+                                                                </div>
+                                                                -->
+                                                            </div>
+                                                            <button data-effect="st-effect-3" class="btn">Push</button>
+                                                        </section>
+
+                                                    </fieldset>
+
+                                                    <fieldset>
+                                                        <legend>Periode</legend>
+
+                                                            <ul>
+                                                                <li>24 jul -> 26 jul</li>
+                                                                <li>24 jul -> 26 jul</li>
+                                                                <li>24 jul -> 26 jul</li>
+                                                                <li>24 jul -> 26 jul</li>
+                                                            </ul>
+
+                                                        <a href="#!" class="btn">Wijzigen</a>
+                                                    </fieldset>
+
+
+                                                    <fieldset>
+                                                        <legend>Trajecten</legend>
+
+                                                            <ul id="routeList">
+                                                                <li>R4: Gent - Zelzate</li>
+                                                                <li>R4: Gent - Zelzate</li>
+                                                                <li>R4: Gent - Zelzate</li>
+                                                                <li>R4: Gent - Zelzate</li>
+                                                            </ul>
+
+
+
+                                                        <a href="#!" class="btn" id="selectRoutes" data-multiplicity="single">Selecteer trajecten</a>
+                                                    </fieldset>
+
+
+
+
+
+                                                    <fieldset>
+                                                        <legend>Databronnen</legend>
+
+                                                            <ul>
+                                                                <li>R4: Gent - Zelzate</li>
+                                                                <li>R4: Gent - Zelzate</li>
+                                                                <li>R4: Gent - Zelzate</li>
+                                                                <li>R4: Gent - Zelzate</li>
+                                                            </ul>
+
+
+                                                        <a href="#!" class="btn">Selecteer databronnen</a>
+                                                    </fieldset>
+
+
+
+                                                </div>
+
+
+                                        </div>
+                                    </div>
+                                     
+                      
+				</nav>
+
+                            <div class="analyse">
+                              <div class="page">
+				<div class="st-content"><!-- this is the wrapper for the content -->
+					<div class="st-content-inner"><!-- extra div for emulating position:fixed of the menu -->
+						<!-- Top Navigation -->
+						<div class="codrops-top clearfix">
+							<a class="codrops-icon codrops-icon-prev" href="http://tympanus.net/Tutorials/3DShadingWithBoxShadows/"><span>Previous Demo</span></a>
+							<span class="right"><a class="codrops-icon codrops-icon-drop" href="http://tympanus.net/codrops/?p=16292"><span>Back to the Codrops Article</span></a></span>
+						</div>
+						<header class="codrops-header">
+							<h1>Sidebar Transitions <span>Transition effects for off-canvas views</span></h1>
+						</header>
+						<div class="main clearfix">
+							<div id="st-trigger-effects" class="column">
+                                                            <a class="btn" data-effect="st-effect-3">Push</a>
+                                                            
+							</div>
+							<div class="column">
+								<p>Sidebar menus or off-canvas navigations can be revealed in many creative ways.</p>
+								<p>Here is some inspiration for showing them in style using CSS transitions.</p>
+							</div>
+							<div class="info">
+								<p>If you enjoyed this demo you might also like:</p>
+								<p><a href="http://tympanus.net/Development/HeaderEffects/">On Scroll Header Effects</a></p>
+								<p><a href="http://tympanus.net/Development/PageTransitions/">A Collection of Page Transitions</a></p>
+							</div>
+						</div><!-- /main -->
+					</div><!-- /st-content-inner -->
+				</div><!-- /st-content -->
+			</div><!-- /st-pusher -->
+                      </div>
+                   </div>
+		</div><!-- /st-container -->
+                        
+                        <!--
+                        
+                        <div class="content center">
+                            <div class="preloader-wrapper big active center-align">
+                                <div class="spinner-layer spinner-blue-only">
+                                  <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                  </div><div class="gap-patch">
+                                    <div class="circle"></div>
+                                  </div><div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                            
+                        -->
+                        
+                
+            </ui:define>
+
+            <ui:define name="right">
+                
+                <div class="analyse">
+                    
+                    <div class="sidebar">
+                   
+                            <div class="header">
+                                <div class="row">
+                                    <div class="col s1 btn_back">
+                                        <h:link outcome="pretty:analyse">
+                                            <i class="material-icons">keyboard_backspace</i>
+                                        </h:link>
+                                    </div>
+                                    <div class="col s11 title"><span> Databronnen vergelijken </span></div>
+                                </div>
+                            </div>
+                            
+                            <div class="content">
+                                
+                                <fieldset>
+                                    <legend>Periode</legend>
+                                    <section>
+                                        <div class="row">
+                                            <div class="col s5 valign-wrapper">
+                                                <p class="valign">Begin</p>
+                                              </div>
+                                            <div class="col s7"> 
+                                                <input type="text" class="datetimepicker" id="periodStart" /> </div>
+                                            <!--
+                                            <div class="col s1 valign-wrapper right-align pull-bottom"> 
+                                                <a href="#!" class="valign datetimepicker" data-refid="periodStart"><i class="material-icons">today</i></a> 
+                                            </div>
+                                            -->
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s5 valign-wrapper">
+                                                <p class="valign">Eind</p>
+                                            </div>
+                                            <div class="col s7"> 
+                                                <input type="text" class="datetimepicker" id="periodEnd" /> </div>
+                                            <!--
+                                            <div class="col s1 valign-wrapper right-align pull-bottom"> 
+                                                <a href="#!" class="valign datetimepicker" data-refid="periodEnd"><i class="material-icons">today</i></a> 
+                                            </div>
+                                            -->
+                                        </div>
+                                        <button data-effect="st-effect-3" class="btn">Push</button>
+                                    </section>
+                                    
+                                </fieldset>
+                                
+                                <fieldset>
+                                    <legend>Periode</legend>
+                                   
+                                        <ul>
+                                            <li>24 jul -> 26 jul</li>
+                                            <li>24 jul -> 26 jul</li>
+                                            <li>24 jul -> 26 jul</li>
+                                            <li>24 jul -> 26 jul</li>
+                                        </ul>
+                                   
+                                    <a href="#!" class="btn">Wijzigen</a>
+                                </fieldset>
+                                
+                                
+                                <fieldset>
+                                    <legend>Trajecten</legend>
+                                    
+                                        <ul id="routeList">
+                                            <li>R4: Gent - Zelzate</li>
+                                            <li>R4: Gent - Zelzate</li>
+                                            <li>R4: Gent - Zelzate</li>
+                                            <li>R4: Gent - Zelzate</li>
+                                        </ul>
+                                 
+                                    
+                                    
+                                    <a href="#!" class="btn" id="selectRoutes" data-multiplicity="single">Selecteer trajecten</a>
+                                </fieldset>
+                                
+                                
+                                
+                                
+                                
+                                <fieldset>
+                                    <legend>Databronnen</legend>
+                                    
+                                        <ul>
+                                            <li>R4: Gent - Zelzate</li>
+                                            <li>R4: Gent - Zelzate</li>
+                                            <li>R4: Gent - Zelzate</li>
+                                            <li>R4: Gent - Zelzate</li>
+                                        </ul>
+                                
+                                    
+                                    <a href="#!" class="btn">Selecteer databronnen</a>
+                                </fieldset>
+                                
+                                
+                                
+                            </div>
+                      
+                        
+                    </div>
+                </div>
+                
+
+                <!-- Modal Structure -->
+                <div id="selectRoutesModel" class="modal modal-fixed-footer">
+                  <div class="modal-content">
+                    <h4>Trajecten selecteren</h4>
+                    <p>Selecteer een of meerdere traject(en) waarover je data wil vergelijken</p>
+                    <div class="row">
+                        <div class="col s6">
+                            
+                            <div class="multiselectsection">
+                                <ul id="availableRoutesList">
+
+                                </ul>
+                            </div>
+                            
+                        </div>
+                        <div class="col s6">
+                            <img src="" class="responsive-img" id="routePreview"  />
+                        </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Ok</a>
+                  </div>
+                </div>
+                
+                
+                <nav class="st-menu st-effect-3" id="menu-3">
+                    <h2 class="icon icon-lab">Sidebar</h2>
+                    <ul>
+                            <li><a class="icon icon-data" href="#">Data Management</a></li>
+                            <li><a class="icon icon-location" href="#">Location</a></li>
+                            <li><a class="icon icon-study" href="#">Study</a></li>
+                            <li><a class="icon icon-photo" href="#">Collections</a></li>
+                            <li><a class="icon icon-wallet" href="#">Credits</a></li>
+                    </ul>
+                </nav>
+                
+     
+            </ui:define>
+            
+                
+    
+            <ui:define name="javascript">
+                
+                
+                <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyseComponents.js" />
+                
+                <script>
+			(function() {
+				var selList = document.getElementById( 'availableRoutesList' ),
+					items = selList.querySelectorAll( 'li' );
+				
+				// fill the initial checked elements (mozilla)
+				[].slice.call( items ).forEach( function( el ) {
+					el.parentNode.className = el.checked ? 'selected' : '';
+				} );
+
+				function checkUncheck( el ) {
+					el.parentNode.className = el.checked ? '' : 'selected';
+					el.checked = !el.checked;
+				}
+
+
+			} )();
+                        
+                        $(document).ready(function(){
+                            $('.slider').slider({full_width: true});
+                        });
+		</script>
+
+                
+            </ui:define>
+
+        </ui:composition>
+
+    
+    
+
+
+</html>

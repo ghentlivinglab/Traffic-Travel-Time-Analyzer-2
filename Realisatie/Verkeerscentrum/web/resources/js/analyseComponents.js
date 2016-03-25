@@ -1,32 +1,34 @@
 $(document).ready(function() {
+    /*
+    $('#selectRoutesModel').openModal({
+      dismissible: false, // Modal can be dismissed by clicking outside of the modal
+      opacity: .5, // Opacity of modal background
+      in_duration: 300, // Transition in duration
+      out_duration: 200, // Transition out duration
+      //ready: function() { alert('Ready'); }, // Callback for Modal open
+      //complete: function() { alert('Closed'); } // Callback for Modal close
+    });
+    */
     $(".sidebar .content").css("height",$("main").height()-$(".sidebar .header").height());
-    /*$('.datepicker').pickadate({
-        selectMonths: true, // Creates a dropdown to control month
-        selectYears: 15 // Creates a dropdown of 15 years to control year
-    });*/
-     $('.datetimepicker').click(function() {
-         /*var datetime = "#"+$(this).data("refid");
-         alert(datetime);
-         $(datetime).bootstrapMaterialDatePicker({ format : 'dddd DD MMMM YYYY - HH:mm' , lang : 'nl' });
-         $(datetime).trigger("mouseup");
-         */
-    })
-    $(".datetimepicker").bootstrapMaterialDatePicker({ format : 'DD MMMM YYYY - HH:mm' });
-     //$('#modal1').openModal();
-     showRoutePreview = function(){
+    $(".datetimepicker").bootstrapMaterialDatePicker({ 
+        format : 'DD MMMM YYYY - HH:mm',
+        lang: 'nl',
+        weekStart : 1        
+    });
+    showRoutePreview = function(){
          $("#routePreview").css("display","block");
          
          $("#routePreview").attr("src","http://localhost:8080/web/resources/img/traject.PNG");
-     };
-     hideRoutePreview = function(){
+    };
+    hideRoutePreview = function(){
          $("#routePreview").css("display","none");
-     };
-     addRouteToList = function(){
+    };
+    addRouteToList = function(){
          
-     };
-     $("#selectRoutes").click(function(){
-         switch($(this).data("multiplicity")){
-             case "multi": 
+    };
+    $("#selectRoutes").click(function(){
+        switch($(this).data("multiplicity")){
+            case "multi": 
                 for(i=0; i<20; i++){
                      $("#availableRoutesList")
                              .append($("<li />")
@@ -36,7 +38,7 @@ $(document).ready(function() {
                              )));
                 }
                  break;
-             case "single": 
+            case "single": 
                  for(i=0; i<20; i++){
                      $("#availableRoutesList")
                              .append($("<li />")
@@ -45,8 +47,8 @@ $(document).ready(function() {
                              .append($("<span />").text("R4: Gent - Zelzate")
                              )));
                     }
-                 break;
-         }
-         $('#selectRoutesModel').openModal();
+                break;
+        }
+        $('#selectRoutesModel').openModal();
      });
 });

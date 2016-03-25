@@ -7741,7 +7741,7 @@ select {
     opacity: 0; } }
 .slider {
   position: relative;
-  height: 400px;
+  height: 100%;
   width: 100%; }
   .slider.fullscreen {
     height: 100%;

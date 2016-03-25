@@ -1588,7 +1588,7 @@
 .shades-text.text-black {
   color: #000000 !important; }
 
-.shades.white {
+.shades.white, .analyse .page .header .shades.btn, .analyse .sidebar .collapsible .collapsible-body .shades.btn {
   background-color: #FFFFFF !important; }
 
 .shades-text.text-white {
@@ -1606,7 +1606,7 @@
 .black-text {
   color: #000000 !important; }
 
-.white {
+.white, .analyse .page .header .btn, .analyse .sidebar .collapsible .collapsible-body .btn {
   background-color: #FFFFFF !important; }
 
 .white-text {
@@ -2609,28 +2609,60 @@ main {
       .map .sidebar .trafficinfo .traffic-list li {
         opacity: 0; }
 
-.index .banner {
-  width: 100%;
-  height: 100%;
-  background-image: url("../img/homepage.jpg");
-  background-size: cover; }
-
 .analyse {
   height: 100%; }
+  .analyse .container {
+    width: 90%; }
   .analyse .row {
     clear: both; }
+  .analyse .index .banner {
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/homepage.jpg");
+    background-size: cover; }
+  .analyse .index .slider {
+    display: none; }
+    .analyse .index .slider ul.slides {
+      background: #f5f5f5; }
+    .analyse .index .slider li {
+      background: none; }
+      .analyse .index .slider li .header {
+        background: #1976D2;
+        margin: 0;
+        color: white; }
+      .analyse .index .slider li .progress {
+        background: #bdbdbd; }
+        .analyse .index .slider li .progress .determinate {
+          background: #fdd835; }
+    .analyse .index .slider ul.indicators {
+      padding: 20px; }
+      .analyse .index .slider ul.indicators .indicator-item {
+        background: #757575; }
+        .analyse .index .slider ul.indicators .indicator-item.active {
+          background: #1E88E5; }
+    .analyse .index .slider section {
+      margin: 10px;
+      padding: 10px; }
   .analyse .page {
     height: 100%;
     overflow-y: auto; }
+    .analyse .page .viewSwitch li {
+      border: 1px solid #1E88E5;
+      padding: 0; }
+      .analyse .page .viewSwitch li a {
+        display: block;
+        padding: 0 20px; }
+      .analyse .page .viewSwitch li.active {
+        background: #1E88E5; }
     .analyse .page .header {
-      background: #26a69a;
+      background: #1E88E5;
       color: white;
-      padding: 50px 30px; }
+      padding: 30px 30px; }
       .analyse .page .header h3 {
         margin: 0;
         color: white; }
-    .analyse .page .container {
-      width: 90%; }
+      .analyse .page .header .btn {
+        color: black; }
     .analyse .page .content {
       padding: 20px; }
   .analyse .sidebar {
@@ -2645,13 +2677,14 @@ main {
       min-height: 3rem;
       line-height: 3rem;
       padding: 0 1rem;
-      background: #ffd54f;
+      background: #90a4ae;
       width: 100%; }
       .analyse .sidebar .header .row {
         margin: 0; }
       .analyse .sidebar .header .title {
         text-align: center;
-        font-weight: 700; }
+        font-weight: 500;
+        text-transform: uppercase; }
       .analyse .sidebar .header i {
         width: 2rem;
         font-size: 1.6rem;
@@ -2679,5 +2712,34 @@ main {
         text-align: center;
         margin-right: 1rem;
         color: black; }
+      .analyse .sidebar .content section {
+        padding: 10px;
+        background: white; }
+    .analyse .sidebar .collapsible {
+      background: white; }
+      .analyse .sidebar .collapsible .collapsible-header {
+        background: white; }
+        .analyse .sidebar .collapsible .collapsible-header i {
+          color: #e64a19; }
+      .analyse .sidebar .collapsible .collapsible-body section {
+        margin: 20px; }
+      .analyse .sidebar .collapsible .collapsible-body ul {
+        margin: 0;
+        padding: 0; }
+        .analyse .sidebar .collapsible .collapsible-body ul li {
+          background: white;
+          width: 100%;
+          padding: 10px; }
+        .analyse .sidebar .collapsible .collapsible-body ul li:hover {
+          background: grey; }
+      .analyse .sidebar .collapsible .collapsible-body .btn {
+        color: black;
+        width: 100%;
+        color: #e64a19; }
+      .analyse .sidebar .collapsible .collapsible-body p {
+        padding: 0;
+        margin: auto 0; }
+      .analyse .sidebar .collapsible .collapsible-body input {
+        height: 2rem; }
 
 /*# sourceMappingURL=app.css.map */

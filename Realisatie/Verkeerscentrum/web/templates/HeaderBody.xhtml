@@ -14,11 +14,12 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title><ui:insert name="pagetitle">Verkeerscentrum Gent</ui:insert></title>
         <!--Import Google Icon Font-->
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-           
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <!--Import materialize.css-->     
+        
         <link rel="icon" href="/web/resources/img/favicon.ico" type="image/x-icon" />
 
-        <!--Import materialize.css-->  
+        
         <link type="text/css" rel="stylesheet" href="#{requestScope.resourceURLcss}/materialize.css"  media="screen,projection" />
         <link type="text/css" rel="stylesheet" href="#{requestScope.resourceURLcss}/app.css"  media="screen,projection" />
         <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
@@ -74,22 +75,15 @@
         
         <main>
             
-            <div class="row pull-bottom">
-                <div class="col s12 m8 pull-bottom">
-                    <ui:insert name="content">Content</ui:insert>
-                </div>
-                <div class="col s12 m4 pull-bottom">
-                    <ui:insert name="right">Right</ui:insert>
-                </div>
-            </div>
-            
+            <ui:insert name="content">Content</ui:insert>
+
         </main>  
-        
-        
+       
+       
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <!-- Compiled and minified JavaScript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
-        
+         
         <script>
             
             // Initialize collapse button

@@ -13,7 +13,121 @@
                 <div class="analyse">
   
                     <div class="index pull-bottom">
-                        <div class="banner" />
+                        <div class="banner">
+                            
+                              <div class="slider">
+                                <ul class="slides">
+                                  <li>
+                                        <div class="row header">
+                                            <div class="col s12">
+                                                <div class="container">
+                                                    <h3>Stap 1: selecteer een periode</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="determinate" style="width: 33%"></div>
+                                        </div>
+                                      <div class="container">
+                                        <div class="row">
+                                            <div class="col s7">
+                                                <p>Hieronder kan u een periode selecteren.</p>
+                                            </div>
+                                            <div class="col s5 right-align">
+                                                <p>
+                                                    <a href="#!" class="btn disabled">Vorige</a>
+                                                    <a href="#!" class="btn btnNextSlide">Volgende</a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col m6">
+                                                <section>
+                                                    <h4>Begin</h4>
+                                                    <input type="text" class="datetimepicker" id="periodStart" /> 
+                                                </section> 
+                                             
+                                            </div>
+                                            <div class="col m6">
+                                                <section>
+                                                    <h4>Einde</h4>
+                                                    <input type="text" class="datetimepicker" id="periodStart" /> 
+                                                </section>      
+                                             
+                                            </div>
+                                        </div>
+                                        
+                                      </div>
+                     
+                                  </li>
+                                  <li>
+                                    
+                                    
+                                        <div class="row header">
+                                            <div class="col s12">
+                                                <div class="container">
+                                                    <h3>Stap 2: selecteer een traject</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="determinate" style="width: 66%"></div>
+                                        </div>
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col s7">
+                                                    <p>Hieronder kan u een of meerdere te analyseren trajecten selecteren.</p>
+                                                </div>
+                                                <div class="col s5 right-align">
+                                                    <p>
+                                                        <a href="#!" class="btn btnPrevSlide">Vorige</a>
+                                                        <a href="#!" class="btn btnNextSlide">Volgende</a>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        
+                                        </div>
+                                      
+                                      
+                                      
+                                      
+                                  </li>
+                                  <li>
+                                    
+                                    
+                                        <div class="row header">
+                                            <div class="col s12">
+                                                <div class="container">
+                                                    <h3>Stap 3: databronnen</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="determinate" style="width: 100%"></div>
+                                        </div>
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col s7">
+                                                    <p>Hieronder kan u selecteren welke bronnen mogen deel uitmaken van de analyse.</p>
+                                                </div>
+                                                <div class="col s5 right-align">
+                                                    <p>
+                                                        <a href="#!" class="btn btnPrevSlide">Vorige</a>
+                                                        <button type="submit" href="#!" class="btn green">Analyseer</button>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        
+                                        </div>
+                                      
+                                      
+                                  </li>
+                                  
+                                </ul>
+                              </div>
+                            
+                        </div>
+                            
                     </div>
                 
                 </div>
@@ -26,12 +140,6 @@
                     <img src="#{resourceURLimg}/vcg.png" class="logo img-responsive" />
                     <div class="navigation">
                         <ul>
-                            <li>
-                                <h:link outcome="pretty:analyse-datasources">
-                                    <i class="material-icons">open_in_browser</i>
-                                    Databronnen vergelijken
-                                </h:link>
-                            </li>
                             <li>
                                 <a href="live">
                                     <i class="material-icons">navigation</i>
@@ -53,7 +161,7 @@
                             <li>
                                 <a href="live">
                                     <i class="material-icons">settings</i>
-                                    Trajcten vergelijken
+                                    Trajecten vergelijken
                                </a>
                             </li>
                             <li>
@@ -61,6 +169,13 @@
                                     <i class="material-icons">settings</i>
                                     Perioden vergelijken
                                </a>
+                            </li>
+                            <li>
+                                <!-- <h:link outcome="pretty:analyse-datasources" id="btnCompareSources"> -->
+                                <a href="#!" id="btnCompareSources">
+                                    <i class="material-icons">open_in_browser</i>
+                                    Databronnen vergelijken
+                                </a>
                             </li>
                         </ul>
                         
@@ -79,6 +194,49 @@
     
             <ui:define name="javascript">
                 
+                <script>
+                  
+                  var tab = 0;
+                  function resetSlider(){
+                      while(tab != 0)
+                          prevSlide();
+                  }
+                  function nextSlide(){
+                      tab++;
+                      tab %= 3;
+                      $(".slider").slider("next");
+                  }
+                  function prevSlide(){
+                      tab--;
+                      tab %= 3;
+                      $(".slider").slider("prev");
+                  }
+                    
+                  $(document).ready(function(){
+                    $(".slider").slider({
+                        full_width: true,
+                    });
+                    $(".slider").slider('pause');
+                    $(".slider").css("height","100%");
+                    $(".slides").css("height","100%");
+                    
+                    $("#btnCompareSources").click(function(){
+                        $(".slider").fadeIn();
+                        resetSlider();
+                    });
+                    
+                    $(".btnNextSlide").click(nextSlide);
+                    $(".btnPrevSlide").click(prevSlide);
+                    
+                    $(".datetimepicker").bootstrapMaterialDatePicker({ 
+                        format : 'DD MMMM YYYY - HH:mm',
+                        lang: 'nl',
+                        weekStart : 1        
+                    });
+                
+                  });
+
+                </script>
                 
             </ui:define>
 

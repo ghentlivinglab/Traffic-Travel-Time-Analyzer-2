@@ -6,149 +6,201 @@
     
     
 
-        <ui:composition template="./templates/HeaderBodySideRight.xhtml">
+        <ui:composition template="./templates/HeaderBody.xhtml">
             
             <ui:define name="page"> Analyse </ui:define>
 
             <ui:define name="content">
                 
-                <div class="analyse">
-                    <div class="page">
-                        <!-- <div class="header">
-                            <h3>Databronnen vergelijken</h3>
-                        </div>
-                        -->
-                        <div class="content">
-                 
-                            
-                            <div class="container">
-                                <h5>R4: Gent - Zelzate</h5>
-
-                                <br /><br />
-
-                                <img src="#{requestScope.resourceURLimg}/grafiek.PNG" class="responsive-img" />
-
-                                <br />
-                                
-                                <!--
-                                <h5>Databronnen vergelijken</h5>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                </p>
-                                <p>
-                                    Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit. Etiam tempor. Ut ullamcorper, ligula eu tempor congue, eros est euismod turpis, id tincidunt sapien risus a quam. Maecenas fermentum consequat mi. Donec fermentum. Pellentesque malesuada nulla a mi. Duis sapien sem, aliquet nec, commodo eget, consequat quis, neque. Aliquam faucibus, elit ut dictum aliquet, felis nisl adipiscing sapien, sed malesuada diam lacus eget erat. Cras mollis scelerisque nunc. Nullam arcu. Aliquam consequat. Curabitur augue lorem, dapibus quis, laoreet et, pretium ac, nisi. Aenean magna nisl, mollis quis, molestie eu, feugiat in, orci. In hac habitasse platea dictumst.
-                                </p>
-
-                                
-                                
-                                <i class="material-icons" style="font-size:500px;opacity: 0.05; position:absolute; top: 10%; left: 50%; 
-    -webkit-transform: translate(-50%, 0);">accessible</i>
-                                
-                                -->
-                                
-                                
-                            </div>
-                            
-                        </div>
-                    </div>
-                     
-                </div>
                 
-                
-            </ui:define>
-
-            <ui:define name="right">
                 <div class="analyse">
-                    
-                    <div class="sidebar">
-                   
-                            <div class="header">
-                                <div class="row">
-                                    <div class="col s1 btn_back">
-                                        <h:link outcome="pretty:analyse">
-                                            <i class="material-icons">keyboard_backspace</i>
-                                        </h:link>
-                                    </div>
-                                    <div class="col s11 title"><span> Databronnen vergelijken </span></div>
-                                </div>
-                            </div>
+
+                <div id="st-container" class="st-container">
+			
+			<!-- content push wrapper -->
+			<div class="st-pusher">
+				<section class="st-menu st-effect-3" id="menu-3">
+                                    
+                                        <div class="sidebar">
+
+                                                <div class="header">
+                                                    <div class="row">
+                                                        <div class="col s1 btn_back">
+                                                            <a href="#!" id="btnResetSidebar">
+                                                                <i class="material-icons">keyboard_backspace</i>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col s11 title"><span> Databronnen vergelijken </span></div>
+                                                    </div>
+                                                </div>
+
+                                                <!--
+                                                <div class="content">
+
+                                                    
+                                                    
+                                                    
+                                                    <fieldset>
+                                                        <legend>Periode</legend>
+
+
+                                                    </fieldset>
+
+                                                    <fieldset>
+                                                        <legend>Periode</legend>
+
+                                                            <ul>
+                                                                <li>24 jul -> 26 jul</li>
+                                                                <li>24 jul -> 26 jul</li>
+                                                                <li>24 jul -> 26 jul</li>
+                                                                <li>24 jul -> 26 jul</li>
+                                                            </ul>
+
+                                                        <a href="#!" class="btn">Wijzigen</a>
+                                                    </fieldset>
+
+
+                                                    <fieldset>
+                                                        <legend>Trajecten</legend>
+
+                                                            <ul id="routeList">
+                                                                <li>R4: Gent - Zelzate</li>
+                                                                <li>R4: Gent - Zelzate</li>
+                                                                <li>R4: Gent - Zelzate</li>
+                                                                <li>R4: Gent - Zelzate</li>
+                                                            </ul>
+
+
+
+                                                        <a href="#!" class="btn" id="selectRoutes" data-multiplicity="single">Selecteer trajecten</a>
+                                                    </fieldset>
+
+
+
+
+
+                                                    <fieldset>
+                                                        <legend>Databronnen</legend>
+
+                                                            <ul>
+                                                                <li>R4: Gent - Zelzate</li>
+                                                                <li>R4: Gent - Zelzate</li>
+                                                                <li>R4: Gent - Zelzate</li>
+                                                                <li>R4: Gent - Zelzate</li>
+                                                            </ul>
+
+
+                                                        <a href="#!" class="btn">Selecteer databronnen</a>
+                                                    </fieldset>
+                                                    
+                                                    
+                                                </div>
+                                                -->
+                                            
+                                            <ul class="collapsible" data-collapsible="accordion">
+                                                <li>
+                                                  <div class="collapsible-header"><i class="material-icons">filter_drama</i>Periode</div>
+                                                  <div class="collapsible-body">
+                                                        
+                                                        <section>
+                                                            <div class="row">
+                                                                <div class="col s5 valign-wrapper">
+                                                                    <p class="valign">Begin</p>
+                                                                  </div>
+                                                                <div class="col s7"> 
+                                                                    <input type="text" class="datetimepicker" id="periodStart" /> </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col s5 valign-wrapper">
+                                                                    <p class="valign">Eind</p>
+                                                                </div>
+                                                                <div class="col s7"> 
+                                                                    <input type="text" class="datetimepicker" id="periodEnd" /> </div>
+                                                            </div>
+                                                        </section>
+                                                      
+                                                  </div>
+                                                </li>
+                                                <li>
+                                                  <div class="collapsible-header"><i class="material-icons">place</i>Trajecten</div>
+                                                  <div class="collapsible-body">
+                                                     
+                                                        <ul id="routeList">
+                                                            <li>R4: Gent - Zelzate</li>
+                                                            <li>R4: Gent - Zelzate</li>
+                                                            <li>R4: Gent - Zelzate</li>
+                                                            <li>R4: Gent - Zelzate</li>
+                                                        </ul>
+                                                      
+                                                        <a href="#!" class="btn" id="selectRoutes" data-multiplicity="single">Selecteer trajecten</a>    
+                                                  </div>
+                                                </li>
+                                                <li>
+                                                  <div class="collapsible-header"><i class="material-icons">whatshot</i>Databronnen</div>
+                                                  <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+                                                </li>
+                                            </ul>
+                                            
+                                        </div>
+				</section>
+
                             
-                            <div class="content">
-                                
-                                <fieldset>
-                                    <legend>Periode</legend>
-                                    <div class="row">
-                                        <div class="col s5 valign-wrapper">
-                                            <p class="valign">Begin</p>
-                                          </div>
-                                        <div class="col s7"> <input type="text" class="datetimepicker" id="periodStart" /> </div>
-                                        <!--
-                                        <div class="col s1 valign-wrapper right-align pull-bottom"> 
-                                            <a href="#!" class="valign datetimepicker" data-refid="periodStart"><i class="material-icons">today</i></a> 
-                                        </div>
-                                        -->
-                                    </div>
-                                    <div class="row">
-                                        <div class="col s5 valign-wrapper">
-                                            <p class="valign">Eind</p>
-                                          </div>
-                                        <div class="col s7"> <input type="text" class="datetimepicker" id="periodEnd" /> </div>
-                                        <!--
-                                        <div class="col s1 valign-wrapper right-align pull-bottom"> 
-                                            <a href="#!" class="valign datetimepicker" data-refid="periodEnd"><i class="material-icons">today</i></a> 
-                                        </div>
-                                        -->
-                                       
-                                    </div>
-                                </fieldset>
-                                
-                                <fieldset>
-                                    <legend>Periode</legend>
-                                    <ul>
-                                        <li>24 jul -> 26 jul</li>
-                                        <li>24 jul -> 26 jul</li>
-                                        <li>24 jul -> 26 jul</li>
-                                        <li>24 jul -> 26 jul</li>
-                                        
-                                    </ul>
-                                    <a href="#!" class="btn">Wijzigen</a>
-                                </fieldset>
-                                
-                                
-                                <fieldset>
-                                    <legend>Trajecten</legend>
-                                    
-                                    <ul id="routeList">
-                                        <li>R4: Gent - Zelzate</li>
-                                        <li>R4: Gent - Zelzate</li>
-                                        <li>R4: Gent - Zelzate</li>
-                                        <li>R4: Gent - Zelzate</li>
-                                    </ul>
-                                    
-                                    <a href="#!" class="btn" id="selectRoutes" data-multiplicity="single">Selecteer trajecten</a>
-                                </fieldset>
-                                
-                                
-                                
-                                
-                                
-                                <fieldset>
-                                    <legend>Databronnen</legend>
-                                    <ul>
-                                        <li>R4: Gent - Zelzate</li>
-                                        <li>R4: Gent - Zelzate</li>
-                                        <li>R4: Gent - Zelzate</li>
-                                        <li>R4: Gent - Zelzate</li>
-                                    </ul>
-                                    <a href="#!" class="btn">Selecteer databronnen</a>
-                                </fieldset>
-                                
-                                
-                                
-                            </div>
-                      
-                        
-                    </div>
+				<div class="st-content"><!-- this is the wrapper for the content -->
+					<div class="st-content-inner"><!-- extra div for emulating position:fixed of the menu -->
+						
+                                            <div class="page">
+                                                
+                                                    
+                                                <div class="header">
+                                                    <div class="row">
+                                                        <div class="col m4">
+                                                            <a href="#!" class="btn st-effect-trigger" data-effect="st-effect-3">
+                                                                <i class="material-icons left">mode_edit</i>
+                                                                Wijzig aanvraag
+                                                            </a>
+                                                        </div>
+                                                        <div class="col m8">
+                                                            <h3>R4: Gent - Zelzate</h3> 
+                                                            <span>Periode: 24 juli 15:00 - 26 juli 15:00</span>
+                                                        </div>
+                                                        
+                                                    </div>  
+                                                </div>
+                                                
+                                                <div class="content">
+                                                
+                                                     <div class="container">
+                                                        
+                                                        <div class="row">
+                                                            <div class="col m12 right-align">
+                                                                <div class="viewSwitch">
+                                                                    <ul class="pagination">
+                                                                        <li class="active">
+                                                                            <a href="#!" id="btnSwitchToLive">Grafiek</a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="#!" id="btnSwitchToAvg">Tabel</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>  
+                                                         
+                                                        <img class="responsive-img" src="#{requestScope.resourceURLimg}/grafiek.png" witdh="100%" />
+                                                        
+                                                        <br /><br /><br /><br />
+                                                        
+                                                    </div>
+                                                    
+                                                    
+                                                </div>
+                                            </div>
+					</div><!-- /st-content-inner -->
+				</div><!-- /st-content -->
+			</div><!-- /st-pusher -->
+           
+		</div><!-- /st-container -->
+                
                 </div>
                 
 
@@ -177,15 +229,17 @@
                   </div>
                 </div>
                 
-     
+                
+                        
             </ui:define>
-            
+
+          
                 
     
             <ui:define name="javascript">
                 
                 
-               <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyseComponents.js" />
+                <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyseComponents.js" />
                 
                 <script>
 			(function() {
