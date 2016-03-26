@@ -9,7 +9,7 @@
             <ui:define name="page"> Analyse </ui:define>
 
             <ui:define name="content">
-                
+                <form action="/web/analyse/datasources" method="post">
                 <div class="analyse">
   
                     <div class="index pull-bottom">
@@ -33,8 +33,8 @@
                                             <div class="col s7">
                                                 <p>Hieronder kan u een periode selecteren.</p>
                                             </div>
-                                            <div class="col s5 right-align">
-                                                <p>
+                                            <div class="col s5">
+                                                <p class="right-align">
                                                     <a href="#!" class="btn disabled">Vorige</a>
                                                     <a href="#!" class="btn btnNextSlide">Volgende</a>
                                                 </p>
@@ -79,13 +79,26 @@
                                                     <p>Hieronder kan u een of meerdere te analyseren trajecten selecteren.</p>
                                                 </div>
                                                 <div class="col s5 right-align">
-                                                    <p>
+                                                    <p class="right-align">
                                                         <a href="#!" class="btn btnPrevSlide">Vorige</a>
                                                         <a href="#!" class="btn btnNextSlide">Volgende</a>
                                                     </p>
                                                 </div>
                                             </div>
-                                        
+                                            <div class="row">
+                                                <div class="col s6">
+
+                                                    <div class="multiselectsection">
+                                                        <ul id="availableRoutesList" class="availableRoutesList">
+
+                                                        </ul>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col s6">
+                                                    <img src="" class="responsive-img" id="routePreview"  />
+                                                </div>
+                                            </div>
                                         </div>
                                       
                                       
@@ -107,11 +120,11 @@
                                         </div>
                                         <div class="container">
                                             <div class="row">
-                                                <div class="col s7">
+                                                <div class="col m7">
                                                     <p>Hieronder kan u selecteren welke bronnen mogen deel uitmaken van de analyse.</p>
                                                 </div>
-                                                <div class="col s5 right-align">
-                                                    <p>
+                                                <div class="col m5 right-align">
+                                                    <p class="right-align">
                                                         <a href="#!" class="btn btnPrevSlide">Vorige</a>
                                                         <button type="submit" href="#!" class="btn green">Analyseer</button>
                                                     </p>
@@ -132,7 +145,7 @@
                 
                 </div>
                 
-                
+                </form>
             </ui:define>
 
             <ui:define name="right">
@@ -141,31 +154,31 @@
                     <div class="navigation">
                         <ul>
                             <li>
-                                <a href="live">
+                                <a href="#!" id="btnAvgTraffic">
                                     <i class="material-icons">navigation</i>
                                     Gemiddelde verkeerssituaties
                                 </a>
                             </li>
                             <li>
-                                <a href="live">
+                                <a href="#!" id="btnDelayWeekday">
                                     <i class="material-icons">query_builder</i>
                                     Vertragingen per weekdag
-                               </a>
+                                </a>
                             </li>
                             <li>
-                                <a href="live">
+                                <a href="#!" id="btnRushHours">
                                     <i class="material-icons">settings_input_antenna</i>
                                     Spitsuren tijdens werkdagen
-                               </a>
+                                </a>
                             </li>
                             <li>
-                                <a href="live">
+                                <a href="#!" id="btnCompareRoutes">
                                     <i class="material-icons">settings</i>
                                     Trajecten vergelijken
-                               </a>
+                                </a>
                             </li>
                             <li>
-                                <a href="live">
+                                <a href="#!" id="btnComparePeriods">
                                     <i class="material-icons">settings</i>
                                     Perioden vergelijken
                                </a>
@@ -194,49 +207,8 @@
     
             <ui:define name="javascript">
                 
-                <script>
-                  
-                  var tab = 0;
-                  function resetSlider(){
-                      while(tab != 0)
-                          prevSlide();
-                  }
-                  function nextSlide(){
-                      tab++;
-                      tab %= 3;
-                      $(".slider").slider("next");
-                  }
-                  function prevSlide(){
-                      tab--;
-                      tab %= 3;
-                      $(".slider").slider("prev");
-                  }
-                    
-                  $(document).ready(function(){
-                    $(".slider").slider({
-                        full_width: true,
-                    });
-                    $(".slider").slider('pause');
-                    $(".slider").css("height","100%");
-                    $(".slides").css("height","100%");
-                    
-                    $("#btnCompareSources").click(function(){
-                        $(".slider").fadeIn();
-                        resetSlider();
-                    });
-                    
-                    $(".btnNextSlide").click(nextSlide);
-                    $(".btnPrevSlide").click(prevSlide);
-                    
-                    $(".datetimepicker").bootstrapMaterialDatePicker({ 
-                        format : 'DD MMMM YYYY - HH:mm',
-                        lang: 'nl',
-                        weekStart : 1        
-                    });
-                
-                  });
-
-                </script>
+                <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse.js" />
+               
                 
             </ui:define>
 

@@ -11,6 +11,13 @@
     
     height: 100%;
     
+    
+    .availableRoutesList{
+        ol{
+            padding: 0;
+        }
+    }
+    
     .index{
 
         .banner{
@@ -24,23 +31,21 @@
             display:none;
             ul.slides{
                 background: color("grey","lighten-4");
-            }
-            li{
-                background:none;
+                > li{
+                    background:none;
 
-                .header{
-                    background: color("blue","darken-2");
-                    margin: 0;
-                    color: white;
-                }
-                .progress{
-                    background: color("grey","lighten-1");
-                    .determinate{
-                        background: color("yellow","darken-1");
+                    .header{
+                        background: color("blue","darken-2");
+                        margin: 0;
+                        color: white;
+                    }
+                    .progress{
+                        background: color("grey","lighten-1");
+                        .determinate{
+                            background: color("yellow","darken-2");
+                        }
                     }
                 }
-                
-
             }
             ul.indicators{
                 padding:20px;

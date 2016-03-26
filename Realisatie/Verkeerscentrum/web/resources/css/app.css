@@ -2327,6 +2327,9 @@ main {
   display: block;
   overflow-y: auto; }
 
+form {
+  height: 100%; }
+
 .pull-bottom {
   height: 100%;
   padding: 0;
@@ -2615,6 +2618,8 @@ main {
     width: 90%; }
   .analyse .row {
     clear: both; }
+  .analyse .availableRoutesList ol {
+    padding: 0; }
   .analyse .index .banner {
     width: 100%;
     height: 100%;
@@ -2624,16 +2629,16 @@ main {
     display: none; }
     .analyse .index .slider ul.slides {
       background: #f5f5f5; }
-    .analyse .index .slider li {
-      background: none; }
-      .analyse .index .slider li .header {
-        background: #1976D2;
-        margin: 0;
-        color: white; }
-      .analyse .index .slider li .progress {
-        background: #bdbdbd; }
-        .analyse .index .slider li .progress .determinate {
-          background: #fdd835; }
+      .analyse .index .slider ul.slides > li {
+        background: none; }
+        .analyse .index .slider ul.slides > li .header {
+          background: #1976D2;
+          margin: 0;
+          color: white; }
+        .analyse .index .slider ul.slides > li .progress {
+          background: #bdbdbd; }
+          .analyse .index .slider ul.slides > li .progress .determinate {
+            background: #fbc02d; }
     .analyse .index .slider ul.indicators {
       padding: 20px; }
       .analyse .index .slider ul.indicators .indicator-item {
