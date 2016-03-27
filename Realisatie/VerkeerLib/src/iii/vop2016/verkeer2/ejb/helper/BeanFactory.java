@@ -19,6 +19,7 @@ import javax.naming.InitialContext;
 import iii.vop2016.verkeer2.ejb.datadownloader.ITrafficDataDownloader;
 import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyser;
 import iii.vop2016.verkeer2.ejb.geojson.GeoJsonRemote;
+import iii.vop2016.verkeer2.ejb.dataprovider.IDataProvider;
 
 /**
  *
@@ -174,6 +175,22 @@ public class BeanFactory {
             }
         }
         return adapters;
+    }
+
+    public IDataProvider getDataProvider() {
+                if (sctx != null) {
+            Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.DataProvider, sctx, Logger.getGlobal());
+            if (obj instanceof IDataProvider) {
+                return (IDataProvider) obj;
+            }
+        }
+        else{
+            Object obj = HelperFunctions.getBean(beanProperties, BeanSelector.DataProvider, ctx, Logger.getGlobal());
+            if (obj instanceof IDataProvider) {
+                return (IDataProvider) obj;
+            }
+        }
+        return null;
     }
 
 }

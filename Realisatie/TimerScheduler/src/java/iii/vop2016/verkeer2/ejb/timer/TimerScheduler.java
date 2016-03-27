@@ -88,7 +88,8 @@ public class TimerScheduler implements TimerSchedulerRemote {
         Properties prop = getProperties();
 
         //Get interval to closest time for timer from properties file
-        int currentTime = getIndexedCurrentTime(prop);
+        Date time = getCurrentTime(prop);
+        int currentTime = getIndexedCurrentTime(time);
         interval = getIntervalForClosestTime(currentTime, prop);
         Logger.getLogger("logger").log(Level.INFO, "Interval for Timer set to " + interval);
 
@@ -115,11 +116,12 @@ public class TimerScheduler implements TimerSchedulerRemote {
 
         Properties prop = getProperties();
 
-        int currentTime = getIndexedCurrentTime(prop);
+        Date time = getCurrentTime(prop);
+        int currentTime = getIndexedCurrentTime(time);
 
         if (ticks == interval) {
             ticks = 1;
-            DoTick();
+            DoTick(time);
         } else {
             ticks++;
         }
@@ -128,7 +130,7 @@ public class TimerScheduler implements TimerSchedulerRemote {
         int i = getIntervalForClosestTime(currentTime, prop);
         if (i != interval) {
             if (ticks != 1) {
-                DoTick();
+                DoTick(time);
             }
 
             interval = i;
@@ -138,8 +140,7 @@ public class TimerScheduler implements TimerSchedulerRemote {
 
     }
 
-    private int getIndexedCurrentTime(Properties prop) {
-        Date time = getCurrentTime(prop);
+    private int getIndexedCurrentTime(Date time) {
         int currentTime = Integer.parseInt(sdf.format(time));
         return currentTime;
     }
@@ -197,11 +198,11 @@ public class TimerScheduler implements TimerSchedulerRemote {
         return interval;
     }
 
-    private void DoTick() {
+    private void DoTick(Date currentTime) {
         //lookup datamanager bean and trigger timed function
         ITrafficDataDownloader managementBean = beans.getDataManager();
         if (managementBean != null) {
-            managementBean.downloadNewData(new Date());
+            managementBean.downloadNewData(currentTime);
         } else {
             Logger.getLogger("logger").log(Level.SEVERE, "Could not access dataManagement bean to trigger Timed function");
         }

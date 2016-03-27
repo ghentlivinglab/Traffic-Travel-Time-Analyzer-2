@@ -86,7 +86,7 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
     @Override
     public List<IRouteData> getData(IRoute route, Date time1, Date time2) {
         List<IRouteData> data = new ArrayList<>();
-        try {  
+        try {
             long[] range = blocklist.getIdRange(time1, time2);
             if (range[0] == -1 || range[1] == -1) {
                 throw new NoResultException("Could not retrieve id segment from blocklist");
@@ -94,9 +94,9 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
 
             Parameter p0 = new Parameter("id", range[0], range[1], Operation.between);
             Parameter p1 = new Parameter("routeId", route.getId(), Operation.eq);
-            Parameter p2 = new Parameter("timestamp", time1,time2, Operation.between);
+            Parameter p2 = new Parameter("timestamp", time1, time2, Operation.between);
             Request r = new Request(true, 0).addParam(0, p0).addParam(1, p1).addParam(2, p2);
-            
+
             List<IRouteData> routesEntities = r.PrepareQuery(em).getResultList();
             for (IRouteData rdata : routesEntities) {
                 data.add(new RouteData(rdata));
@@ -228,5 +228,36 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
             e2.setTimestamp(new Date(i));
             em.persist(e2);
         }
+    }
+
+    @Override
+    public List<IRouteData> getData(IRoute route, List<Date> startList, List<Date> endList) {
+        List<IRouteData> data = new ArrayList<>();
+        if (route == null) {
+            return data;
+        }
+        if (startList == null || endList == null || startList.size() == 0 || endList.size() == 0 || startList.size() != endList.size()) {
+            return data;
+        }
+        long[] idRange = blocklist.getIdRange(startList.get(0), endList.get(endList.size() - 1));
+
+        if (idRange == null || idRange[0] == -1 || idRange[1] == -1) {
+            return data;
+        }
+
+        Request r = new Request(true, 0);
+        int i = 0;
+        r.addParam(i++, new Parameter("id", idRange[0], idRange[1], Operation.between));
+        r.addParam(i++, new Parameter("routeId", route.getId(), Operation.eq));
+        for (int x = 0; x < startList.size(); x++) {
+            r.addParam(i++, new Parameter("timestamp", startList.get(x), endList.get(x), Operation.between));
+        }
+        List<RouteDataEntity> routesEntities = r.PrepareQuery(em).getResultList();
+
+        //transform all database objects to library objects via copy constructor
+        for (IRouteData rdata : routesEntities) {
+            data.add(new RouteData(rdata));
+        }
+        return data;
     }
 }

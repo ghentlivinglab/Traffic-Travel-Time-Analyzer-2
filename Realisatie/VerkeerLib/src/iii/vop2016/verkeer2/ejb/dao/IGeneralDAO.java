@@ -16,6 +16,7 @@ import java.util.List;
 public interface IGeneralDAO{
     
     public List<IRoute> getRoutes();
+    public List<IRoute> getRoutes(List<Long> ids);
     public IRoute getRoute(String name);
     public IRoute getRoute(long id);
     public IRoute addRoute(IRoute route);

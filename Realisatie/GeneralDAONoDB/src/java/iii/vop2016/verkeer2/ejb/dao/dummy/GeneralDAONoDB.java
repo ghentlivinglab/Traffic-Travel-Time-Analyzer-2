@@ -106,4 +106,9 @@ public class GeneralDAONoDB implements GeneralDAONoDBRemote {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public List<IRoute> getRoutes(List<Long> ids) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

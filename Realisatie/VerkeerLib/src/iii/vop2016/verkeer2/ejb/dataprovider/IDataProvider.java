@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * @author Tobias
  */
-interface IDataProvider {
+public interface IDataProvider {
 
     //get data for last entries, weigthed aritmetic mean
     int getCurrentDuration(IRoute route, List<String> providers);

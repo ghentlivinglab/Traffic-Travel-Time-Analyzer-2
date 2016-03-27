@@ -40,4 +40,7 @@
   <module>
     <ejb>TrafficDataDownloader.jar</ejb>
   </module>
+  <module>
+    <ejb>DataProvider.jar</ejb>
+  </module>
 </application>

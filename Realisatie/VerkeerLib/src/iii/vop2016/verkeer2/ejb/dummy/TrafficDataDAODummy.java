@@ -14,6 +14,7 @@ import iii.vop2016.verkeer2.ejb.datasources.ISourceAdapter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -111,6 +112,11 @@ public class TrafficDataDAODummy implements ITrafficDataDAO{
 
     @Override
     public void fillDummyData(long i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<IRouteData> getData(IRoute route, List<Date> startList, List<Date> endList) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

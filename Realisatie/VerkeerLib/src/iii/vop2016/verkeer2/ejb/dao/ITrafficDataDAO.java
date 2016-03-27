@@ -10,6 +10,7 @@ import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.datasources.ISourceAdapter;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -29,5 +30,7 @@ public interface ITrafficDataDAO {
     public IRouteData getDataByID(long id);
     
     void fillDummyData(long i);
+
+    public List<IRouteData> getData(IRoute route, List<Date> startList, List<Date> endList);
     
 }

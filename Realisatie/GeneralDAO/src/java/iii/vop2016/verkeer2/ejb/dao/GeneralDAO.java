@@ -174,28 +174,55 @@ public class GeneralDAO implements GeneralDAORemote {
         Query q = em.createQuery("SELECT g FROM GeoLocationMappingEntity g WHERE g.route.id = :id");
         q.setParameter("id", route.getId());
         List<GeoLocationMappingEntity> list = q.getResultList();
-        
-        List<IGeoLocation> ret =  new ArrayList<>();
-        for(GeoLocationMappingEntity e : list)
+
+        List<IGeoLocation> ret = new ArrayList<>();
+        for (GeoLocationMappingEntity e : list) {
             ret.add(new GeoLocation(e));
-        
+        }
+
         Collections.sort(ret, new GeoLocationComparator());
-        
+
         return ret;
     }
 
     @Override
-    public List<IGeoLocation> setRouteMappingGeolocations(IRoute route,List<IGeoLocation> geolocs) {
+    public List<IGeoLocation> setRouteMappingGeolocations(IRoute route, List<IGeoLocation> geolocs) {
         route = new RouteEntity(route);
         List<IGeoLocation> retLocs = new ArrayList<>();
         List<IGeoLocation> storedLocs = getRouteMappingGeolocations(route);
-        if(storedLocs.size() == 0){
-            for(IGeoLocation geoloc : geolocs){
+        if (storedLocs.size() == 0) {
+            for (IGeoLocation geoloc : geolocs) {
                 GeoLocationMappingEntity location = new GeoLocationMappingEntity(geoloc, route);
                 em.persist(location);
                 retLocs.add(new GeoLocation(location));
             }
         }
         return retLocs;
+    }
+
+    @Override
+    public List<IRoute> getRoutes(List<Long> ids) {
+        List<IRoute> ret = new ArrayList<>();
+        try {
+            Query q = em.createQuery("SELECT g FROM GeoLocationMappingEntity g WHERE g.route.id in :id");
+            q.setParameter("id", ids);
+            List<IRoute> routes = q.getResultList();
+
+            for (IRoute r : routes) {
+                IRoute newR = new Route(r);
+                List<IGeoLocation> list = new ArrayList<>();
+                for (IGeoLocation geo : r.getGeolocations()) {
+                    list.add(new GeoLocation(geo));
+                }
+                newR.setGeolocations(list);
+                ret.add(newR);
+            }
+        } catch (Exception e) {
+            Logger logger = Logger.getLogger(this.getClass().getName());
+            logger.severe(e.getMessage());
+        } finally {
+
+        }
+        return ret;
     }
 }

@@ -350,15 +350,15 @@ public class RoutesResource {
     
     private JSONObject JSONDayData(IRoute route, Weekdays day){
         JSONObject result = new JSONObject();
-        Map<Date,Integer> mapDurations;
-        Map<Date,Integer> mapVelocities;
+        Map<Date,Integer> mapDurations = null;
+        Map<Date,Integer> mapVelocities = null;
         if(startTime != null & endTime != null){
             mapDurations=beans.getDataProvider().getDataByDay(route,providers,startTime,endTime,day);
             mapVelocities=beans.getDataProvider().getDataVelocityByDay(route,providers,startTime,endTime,day);      
         }
         else{
-            mapDurations=beans.getDataProvider().getDataByDay(route,providers,day);
-            mapVelocities=beans.getDataProvider().getDataVelocityByDay(route,providers,day);            
+            //mapDurations=beans.getDataProvider().getDataByDay(route,providers,day);
+            //mapVelocities=beans.getDataProvider().getDataVelocityByDay(route,providers,day);            
         }
         
         List<Date> timestamps = new ArrayList<>();
@@ -462,16 +462,16 @@ public class RoutesResource {
         result.put("provider",provider);
         
         JSONObject obj = new JSONObject();
-        Map<Date,Integer> mapDurations;
-        Map<Date,Integer> mapVelocities;
+        Map<Date,Integer> mapDurations = null;
+        Map<Date,Integer> mapVelocities = null;
         
         if(startTime != null & endTime != null){
             mapDurations=beans.getDataProvider().getData(route,lprovider,startTime,endTime);
             mapVelocities=beans.getDataProvider().getDataVelocity(route,lprovider,startTime,endTime);      
         }
         else{
-            mapDurations=beans.getDataProvider().getData(route,lprovider);
-            mapVelocities=beans.getDataProvider().getDataVelocity(route,lprovider);               
+            //mapDurations=beans.getDataProvider().getData(route,lprovider);
+            //mapVelocities=beans.getDataProvider().getDataVelocity(route,lprovider);               
         }
         
         List<Date> timestamps = new ArrayList<>();
