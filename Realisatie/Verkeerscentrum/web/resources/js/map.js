@@ -1,8 +1,14 @@
 
+/* global Materialize, L */
+
 var timerProgress = 98;
 var map;
 var mymap;
 var layer;
+var trafficData = [];
+var modus = "live";
+
+trafficData = [{ "id":1,"name":"Route 123" },{ "id":2,"name":"Route 456" }];
 
 function setTimerProgress(){
     timerProgress += 0.5;
@@ -14,8 +20,23 @@ function setTimerProgress(){
     progressBar.attr("style","width:"+timerProgress+"%;");
 }
 
+
+
 function refreshLiveData(){
-    Materialize.toast('De verkeerssituatie werd zonet geüpdated', 4000, 'toast bottom') // 4000 is the duration of the toast
+    
+    $.ajax({
+        url:"http://localhost:8080/rest/v2/routes/all",
+        dataType: "json",
+        success: function(data, textStatus, jqXHR ){
+            Materialize.toast('De verkeerssituatie werd zonet geüpdated', 4000, 'toast bottom');
+            trafficData = JSON.parse(data);
+            trafficData = JSON.parse("[{ 'id':1 }]");
+            setModus(modus);
+        },
+        error: function(jqXHR, textStatus, errorThrown ){
+            Materialize.toast('Er kan geen nieuwe data worden opgehaald!', 4000, 'toast bottom');
+        }
+    });
 }
 
 function initMap(){
@@ -57,35 +78,43 @@ function setAvgMap(){
     //teken Avg data
 }
 
-function switchBtnLiveAvg(naam){
-    if(naam === "live"){
+function switchBtnModus(){
+    if(modus === "live"){
         $("#btnSwitchToLive").parent().addClass("active");
         $("#btnSwitchToAvg").parent().removeClass("active");
     }
         
-    if(naam === "avg"){
+    if(modus === "avg"){
         $("#btnSwitchToAvg").parent().addClass("active");
         $("#btnSwitchToLive").parent().removeClass("active");
-    }
-        
+    } 
+}
+
+
+function setModus(modus){
+    if(modus === "live")
+        setLiveModus();
+    if(modus === "avg")
+        setAvgModus();
 }
 
 function setLiveModus(){
+    modus = "live";
     setLiveMap();
     setLiveList();
-    switchBtnLiveAvg("live");
+    switchBtnModus();
 }
 
 function setAvgModus(){
+    modus = "avg";
     setAvgMap();
     setAvgList();
-    switchBtnLiveAvg("avg");
+    switchBtnModus();
 }
 
 function setLiveList(){
-    trafficList = $("#traffic-list");
-    
-    trafficList.html("");
+    trafficListBox = $("#traffic-list");
+    trafficListBox.html("");
     
     header = $("<ul/>").addClass("traffic-list")
             .append($("<li/>").append($("<table/>").addClass("highlight").append($("<thead/>")
@@ -95,25 +124,28 @@ function setLiveList(){
             .append($("<th/>").text("Vertraging").attr("width","20%").attr("data-field","delay").addClass("center"))
             .append($("<th/>").attr("width","10%"))
     ))));
+    trafficListBox.append(header);
+    
+    trafficList = $(".traffic-list");
+    if(trafficData.length>0){
+        for (var i = 0; i < trafficData.length; i++) {
+            id = trafficData[i].id;
+            name = trafficData[i].name;
+            duration = "16 min";
+            delay = "2 min";
+            trend = "call_made";
 
-    trafficList.append(header);
-
-
-    for (var i = 0; i < 15; i++) {
-        name = "R4: Gent - Zelzate";
-        duration = "16 min";
-        delay = "2 min";
-        trend = "call_made";
-
-        trafficListItem = $("<ul/>").addClass("traffic-list")
-                .append($("<li/>").append($("<table/>").addClass("highlight").append($("<thead/>")
-                .append($("<tr/>")
-                .append($("<td/>").text(name).attr("width","50%"))
-                .append($("<td/>").text(duration).attr("width","20%").addClass("center"))
-                .append($("<td/>").append($("<span/>").addClass("badge slow").text(delay)).attr("width","20%").addClass("center"))
-                .append($("<td/>").attr("width","10%").append($("<i/>").addClass("material-icons").text(trend)))
-        ))));
-
+            trafficListItem = $("<li/>").append($("<table/>").addClass("highlight").append($("<thead/>")
+                    .append($("<tr/>")
+                    .append($("<td/>").text(name).attr("width","50%"))
+                    .append($("<td/>").text(duration).attr("width","20%").addClass("center"))
+                    .append($("<td/>").append($("<span/>").addClass("badge slow").text(delay)).attr("width","20%").addClass("center"))
+                    .append($("<td/>").attr("width","10%").append($("<i/>").addClass("material-icons").text(trend)))
+            )));
+            trafficList.append(trafficListItem);
+        }
+    }else{
+        trafficListItem = $("<li/>").text("Geen trajecten om weer te geven...");
         trafficList.append(trafficListItem);
     }
     Materialize.showStaggeredList('.traffic-list');
@@ -142,7 +174,7 @@ function setAvgList(){
         delay = "2 min";
         trend = "call_made";
 
-        trafficListItem = $("<ul/>").addClass("traffic-list")
+        trafficListItem = $(".traffic-list")
                 .append($("<li/>").append($("<table/>").addClass("highlight").append($("<thead/>")
                 .append($("<tr/>")
                 .append($("<td/>").text(name).attr("width","50%"))
@@ -175,6 +207,8 @@ function setGeoJson(data){
     }).addTo(mymap);    
 }
 
+
+
 function failedCall(data){
     Materialize.toast("Er is onmogelijk data op te halen", 4000, 'toast bottom') // 4000 is the duration of the toast
 }
@@ -191,15 +225,12 @@ function requestGeoJson(){
 
 
 $(document).ready(function() {
-    
     mymap = L.map('map').setView([51.096434, 3.744511], 11);
-    setLiveModus();
+    setModus("live");
     initGUI();
     setInterval(setTimerProgress,1500);
-    
     //$("#text").text("no route");
-    
-
+    refreshLiveData();
     requestGeoJson();
     
 });

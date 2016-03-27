@@ -9,7 +9,7 @@
             <ui:define name="page"> Analyse </ui:define>
 
             <ui:define name="content">
-                <form action="/web/analyse/datasources" method="post">
+                <form action="/web/analyse/datasources" method="get">
                 <div class="analyse">
   
                     <div class="index pull-bottom">
@@ -44,14 +44,16 @@
                                             <div class="col m6">
                                                 <section>
                                                     <h4>Begin</h4>
-                                                    <input type="text" class="datetimepicker" id="periodStart" /> 
+                                                    <input type="text" class="datetimepicker" id="periodStart" />
+                                                    <input name="periodStart" type="hidden" />
                                                 </section> 
                                              
                                             </div>
                                             <div class="col m6">
                                                 <section>
                                                     <h4>Einde</h4>
-                                                    <input type="text" class="datetimepicker" id="periodStart" /> 
+                                                    <input type="text" class="datetimepicker" id="periodEnd" /> 
+                                                    <input name="periodEnd" type="hidden" />
                                                 </section>      
                                              
                                             </div>
@@ -152,7 +154,7 @@
                 <div class="sidebar">
                     <img src="#{resourceURLimg}/vcg.png" class="logo img-responsive" />
                     <div class="navigation">
-                        <ul>
+                        <ul id="staggered-list">
                             <li>
                                 <a href="#!" id="btnAvgTraffic">
                                     <i class="material-icons">navigation</i>
@@ -208,7 +210,12 @@
             <ui:define name="javascript">
                 
                 <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse.js" />
-               
+                
+                <script>
+                    $(document).ready(function(){
+                        Materialize.showStaggeredList('#staggered-list');
+                    });                    
+                </script>
                 
             </ui:define>
 
