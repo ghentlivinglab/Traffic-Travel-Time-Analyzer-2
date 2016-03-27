@@ -68,3 +68,4 @@ Datum,Start,Einde,Plaats,Categorie,Omschrijving,Issue #,Opmerkingen
 26/03/16,12:00,13:30,Thuis,Web,Stappenplan initialisatie bij analyse,,
 26/03/16,20:00,22:00,Thuis,Web,Testen + opzoeken integratie beans voor analyse module,,
 27/03/16,11:00,15:30,Thuis,Web,Implementeren beans voor analyse module,,
+27/03/16,16:00,17:00,Thuis,Web,Toevoegen AJAX call to REST in live modus,,
