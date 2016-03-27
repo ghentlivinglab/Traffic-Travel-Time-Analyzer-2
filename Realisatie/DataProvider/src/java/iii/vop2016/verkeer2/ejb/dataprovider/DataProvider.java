@@ -105,44 +105,74 @@ public class DataProvider implements DataProviderRemote {
 
     @Override
     public int getOptimalDuration(IRoute route, List<String> providers) {
-        if (optimalDuration == -1) {
-            Properties properties = getProperties();
-            long timeframe = Integer.parseInt(properties.getProperty("OptimalDurationTimeFrame", "0")) * (long) 1000;
-            long currentTime = beans.getTimer().getCurrentTime();
-            Calendar startTime = GetTimeFromPropertyValue(properties.getProperty("OptimalDurationStartHour", "00-00"));
-            Calendar endTime = GetTimeFromPropertyValue(properties.getProperty("OptimalDurationEndHour", "00-00"));
+        //if (optimalDuration == -1) {
+        Properties properties = getProperties();
+        long timeframe = Integer.parseInt(properties.getProperty("OptimalDurationTimeFrame", "0")) * (long) 1000;
+        long currentTime = beans.getTimer().getCurrentTime();
+        Calendar startTime = GetTimeFromPropertyValue(properties.getProperty("OptimalDurationStartHour", "00-00"));
+        Calendar endTime = GetTimeFromPropertyValue(properties.getProperty("OptimalDurationEndHour", "00-00"));
 
-            Date startDate = new Date(currentTime - timeframe);
-            Date endDate = new Date(currentTime);
-            
-            List<Date> startList = GenerateListForHourBetweenDates(startTime,startDate,endDate);
-            List<Date> endList = GenerateListForHourBetweenDates(endTime,startDate,endDate);
+        Date startDate = new Date(currentTime - timeframe);
+        Date endDate = new Date(currentTime);
 
-            ITrafficDataDAO dao = beans.getTrafficDataDAO();
+        List<Date> startList = GenerateListForHourBetweenDates(startTime, startDate, endDate);
+        List<Date> endList = GenerateListForHourBetweenDates(endTime, startDate, endDate);
 
-            List<IRouteData> list = dao.getData(route, startList, endList);
-            
+        ITrafficDataDAO dao = beans.getTrafficDataDAO();
 
-            //Weighted arithmetic mean ( sum(x*y)/sum(x) )
-            long totalDistanceMulVelocity = 0;
-            long totaldistance = 0;
+        List<IRouteData> list = dao.getData(route, startList, endList);
 
-            int i = 0;
-            for (IRouteData d : list) {
-                totalDistanceMulVelocity += d.getDistance() / d.getDuration();
-                totaldistance += d.getDistance();
-                i++;
-            }
+        //Weighted arithmetic mean ( sum(x*y)/sum(x) )
+        long totalDistanceMulDuration = 0;
+        long totaldistance = 0;
 
-            optimalDuration = Math.toIntExact(totalDistanceMulVelocity / totaldistance);
+        int i = 0;
+        for (IRouteData d : list) {
+            totalDistanceMulDuration += d.getDistance() * d.getDuration();
+            totaldistance += d.getDistance();
+            i++;
         }
+
+        optimalDuration =  Math.toIntExact(totalDistanceMulDuration / totaldistance);
+        //}
         return optimalDuration;
     }
+    
+    private int optimalSpeed;
 
     @Override
     public int getOptimalVelocity(IRoute route, List<String> providers) {
+        //if (optimalDuration == -1) {
+        Properties properties = getProperties();
+        long timeframe = Integer.parseInt(properties.getProperty("OptimalDurationTimeFrame", "0")) * (long) 1000;
+        long currentTime = beans.getTimer().getCurrentTime();
+        Calendar startTime = GetTimeFromPropertyValue(properties.getProperty("OptimalDurationStartHour", "00-00"));
+        Calendar endTime = GetTimeFromPropertyValue(properties.getProperty("OptimalDurationEndHour", "00-00"));
+
+        Date startDate = new Date(currentTime - timeframe);
+        Date endDate = new Date(currentTime);
+
+        List<Date> startList = GenerateListForHourBetweenDates(startTime, startDate, endDate);
+        List<Date> endList = GenerateListForHourBetweenDates(endTime, startDate, endDate);
+
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return 0;
+
+        List<IRouteData> list = dao.getData(route, startList, endList);
+
+        //Weighted arithmetic mean ( sum(x*y)/sum(x) )
+        long totalDuration = 0;
+        long totaldistance = 0;
+
+        int i = 0;
+        for (IRouteData d : list) {
+            totalDuration += d.getDuration();
+            totaldistance += d.getDistance();
+            i++;
+        }
+
+        optimalSpeed =  Math.toIntExact(totalDuration / totaldistance);
+        //}
+        return optimalSpeed;
     }
 
     @Override
@@ -159,31 +189,7 @@ public class DataProvider implements DataProviderRemote {
 
     @Override
     public int getAvgDuration(IRoute route, List<String> providers) {
-        if (optimalDuration == -1) {
-            long timeframe = Integer.parseInt(getProperties().getProperty("OptimalDurationTimeFrame", "0")) * (long) 1000;
-            long currentTime = beans.getTimer().getCurrentTime();
-
-            Date startDate = new Date(currentTime - timeframe);
-            Date endDate = new Date(currentTime);
-
-            ITrafficDataDAO dao = beans.getTrafficDataDAO();
-
-            List<IRouteData> list = dao.getData(route, startDate, endDate);
-
-            //Weighted arithmetic mean ( sum(x*y)/sum(x) )
-            long totalDistanceMulVelocity = 0;
-            long totaldistance = 0;
-
-            int i = 0;
-            for (IRouteData d : list) {
-                totalDistanceMulVelocity += d.getDistance() / d.getDuration();
-                totaldistance += d.getDistance();
-                i++;
-            }
-
-            optimalDuration = Math.toIntExact(totalDistanceMulVelocity / totaldistance);
-        }
-        return optimalDuration;
+        return 0;
     }
 
     @Override
@@ -237,55 +243,55 @@ public class DataProvider implements DataProviderRemote {
     @Override
     public Map<Date, Integer> getRecentData(IRoute route, List<String> providers) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return null;
+        return new HashMap<>();
     }
 
     @Override
     public Map<Date, Integer> getDataByDay(IRoute route, List<String> providers, Date start, Date end, Weekdays day) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return null;
+        return new HashMap<>();
     }
 
     @Override
     public Map<Date, Integer> getDataVelocityByDay(IRoute route, List<String> providers, Date start, Date end, Weekdays day) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return null;
+        return new HashMap<>();
     }
 
     @Override
     public Map<Date, Integer> getDataByDayInWorkWeek(IRoute route, List<String> providers, Date start, Date end) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return null;
+        return new HashMap<>();
     }
 
     @Override
     public Map<Date, Integer> getDataVelocityByDayInWorkWeek(IRoute route, List<String> providers, Date start, Date end) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return null;
+        return new HashMap<>();
     }
 
     @Override
     public Map<Date, Integer> getData(IRoute route, List<String> providers, Date start, Date end) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return null;
+        return new HashMap<>();
     }
 
     @Override
     public Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers, Date start, Date end) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return null;
+        return new HashMap<>();
     }
 
     @Override
     public Map<Date, Integer> getDataByDayInWorkWeek(IRoute route, List<String> providers) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return null;
+        return new HashMap<>();
     }
 
     @Override
     public Map<Date, Integer> getDataVelocityByDayInWorkWeek(IRoute route, List<String> providers) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return null;
+        return new HashMap<>();
     }
 
     protected Pattern timeFormat = Pattern.compile("([0-9]{2})-([0-9]{2})");
@@ -304,16 +310,16 @@ public class DataProvider implements DataProviderRemote {
 
     private List<Date> GenerateListForHourBetweenDates(Calendar time, Date startDate, Date endDate) {
         List<Date> dates = new ArrayList<>();
-        
+
         Calendar cStart = new GregorianCalendar();
         cStart.setTime(startDate);
         Calendar cEnd = new GregorianCalendar();
         cEnd.setTime(endDate);
-        
+
         cStart.set(Calendar.HOUR_OF_DAY, time.get(Calendar.HOUR_OF_DAY));
         cStart.set(Calendar.MINUTE, time.get(Calendar.MINUTE));
-        
-        while(cStart.before(cEnd)){
+
+        while (cStart.before(cEnd)) {
             dates.add(cStart.getTime());
             cStart.add(Calendar.DAY_OF_MONTH, 1);
         }

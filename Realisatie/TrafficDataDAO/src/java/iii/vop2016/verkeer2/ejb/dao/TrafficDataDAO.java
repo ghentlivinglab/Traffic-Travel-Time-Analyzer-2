@@ -147,7 +147,7 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
             r.addParam(0, p1);
             if (adapters != null && adapters.size() != 0) {
                 Parameter p2 = new Parameter("provider", adapters, Operation.eq);
-                r.addParam(0, p2);
+                r.addParam(1, p2);
             }
             List<IRouteData> routesEntities = r.PrepareQuery(em).getResultList();
 
@@ -164,7 +164,7 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
             r = new Request(true, 0).addParam(0, p0).addParam(1, p1).addParam(2, p2);
             if (adapters != null && adapters.size() != 0) {
                 Parameter p3 = new Parameter("provider", adapters, Operation.eq);
-                r.addParam(0, p3);
+                r.addParam(3, p3);
             }
             routesEntities = r.PrepareQuery(em).getResultList();
 
@@ -249,9 +249,8 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
         int i = 0;
         r.addParam(i++, new Parameter("id", idRange[0], idRange[1], Operation.between));
         r.addParam(i++, new Parameter("routeId", route.getId(), Operation.eq));
-        for (int x = 0; x < startList.size(); x++) {
-            r.addParam(i++, new Parameter("timestamp", startList.get(x), endList.get(x), Operation.between));
-        }
+        r.addParam(i++, new Parameter("timestamp", startList, endList, Operation.between));
+        
         List<RouteDataEntity> routesEntities = r.PrepareQuery(em).getResultList();
 
         //transform all database objects to library objects via copy constructor
