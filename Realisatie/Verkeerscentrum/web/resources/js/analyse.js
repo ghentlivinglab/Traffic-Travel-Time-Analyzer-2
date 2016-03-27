@@ -15,11 +15,17 @@ addRouteToList = function(evt){
 };
     
 function resetSlider(){
-    while(tab != 0)
+    while(tab !== 0){
         prevSlide();
+    }
 }
 function showSlider(){
+    //FADE IN
     $(".slider").fadeIn();
+    //SLIDE IN LEFT
+    //$(".slider").show();
+    //$(".slider").css("left",-1000);
+    //$(".slider").animate({left: '0px'});
 }
 function nextSlide(){
     tab++;
@@ -41,7 +47,7 @@ function showAvalibleRoutes(multiplicity){
           for(i=0; i<20; i++){
                $("#availableRoutesList")
                     .append($("<ol />")
-                    .append($("<input />").attr("id","route"+i).attr("type","checkbox").attr("value",i))
+                    .append($("<input />").attr("id","route"+i).attr("type","checkbox").attr("value",i).attr("name","routeId"))
                     .append($("<label />").attr("for","route"+i).mouseover(showRoutePreview).mouseleave(hideRoutePreview).click({routeId: i},addRouteToList)
                     .append($("<span />").text("R4: Gent - Zelzate")
                     )));
@@ -51,7 +57,7 @@ function showAvalibleRoutes(multiplicity){
            for(i=0; i<20; i++){
                $("#availableRoutesList")
                     .append($("<ol />")
-                    .append($("<input />").attr("id","route"+i).attr("type","radio").attr("name","route"))
+                    .append($("<input />").attr("id","route"+i).attr("type","radio").attr("value",i).attr("name","route").attr("name","routeId"))
                     .append($("<label />").attr("for","route"+i).mouseover(showRoutePreview).mouseleave(hideRoutePreview).click({routeId: i},addRouteToList)
                     .append($("<span />").text("R4: Gent - Zelzate")
                     )));
@@ -69,33 +75,33 @@ $(document).ready(function(){
   $(".slides").css("height","100%");
 
   $("#btnCompareSources").click(function(){
-      showSlider();
       resetSlider();
+      showSlider();
       showAvalibleRoutes();
   });
   $("#btnAvgTraffic").click(function(){
-      showSlider();
       resetSlider();
+      showSlider();
       showAvalibleRoutes();
   });
   $("#btnDelayWeekday").click(function(){
-      showSlider();
       resetSlider();
+      showSlider();
       showAvalibleRoutes();
   });
   $("#btnRushHours").click(function(){
-      showSlider();
       resetSlider();
+      showSlider();
       showAvalibleRoutes();
   });
   $("#btnCompareRoutes").click(function(){
-      showSlider();
       resetSlider();
+      showSlider();
       showAvalibleRoutes("multi");
   });
   $("#btnComparePeriods").click(function(){
-      showSlider();
       resetSlider();
+      showSlider();
       showAvalibleRoutes();
   });
 
@@ -105,8 +111,12 @@ $(document).ready(function(){
   $(".datetimepicker").bootstrapMaterialDatePicker({ 
       format : 'DD MMMM YYYY - HH:mm',
       lang: 'nl',
-      weekStart : 1        
+      weekStart : 1
+  }).on('change', function(e, date){
+     var hiddenName = $(this).attr('id'); 
+     $("[name="+hiddenName+"]").val(new Date(date).getTime());
   });
+  
 
 });
                   

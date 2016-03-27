@@ -2,7 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     
     
 
@@ -101,6 +103,8 @@
                                                 <li>
                                                   <div class="collapsible-header"><i class="material-icons">filter_drama</i>Periode</div>
                                                   <div class="collapsible-body">
+                                                      
+
                                                         
                                                         <section>
                                                             <div class="row">
@@ -108,14 +112,20 @@
                                                                     <p class="valign">Begin</p>
                                                                   </div>
                                                                 <div class="col s7"> 
-                                                                    <input type="text" class="datetimepicker" id="periodStart" /> </div>
+                                                                    <h:inputText value="#{DataSourcesComparer.period.key}" class="datetimepicker" id="periodStart">  
+                                                                        <f:convertDateTime pattern="dd MMMM YYYY - HH:mm"/>  
+                                                                    </h:inputText>
+                                                                </div>
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col s5 valign-wrapper">
                                                                     <p class="valign">Eind</p>
                                                                 </div>
                                                                 <div class="col s7"> 
-                                                                    <input type="text" class="datetimepicker" id="periodEnd" /> </div>
+                                                                    <h:inputText value="#{DataSourcesComparer.period.value}" class="datetimepicker" id="periodEnd">  
+                                                                        <f:convertDateTime pattern="dd MMMM YYYY - HH:mm"/>  
+                                                                    </h:inputText>
+                                                                </div>
                                                             </div>
                                                         </section>
                                                       
@@ -125,11 +135,11 @@
                                                   <div class="collapsible-header"><i class="material-icons">place</i>Trajecten</div>
                                                   <div class="collapsible-body">
                                                      
+                                                      
                                                         <ul id="routeList">
-                                                            <li>R4: Gent - Zelzate</li>
-                                                            <li>R4: Gent - Zelzate</li>
-                                                            <li>R4: Gent - Zelzate</li>
-                                                            <li>R4: Gent - Zelzate</li>
+                                                            <c:forEach var="route" items="#{DataSourcesComparer.routes}">
+                                                                <li><h:outputText value="#{route.name}"/></li>
+                                                            </c:forEach>
                                                         </ul>
                                                       
                                                         <a href="#!" class="btn" id="selectRoutes" data-multiplicity="single">Selecteer trajecten</a>    
@@ -137,7 +147,14 @@
                                                 </li>
                                                 <li>
                                                   <div class="collapsible-header"><i class="material-icons">whatshot</i>Databronnen</div>
-                                                  <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+                                                  <div class="collapsible-body">
+                                                      <ul id="routeList">
+                                                          <c:forEach var="provider" items="#{DataSourcesComparer.dataProviders}">
+                                                                <li><h:outputText value="#{provider}"/></li>
+                                                            </c:forEach>
+                                                      </ul>
+                                                      <a href="#!" class="btn" id="selectRoutes">Selecteer bronnen</a>   
+                                                  </div>
                                                 </li>
                                             </ul>
                                             
@@ -153,15 +170,20 @@
                                                     
                                                 <div class="header">
                                                     <div class="row">
-                                                        <div class="col m4">
+                                                        <div class="col m3">
                                                             <a href="#!" class="btn st-effect-trigger" data-effect="st-effect-3">
                                                                 <i class="material-icons left">mode_edit</i>
                                                                 Wijzig aanvraag
                                                             </a>
                                                         </div>
                                                         <div class="col m8">
-                                                            <h3>R4: Gent - Zelzate</h3> 
-                                                            <span>Periode: 24 juli 15:00 - 26 juli 15:00</span>
+                                                            <h3><h:outputText value="#{DataSourcesComparer.title}" /></h3> 
+                                                            <span><h:outputText value="#{DataSourcesComparer.subTitle}" /></span>
+                                                        </div>
+                                                        <div class="col m1">
+                                                            <h:link outcome="pretty:analyse" class="white-text">
+                                                                <i class="material-icons">clear_all</i>
+                                                            </h:link>
                                                         </div>
                                                         
                                                     </div>  
@@ -188,7 +210,13 @@
                                                          
                                                         <img class="responsive-img" src="#{requestScope.resourceURLimg}/grafiek.png" witdh="100%" />
                                                         
-                                                        <br /><br /><br /><br />
+                                                        <br /><br />
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        <br /><br />
                                                         
                                                     </div>
                                                     
