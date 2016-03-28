@@ -43,4 +43,7 @@
   <module>
     <ejb>DataProvider.jar</ejb>
   </module>
+  <module>
+    <ejb>CoyoteSourceAdapter.jar</ejb>
+  </module>
 </application>
