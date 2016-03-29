@@ -33,4 +33,8 @@ public interface ITrafficDataDAO {
 
     public List<IRouteData> getData(IRoute route, List<Date> startList, List<Date> endList);
     
+    public List<Long> getAggregateData(IRoute route, Date time1, Date time2, AggregationContainer... aggr);
+    
+    public List<Long> getAggregateData(IRoute route, List<Date> startList, List<Date> endList, AggregationContainer... aggr);
+    
 }

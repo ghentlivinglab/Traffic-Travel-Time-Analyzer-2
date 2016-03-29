@@ -8,6 +8,8 @@ package iii.vop2016.verkeer2.ejb.dataprovider;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.Weekdays;
+import iii.vop2016.verkeer2.ejb.dao.Aggregation;
+import iii.vop2016.verkeer2.ejb.dao.AggregationContainer;
 import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
 import iii.vop2016.verkeer2.ejb.datasources.ISourceAdapter;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
@@ -21,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Callable;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -54,7 +58,6 @@ public class DataProvider implements DataProviderRemote {
             Logger.getLogger(DataProvider.class.getName()).log(Level.SEVERE, null, ex);
         }
         beans = BeanFactory.getInstance(ctx, ctxs);
-        optimalDuration = -1;
 
         Logger.getLogger("logger").log(Level.INFO, "DataProvider has been initialized.");
     }
@@ -63,23 +66,44 @@ public class DataProvider implements DataProviderRemote {
         return HelperFunctions.RetrievePropertyFile(JNDILOOKUP_PROPERTYFILE, ctx, Logger.getGlobal());
     }
 
+    @Deprecated
+    private int CalculateArithmaticMean(List<IRouteData> data, Function<IRouteData, Long> var, Function<IRouteData, Long> weight) {
+        long totalNum = 0;
+        long totalDiv = 0;
+        int i = 0;
+        for (IRouteData d : data) {
+            long w = weight.apply(d);
+            long v = var.apply(d);
+            totalNum += w * v;
+            totalDiv += w;
+            i++;
+        }
+
+        if (totalDiv == 0) {
+            return -1;
+        }
+
+        return Math.toIntExact(totalNum / totalDiv);
+    }
+
+    private static Function<IRouteData, Long> function_distance = new Function<IRouteData, Long>() {
+        @Override
+        public Long apply(IRouteData t) {
+            return new Long(t.getDistance());
+        }
+    };
+
     @Override
     public int getCurrentDuration(IRoute route, List<String> providers) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
         List<IRouteData> list = dao.getCurrentTrafficSituation(route, providers);
 
-        //Weighted arithmetic mean ( sum(x*y)/sum(x) )
-        long totalDistanceMulDurataion = 0;
-        long totaldistance = 0;
-
-        int i = 0;
-        for (IRouteData d : list) {
-            totalDistanceMulDurataion += d.getDistance() * d.getDuration();
-            totaldistance += d.getDistance();
-            i++;
-        }
-
-        return Math.toIntExact(totalDistanceMulDurataion / totaldistance);
+        return CalculateArithmaticMean(list, new Function<IRouteData, Long>() {
+            @Override
+            public Long apply(IRouteData t) {
+                return new Long(t.getDuration());
+            }
+        }, function_distance);
     }
 
     @Override
@@ -87,121 +111,154 @@ public class DataProvider implements DataProviderRemote {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
         List<IRouteData> list = dao.getCurrentTrafficSituation(route, providers);
 
-        //Weighted arithmetic mean ( sum(x*y)/sum(x) )
-        long totalDistanceMulVelocity = 0;
-        long totaldistance = 0;
-
-        int i = 0;
-        for (IRouteData d : list) {
-            totalDistanceMulVelocity += d.getDistance() / d.getDuration();
-            totaldistance += d.getDistance();
-            i++;
-        }
-
-        return Math.toIntExact(totalDistanceMulVelocity / totaldistance);
+        return CalculateArithmaticMean(list, new Function<IRouteData, Long>() {
+            @Override
+            public Long apply(IRouteData t) {
+                return (long) t.getDistance() / (long) t.getDuration();
+            }
+        }, function_distance);
     }
 
-    private int optimalDuration;
+    private Map<IRoute, Integer> optimalDuration = new HashMap<>();
 
     @Override
     public int getOptimalDuration(IRoute route, List<String> providers) {
-        if (optimalDuration == -1) {
+        if (!optimalDuration.containsKey(route)) {
             Properties properties = getProperties();
             long timeframe = Integer.parseInt(properties.getProperty("OptimalDurationTimeFrame", "0")) * (long) 1000;
             long currentTime = beans.getTimer().getCurrentTime();
-            Calendar startTime = GetTimeFromPropertyValue(properties.getProperty("OptimalDurationStartHour", "00-00"));
-            Calendar endTime = GetTimeFromPropertyValue(properties.getProperty("OptimalDurationEndHour", "00-00"));
-
             Date startDate = new Date(currentTime - timeframe);
             Date endDate = new Date(currentTime);
-            
-            List<Date> startList = GenerateListForHourBetweenDates(startTime,startDate,endDate);
-            List<Date> endList = GenerateListForHourBetweenDates(endTime,startDate,endDate);
 
-            ITrafficDataDAO dao = beans.getTrafficDataDAO();
-
-            List<IRouteData> list = dao.getData(route, startList, endList);
-            
-
-            //Weighted arithmetic mean ( sum(x*y)/sum(x) )
-            long totalDistanceMulVelocity = 0;
-            long totaldistance = 0;
-
-            int i = 0;
-            for (IRouteData d : list) {
-                totalDistanceMulVelocity += d.getDistance() / d.getDuration();
-                totaldistance += d.getDistance();
-                i++;
+            int dur = getOptimalDuration(route, providers, startDate, endDate);
+            if (dur != -1) {
+                optimalDuration.put(route, dur);
             }
-
-            optimalDuration = Math.toIntExact(totalDistanceMulVelocity / totaldistance);
+            return dur;
         }
-        return optimalDuration;
+        return optimalDuration.get(route);
     }
+
+    private Map<IRoute, Integer> optimalSpeed = new HashMap<>();
 
     @Override
     public int getOptimalVelocity(IRoute route, List<String> providers) {
-        ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return 0;
-    }
-
-    @Override
-    public int getOptimalDuration(IRoute route, List<String> providers, Date start, Date end) {
-        ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return 0;
-    }
-
-    @Override
-    public int getOptimalVelocity(IRoute route, List<String> providers, Date start, Date end) {
-        ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return 0;
-    }
-
-    @Override
-    public int getAvgDuration(IRoute route, List<String> providers) {
-        if (optimalDuration == -1) {
-            long timeframe = Integer.parseInt(getProperties().getProperty("OptimalDurationTimeFrame", "0")) * (long) 1000;
+        if (!optimalSpeed.containsKey(route)) {
+            Properties properties = getProperties();
+            long timeframe = Integer.parseInt(properties.getProperty("OptimalDurationTimeFrame", "0")) * (long) 1000;
             long currentTime = beans.getTimer().getCurrentTime();
-
             Date startDate = new Date(currentTime - timeframe);
             Date endDate = new Date(currentTime);
 
-            ITrafficDataDAO dao = beans.getTrafficDataDAO();
-
-            List<IRouteData> list = dao.getData(route, startDate, endDate);
-
-            //Weighted arithmetic mean ( sum(x*y)/sum(x) )
-            long totalDistanceMulVelocity = 0;
-            long totaldistance = 0;
-
-            int i = 0;
-            for (IRouteData d : list) {
-                totalDistanceMulVelocity += d.getDistance() / d.getDuration();
-                totaldistance += d.getDistance();
-                i++;
+            int dur = getOptimalVelocity(route, providers, startDate, endDate);
+            if (dur != -1) {
+                optimalSpeed.put(route, dur);
             }
-
-            optimalDuration = Math.toIntExact(totalDistanceMulVelocity / totaldistance);
+            return dur;
         }
-        return optimalDuration;
+        return optimalSpeed.get(route);
     }
 
     @Override
-    public int getAvgVelocity(IRoute route, List<String> providers) {
+    public int getOptimalDuration(IRoute route, List<String> providers, Date startDate, Date endDate) {
+        Properties properties = getProperties();
+        Calendar startTime = GetTimeFromPropertyValue(properties.getProperty("OptimalDurationStartHour", "00-00"));
+        Calendar endTime = GetTimeFromPropertyValue(properties.getProperty("OptimalDurationEndHour", "00-00"));
+
+        List<Date> startList = GenerateListForHourBetweenDates(startTime, startDate, endDate);
+        List<Date> endList = GenerateListForHourBetweenDates(endTime, startDate, endDate);
+
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return 0;
+
+        List<Long> list = dao.getAggregateData(route, startList, endList, new AggregationContainer(Aggregation.sum, "duration * distance"), new AggregationContainer(Aggregation.sum, "distance"));
+
+        if (list.size() == 2) {
+            return Math.toIntExact(list.get(0)/list.get(1));
+        }
+        return -1;
+    }
+
+    @Override
+    public int getOptimalVelocity(IRoute route, List<String> providers, Date startDate, Date endDate) {
+        Properties properties = getProperties();
+        Calendar startTime = GetTimeFromPropertyValue(properties.getProperty("OptimalDurationStartHour", "00-00"));
+        Calendar endTime = GetTimeFromPropertyValue(properties.getProperty("OptimalDurationEndHour", "00-00"));
+
+        List<Date> startList = GenerateListForHourBetweenDates(startTime, startDate, endDate);
+        List<Date> endList = GenerateListForHourBetweenDates(endTime, startDate, endDate);
+
+        ITrafficDataDAO dao = beans.getTrafficDataDAO();
+
+        List<Long> list = dao.getAggregateData(route, startList, endList, new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
+
+        if (list.size() == 2) {
+            return Math.toIntExact(list.get(0)/list.get(1));
+        }
+        return -1;
+    }
+
+    private Map<IRoute, Integer> avgDuration = new HashMap<>();
+
+    @Override
+    public int getAvgDuration(IRoute route, List<String> providers) {
+        if (!avgDuration.containsKey(route)) {
+            Properties properties = getProperties();
+            long timeframe = Integer.parseInt(properties.getProperty("AvgDurationTimeFrame", "0")) * (long) 1000;
+            long currentTime = beans.getTimer().getCurrentTime();
+            Date startDate = new Date(currentTime - timeframe);
+            Date endDate = new Date(currentTime);
+
+            int dur = getAvgDuration(route, providers, startDate, endDate);
+            if (dur != -1) {
+                avgDuration.put(route, dur);
+            }
+            return dur;
+        }
+        return avgDuration.get(route);
+    }
+
+    private Map<IRoute, Integer> avgSpeed = new HashMap<>();
+
+    @Override
+    public int getAvgVelocity(IRoute route, List<String> providers) {
+        if (!avgSpeed.containsKey(route)) {
+            Properties properties = getProperties();
+            long timeframe = Integer.parseInt(properties.getProperty("AvgDurationTimeFrame", "0")) * (long) 1000;
+            long currentTime = beans.getTimer().getCurrentTime();
+            Date startDate = new Date(currentTime - timeframe);
+            Date endDate = new Date(currentTime);
+
+            int dur = getAvgVelocity(route, providers, startDate, endDate);
+            if (dur != -1) {
+                avgSpeed.put(route, dur);
+            }
+            return dur;
+        }
+        return avgSpeed.get(route);
     }
 
     @Override
     public int getAvgDuration(IRoute route, List<String> providers, Date start, Date end) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return 0;
+        
+        List<Long> list = dao.getAggregateData(route, start, end, new AggregationContainer(Aggregation.sum, "duration * distance"), new AggregationContainer(Aggregation.sum, "distance"));
+
+        if (list.size() == 2) {
+            return Math.toIntExact(list.get(0)/list.get(1));
+        }
+        return -1;
     }
 
     @Override
     public int getAvgVelocity(IRoute route, List<String> providers, Date start, Date end) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return 0;
+        
+        List<Long> list = dao.getAggregateData(route, start, end, new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
+
+        if (list.size() == 2) {
+            return Math.toIntExact(list.get(0)/list.get(1));
+        }
+        return -1;
     }
 
     @Override
@@ -219,7 +276,18 @@ public class DataProvider implements DataProviderRemote {
     @Override
     public int getDistance(IRoute route, List<String> providers) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return 0;
+        List<IRouteData> list = dao.getCurrentTrafficSituation(route, providers);
+
+        long distance = 0;
+
+        int i = 0;
+        for (IRouteData r : list) {
+            distance += r.getDistance();
+            i++;
+        }
+
+        return Math.toIntExact(distance / i);
+
     }
 
     @Override
@@ -237,55 +305,55 @@ public class DataProvider implements DataProviderRemote {
     @Override
     public Map<Date, Integer> getRecentData(IRoute route, List<String> providers) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return null;
+        return new HashMap<>();
     }
 
     @Override
     public Map<Date, Integer> getDataByDay(IRoute route, List<String> providers, Date start, Date end, Weekdays day) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return null;
+        return new HashMap<>();
     }
 
     @Override
     public Map<Date, Integer> getDataVelocityByDay(IRoute route, List<String> providers, Date start, Date end, Weekdays day) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return null;
+        return new HashMap<>();
     }
 
     @Override
     public Map<Date, Integer> getDataByDayInWorkWeek(IRoute route, List<String> providers, Date start, Date end) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return null;
+        return new HashMap<>();
     }
 
     @Override
     public Map<Date, Integer> getDataVelocityByDayInWorkWeek(IRoute route, List<String> providers, Date start, Date end) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return null;
+        return new HashMap<>();
     }
 
     @Override
     public Map<Date, Integer> getData(IRoute route, List<String> providers, Date start, Date end) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return null;
+        return new HashMap<>();
     }
 
     @Override
     public Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers, Date start, Date end) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return null;
+        return new HashMap<>();
     }
 
     @Override
     public Map<Date, Integer> getDataByDayInWorkWeek(IRoute route, List<String> providers) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return null;
+        return new HashMap<>();
     }
 
     @Override
     public Map<Date, Integer> getDataVelocityByDayInWorkWeek(IRoute route, List<String> providers) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return null;
+        return new HashMap<>();
     }
 
     protected Pattern timeFormat = Pattern.compile("([0-9]{2})-([0-9]{2})");
@@ -304,19 +372,20 @@ public class DataProvider implements DataProviderRemote {
 
     private List<Date> GenerateListForHourBetweenDates(Calendar time, Date startDate, Date endDate) {
         List<Date> dates = new ArrayList<>();
-        
+
         Calendar cStart = new GregorianCalendar();
         cStart.setTime(startDate);
         Calendar cEnd = new GregorianCalendar();
         cEnd.setTime(endDate);
-        
+
         cStart.set(Calendar.HOUR_OF_DAY, time.get(Calendar.HOUR_OF_DAY));
         cStart.set(Calendar.MINUTE, time.get(Calendar.MINUTE));
-        
-        while(cStart.before(cEnd)){
+
+        while (cStart.before(cEnd)) {
             dates.add(cStart.getTime());
             cStart.add(Calendar.DAY_OF_MONTH, 1);
         }
         return dates;
     }
+
 }

@@ -37,8 +37,6 @@ public class TimersResource {
     @Context
     private UriInfo context;
     
-    @Resource
-    private SessionContext sctx;
     private InitialContext ctx;
     private static BeanFactory beans;
 
@@ -55,7 +53,7 @@ public class TimersResource {
         } catch (NamingException ex) {
             Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        beans = BeanFactory.getInstance(ctx, sctx);
+        beans = BeanFactory.getInstance(ctx, null);
     }
 
     /**
@@ -73,7 +71,7 @@ public class TimersResource {
         return result.toString();
     }
     
-    @POST
+    @GET
     @Path("newdata/start")
     @Produces("application/json")
     public String startTimer(){
@@ -83,7 +81,7 @@ public class TimersResource {
         return result.toString();
     }
     
-    @POST
+    @GET
     @Path("newdata/stop")
     @Produces("application/json")
     public String stopTimer(){
