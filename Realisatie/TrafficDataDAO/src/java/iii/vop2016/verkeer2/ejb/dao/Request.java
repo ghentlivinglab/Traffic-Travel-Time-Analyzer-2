@@ -28,7 +28,7 @@ public class Request {
 
     public Request addParam(int place, Parameter p) {
         //enlarge array if required
-        while(param.length <= place) {
+        while (param.length <= place) {
             param = Arrays.copyOf(param, param.length * 2);
         }
 
@@ -43,13 +43,47 @@ public class Request {
 
     public Query PrepareQuery(EntityManager em) {
         StringBuilder b = new StringBuilder();
-        b.append("SELECT r FROM RouteDataEntity r");
+        b.append("SELECT ");
 
-        if (param.length > 0) {
+        //apply aggregation clauses if any
+        int length = 0;
+        for (Parameter p : param) {
+            if (p != null && p.isAggregation) {
+                length++;
+            }
+        }
+
+        if (length > 0) {
+            int count = 0;
+            for (int i = 0; i < param.length; i++) {
+                Parameter p = param[i];
+                if (p != null && p.isAggregation) {
+                    if(count != 0)
+                        b.append(",");
+                    p.build(b);
+                    count++;
+                }
+                
+            }
+        }else{
+            b.append("r");
+        }
+        
+        b.append(" FROM RouteDataEntity r");
+
+        //append where clauses (if there are any)
+        length = 0;
+        for (Parameter p : param) {
+            if (p != null && !p.isAggregation) {
+                length++;
+            }
+        }
+
+        if (length > 0) {
             b.append(" WHERE ");
             for (int i = 0; i < param.length; i++) {
                 Parameter p = param[i];
-                if (p != null) {
+                if (p != null && !p.isAggregation) {
                     if (i != 0) {
                         b.append(" AND ");
                     }
@@ -59,22 +93,25 @@ public class Request {
 
         }
 
+        //invert table if required
         if (!ascending) {
             b.append(" ORDER BY r.id DESC");
         }
 
         Query q = em.createQuery(b.toString());
 
+        //fill values for every where clause
         if (param.length > 0) {
             for (int i = 0; i < param.length; i++) {
                 Parameter p = param[i];
-                if (p != null) {
+                if (p != null && !p.isAggregation) {
                     p.setValue(q);
                 }
             }
 
         }
 
+        //limit results if requested
         if (limitResult != 0) {
             q.setMaxResults(limitResult);
         }

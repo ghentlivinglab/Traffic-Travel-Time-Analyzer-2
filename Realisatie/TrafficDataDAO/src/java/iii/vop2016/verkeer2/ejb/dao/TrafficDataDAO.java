@@ -5,33 +5,23 @@
  */
 package iii.vop2016.verkeer2.ejb.dao;
 
-import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.RouteData;
-import iii.vop2016.verkeer2.ejb.datasources.ISourceAdapter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
-import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.TemporalType;
 
 /**
  *
@@ -250,12 +240,98 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
         r.addParam(i++, new Parameter("id", idRange[0], idRange[1], Operation.between));
         r.addParam(i++, new Parameter("routeId", route.getId(), Operation.eq));
         r.addParam(i++, new Parameter("timestamp", startList, endList, Operation.between));
-        
+
         List<RouteDataEntity> routesEntities = r.PrepareQuery(em).getResultList();
 
         //transform all database objects to library objects via copy constructor
         for (IRouteData rdata : routesEntities) {
             data.add(new RouteData(rdata));
+        }
+        return data;
+    }
+
+    @Override
+    public List<Long> getAggregateData(IRoute route, List<Date> startList, List<Date> endList, AggregationContainer... aggr) {
+        List<Long> data = new ArrayList<>();
+        try {
+            if (route == null) {
+                return data;
+            }
+            if (startList == null || endList == null || startList.size() == 0 || endList.size() == 0 || startList.size() != endList.size()) {
+                return data;
+            }
+            long[] idRange = blocklist.getIdRange(startList.get(0), endList.get(endList.size() - 1));
+
+            if (idRange == null || idRange[0] == -1 || idRange[1] == -1) {
+                return data;
+            }
+
+            Request r = new Request(true, 0);
+            int i = 0;
+
+            if (idRange[0] == -1 || idRange[1] == -1) {
+                throw new NoResultException("Could not retrieve id segment from blocklist");
+            }
+
+            r.addParam(i++, new Parameter("id", idRange[0], idRange[1], Operation.between));
+            r.addParam(i++, new Parameter("routeId", route.getId(), Operation.eq));
+            r.addParam(i++, new Parameter("timestamp", startList, endList, Operation.between));
+            for (AggregationContainer c : aggr) {
+                r.addParam(i++, new Parameter(c.aggregation, c.attr));
+            }
+
+            Object obj = r.PrepareQuery(em).getSingleResult();
+            if (obj instanceof Object[]) {
+                Object[] arr = (Object[]) obj;
+                for (Object l : arr) {
+                    if (l instanceof Long) {
+                        data.add((Long) l);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            Logger logger = Logger.getLogger(this.getClass().getName());
+            logger.severe(e.getMessage());
+        } finally {
+
+        }
+        return data;
+    }
+
+    @Override
+    public List<Long> getAggregateData(IRoute route, Date time1, Date time2, AggregationContainer... aggr) {
+        List<Long> data = new ArrayList<>();
+        try {
+            long[] range = blocklist.getIdRange(time1, time2);
+            if (range[0] == -1 || range[1] == -1) {
+                throw new NoResultException("Could not retrieve id segment from blocklist");
+            }
+
+            int i = 0;
+            Request r = new Request(true, 0);
+            r.addParam(i++, new Parameter("id", range[0], range[1], Operation.between));
+            r.addParam(i++, new Parameter("routeId", route.getId(), Operation.eq));
+            r.addParam(i++, new Parameter("timestamp", time1, time2, Operation.between));
+            for (AggregationContainer c : aggr) {
+                r.addParam(i++, new Parameter(c.aggregation, c.attr));
+            }
+
+            Object obj = r.PrepareQuery(em).getSingleResult();
+            if (obj instanceof Object[]) {
+                Object[] arr = (Object[]) obj;
+                for (Object l : arr) {
+                    if (l instanceof Long) {
+                        data.add((Long) l);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            Logger logger = Logger.getLogger(this.getClass().getName());
+            logger.severe(e.getMessage());
+        } finally {
+
         }
         return data;
     }

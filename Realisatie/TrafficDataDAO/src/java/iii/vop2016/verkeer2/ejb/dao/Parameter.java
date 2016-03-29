@@ -8,7 +8,11 @@ package iii.vop2016.verkeer2.ejb.dao;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.persistence.Query;
+import javax.validation.ConstraintDeclarationException;
+import javax.validation.ConstraintViolationException;
 
 /**
  *
@@ -21,12 +25,17 @@ public class Parameter<T> {
     public T value2;
     public Operation operation;
 
+    public Aggregation aggregation;
+    private String fields;
+    public boolean isAggregation;
+
     public Parameter(String property, T value, T value2, Operation operation) {
         this.property = property;
         this.name = property;
         this.value = value;
         this.value2 = value2;
         this.operation = operation;
+        this.isAggregation = false;
     }
 
     public Parameter(String property, T value, Operation operation) {
@@ -35,24 +44,55 @@ public class Parameter<T> {
         this.value = value;
         this.value2 = null;
         this.operation = operation;
+        this.isAggregation = false;
+    }
+
+    private static Pattern pat = Pattern.compile("([a-zA-Z]+)");
+    public Parameter(Aggregation type ,String param) {
+        this.aggregation = type;
+        this.fields = param;
+        this.isAggregation = true;
+
+        if (param == null || param.equals("")) {
+            throw new ConstraintDeclarationException("param is empty!");
+        }
+        
+        Matcher matcher = pat.matcher(param);
+        StringBuffer b = new StringBuffer();
+        while(matcher.find()){
+            matcher.appendReplacement(b, "r." + matcher.group(1));
+        }
+        matcher.appendTail(b);
+        
+        this.fields = b.toString();
     }
 
     public void build(StringBuilder b) {
-        b.append("(");
-
-        if (value instanceof List) {
-            List val = (List) value;
-            for (int x = 0; x < val.size(); x++) {
-                if (x != 0) {
-                    b.append(" OR ");
-                }
-                buildComparator(b, property, name + "Entry" + x);
+        if (isAggregation) {
+            switch (aggregation) {
+                case sum:
+                    b.append("SUM(");
+                    b.append(fields);
+                    b.append(")");
+                    break;
             }
         } else {
-            buildComparator(b, property, name);
-        }
+            b.append("(");
 
-        b.append(")");
+            if (value instanceof List) {
+                List val = (List) value;
+                for (int x = 0; x < val.size(); x++) {
+                    if (x != 0) {
+                        b.append(" OR ");
+                    }
+                    buildComparator(b, property, name + "Entry" + x);
+                }
+            } else {
+                buildComparator(b, property, name);
+            }
+
+            b.append(")");
+        }
 
     }
 

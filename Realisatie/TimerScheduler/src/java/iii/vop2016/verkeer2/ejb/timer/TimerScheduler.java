@@ -58,6 +58,8 @@ public class TimerScheduler implements TimerSchedulerRemote {
     protected Pattern timeFormat = Pattern.compile("([0-9]{2})-([0-9]{2})");
     protected static final int DEFAULTINTERVAL = 5;
     protected boolean isRunning;
+    protected boolean isTimeInvalid;
+    protected Date currentTime;
 
     protected Pattern numberFormat = Pattern.compile("\\d+");
 
@@ -88,6 +90,7 @@ public class TimerScheduler implements TimerSchedulerRemote {
         Properties prop = getProperties();
 
         //Get interval to closest time for timer from properties file
+        isTimeInvalid = true;
         Date time = getCurrentTime(prop);
         int currentTime = getIndexedCurrentTime(time);
         interval = getIntervalForClosestTime(currentTime, prop);
@@ -110,6 +113,8 @@ public class TimerScheduler implements TimerSchedulerRemote {
     @Override
     @Timeout
     public void Tick() {
+        isTimeInvalid = true;
+        
         if (!isRunning) {
             return;
         }
@@ -146,20 +151,24 @@ public class TimerScheduler implements TimerSchedulerRemote {
     }
 
     private Date getCurrentTime(Properties prop) {
-        Date time = null;
-        int currentTime = -1;
-        try {
-            //retrieve current time from ntp server
-            time = getCurrentTime_ntpServer(prop);
-            if (time == null) {
-                throw new IOException();
+        if (isTimeInvalid) {
+            Date time = null;
+            int currentTime = -1;
+            try {
+                //retrieve current time from ntp server
+                time = getCurrentTime_ntpServer(prop);
+                if (time == null) {
+                    throw new IOException();
+                }
+            } catch (Exception ex) {
+                //use local server time as backup
+                Calendar cal = Calendar.getInstance();
+                time = cal.getTime();
             }
-        } catch (Exception ex) {
-            //use local server time as backup
-            Calendar cal = Calendar.getInstance();
-            time = cal.getTime();
+            isTimeInvalid = false;
+            this.currentTime = time;
         }
-        return time;
+        return this.currentTime;
     }
 
     private int getIntervalForClosestTime(int currentTime, Properties properties) {
@@ -274,15 +283,15 @@ public class TimerScheduler implements TimerSchedulerRemote {
             System.out.println(" rootdelay=" + nFormat.format(message.getRootDelayInMillisDouble()) + ", rootdispersion(ms): " + nFormat.format(disp));
 
             long destTime = info.getReturnTime();
-            
+
             // Transmit time is time reply sent by server (t3)
             TimeStamp xmitNtpTime = message.getTransmitTimeStamp();
             info.computeDetails();
             Long delayValue = info.getDelay();
-            
+
             Date date = xmitNtpTime.getDate();
             date = new Date(date.getTime() + delayValue);
-            
+
             return date;
         }
     }

@@ -122,7 +122,7 @@ public class Route implements IRoute{
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.name);
+        hash = 97 * hash + Objects.hashCode(this.name) + Objects.hashCode(this.id) ;
         return hash;
     }
 
@@ -138,7 +138,10 @@ public class Route implements IRoute{
             return false;
         }
         final IRoute other = (IRoute) obj;
-        if (!Objects.equals(this.name, other.getName())) {
+        if (!other.getName().equals(getName())) {
+            return false;
+        }
+        if (other.getId() != getId()) {
             return false;
         }
         return true;
