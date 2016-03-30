@@ -38,7 +38,7 @@ public class TomTomSourceAdapter implements TomTomSourceAdapterRemote {
 
     @PostConstruct
     public void init() {
-        Logger.getLogger("logger").log(Level.INFO, "TomTomSourceAdapter has been initialized.");
+        Logger.getLogger("logger").log(Level.INFO, providerName + "SourceAdapter has been initialized.");
     }
 
     @Override
@@ -95,9 +95,9 @@ public class TomTomSourceAdapter implements TomTomSourceAdapterRemote {
         }
              */
         } catch (URLException e) {
-            throw new URLException("Wrong URL for TomTom adapter");
+            throw new URLException("Wrong URL for " + providerName + " adapter or internet connection is lost");
         } catch (JSONException | DataAccessException e) {
-            throw new DataAccessException("Cannot access data for TomTom adapter");
+            throw new DataAccessException("Cannot access data from " + providerName + " adapter");
         }
         return rd;
     }
@@ -116,16 +116,16 @@ public class TomTomSourceAdapter implements TomTomSourceAdapterRemote {
             //System.out.println(buffer.toString());
             return buffer.toString();
         } catch (MalformedURLException ex) {
-            throw new URLException("Wrong URL for TomTom adapter");
+            throw new URLException("Wrong URL for " + providerName + " adapter or internet connection is lost");
         } catch (IOException e) {
-            throw new DataAccessException("Cannot access data for TomTom adapter");
+            throw new DataAccessException("Cannot access data from " + providerName + " adapter");
         } finally {
             try {
                 if (reader != null) {
                     reader.close();
                 }
             } catch (IOException e) {
-                throw new DataAccessException("Cannot access data for TomTom adapter");
+                throw new DataAccessException("Cannot access data from " + providerName + " adapter");
             }
         }
     }

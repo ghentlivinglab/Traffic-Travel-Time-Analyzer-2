@@ -101,13 +101,13 @@ public class RoutesResource {
         try {
             ITrafficDataDownstreamAnalyser analyser = beans.getTrafficDataDownstreamAnalyser();
 
-            IRoute r = new Route("R4 Zelzate");
+            IRoute r = new Route("Rooigemlaan (R40) northbound");
 
             //r.setInverseRoute(r);
-            IGeoLocation geolocation1 = new GeoLocation(51.192226, 3.776342);
-            IGeoLocation geolocation2 = new GeoLocation(51.086447, 3.672188);
-            geolocation1.setName("Zelzate");
-            geolocation2.setName("Gent");
+            IGeoLocation geolocation1 = new GeoLocation(51.0560905, 3.6951634);
+            IGeoLocation geolocation2 = new GeoLocation(51.0663037, 3.6996797);
+            geolocation1.setName("Drongensesteenweg");
+            geolocation2.setName("Palinghuizen");
             r.addGeolocation(geolocation1);
             r.addGeolocation(geolocation2);
             r = beans.getGeneralDAO().addRoute(r);
