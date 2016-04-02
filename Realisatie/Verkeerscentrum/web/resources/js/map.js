@@ -8,7 +8,45 @@ var layer;
 var trafficData = [];
 var modus = "live";
 
-trafficData = [{ "id":1,"name":"Route 123" },{ "id":2,"name":"Route 456" }];
+trafficData = [
+   {
+      distance:14685,
+      trend:0,
+      currentDelayLevel:0,
+      optimalDuration:734,
+      avgDuration:734,
+      currentVelocity:19,
+      recentData:{
+         "duration":{
+            "name":"TrendDurations 1",
+            "description":"This data are the durations over the last hour for route 1",
+            "x-ax":[
+
+            ],
+            "y-ax":[
+
+            ]
+         }
+      },
+      avgVelocity:2,
+      optimalVelocity:2,
+      name:"R4 Gent - Zelzate",
+      currentDuration:753,
+      id:1,
+      geolocations:[
+         {
+            latitude:51.192226,
+            name:"Zelzate",
+            longitude:3.776342
+         },
+         {
+            latitude:51.086447,
+            name:"Gent",
+            longitude:3.672188
+         }
+      ]
+   }
+];
 
 function setTimerProgress(){
     timerProgress += 0.5;

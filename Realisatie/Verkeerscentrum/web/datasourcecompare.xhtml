@@ -4,7 +4,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
     
     
 
@@ -24,7 +25,7 @@
 				<section class="st-menu st-effect-3" id="menu-3">
                                     
                                         <div class="sidebar">
-
+                                            <form method="GET" id="formRefreshAnalyse">   
                                                 <div class="header">
                                                     <div class="row">
                                                         <div class="col s1 btn_back">
@@ -32,132 +33,84 @@
                                                                 <i class="material-icons">keyboard_backspace</i>
                                                             </a>
                                                         </div>
-                                                        <div class="col s11 title"><span> Databronnen vergelijken </span></div>
+                                                        <div class="col s10 title"><span> Databronnen vergelijken </span></div>
+                                                        <div class="col s1 btn_back">
+                                                            <a href="#!" class="btnRefreshAnalyse">
+                                                                <i class="material-icons">refresh</i>
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
 
-                                                <!--
-                                                <div class="content">
-
-                                                    
-                                                    
-                                                    
-                                                    <fieldset>
-                                                        <legend>Periode</legend>
 
 
-                                                    </fieldset>
-
-                                                    <fieldset>
-                                                        <legend>Periode</legend>
-
-                                                            <ul>
-                                                                <li>24 jul -> 26 jul</li>
-                                                                <li>24 jul -> 26 jul</li>
-                                                                <li>24 jul -> 26 jul</li>
-                                                                <li>24 jul -> 26 jul</li>
-                                                            </ul>
-
-                                                        <a href="#!" class="btn">Wijzigen</a>
-                                                    </fieldset>
+                                                <ul class="collapsible" data-collapsible="accordion">
+                                                    <li>
+                                                      <div class="collapsible-header"><i class="material-icons">filter_drama</i>Periode</div>
+                                                      <div class="collapsible-body">
 
 
-                                                    <fieldset>
-                                                        <legend>Trajecten</legend>
+
+                                                            <section>
+                                                                <div class="row">
+                                                                    <div class="col s5 valign-wrapper">
+                                                                        <p class="valign">Begin</p>
+                                                                      </div>
+                                                                    <div class="col s7"> 
+                                                                        <h:inputText value="#{DataSourcesComparer.period.key}" class="datetimepicker" id="periodStart" a:name="periodStartDummy">  
+                                                                            <f:convertDateTime pattern="dd MMMM YYYY - HH:mm"/>  
+                                                                        </h:inputText>
+                                                                        <h:inputText value="#{DataSourcesComparer.period.key.getTime()}" a:name="periodStart" a:type="hidden" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col s5 valign-wrapper">
+                                                                        <p class="valign">Eind</p>
+                                                                    </div>
+                                                                    <div class="col s7"> 
+                                                                        <h:inputText value="#{DataSourcesComparer.period.value}" class="datetimepicker" id="periodEnd" a:name="periodEndDummy">  
+                                                                            <f:convertDateTime pattern="dd MMMM YYYY - HH:mm"/>  
+                                                                        </h:inputText>
+                                                                        <h:inputText value="#{DataSourcesComparer.period.value.getTime()}" a:name="periodEnd" a:type="hidden" />
+                                                                    </div>
+                                                                </div>
+                                                            </section>
+
+                                                      </div>
+                                                    </li>
+                                                    <li>
+                                                      <div class="collapsible-header"><i class="material-icons">place</i>Trajecten</div>
+                                                      <div class="collapsible-body">
+
 
                                                             <ul id="routeList">
-                                                                <li>R4: Gent - Zelzate</li>
-                                                                <li>R4: Gent - Zelzate</li>
-                                                                <li>R4: Gent - Zelzate</li>
-                                                                <li>R4: Gent - Zelzate</li>
+                                                                <c:forEach var="route" items="#{routeDAO.selectedRoutes}">
+                                                                    <li>
+                                                                        <h:outputText value="#{route.name}"/> 
+                                                                        <input type="hidden" name="routeId" value="#{route.id}" /> 
+                                                                    </li>
+                                                                </c:forEach>
                                                             </ul>
 
-
-
-                                                        <a href="#!" class="btn" id="selectRoutes" data-multiplicity="single">Selecteer trajecten</a>
-                                                    </fieldset>
-
-
-
-
-
-                                                    <fieldset>
-                                                        <legend>Databronnen</legend>
-
-                                                            <ul>
-                                                                <li>R4: Gent - Zelzate</li>
-                                                                <li>R4: Gent - Zelzate</li>
-                                                                <li>R4: Gent - Zelzate</li>
-                                                                <li>R4: Gent - Zelzate</li>
-                                                            </ul>
-
-
-                                                        <a href="#!" class="btn">Selecteer databronnen</a>
-                                                    </fieldset>
-                                                    
-                                                    
-                                                </div>
-                                                -->
-                                            
-                                            <ul class="collapsible" data-collapsible="accordion">
-                                                <li>
-                                                  <div class="collapsible-header"><i class="material-icons">filter_drama</i>Periode</div>
-                                                  <div class="collapsible-body">
-                                                      
-
-                                                        
-                                                        <section>
-                                                            <div class="row">
-                                                                <div class="col s5 valign-wrapper">
-                                                                    <p class="valign">Begin</p>
-                                                                  </div>
-                                                                <div class="col s7"> 
-                                                                    <h:inputText value="#{DataSourcesComparer.period.key}" class="datetimepicker" id="periodStart">  
-                                                                        <f:convertDateTime pattern="dd MMMM YYYY - HH:mm"/>  
-                                                                    </h:inputText>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col s5 valign-wrapper">
-                                                                    <p class="valign">Eind</p>
-                                                                </div>
-                                                                <div class="col s7"> 
-                                                                    <h:inputText value="#{DataSourcesComparer.period.value}" class="datetimepicker" id="periodEnd">  
-                                                                        <f:convertDateTime pattern="dd MMMM YYYY - HH:mm"/>  
-                                                                    </h:inputText>
-                                                                </div>
-                                                            </div>
-                                                        </section>
-                                                      
-                                                  </div>
-                                                </li>
-                                                <li>
-                                                  <div class="collapsible-header"><i class="material-icons">place</i>Trajecten</div>
-                                                  <div class="collapsible-body">
-                                                     
-                                                      
-                                                        <ul id="routeList">
-                                                            <c:forEach var="route" items="#{DataSourcesComparer.routes}">
-                                                                <li><h:outputText value="#{route.name}"/></li>
-                                                            </c:forEach>
-                                                        </ul>
-                                                      
-                                                        <a href="#!" class="btn" id="selectRoutes" data-multiplicity="single">Selecteer trajecten</a>    
-                                                  </div>
-                                                </li>
-                                                <li>
-                                                  <div class="collapsible-header"><i class="material-icons">whatshot</i>Databronnen</div>
-                                                  <div class="collapsible-body">
-                                                      <ul id="routeList">
-                                                          <c:forEach var="provider" items="#{DataSourcesComparer.dataProviders}">
-                                                                <li><h:outputText value="#{provider}"/></li>
-                                                            </c:forEach>
-                                                      </ul>
-                                                      <a href="#!" class="btn" id="selectRoutes">Selecteer bronnen</a>   
-                                                  </div>
-                                                </li>
-                                            </ul>
-                                            
+                                                            <a href="#!" class="btn" id="selectRoutes" data-multiplicity="single">Selecteer trajecten</a>    
+                                                      </div>
+                                                    </li>
+                                                    <li>
+                                                      <div class="collapsible-header"><i class="material-icons">whatshot</i>Databronnen</div>
+                                                      <div class="collapsible-body">
+                                                          <ul id="routeList">
+                                                              <c:forEach var="provider" items="#{dataproviderDAO.selectedProviders}">
+                                                                  <li> 
+                                                                      <h:outputText value="#{provider.name}"/> 
+                                                                      <input type="hidden" name="provider" value="#{provider.name}" /> 
+                                                                  </li>
+                                                                </c:forEach>
+                                                          </ul>
+                                                          <a href="#!" class="btn" id="selectRoutes">Selecteer bronnen</a>   
+                                                      </div>
+                                                    </li>
+                                                </ul>
+                                            </form> 
                                         </div>
 				</section>
 

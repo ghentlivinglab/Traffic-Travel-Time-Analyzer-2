@@ -1,7 +1,6 @@
 var tab = 0;
 var lastSelectedRoute = null;
 var addedPeriods = 0;
-var inittabs = [];
 
 showRoutePreview = function(){
     $("#routePreview").css("display","block");
@@ -13,30 +12,18 @@ hideRoutePreview = function(){
     else
         $("#routePreview").attr("src","http://localhost:8080/web/resources/img/traject.PNG");
 };
-addRouteToList = function(){
-    lastSelectedRoute = $("#"+$(this).attr("for")).val();
+addRouteToList = function(evt){
+    lastSelectedRoute = evt.data.routeId;
 };
     
-function showTab(tabname){
-    $(".inittabs li").hide();
-    $("#inittab_"+tabname).addClass("active").show();
-}   
-    
 function resetSlider(){
-    
-    if(inittabs.length > 0){
-        tab = 0;
-        showTab(inittabs[0]);
-    }else{
-        alert("No tabs are defined!");
+    while(tab !== 0){
+        prevSlide();
     }
-        
 }
-
 function showSlider(){
     //FADE IN
-    $(".initprocess").fadeIn();
-    $(".inittabs").fadeIn();
+    $(".slider").fadeIn();
     //SLIDE IN LEFT
     //$(".slider").show();
     //$(".slider").css("left",-1000);
@@ -44,69 +31,80 @@ function showSlider(){
 }
 function nextSlide(){
     tab++;
-    tab %= inittabs.length;
-    showTab(inittabs[tab]);
+    tab %= 3;
+    $(".slider").slider("next");
 }
 function prevSlide(){
     tab--;
-    tab %= inittabs.length;
-    showTab(inittabs[tab]);
+    tab %= 3;
+    $(".slider").slider("prev");
 }
-function setRouteMultiplicity(multiplicity){
+function showAvalibleRoutes(multiplicity){
     if(multiplicity === undefined) {
         multiplicity = "single";
     }
+    $("#availableRoutesList").html("");
     switch(multiplicity){
       case "multi": 
-           $("[name=routeId]").attr("type","checkbox");
+          for(i=0; i<20; i++){
+               $("#availableRoutesList")
+                    .append($("<ol />")
+                    .append($("<input />").attr("id","route"+i).attr("type","checkbox").attr("value",i).attr("name","routeId"))
+                    .append($("<label />").attr("for","route"+i).mouseover(showRoutePreview).mouseleave(hideRoutePreview).click({routeId: i},addRouteToList)
+                    .append($("<span />").text("R4: Gent - Zelzate")
+                    )));
+          }
            break;
       case "single": 
-           $("[name=routeId]").attr("type","radio");
-           break;
-    }
+           for(i=0; i<20; i++){
+               $("#availableRoutesList")
+                    .append($("<ol />")
+                    .append($("<input />").attr("id","route"+i).attr("type","radio").attr("value",i).attr("name","route").attr("name","routeId"))
+                    .append($("<label />").attr("for","route"+i).mouseover(showRoutePreview).mouseleave(hideRoutePreview).click({routeId: i},addRouteToList)
+                    .append($("<span />").text("R4: Gent - Zelzate")
+                    )));
+              }
+          break;
+  }
 }
 
 $(document).ready(function(){
+  $(".slider").slider({
+      full_width: true,
+  });
+  $(".slider").slider('pause');
+  $(".slider").css("height","100%");
+  $(".slides").css("height","100%");
 
-  $("#availableRoutesList label").mouseover(showRoutePreview)
-          .mouseleave(hideRoutePreview)
-          .click(addRouteToList);
-    
   $("#btnCompareSources").click(function(){
-      inittabs = ["singleperiod","singleroute","providers"];
       resetSlider();
       showSlider();
-      setRouteMultiplicity();
+      showAvalibleRoutes();
   });
   $("#btnAvgTraffic").click(function(){
-      inittabs = ["singleperiod","singleroute","providers"];
       resetSlider();
       showSlider();
-      setRouteMultiplicity();
+      showAvalibleRoutes();
   });
   $("#btnDelayWeekday").click(function(){
-      inittabs = ["singleperiod","singleroute","providers"];
       resetSlider();
       showSlider();
-      setRouteMultiplicity();
+      showAvalibleRoutes();
   });
   $("#btnRushHours").click(function(){
-      inittabs = ["singleperiod","singleroute","providers"];
       resetSlider();
       showSlider();
-      setRouteMultiplicity();
+      showAvalibleRoutes();
   });
   $("#btnCompareRoutes").click(function(){
-      inittabs = ["singleperiod","singleroute","providers"];
       resetSlider();
       showSlider();
-      setRouteMultiplicity("multi");
+      showAvalibleRoutes("multi");
   });
   $("#btnComparePeriods").click(function(){
-      inittabs = ["multiperiod","singleroute","providers"];
       resetSlider();
       showSlider();
-      setRouteMultiplicity();
+      showAvalibleRoutes();
   });
 
   $(".btnNextSlide").click(nextSlide);
@@ -138,14 +136,6 @@ $(document).ready(function(){
           date.setMilliseconds(0);
           $("[name="+hiddenName+"]").val(date.getTime());
       }
-  });
-  
-  $('.btnRefreshAnalyse').click(function(e) {
-        e.preventDefault();
-        $('#formRefreshAnalyse').submit(function() {
-            $(this).children('[name=periodStartDummy]').remove();
-            $(this).children('[name=periodEndDummy]').remove();
-         });
   });
   
 
