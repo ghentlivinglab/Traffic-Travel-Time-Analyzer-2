@@ -11,19 +11,16 @@ import iii.vop2016.verkeer2.ejb.components.Weekdays;
 import iii.vop2016.verkeer2.ejb.dao.Aggregation;
 import iii.vop2016.verkeer2.ejb.dao.AggregationContainer;
 import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
-import iii.vop2016.verkeer2.ejb.datasources.ISourceAdapter;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -90,6 +87,20 @@ public class DataProvider implements DataProviderRemote {
         @Override
         public Long apply(IRouteData t) {
             return new Long(t.getDistance());
+        }
+    };
+    
+    private static Function<IRouteData, Long> function_distanceMulDuration = new Function<IRouteData, Long>() {
+        @Override
+        public Long apply(IRouteData t) {
+            return new Long(t.getDistance() * t.getDuration());
+        }
+    };
+    
+    private static Function<IRouteData, Long> function_distanceMulDistanceDivDuration = new Function<IRouteData, Long>() {
+        @Override
+        public Long apply(IRouteData t) {
+            return new Long(t.getDistance() * t.getDistance() / t.getDuration());
         }
     };
 
@@ -173,7 +184,7 @@ public class DataProvider implements DataProviderRemote {
         List<Long> list = dao.getAggregateData(route, startList, endList, new AggregationContainer(Aggregation.sum, "duration * distance"), new AggregationContainer(Aggregation.sum, "distance"));
 
         if (list.size() == 2) {
-            return Math.toIntExact(list.get(0)/list.get(1));
+            return Math.toIntExact(list.get(0) / list.get(1));
         }
         return -1;
     }
@@ -192,7 +203,7 @@ public class DataProvider implements DataProviderRemote {
         List<Long> list = dao.getAggregateData(route, startList, endList, new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
 
         if (list.size() == 2) {
-            return Math.toIntExact(list.get(0)/list.get(1));
+            return Math.toIntExact(list.get(0) / list.get(1));
         }
         return -1;
     }
@@ -240,11 +251,11 @@ public class DataProvider implements DataProviderRemote {
     @Override
     public int getAvgDuration(IRoute route, List<String> providers, Date start, Date end) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        
+
         List<Long> list = dao.getAggregateData(route, start, end, new AggregationContainer(Aggregation.sum, "duration * distance"), new AggregationContainer(Aggregation.sum, "distance"));
 
         if (list.size() == 2) {
-            return Math.toIntExact(list.get(0)/list.get(1));
+            return Math.toIntExact(list.get(0) / list.get(1));
         }
         return -1;
     }
@@ -252,11 +263,11 @@ public class DataProvider implements DataProviderRemote {
     @Override
     public int getAvgVelocity(IRoute route, List<String> providers, Date start, Date end) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        
+
         List<Long> list = dao.getAggregateData(route, start, end, new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
 
         if (list.size() == 2) {
-            return Math.toIntExact(list.get(0)/list.get(1));
+            return Math.toIntExact(list.get(0) / list.get(1));
         }
         return -1;
     }
@@ -334,14 +345,56 @@ public class DataProvider implements DataProviderRemote {
 
     @Override
     public Map<Date, Integer> getData(IRoute route, List<String> providers, Date start, Date end) {
+        Map<Date, Integer> ret = new HashMap<>();
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return new HashMap<>();
+        List<IRouteData> list = dao.getData(route, start, end);
+
+        //map all retrieved data to specified date
+        Map<Date, List<IRouteData>> reduce = new HashMap<>();
+        for (IRouteData r : list) {
+            List<IRouteData> data = reduce.get(r.getTimestamp());
+            if (data == null) {
+                data = new ArrayList<>();
+                data.add(r);
+                reduce.put(r.getTimestamp(), data);
+            } else {
+                data.add(r);
+            }
+        }
+        
+        //reduce data to mean for that day
+        for(Map.Entry<Date,List<IRouteData>> entry : reduce.entrySet()){
+            ret.put(entry.getKey(), CalculateArithmaticMean(entry.getValue(), function_distanceMulDuration, function_distance));
+        }
+        
+        return ret;
     }
 
     @Override
     public Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers, Date start, Date end) {
+        Map<Date, Integer> ret = new HashMap<>();
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return new HashMap<>();
+        List<IRouteData> list = dao.getData(route, start, end);
+
+        //map all retrieved data to specified date
+        Map<Date, List<IRouteData>> reduce = new HashMap<>();
+        for (IRouteData r : list) {
+            List<IRouteData> data = reduce.get(r.getTimestamp());
+            if (data == null) {
+                data = new ArrayList<>();
+                data.add(r);
+                reduce.put(r.getTimestamp(), data);
+            } else {
+                data.add(r);
+            }
+        }
+        
+        //reduce data to mean for that day
+        for(Map.Entry<Date,List<IRouteData>> entry : reduce.entrySet()){
+            ret.put(entry.getKey(), CalculateArithmaticMean(entry.getValue(), function_distanceMulDistanceDivDuration, function_distance));
+        }
+        
+        return ret;
     }
 
     @Override

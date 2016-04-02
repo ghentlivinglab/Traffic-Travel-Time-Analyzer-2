@@ -41,7 +41,7 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
 
     @PostConstruct
     public void init(){
-        Logger.getLogger("logger").log(Level.INFO, "GoogleMapsSourceAdapter has been initialized.");  
+        Logger.getLogger("logger").log(Level.INFO, providerName + "SourceAdapter has been initialized.");  
     }
 
     @Override
@@ -90,7 +90,7 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
                         JSONObject status1 = elements.getJSONObject(0);
                         String status = (String) status1.getString("status");
                         if(status.equalsIgnoreCase("ZERO_RESULTS")){
-                            throw new DataAccessException("Cannot access data from Google Maps adapter");
+                            throw new DataAccessException("Cannot access data from " + providerName + " adapter");
                         }
                     
                         for (int k = 0; k < elements.length(); k++) {
@@ -105,11 +105,11 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
                         }
                     }
                 } else {
-                    throw new DataAccessException("Cannot access data from Google Maps adapter");
+                    throw new DataAccessException("Cannot access data from " + providerName + " adapter");
             }
             } 
             catch (IOException ex) {
-                throw new URLException("Wrong URL for Google Maps adapter");
+                throw new URLException("Wrong URL for " + providerName + " adapter or internet connection is lost");
             }
             
         }
