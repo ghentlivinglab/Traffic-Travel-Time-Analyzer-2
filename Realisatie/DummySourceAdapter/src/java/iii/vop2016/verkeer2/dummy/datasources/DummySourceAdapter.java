@@ -10,13 +10,13 @@ import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.RouteData;
 import iii.vop2016.verkeer2.ejb.helper.DataAccessException;
 import iii.vop2016.verkeer2.ejb.helper.URLException;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 
 /**
  *
  * @author tobia
  */
-@Stateless
+@Singleton
 public class DummySourceAdapter implements DummySourceAdapterRemote {
 
     int count = 0;

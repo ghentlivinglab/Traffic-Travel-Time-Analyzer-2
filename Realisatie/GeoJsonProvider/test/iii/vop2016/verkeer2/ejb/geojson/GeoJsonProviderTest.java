@@ -94,7 +94,11 @@ public class GeoJsonProviderTest {
         map.put(r, list);
         map.put(r2, list2);
         
-        String json = instance.getGeoJson(map);
+        Map<IRoute,Integer> del = new HashMap<>();
+        del.put(r, 0);
+        del.put(r2, 1);
+        
+        String json = instance.getGeoJson(map,del);
         System.out.println("dq");
     }
     

@@ -78,4 +78,6 @@ public interface IDataProvider {
     
     //helper function for datadownstream
     int getMeanDurationFromRouteData(List<IRouteData> routeData);
+    
+    void invalidateCurrentData();
 }

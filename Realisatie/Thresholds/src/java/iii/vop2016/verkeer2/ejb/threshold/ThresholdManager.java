@@ -51,6 +51,10 @@ public class ThresholdManager implements ThresholdManagerRemote {
         beans = BeanFactory.getInstance(ctx, ctxs);
 
         thresholdMap = beans.getGeneralDAO().getThresholds();
+        if (thresholdMap == null) {
+            thresholdMap = new HashMap<>();
+        }
+        
         prevThresholdLevel = new HashMap<>();
         for (IRoute route : thresholdMap.keySet()) {
             prevThresholdLevel.put(route, -1);

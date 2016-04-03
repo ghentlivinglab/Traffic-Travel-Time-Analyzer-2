@@ -7,6 +7,8 @@ package iii.vop2016.verkeer2.war.rest;
 
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
+import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
+import iii.vop2016.verkeer2.ejb.dataprovider.IDataProvider;
 import iii.vop2016.verkeer2.ejb.geojson.GeoJsonRemote;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import java.util.HashMap;
@@ -68,30 +70,48 @@ public class GeojsonResource {
         }
 
         GeoJsonRemote provider = beans.getGeoJsonProvider();
-        List<IGeoLocation> list = provider.getRoutePlotGeoLocations(route);
+        IDataProvider dataProvider = beans.getDataProvider();
+        if (dataProvider != null && provider != null) {
+            List<IGeoLocation> list = provider.getRoutePlotGeoLocations(route);
 
-        Map<IRoute, List<IGeoLocation>> map = new HashMap<>();
-        map.put(route, list);
+            Map<IRoute, List<IGeoLocation>> map = new HashMap<>();
+            map.put(route, list);
 
-        return provider.getGeoJson(map);
+            Map<IRoute, Integer> delaylevels = new HashMap<>();
+            delaylevels.put(route, dataProvider.getCurrentDelayLevel(route, null));
+
+            return provider.getGeoJson(map, delaylevels);
+        }
+        return "";
     }
 
     @GET
     @Path("all")
     @Produces("application/json")
     public String getGeoJson() {
+        IGeneralDAO dao = beans.getGeneralDAO();
+        IDataProvider dataProvider = beans.getDataProvider();
+
+        if (dao == null || dataProvider == null) {
+            return "";
+        }
+
         List<IRoute> routes = beans.getGeneralDAO().getRoutes();
+
         if (routes == null) {
             return "";
         }
 
         Map<IRoute, List<IGeoLocation>> map = new HashMap<>();
+        Map<IRoute, Integer> delaylevels = new HashMap<>();
+
         GeoJsonRemote provider = beans.getGeoJsonProvider();
         for (IRoute route : routes) {
             List<IGeoLocation> list = provider.getRoutePlotGeoLocations(route);
             map.put(route, list);
+            delaylevels.put(route, dataProvider.getCurrentDelayLevel(route, null));
         }
-        
-        return provider.getGeoJson(map);
+
+        return provider.getGeoJson(map,delaylevels);
     }
 }

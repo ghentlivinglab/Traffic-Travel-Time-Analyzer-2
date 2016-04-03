@@ -26,6 +26,7 @@ import javax.naming.NamingException;
  * @author tobia
  */
 @Singleton
+@Startup
 public class DummyTimerScheduler implements TimerSchedulerRemote {
 
     boolean running = true;
@@ -52,7 +53,7 @@ public class DummyTimerScheduler implements TimerSchedulerRemote {
     @Override
     @Timeout
     public void Tick() {
-        if (!beans.isBeanActive("TimerScheduler/TimerScheduler")) {
+        if (!beans.isBeanActive("DummyTimerScheduler/DummyTimerScheduler")) {
             return;
         }
 

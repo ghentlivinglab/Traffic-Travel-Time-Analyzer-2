@@ -126,38 +126,60 @@ public class DataProvider implements DataProviderRemote {
         }
     };
 
+    private Map<IRoute, Integer> currentDuration = new HashMap<>();
+
     @Override
     public int getCurrentDuration(IRoute route, List<String> providers) {
-        ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        List<IRouteData> list = dao.getCurrentTrafficSituation(route, providers);
+        if (!currentDuration.containsKey(route)) {
+            ITrafficDataDAO dao = beans.getTrafficDataDAO();
+            List<IRouteData> list = dao.getCurrentTrafficSituation(route, providers);
 
-        if (list == null || list.size() == 0) {
-            return -1;
-        }
-
-        return CalculateArithmaticMean(list, new Function<IRouteData, Long>() {
-            @Override
-            public Long apply(IRouteData t) {
-                return new Long(t.getDuration());
+            if (list == null || list.size() == 0) {
+                return -1;
             }
-        }, function_distance);
+
+            int ret = CalculateArithmaticMean(list, new Function<IRouteData, Long>() {
+                @Override
+                public Long apply(IRouteData t) {
+                    return new Long(t.getDuration());
+                }
+            }, function_distance);
+
+            if (ret != -1) {
+                currentDuration.put(route, ret);
+            }
+
+            return ret;
+        }
+        return currentDuration.get(route);
     }
+
+    private Map<IRoute, Integer> currentSpeed = new HashMap<>();
 
     @Override
     public int getCurrentVelocity(IRoute route, List<String> providers) {
-        ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        List<IRouteData> list = dao.getCurrentTrafficSituation(route, providers);
+        if (!currentSpeed.containsKey(route)) {
+            ITrafficDataDAO dao = beans.getTrafficDataDAO();
+            List<IRouteData> list = dao.getCurrentTrafficSituation(route, providers);
 
-        if (list == null || list.size() == 0) {
-            return -1;
-        }
-
-        return CalculateArithmaticMean(list, new Function<IRouteData, Long>() {
-            @Override
-            public Long apply(IRouteData t) {
-                return (long) t.getDistance() / (long) t.getDuration();
+            if (list == null || list.size() == 0) {
+                return -1;
             }
-        }, function_distance);
+
+            int ret = CalculateArithmaticMean(list, new Function<IRouteData, Long>() {
+                @Override
+                public Long apply(IRouteData t) {
+                    return (long) t.getDistance() / (long) t.getDuration();
+                }
+            }, function_distance);
+
+            if (ret != -1) {
+                currentSpeed.put(route, ret);
+            }
+
+            return ret;
+        }
+        return currentSpeed.get(route);
     }
 
     private Map<IRoute, Integer> optimalDuration = new HashMap<>();
@@ -175,6 +197,7 @@ public class DataProvider implements DataProviderRemote {
             if (dur != -1) {
                 optimalDuration.put(route, dur);
             }
+
             return dur;
         }
         return optimalDuration.get(route);
@@ -328,7 +351,7 @@ public class DataProvider implements DataProviderRemote {
     @Override
     public int getDelayLevel(IRoute route, List<String> providers, Date start, Date end) {
         int avg = this.getAvgDuration(route, providers);
-        int pastAvg = getAvgDuration(route, providers,start,end);
+        int pastAvg = getAvgDuration(route, providers, start, end);
         return beans.getThresholdManager().getThresholdLevel(route, pastAvg - avg);
     }
 
@@ -345,9 +368,10 @@ public class DataProvider implements DataProviderRemote {
             i++;
         }
 
-        if(i == 0)
+        if (i == 0) {
             return -1;
-        
+        }
+
         return Math.toIntExact(distance / i);
 
     }
@@ -490,6 +514,12 @@ public class DataProvider implements DataProviderRemote {
             cStart.add(Calendar.DAY_OF_MONTH, 1);
         }
         return dates;
+    }
+
+    @Override
+    public void invalidateCurrentData() {
+        this.currentDuration.clear();
+        this.currentSpeed.clear();
     }
 
 }

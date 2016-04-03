@@ -88,6 +88,8 @@ public class TrafficDataDownstreamAnalyser implements TrafficDataDownstreamAnaly
                 }
             }
         }
+        
+        dataProvider.invalidateCurrentData();
     }
 
     private Map<Long, List<IRouteData>> MapDataToRoutes(List<IRouteData> routeData) {

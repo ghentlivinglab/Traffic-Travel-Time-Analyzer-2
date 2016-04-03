@@ -35,7 +35,6 @@ public class SourceManager implements ISourceManager{
     private SessionContext ctxs;
     private InitialContext ctx;
     private BeanFactory beanFactory;
-    private List<ISourceAdapter> adapters;
 
     ExecutorService executor;
     
@@ -48,9 +47,7 @@ public class SourceManager implements ISourceManager{
             Logger.getLogger(SourceManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         beanFactory = BeanFactory.getInstance(ctx, ctxs);
-        
-        adapters = new ArrayList<ISourceAdapter>();
-        
+                
         executor = Executors.newFixedThreadPool(10);
         
         Logger.getLogger("logger").log(Level.INFO, "SourceManager has been initialized.");        
@@ -63,8 +60,7 @@ public class SourceManager implements ISourceManager{
     @Override
     public List<IRouteData> parse(final IRoute route) {
         
-        if(adapters.size() == 0)
-            adapters.addAll(beanFactory.getSourceAdaptors());
+        List<ISourceAdapter> adapters = beanFactory.getSourceAdaptors();
         
         List<IRouteData> result = new ArrayList<>();
         

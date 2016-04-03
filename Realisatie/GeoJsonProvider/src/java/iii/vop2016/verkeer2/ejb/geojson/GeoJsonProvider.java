@@ -117,15 +117,15 @@ public class GeoJsonProvider implements GeoJsonRemote {
     }
 
     @Override
-    public String getGeoJson(Map<IRoute,List<IGeoLocation>> list) {
+    public String getGeoJson(Map<IRoute,List<IGeoLocation>> list, Map<IRoute,Integer> delays) {
         if(list.size() == 1){
             Map.Entry<IRoute,List<IGeoLocation>> vals = list.entrySet().iterator().next();
-            return getGeoJsonFeature(vals.getValue(),vals.getKey().getId()).build().toString();
+            return getGeoJsonFeature(vals.getValue(),vals.getKey(), delays.get(vals.getKey())).build().toString();
         }
         
         JsonArrayBuilder arr = Json.createArrayBuilder();
         for(Map.Entry<IRoute,List<IGeoLocation>> val : list.entrySet()){
-            arr.add(getGeoJsonFeature(val.getValue(),val.getKey().getId()));
+            arr.add(getGeoJsonFeature(val.getValue(),val.getKey(),delays.get(val.getKey())));
         }
         return arr.build().toString();
     }
@@ -250,17 +250,17 @@ public class GeoJsonProvider implements GeoJsonRemote {
 
     }
 
-    private JsonArrayBuilder getGeoJsonFeaturesArray(List<IGeoLocation> locations, long routeId) {
+    private JsonArrayBuilder getGeoJsonFeaturesArray(List<IGeoLocation> locations, IRoute route, int delayLevel) {
         JsonArrayBuilder b = Json.createArrayBuilder();
-        b.add(getGeoJsonFeature(locations, routeId));
+        b.add(getGeoJsonFeature(locations, route, delayLevel));
         return b;
     }
 
-    private JsonObjectBuilder getGeoJsonFeature(List<IGeoLocation> l, long routeId) {
+    private JsonObjectBuilder getGeoJsonFeature(List<IGeoLocation> l, IRoute route, int delayLevel) {
         JsonObjectBuilder b = Json.createObjectBuilder();
         b.add("type", "Feature");
         b.add("geometry", getGeoJsonGeometry(l));
-        b.add("properties", getGeoJsonProperties(l, routeId));
+        b.add("properties", getGeoJsonProperties(l, route,delayLevel));
 
         return b;
     }
@@ -272,10 +272,10 @@ public class GeoJsonProvider implements GeoJsonRemote {
         return b;
     }
 
-    private JsonObjectBuilder getGeoJsonProperties(List<IGeoLocation> l, long routeId) {
+    private JsonObjectBuilder getGeoJsonProperties(List<IGeoLocation> l, IRoute route, int delayLevel) {
         JsonObjectBuilder b = Json.createObjectBuilder();
-        b.add("description", routeId);
-        b.add("color", "#33cc33");
+        b.add("description", route.getId());
+        b.add("currentDelayLevel", delayLevel);
         return b;
     }
 

@@ -53,7 +53,7 @@ public class DummyTrafficDataDAO implements TrafficDataDAORemote {
                 ret.add(data);
             }
         }
-        return data;
+        return ret;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class DummyTrafficDataDAO implements TrafficDataDAORemote {
                 ret.add(data);
             }
         }
-        return data;
+        return ret;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class DummyTrafficDataDAO implements TrafficDataDAORemote {
                 ret.add(data);
             }
         }
-        return data;
+        return ret;
     }
 
     @Override
@@ -98,7 +98,7 @@ public class DummyTrafficDataDAO implements TrafficDataDAORemote {
                 ret.add(data);
             }
         }
-        return data;
+        return ret;
     }
 
     @Override
@@ -133,7 +133,7 @@ public class DummyTrafficDataDAO implements TrafficDataDAORemote {
                 }
             }
         }
-        return data;
+        return ret;
     }
 
     @Override

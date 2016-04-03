@@ -32,7 +32,7 @@ public class HelperFunctions {
      */
     public static Properties RetrievePropertyFile(String lookup, InitialContext ctx, Logger logger) {
         if (ctx == null) {
-            return null;
+            return new Properties();
         }
         try {
             Object obj = ctx.lookup(lookup);
@@ -44,7 +44,7 @@ public class HelperFunctions {
         } catch (NamingException ex) {
             logger.log(Level.WARNING, "Property file REFERENCE missing (" + lookup + ")");
         }
-        return null;
+        return new Properties();
     }
 
     /**

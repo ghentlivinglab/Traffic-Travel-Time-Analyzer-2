@@ -19,5 +19,5 @@ import javax.ejb.Remote;
 public interface GeoJsonRemote {
     
     List<IGeoLocation> getRoutePlotGeoLocations(IRoute route);
-    String getGeoJson(Map<IRoute,List<IGeoLocation>> list);
+    String getGeoJson(Map<IRoute,List<IGeoLocation>> list,Map<IRoute,Integer> delayLevels);
 }
