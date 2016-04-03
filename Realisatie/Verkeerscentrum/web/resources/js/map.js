@@ -7,7 +7,10 @@ var mymap;
 var layer;
 var trafficData = [];
 var modus = "live";
+var urlGeoJSON = "http://localhost:8080/RestApi/v2/geojson/all";
+var urlAllRoutes = "http://localhost:8080/RestApi/v2/routes/all";
 
+/*
 trafficData = [
    {
       distance:14685,
@@ -47,6 +50,7 @@ trafficData = [
       ]
    }
 ];
+*/
 
 function setTimerProgress(){
     timerProgress += 0.5;
@@ -63,12 +67,11 @@ function setTimerProgress(){
 function refreshLiveData(){
     
     $.ajax({
-        url:"http://localhost:8080/rest/v2/routes/all",
+        url: urlAllRoutes,
         dataType: "json",
         success: function(data, textStatus, jqXHR ){
             Materialize.toast('De verkeerssituatie werd zonet geüpdated', 4000, 'toast bottom');
-            trafficData = JSON.parse(data);
-            trafficData = JSON.parse("[{ 'id':1 }]");
+            trafficData = data;
             setModus(modus);
         },
         error: function(jqXHR, textStatus, errorThrown ){
@@ -167,18 +170,41 @@ function setLiveList(){
     trafficList = $(".traffic-list");
     if(trafficData.length>0){
         for (var i = 0; i < trafficData.length; i++) {
+            var duration, id, name, delay, trend, delayClass, delayTxt, durationTxt;
             id = trafficData[i].id;
             name = trafficData[i].name;
-            duration = "16 min";
-            delay = "2 min";
-            trend = "call_made";
-            //trend = "call_received";
+            duration.min = trafficData[i]%60;
+            duration.sec = (trafficData[i]-duration.min);
+            durationTxt = duration.min+" min";
+            if(trafficData[i].optimalDuration < 0){
+                delay.sec = trafficData[i].currentDuration-trafficData[i].optimalDuration;
+                delay.min = delay.sec%60;
+                delayTxt = delay.min+" min";
+            }else{
+                delayTxt = "? min";
+            }
+            if(trafficData[i].trend < 0){
+                trend = "call_received";
+            }else if(trafficData[i].trend > 0){
+                trend = "call_made";
+            }else{
+                trend = "";
+            }
+            
+            delayClass = "";
+            switch(trafficData[i].currentDelayLevel){
+                case 0: delayClass = "veryfast"; break;
+                case 1: delayClass = "fast"; break;
+                case 2: delayClass = "medium"; break;
+                case 3: delayClass = "slow"; break;
+                case 4: delayClass = "verslow"; break;
+            }
 
             trafficListItem = $("<li/>").append($("<table/>").addClass("highlight").append($("<thead/>")
                     .append($("<tr/>")
                     .append($("<td/>").text(name).attr("width","50%"))
                     .append($("<td/>").text(duration).attr("width","20%").addClass("center"))
-                    .append($("<td/>").append($("<span/>").addClass("badge slow").text(delay)).attr("width","20%").addClass("center"))
+                    .append($("<td/>").append($("<span/>").addClass("badge "+delayClass).text(delay)).attr("width","20%").addClass("center"))
                     .append($("<td/>").attr("width","10%").append($("<i/>").addClass("material-icons").text(trend)))
             )));
             trafficList.append(trafficListItem);
@@ -257,7 +283,7 @@ function failedCall(data){
 
 function requestGeoJson(){
     $.ajax({
-            url:"http://localhost:8080/rest/v2/geojson/all",
+            url: urlGeoJSON,
             dataType: "json",
             success: setGeoJson,
             error:failedCall

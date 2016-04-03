@@ -53,23 +53,29 @@
                 border-radius: 2px;
                 padding:2px 5px;
 
+                &.veryslow {
+                  color: #fff;
+                  background-color: black;
+                }
+                
                 &.slow {
                   color: #fff;
-                  background-color: $traffic-slow;
+                  background-color: red;
                 }
 
                 &.medium {
-
                   color: #fff;
-                  background-color: $traffic-medium;
-
+                  background-color: orange;
                 }
 
                 &.fast {
-
                   color: #fff;
-                  background-color: $traffic-fast;
-
+                  background-color: green;
+                }
+                
+                &.veryfast {
+                  color: #fff;
+                  background-color: greenyellow;
                 }
             }
 

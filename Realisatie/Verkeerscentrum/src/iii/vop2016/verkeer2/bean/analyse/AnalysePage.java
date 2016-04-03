@@ -5,7 +5,7 @@
  */
 package iii.vop2016.verkeer2.bean.analyse;
 
-import iii.vop2016.verkeer2.ejb.components.Route;
+import iii.vop2016.verkeer2.bean.components.Route;
 import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;

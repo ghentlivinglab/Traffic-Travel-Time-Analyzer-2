@@ -5,7 +5,7 @@
  */
 package iii.vop2016.verkeer2.bean.analyse;
 
-import iii.vop2016.verkeer2.ejb.components.DataProvider;
+import iii.vop2016.verkeer2.bean.components.DataProvider;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

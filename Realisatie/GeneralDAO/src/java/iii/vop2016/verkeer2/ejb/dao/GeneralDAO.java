@@ -165,16 +165,25 @@ public class GeneralDAO implements GeneralDAORemote {
 
     @Override
     public List<IGeoLocation> setRouteMappingGeolocations(IRoute route, List<IGeoLocation> geolocs) {
-        route = new RouteEntity(route);
         List<IGeoLocation> retLocs = new ArrayList<>();
-        List<IGeoLocation> storedLocs = getRouteMappingGeolocations(route);
-        if (storedLocs.size() == 0) {
-            for (IGeoLocation geoloc : geolocs) {
-                GeoLocationMappingEntity location = new GeoLocationMappingEntity(geoloc, route);
-                em.persist(location);
-                retLocs.add(new GeoLocation(location));
+        try {
+
+            route = new RouteEntity(route);
+            //vind ge dit wel veilig om zo met route te werken? ja, is handig, ok,
+            List<IGeoLocation> storedLocs = getRouteMappingGeolocations(route);
+            if (storedLocs.size() == 0) {
+                for (IGeoLocation geoloc : geolocs) {
+                    GeoLocationMappingEntity location = new GeoLocationMappingEntity(geoloc, route);
+                    em.persist(location);
+                    retLocs.add(new GeoLocation(location));
+                }
             }
+
+            em.flush();
+        } catch (Exception ex) {
+            Logger.getLogger(GeneralDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         return retLocs;
     }
 

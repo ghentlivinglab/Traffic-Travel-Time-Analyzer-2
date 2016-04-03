@@ -33,6 +33,30 @@ form{
     padding-top: $navbar-height;
 }
 
+.veryslow {
+    color: #fff;
+    background-color: black;
+}
+
+.slow {
+    color: #fff;
+    background-color: red;
+}
+
+.medium {
+    color:  #fff;
+    background-color: orange;
+}
+
+.fast {
+    color: #fff;
+    background-color: green;
+}
+
+.veryfast {
+    color: #fff;
+    background-color: greenyellow;
+}
 
 .sidebar{
     

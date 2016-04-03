@@ -5,8 +5,8 @@
  */
 package iii.vop2016.verkeer2.bean.analyse;
 
-import iii.vop2016.verkeer2.ejb.components.DataProvider;
-import iii.vop2016.verkeer2.ejb.components.Route;
+import iii.vop2016.verkeer2.bean.components.DataProvider;
+import iii.vop2016.verkeer2.bean.components.Route;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
