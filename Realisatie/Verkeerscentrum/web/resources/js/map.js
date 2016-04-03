@@ -8,7 +8,45 @@ var layer;
 var trafficData = [];
 var modus = "live";
 
-trafficData = [{ "id":1,"name":"Route 123" },{ "id":2,"name":"Route 456" }];
+trafficData = [
+   {
+      distance:14685,
+      trend:0,
+      currentDelayLevel:0,
+      optimalDuration:734,
+      avgDuration:734,
+      currentVelocity:19,
+      recentData:{
+         "duration":{
+            "name":"TrendDurations 1",
+            "description":"This data are the durations over the last hour for route 1",
+            "x-ax":[
+
+            ],
+            "y-ax":[
+
+            ]
+         }
+      },
+      avgVelocity:2,
+      optimalVelocity:2,
+      name:"R4 Gent - Zelzate",
+      currentDuration:753,
+      id:1,
+      geolocations:[
+         {
+            latitude:51.192226,
+            name:"Zelzate",
+            longitude:3.776342
+         },
+         {
+            latitude:51.086447,
+            name:"Gent",
+            longitude:3.672188
+         }
+      ]
+   }
+];
 
 function setTimerProgress(){
     timerProgress += 0.5;
@@ -134,6 +172,7 @@ function setLiveList(){
             duration = "16 min";
             delay = "2 min";
             trend = "call_made";
+            //trend = "call_received";
 
             trafficListItem = $("<li/>").append($("<table/>").addClass("highlight").append($("<thead/>")
                     .append($("<tr/>")
@@ -152,9 +191,8 @@ function setLiveList(){
 }
 
 function setAvgList(){
-    trafficList = $("#traffic-list");
-    
-    trafficList.html("");
+    trafficListBox = $("#traffic-list");
+    trafficListBox.html("");
     
     header = $("<ul/>").addClass("traffic-list")
             .append($("<li/>").append($("<table/>").addClass("highlight").append($("<thead/>")
@@ -165,24 +203,27 @@ function setAvgList(){
             .append($("<th/>").attr("width","10%"))
     ))));
 
-    trafficList.append(header);
+    trafficListBox.append(header);
 
+    trafficList = $(".traffic-list");
+    if(trafficData.length>0){
+        for (var i = 0; i < trafficData.length; i++) {
+            id = trafficData[i].id;
+            name = trafficData[i].name;
+            duration = "8 min";
+            delay = "1 min";
 
-    for (var i = 0; i < 10; i++) {
-        name = "R4: Gent - Zelzate";
-        duration = "16 min";
-        delay = "2 min";
-        trend = "call_made";
-
-        trafficListItem = $(".traffic-list")
-                .append($("<li/>").append($("<table/>").addClass("highlight").append($("<thead/>")
-                .append($("<tr/>")
-                .append($("<td/>").text(name).attr("width","50%"))
-                .append($("<td/>").text(duration).attr("width","20%").addClass("center"))
-                .append($("<td/>").append($("<span/>").addClass("badge slow").text(delay)).attr("width","20%").addClass("center"))
-                .append($("<td/>").attr("width","10%"))
-        ))));
-
+            trafficListItem = $("<li/>").append($("<table/>").addClass("highlight").append($("<thead/>")
+                    .append($("<tr/>")
+                    .append($("<td/>").text(name).attr("width","50%"))
+                    .append($("<td/>").text(duration).attr("width","20%").addClass("center"))
+                    .append($("<td/>").append($("<span/>").addClass("badge slow").text(delay)).attr("width","20%").addClass("center"))
+                    .append($("<td/>").attr("width","10%"))
+            )));
+            trafficList.append(trafficListItem);
+        }
+    }else{
+        trafficListItem = $("<li/>").text("Geen trajecten om weer te geven...");
         trafficList.append(trafficListItem);
     }
     Materialize.showStaggeredList('.traffic-list');

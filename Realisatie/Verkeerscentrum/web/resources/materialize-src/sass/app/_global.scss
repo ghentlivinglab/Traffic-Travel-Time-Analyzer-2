@@ -125,6 +125,32 @@ form{
 }
 
 
+.scrollable{
+    
+    overflow-y: auto;
+    
+    &.small{
+        max-height: 300px;
+    }
+    
+    &.medium{
+        max-height: 400px;
+    }
+    
+    &.big{
+        max-height: 600px;
+    }
+    
+    &.full_height{
+        max-height: 100%;
+    }
+    
+}
+
+
+
+
+
 
 /* Let's get this party started */
 ::-webkit-scrollbar {

@@ -33,7 +33,7 @@
 		<pattern value="/analyse" />
 		<view-id value="/faces/analyse.xhtml" />
 	</url-mapping>
-        
+               
         <url-mapping id="analyse-datasources">
 		<pattern value="/analyse/datasources" />
 		<view-id value="/faces/datasourcecompare.xhtml" />
