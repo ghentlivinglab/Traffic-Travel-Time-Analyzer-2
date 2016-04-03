@@ -68,6 +68,18 @@ public class ThresholdManager implements ThresholdManagerRemote {
     @Override
     public int getThresholdLevel(IRoute route, int delay) {
         List<IThreshold> thresholds = thresholdMap.get(route);
+        
+        if(thresholds == null){
+            //this can ony happen when a new route was added without alerting the thresholdmanager!
+            thresholdMap = beans.getGeneralDAO().getThresholds();
+            thresholds = thresholdMap.get(route);
+            if(thresholds == null){
+                //if still null, then the thresholds have not been added to the database. an exception should have occured before getting here...
+                addDefaultThresholds(route);
+                thresholds = thresholdMap.get(route);
+            }
+        }
+        
         List<IThreshold> passed = new ArrayList<>();
         List<IThreshold> notPassed = new ArrayList<>();
         for (IThreshold threshold : thresholds) {

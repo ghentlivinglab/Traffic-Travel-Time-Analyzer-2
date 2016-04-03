@@ -94,7 +94,11 @@ public class DummyTrafficDataDAO implements TrafficDataDAORemote {
         Date currentDate = data.get(data.size() - 1).getTimestamp();
 
         for (IRouteData data : this.data) {
-            if (data.getRouteId() == route.getId() && data.getTimestamp().equals(currentDate) && adapter.contains(data.getProvider())) {
+            if (adapter == null || adapter.size() == 0) {
+                if (data.getRouteId() == route.getId() && data.getTimestamp().equals(currentDate)) {
+                    ret.add(data);
+                }
+            } else if (data.getRouteId() == route.getId() && data.getTimestamp().equals(currentDate) && adapter.contains(data.getProvider())) {
                 ret.add(data);
             }
         }
