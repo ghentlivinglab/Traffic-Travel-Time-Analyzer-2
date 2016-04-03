@@ -19,4 +19,7 @@ public interface ITrafficDataDownstreamAnalyser {
     
     public IRouteData addData(IRouteData data);
     public List<IRouteData> addData(List<IRouteData> data);
+    
+    public void startSession();
+    public void endSession(List<IRouteData> data, List<IRoute> routes);
 }

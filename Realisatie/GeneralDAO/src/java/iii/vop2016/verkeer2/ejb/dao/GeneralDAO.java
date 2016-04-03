@@ -9,10 +9,14 @@ import iii.vop2016.verkeer2.ejb.components.GeoLocation;
 import iii.vop2016.verkeer2.ejb.components.GeoLocationComparator;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
+import iii.vop2016.verkeer2.ejb.components.IThreshold;
 import iii.vop2016.verkeer2.ejb.components.Route;
+import iii.vop2016.verkeer2.ejb.components.Threshold;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -57,11 +61,6 @@ public class GeneralDAO implements GeneralDAORemote {
             List<IRoute> routesEntities = em.createQuery("SELECT r FROM RouteEntity r").getResultList();
             for (IRoute r : routesEntities) {
                 IRoute newR = new Route(r);
-                List<IGeoLocation> list = new ArrayList<>();
-                for (IGeoLocation geo : r.getGeolocations()) {
-                    list.add(new GeoLocation(geo));
-                }
-                newR.setGeolocations(list);
                 routes.add(newR);
             }
         } catch (Exception e) {
@@ -86,11 +85,6 @@ public class GeneralDAO implements GeneralDAORemote {
             if (routes.size() >= 1) {
                 route = routes.get(0);
                 route = new Route(route);
-                List<IGeoLocation> list = new ArrayList<>();
-                for (IGeoLocation geo : route.getGeolocations()) {
-                    list.add(new GeoLocation(geo));
-                }
-                route.setGeolocations(list);
             }
         } catch (Exception e) {
             Logger logger = Logger.getLogger(this.getClass().getName());
@@ -112,11 +106,6 @@ public class GeneralDAO implements GeneralDAORemote {
             if (routes.size() >= 1) {
                 route = routes.get(0);
                 route = new Route(route);
-                List<IGeoLocation> list = new ArrayList<>();
-                for (IGeoLocation geo : route.getGeolocations()) {
-                    list.add(new GeoLocation(geo));
-                }
-                route.setGeolocations(list);
             }
         } catch (Exception e) {
             Logger logger = Logger.getLogger(this.getClass().getName());
@@ -130,25 +119,14 @@ public class GeneralDAO implements GeneralDAORemote {
     @Override
     public IRoute addRoute(IRoute route) {
         RouteEntity r = new RouteEntity(route);
-        List<IGeoLocation> l = new ArrayList<>();
-        for (IGeoLocation loc : r.getGeolocations()) {
-            l.add(new GeoLocationEntity(loc));
-        }
-        r.setGeolocations(l);
-
         try {
             em.persist(r);
+            em.flush();
         } catch (Exception ex) {
             Logger.getLogger(GeneralDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         route = new Route(r);
-        List<IGeoLocation> list = new ArrayList<>();
-        for (IGeoLocation geo : r.getGeolocations()) {
-            list.add(new GeoLocation(geo));
-        }
-        route.setGeolocations(list);
-
         return route;
     }
 
@@ -224,5 +202,58 @@ public class GeneralDAO implements GeneralDAORemote {
 
         }
         return ret;
+    }
+
+    @Override
+    public Map<IRoute, List<IThreshold>> getThresholds() {
+        Map<IRoute, List<IThreshold>> ret = new HashMap<>();
+        List<IRoute> routes = getRoutes();
+        try {
+            Query q = em.createQuery("SELECT t FROM ThresholdEntity t");
+            List<ThresholdEntity> resultList = q.getResultList();
+
+            for (ThresholdEntity entity : resultList) {
+                IThreshold t = new Threshold(entity);
+                t.setRoute(getRoute(routes, t.getRouteId()));
+                if (ret.containsKey(t.getRoute())) {
+                    ret.get(t.getRoute()).add(t);
+                } else {
+                    ArrayList<IThreshold> l = new ArrayList<>();
+                    l.add(t);
+                    ret.put(t.getRoute(), l);
+                }
+            }
+
+        } catch (Exception e) {
+            Logger logger = Logger.getLogger(this.getClass().getName());
+            logger.severe(e.getMessage());
+        } finally {
+
+        }
+        return ret;
+    }
+
+    @Override
+    public IThreshold addThreshold(IThreshold threshold) {
+        ThresholdEntity th = new ThresholdEntity(threshold);
+        try {
+            em.persist(th);
+            threshold = new Threshold(th);
+        } catch (Exception e) {
+            Logger logger = Logger.getLogger(this.getClass().getName());
+            logger.severe(e.getMessage());
+        } finally {
+
+        }
+        return threshold;
+    }
+
+    private IRoute getRoute(List<IRoute> routes, long routeId) {
+        for (IRoute r : routes) {
+            if (r.getId() == routeId) {
+                return r;
+            }
+        }
+        return null;
     }
 }

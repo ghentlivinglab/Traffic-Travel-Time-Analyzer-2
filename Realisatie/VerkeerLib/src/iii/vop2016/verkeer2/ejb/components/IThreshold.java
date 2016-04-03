@@ -5,13 +5,16 @@
  */
 package iii.vop2016.verkeer2.ejb.components;
 
+import java.util.List;
+import java.util.Observer;
+
 /**
  *
  * @author tobia
  */
 public interface IThreshold{
 
-    boolean isThresholdReached(IRoute route, IRouteData data);
+    boolean isThresholdReached(IRoute route, int delay);
     
     long getId();
     
@@ -25,8 +28,18 @@ public interface IThreshold{
 
     void setDelayTriggerLevel(int delayTriggerLevel);
 
-    IRoute getRoute();
+    long getRouteId();
 
+    void setRouteId(long routeId);
+    
+    List<Observer> getObservers();
+    
+    void setObservers(List<Observer> observers);
+    
+    void triggerThreshold(int difference);
+    
+    IRoute getRoute();
+    
     void setRoute(IRoute route);
    
 }

@@ -7,7 +7,9 @@ package iii.vop2016.verkeer2.ejb.dao;
 
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
+import iii.vop2016.verkeer2.ejb.components.IThreshold;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -24,6 +26,9 @@ public interface IGeneralDAO{
     
     public List<IGeoLocation> getRouteMappingGeolocations(IRoute route);
     public List<IGeoLocation> setRouteMappingGeolocations(IRoute route, List<IGeoLocation> geolocs);
+    
+    public Map<IRoute,List<IThreshold>> getThresholds();
+    public IThreshold addThreshold(IThreshold threshold);
     
     
 }

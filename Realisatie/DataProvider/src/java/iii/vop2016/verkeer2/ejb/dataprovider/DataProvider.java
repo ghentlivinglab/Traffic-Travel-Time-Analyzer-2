@@ -89,14 +89,36 @@ public class DataProvider implements DataProviderRemote {
             return new Long(t.getDistance());
         }
     };
-    
+
     private static Function<IRouteData, Long> function_distanceMulDuration = new Function<IRouteData, Long>() {
         @Override
         public Long apply(IRouteData t) {
             return new Long(t.getDistance() * t.getDuration());
         }
     };
-    
+
+    @Override
+    public int getMeanDurationFromRouteData(List<IRouteData> routeData) {
+        if (routeData == null || routeData.size() == 0) {
+            return -1;
+        }
+
+        long routeId = routeData.get(0).getRouteId();
+
+        for (IRouteData data : routeData) {
+            if (data.getRouteId() != routeId) {
+                return -1;
+            }
+        }
+
+        return CalculateArithmaticMean(routeData, new Function<IRouteData, Long>() {
+            @Override
+            public Long apply(IRouteData t) {
+                return new Long(t.getDuration());
+            }
+        }, function_distance);
+    }
+
     private static Function<IRouteData, Long> function_distanceMulDistanceDivDuration = new Function<IRouteData, Long>() {
         @Override
         public Long apply(IRouteData t) {
@@ -108,6 +130,10 @@ public class DataProvider implements DataProviderRemote {
     public int getCurrentDuration(IRoute route, List<String> providers) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
         List<IRouteData> list = dao.getCurrentTrafficSituation(route, providers);
+
+        if (list == null || list.size() == 0) {
+            return -1;
+        }
 
         return CalculateArithmaticMean(list, new Function<IRouteData, Long>() {
             @Override
@@ -121,6 +147,10 @@ public class DataProvider implements DataProviderRemote {
     public int getCurrentVelocity(IRoute route, List<String> providers) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
         List<IRouteData> list = dao.getCurrentTrafficSituation(route, providers);
+
+        if (list == null || list.size() == 0) {
+            return -1;
+        }
 
         return CalculateArithmaticMean(list, new Function<IRouteData, Long>() {
             @Override
@@ -183,7 +213,11 @@ public class DataProvider implements DataProviderRemote {
 
         List<Long> list = dao.getAggregateData(route, startList, endList, new AggregationContainer(Aggregation.sum, "duration * distance"), new AggregationContainer(Aggregation.sum, "distance"));
 
-        if (list.size() == 2) {
+        if (list == null || list.size() == 0) {
+            return -1;
+        }
+
+        if (list.size() == 2 && list.get(1) != 0) {
             return Math.toIntExact(list.get(0) / list.get(1));
         }
         return -1;
@@ -202,7 +236,11 @@ public class DataProvider implements DataProviderRemote {
 
         List<Long> list = dao.getAggregateData(route, startList, endList, new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
 
-        if (list.size() == 2) {
+        if (list == null || list.size() == 0) {
+            return -1;
+        }
+
+        if (list.size() == 2 && list.get(1) != 0) {
             return Math.toIntExact(list.get(0) / list.get(1));
         }
         return -1;
@@ -254,7 +292,11 @@ public class DataProvider implements DataProviderRemote {
 
         List<Long> list = dao.getAggregateData(route, start, end, new AggregationContainer(Aggregation.sum, "duration * distance"), new AggregationContainer(Aggregation.sum, "distance"));
 
-        if (list.size() == 2) {
+        if (list == null || list.size() == 0) {
+            return -1;
+        }
+
+        if (list.size() == 2 && list.get(1) != 0) {
             return Math.toIntExact(list.get(0) / list.get(1));
         }
         return -1;
@@ -266,7 +308,11 @@ public class DataProvider implements DataProviderRemote {
 
         List<Long> list = dao.getAggregateData(route, start, end, new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
 
-        if (list.size() == 2) {
+        if (list == null || list.size() == 0) {
+            return -1;
+        }
+
+        if (list.size() == 2 && list.get(1) != 0) {
             return Math.toIntExact(list.get(0) / list.get(1));
         }
         return -1;
@@ -274,14 +320,16 @@ public class DataProvider implements DataProviderRemote {
 
     @Override
     public int getCurrentDelayLevel(IRoute route, List<String> providers) {
-        ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return 0;
+        int avg = this.getAvgDuration(route, providers);
+        int current = getCurrentDuration(route, providers);
+        return beans.getThresholdManager().getThresholdLevel(route, current - avg);
     }
 
     @Override
     public int getDelayLevel(IRoute route, List<String> providers, Date start, Date end) {
-        ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return 0;
+        int avg = this.getAvgDuration(route, providers);
+        int pastAvg = getAvgDuration(route, providers,start,end);
+        return beans.getThresholdManager().getThresholdLevel(route, pastAvg - avg);
     }
 
     @Override
@@ -297,6 +345,9 @@ public class DataProvider implements DataProviderRemote {
             i++;
         }
 
+        if(i == 0)
+            return -1;
+        
         return Math.toIntExact(distance / i);
 
     }
@@ -361,12 +412,12 @@ public class DataProvider implements DataProviderRemote {
                 data.add(r);
             }
         }
-        
+
         //reduce data to mean for that day
-        for(Map.Entry<Date,List<IRouteData>> entry : reduce.entrySet()){
+        for (Map.Entry<Date, List<IRouteData>> entry : reduce.entrySet()) {
             ret.put(entry.getKey(), CalculateArithmaticMean(entry.getValue(), function_distanceMulDuration, function_distance));
         }
-        
+
         return ret;
     }
 
@@ -388,12 +439,12 @@ public class DataProvider implements DataProviderRemote {
                 data.add(r);
             }
         }
-        
+
         //reduce data to mean for that day
-        for(Map.Entry<Date,List<IRouteData>> entry : reduce.entrySet()){
+        for (Map.Entry<Date, List<IRouteData>> entry : reduce.entrySet()) {
             ret.put(entry.getKey(), CalculateArithmaticMean(entry.getValue(), function_distanceMulDistanceDivDuration, function_distance));
         }
-        
+
         return ret;
     }
 

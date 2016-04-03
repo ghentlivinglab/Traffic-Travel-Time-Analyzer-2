@@ -7,10 +7,12 @@ package iii.vop2016.verkeer2.ejb.dummy;
 
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
+import iii.vop2016.verkeer2.ejb.components.IThreshold;
 import iii.vop2016.verkeer2.ejb.components.Route;
 import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -76,6 +78,16 @@ public class GeneralDAODummy implements IGeneralDAO{
 
     @Override
     public List<IRoute> getRoutes(List<Long> ids) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Map<IRoute, List<IThreshold>> getThresholds() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public IThreshold addThreshold(IThreshold threshold) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

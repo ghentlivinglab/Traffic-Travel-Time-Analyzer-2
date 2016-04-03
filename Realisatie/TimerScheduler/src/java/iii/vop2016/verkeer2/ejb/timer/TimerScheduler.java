@@ -21,7 +21,6 @@ import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
 import javax.ejb.Singleton;
-import javax.ejb.Startup;
 import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
@@ -30,15 +29,13 @@ import javax.naming.NamingException;
 import iii.vop2016.verkeer2.ejb.datadownloader.ITrafficDataDownloader;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.text.NumberFormat;
 import java.time.DateTimeException;
+import javax.ejb.Startup;
 import org.apache.commons.net.ntp.NTPUDPClient;
-import org.apache.commons.net.ntp.NtpUtils;
 import org.apache.commons.net.ntp.NtpV3Packet;
 import org.apache.commons.net.ntp.TimeInfo;
 import org.apache.commons.net.ntp.TimeStamp;
-import org.apache.commons.net.time.TimeTCPClient;
 
 /**
  *
@@ -114,6 +111,10 @@ public class TimerScheduler implements TimerSchedulerRemote {
     @Timeout
     public void Tick() {
         isTimeInvalid = true;
+        
+        if(!beans.isBeanActive("TimerScheduler/TimerScheduler")){
+            return;
+        }
         
         if (!isRunning) {
             return;

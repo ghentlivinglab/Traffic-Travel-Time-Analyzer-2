@@ -96,13 +96,23 @@ public class BlockList {
         long[] i = new long[2];
         i[0] = getIdBeginRange(date);
         i[1] = getIdEndRange(date);
+
+        if (i[0] == i[1]) {
+            i[1] += minBlockSize;
+        }
+
         return i;
     }
-    
+
     public long[] getIdRange(Date dateStart, Date dateEnd) {
         long[] i = new long[2];
         i[0] = getIdBeginRange(dateStart);
         i[1] = getIdEndRange(dateEnd);
+
+        if (i[0] == i[1]) {
+            i[1] += minBlockSize;
+        }
+
         return i;
     }
 

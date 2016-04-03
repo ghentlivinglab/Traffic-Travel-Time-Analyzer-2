@@ -17,7 +17,7 @@ public class CurrentTime {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        int min = 15;
+        int min = 100;
         System.out.println(new Date().getTime()-min*1000*60);
         
         

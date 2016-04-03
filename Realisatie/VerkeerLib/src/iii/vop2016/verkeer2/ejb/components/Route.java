@@ -16,7 +16,7 @@ import java.util.Set;
  *
  * @author Mike
  */
-public class Route implements IRoute{
+public class Route implements IRoute {
 
     protected long id;
     protected String name;
@@ -27,32 +27,33 @@ public class Route implements IRoute{
         this.name = null;
         this.id = 0;
     }
-    
+
     public Route(String name) {
         this.name = name;
         geolocations = new ArrayList<>();
         this.id = 0;
     }
-    
+
     public Route(IRoute component) {
         this.id = component.getId();
         this.name = component.getName();
         this.geolocations = component.getGeolocations();
+        List<IGeoLocation> l = new ArrayList<>();
+        for (IGeoLocation loc : getGeolocations()) {
+            l.add(new GeoLocation(loc));
+        }
+        setGeolocations(l);
     }
-    
-    
-    
+
     @Override
     public long getId() {
         return this.id;
     }
-    
+
     @Override
     public void setId(long id) {
         this.id = id;
     }
-    
-    
 
     @Override
     public String getName() {
@@ -67,18 +68,20 @@ public class Route implements IRoute{
 
     @Override
     public IGeoLocation getStartLocation() {
-        if(geolocations.size()>0)
+        if (geolocations.size() > 0) {
             return geolocations.get(0);
-        else
+        } else {
             return null;
+        }
     }
 
     @Override
     public IGeoLocation getEndLocation() {
-        if(geolocations.size()>0)
-            return geolocations.get(geolocations.size()-1);
-        else
+        if (geolocations.size() > 0) {
+            return geolocations.get(geolocations.size() - 1);
+        } else {
             return null;
+        }
     }
 
     @Override
@@ -89,8 +92,8 @@ public class Route implements IRoute{
     @Override
     public void setGeolocations(List<IGeoLocation> locations) {
         geolocations = locations;
-        for(int i=0; i<geolocations.size(); i++){
-            geolocations.get(i).setSortRank(i+1);
+        for (int i = 0; i < geolocations.size(); i++) {
+            geolocations.get(i).setSortRank(i + 1);
         }
     }
 
@@ -102,27 +105,27 @@ public class Route implements IRoute{
 
     @Override
     public void addGeolocation(IGeoLocation location, int i) {
-        for(int j=i; j<geolocations.size(); j++){
-            geolocations.get(j).setSortRank(geolocations.get(j).getSortRank()+1);
+        for (int j = i; j < geolocations.size(); j++) {
+            geolocations.get(j).setSortRank(geolocations.get(j).getSortRank() + 1);
         }
         geolocations.add(i, location);
-        location.setSortRank(i+1);
+        location.setSortRank(i + 1);
     }
 
     @Override
     public void removeGeoLocation(IGeoLocation location) {
         geolocations.remove(location);
     }
-    
+
     @Override
-    public String toString(){
-        return "Route ("+id+", "+name+")" + hashCode();
+    public String toString() {
+        return "Route (" + id + ", " + name + ")" + hashCode();
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.name) + Objects.hashCode(this.id) ;
+        hash = 97 * hash + Objects.hashCode(this.name) + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -147,13 +150,4 @@ public class Route implements IRoute{
         return true;
     }
 
-    
-
-    
-    
-    
-    
-
-
-    
 }

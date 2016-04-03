@@ -8,10 +8,12 @@ package iii.vop2016.verkeer2.ejb.dao;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.Route;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -37,6 +39,11 @@ public class RouteEntity extends Route {
 
     public RouteEntity(IRoute component) {
         super(component);
+        List<IGeoLocation> l = new ArrayList<>();
+        for (IGeoLocation loc : getGeolocations()) {
+            l.add(new GeoLocationEntity(loc));
+        }
+        setGeolocations(l);
     }
 
     @Id
@@ -66,6 +73,7 @@ public class RouteEntity extends Route {
     }
 
     @Override
+    @Column(unique = true)
     public String getName() {
         return super.getName(); 
     }

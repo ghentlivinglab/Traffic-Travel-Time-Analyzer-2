@@ -6,6 +6,7 @@
 package iii.vop2016.verkeer2.ejb.dataprovider;
 
 import iii.vop2016.verkeer2.ejb.components.IRoute;
+import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.Weekdays;
 import java.util.Date;
 import java.util.List;
@@ -74,4 +75,7 @@ public interface IDataProvider {
     Map<Date, Integer> getData(IRoute route, List<String> providers, Date start, Date end);
 
     Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers, Date start, Date end);
+    
+    //helper function for datadownstream
+    int getMeanDurationFromRouteData(List<IRouteData> routeData);
 }

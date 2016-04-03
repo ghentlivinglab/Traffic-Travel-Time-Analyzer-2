@@ -8,10 +8,6 @@
             <web-module-libraries/>
             <web-module-additional-libraries>
                 <library>
-                    <file>${reference.TomTomSourceAdapter.dist-ear}</file>
-                    <path-in-war>/</path-in-war>
-                </library>
-                <library>
                     <file>${reference.TrafficDataDAO.dist-ear}</file>
                     <path-in-war>/</path-in-war>
                 </library>
@@ -56,22 +52,38 @@
                     <path-in-war>/</path-in-war>
                 </library>
                 <library>
-                    <file>${reference.TomTomSourceAdapter.dist-ear}</file>
-                    <path-in-war>/</path-in-war>
-                </library>
-                <library>
                     <file>${reference.DataProvider.dist-ear}</file>
                     <path-in-war>/</path-in-war>
                 </library>
                 <library>
-                    <file>${reference.CoyoteSourceAdapter.dist-ear}</file>
+                    <file>${reference.DummySourceAdapter.dist-ear}</file>
+                    <path-in-war>/</path-in-war>
+                </library>
+                <library>
+                    <file>${reference.DummyTimerScheduler.dist-ear}</file>
+                    <path-in-war>/</path-in-war>
+                </library>
+                <library>
+                    <file>${reference.DummyGeneralDAO.dist-ear}</file>
+                    <path-in-war>/</path-in-war>
+                </library>
+                <library>
+                    <file>${reference.DummyTrafficDataDAO.dist-ear}</file>
+                    <path-in-war>/</path-in-war>
+                </library>
+                <library>
+                    <file>${reference.TomTomSourceAdapter.dist-ear}</file>
+                    <path-in-war>/</path-in-war>
+                </library>
+                <library>
+                    <file>${reference.TomTomSourceAdapter.dist-ear}</file>
                     <path-in-war>/</path-in-war>
                 </library>
             </web-module-additional-libraries>
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
-                <foreign-project>CoyoteSourceAdapter</foreign-project>
+                <foreign-project>DataProvider</foreign-project>
                 <artifact-type>j2ee_ear_archive</artifact-type>
                 <script>build.xml</script>
                 <target>dist-ear</target>
@@ -79,7 +91,31 @@
                 <id>dist-ear</id>
             </reference>
             <reference>
-                <foreign-project>DataProvider</foreign-project>
+                <foreign-project>DummyGeneralDAO</foreign-project>
+                <artifact-type>j2ee_ear_archive</artifact-type>
+                <script>build.xml</script>
+                <target>dist-ear</target>
+                <clean-target>clean-ear</clean-target>
+                <id>dist-ear</id>
+            </reference>
+            <reference>
+                <foreign-project>DummySourceAdapter</foreign-project>
+                <artifact-type>j2ee_ear_archive</artifact-type>
+                <script>build.xml</script>
+                <target>dist-ear</target>
+                <clean-target>clean-ear</clean-target>
+                <id>dist-ear</id>
+            </reference>
+            <reference>
+                <foreign-project>DummyTimerScheduler</foreign-project>
+                <artifact-type>j2ee_ear_archive</artifact-type>
+                <script>build.xml</script>
+                <target>dist-ear</target>
+                <clean-target>clean-ear</clean-target>
+                <id>dist-ear</id>
+            </reference>
+            <reference>
+                <foreign-project>DummyTrafficDataDAO</foreign-project>
                 <artifact-type>j2ee_ear_archive</artifact-type>
                 <script>build.xml</script>
                 <target>dist-ear</target>

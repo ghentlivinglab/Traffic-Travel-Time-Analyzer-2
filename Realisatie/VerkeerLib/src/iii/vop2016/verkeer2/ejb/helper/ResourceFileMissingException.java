@@ -13,7 +13,7 @@ import java.io.StringWriter;
  *
  * @author tobia
  */
-public class ResourceFileMissingException extends Exception{
+public class ResourceFileMissingException extends RuntimeException{
     String jndi;
     public ResourceFileMissingException(String jndi){
         super();

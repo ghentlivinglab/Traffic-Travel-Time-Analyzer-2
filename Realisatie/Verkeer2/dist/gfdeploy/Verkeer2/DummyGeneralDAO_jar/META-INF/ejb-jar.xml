@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+        version="3.2"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/ejb-jar_3_2.xsd">
+<description>Dao dummy for routes</description>
+    <display-name>DummyGeneralDAO</display-name>
+    <enterprise-beans>
+        <session>
+            <ejb-name>DummyGeneralDAO</ejb-name>
+            <remote>iii.vop2016.verkeer2.ejb.dao.GeneralDAORemote</remote>
+            <ejb-class>iii.vop2016.verkeer2.dummy.dao.DummyGeneralDAO</ejb-class>
+            <session-type>Singleton</session-type>
+        </session>
+    </enterprise-beans>
+</ejb-jar>

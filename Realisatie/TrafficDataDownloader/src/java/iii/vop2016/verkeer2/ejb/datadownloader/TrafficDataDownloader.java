@@ -5,31 +5,14 @@
  */
 package iii.vop2016.verkeer2.ejb.datadownloader;
 
-import iii.vop2016.verkeer2.ejb.components.GeoLocation;
-import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
-import iii.vop2016.verkeer2.ejb.components.Route;
-import iii.vop2016.verkeer2.ejb.components.RouteData;
-import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
-import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
-import iii.vop2016.verkeer2.ejb.datadownloader.ISourceManager;
-import iii.vop2016.verkeer2.ejb.datadownloader.TrafficDataDownloaderRemote;
+import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyser;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
-import iii.vop2016.verkeer2.ejb.datasources.ISourceAdapter;
+import iii.vop2016.verkeer2.ejb.threshold.IThresholdManager;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -46,7 +29,6 @@ import javax.naming.NamingException;
  * @author Mike Brants
  */
 @Singleton
-@Startup
 public class TrafficDataDownloader implements TrafficDataDownloaderRemote {
 
     @Resource
@@ -86,21 +68,23 @@ public class TrafficDataDownloader implements TrafficDataDownloaderRemote {
          Logger.getLogger("logger").log(Level.INFO,"Started data scrubbing");
         
         List<IRoute> routes = beanFactory.getGeneralDAO().getRoutes();
+        ITrafficDataDownstreamAnalyser analyzer = beanFactory.getTrafficDataDownstreamAnalyser();
         if (routes != null) {
-            List<IRouteData> data;
-            
+            List<IRouteData> allData = new ArrayList<>();
+            analyzer.startSession();
             for (IRoute route : routes) {
                 
                 //opvragen van de data
-                data = sourceManager.parse(route);
+                List<IRouteData> data = sourceManager.parse(route);
                 
                 //opslaan van de verkregen data
                 if(data != null && data.size() != 0){
                     for(IRouteData r : data)
                         r.setTimestamp(timestamp);
-                    beanFactory.getTrafficDataDownstreamAnalyser().addData(data);
+                    allData.addAll(analyzer.addData(data));
                 }
             }
+            analyzer.endSession(allData, routes);
         }else{
             Logger.getLogger("logger").log(Level.WARNING,"No routes available to scrape data for");
         }

@@ -6,11 +6,14 @@
 package iii.vop2016.verkeer2.ejb.dao;
 
 import iii.vop2016.verkeer2.ejb.components.IRoute;
+import iii.vop2016.verkeer2.ejb.components.IThreshold;
 import iii.vop2016.verkeer2.ejb.components.Threshold;
 import java.util.List;
 import java.util.Observer;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -29,10 +32,17 @@ import javax.persistence.Table;
 @Access(AccessType.PROPERTY)
 public class ThresholdEntity extends Threshold {
 
+    public ThresholdEntity() {
+    }
+
     public ThresholdEntity(IRoute route, int level, int delayTriggerLevel) {
         super(route, level, delayTriggerLevel);
     }
 
+    public ThresholdEntity(IThreshold tr) {
+        super(tr);
+    }
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Override
@@ -50,21 +60,21 @@ public class ThresholdEntity extends Threshold {
         return super.getLevel(); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    @JoinColumn(name = "routeId")
     @Override
-    public IRoute getRoute() {
-        return super.getRoute(); //To change body of generated methods, choose Tools | Templates.
+    public long getRouteId() {
+        return super.getRouteId(); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public void setRouteId(long routeId) {
+        super.setRouteId(routeId); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
 
     @Override
     public void setLevel(int level) {
         super.setLevel(level); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void setRoute(IRoute route) {
-        super.setRoute(route); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

@@ -5,10 +5,17 @@
  */
 package iii.vop2016.verkeer2.ejb.threshold;
 
+import iii.vop2016.verkeer2.ejb.components.IRoute;
+
 /**
  *
  * @author Tobias
  */
 public interface IThresholdManager {
-    
+
+    int getThresholdLevel(IRoute route, int delay);
+
+    int EvalThresholdLevel(IRoute route, int delay);
+
+    void addDefaultThresholds(IRoute route);
 }

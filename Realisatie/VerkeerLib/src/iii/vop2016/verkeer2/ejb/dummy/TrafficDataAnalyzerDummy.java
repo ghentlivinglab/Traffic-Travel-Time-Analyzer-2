@@ -32,5 +32,15 @@ public class TrafficDataAnalyzerDummy implements ITrafficDataDownstreamAnalyser{
         return null;
     }
 
+    @Override
+    public void startSession() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void endSession(List<IRouteData> data, List<IRoute> routes) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     
 }

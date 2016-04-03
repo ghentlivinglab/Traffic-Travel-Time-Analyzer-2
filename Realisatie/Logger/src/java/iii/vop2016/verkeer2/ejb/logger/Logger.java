@@ -25,7 +25,6 @@ import javax.naming.NamingException;
  * @author tobia
  */
 @Singleton
-@Startup
 public class Logger implements LoggerRemote {
 
     protected java.util.logging.Logger l;
