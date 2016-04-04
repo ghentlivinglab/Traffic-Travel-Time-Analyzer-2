@@ -344,6 +344,11 @@ public class DataProvider implements DataProviderRemote {
     @Override
     public int getCurrentDelayLevel(IRoute route, List<String> providers) {
         int opt = this.getOptimalDuration(route, providers);
+
+        if (opt == -1) {
+            return -1;
+        }
+
         int current = getCurrentDuration(route, providers);
         return beans.getThresholdManager().getThresholdLevel(route, current - opt);
     }
