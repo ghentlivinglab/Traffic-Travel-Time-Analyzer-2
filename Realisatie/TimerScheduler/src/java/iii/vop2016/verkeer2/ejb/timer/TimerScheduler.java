@@ -296,4 +296,9 @@ public class TimerScheduler implements TimerSchedulerRemote {
             return date;
         }
     }
+
+    @Override
+    public int getPercentDoneToNextInterval() {
+        return ((ticks-1) * 100) / interval;
+    }
 }

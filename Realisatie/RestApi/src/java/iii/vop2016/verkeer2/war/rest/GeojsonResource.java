@@ -60,7 +60,7 @@ public class GeojsonResource {
     }
 
     @GET
-    @Path("{routeId}")
+    @Path("{routeId}/current")
     @Produces("application/json")
     public String getGeoJson(@PathParam("routeId") String routeString) {
         long routeId = Long.parseLong(routeString);
@@ -86,7 +86,7 @@ public class GeojsonResource {
     }
 
     @GET
-    @Path("all")
+    @Path("all/current")
     @Produces("application/json")
     public String getGeoJson() {
         IGeneralDAO dao = beans.getGeneralDAO();
@@ -110,6 +110,62 @@ public class GeojsonResource {
             List<IGeoLocation> list = provider.getRoutePlotGeoLocations(route);
             map.put(route, list);
             delaylevels.put(route, dataProvider.getCurrentDelayLevel(route, null));
+        }
+
+        return provider.getGeoJson(map,delaylevels);
+    }
+    
+    @GET
+    @Path("{routeId}/avg")
+    @Produces("application/json")
+    public String getAvgGeoJson(@PathParam("routeId") String routeString) {
+        long routeId = Long.parseLong(routeString);
+        IRoute route = beans.getGeneralDAO().getRoute(routeId);
+        if (route == null) {
+            return "";
+        }
+
+        GeoJsonRemote provider = beans.getGeoJsonProvider();
+        IDataProvider dataProvider = beans.getDataProvider();
+        if (dataProvider != null && provider != null) {
+            List<IGeoLocation> list = provider.getRoutePlotGeoLocations(route);
+
+            Map<IRoute, List<IGeoLocation>> map = new HashMap<>();
+            map.put(route, list);
+
+            Map<IRoute, Integer> delaylevels = new HashMap<>();
+            delaylevels.put(route, dataProvider.getAvgDelayLevel(route, null));
+
+            return provider.getGeoJson(map, delaylevels);
+        }
+        return "";
+    }
+
+    @GET
+    @Path("all/avg")
+    @Produces("application/json")
+    public String getAvgGeoJson() {
+        IGeneralDAO dao = beans.getGeneralDAO();
+        IDataProvider dataProvider = beans.getDataProvider();
+
+        if (dao == null || dataProvider == null) {
+            return "";
+        }
+
+        List<IRoute> routes = beans.getGeneralDAO().getRoutes();
+
+        if (routes == null) {
+            return "";
+        }
+
+        Map<IRoute, List<IGeoLocation>> map = new HashMap<>();
+        Map<IRoute, Integer> delaylevels = new HashMap<>();
+
+        GeoJsonRemote provider = beans.getGeoJsonProvider();
+        for (IRoute route : routes) {
+            List<IGeoLocation> list = provider.getRoutePlotGeoLocations(route);
+            map.put(route, list);
+            delaylevels.put(route, dataProvider.getAvgDelayLevel(route, null));
         }
 
         return provider.getGeoJson(map,delaylevels);

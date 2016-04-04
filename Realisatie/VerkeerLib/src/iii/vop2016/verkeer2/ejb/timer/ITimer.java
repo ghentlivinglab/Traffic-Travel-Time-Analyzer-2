@@ -16,4 +16,5 @@ public interface ITimer {
         void StartTimer();
         int getCurrentInterval();
         long getCurrentTime();
+        int getPercentDoneToNextInterval();
 }

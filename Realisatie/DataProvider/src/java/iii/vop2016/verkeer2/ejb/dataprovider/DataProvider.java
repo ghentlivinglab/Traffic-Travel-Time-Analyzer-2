@@ -343,16 +343,44 @@ public class DataProvider implements DataProviderRemote {
 
     @Override
     public int getCurrentDelayLevel(IRoute route, List<String> providers) {
-        int avg = this.getAvgDuration(route, providers);
+        int opt = this.getOptimalDuration(route, providers);
+
+        if (opt == -1) {
+            return -1;
+        }
+
         int current = getCurrentDuration(route, providers);
-        return beans.getThresholdManager().getThresholdLevel(route, current - avg);
+        return beans.getThresholdManager().getThresholdLevel(route, current - opt);
     }
 
     @Override
     public int getDelayLevel(IRoute route, List<String> providers, Date start, Date end) {
-        int avg = this.getAvgDuration(route, providers);
+        int opt = this.getOptimalDuration(route, providers);
+        if (opt == -1) {
+            return -1;
+        }
+
         int pastAvg = getAvgDuration(route, providers, start, end);
-        return beans.getThresholdManager().getThresholdLevel(route, pastAvg - avg);
+        if (opt == -1) {
+            return -1;
+        }
+
+        return beans.getThresholdManager().getThresholdLevel(route, pastAvg - opt);
+    }
+
+    @Override
+    public int getAvgDelayLevel(IRoute route, List<String> providers) {
+        int opt = this.getOptimalDuration(route, providers);
+        if (opt == -1) {
+            return -1;
+        }
+
+        int avg = getAvgDuration(route, providers);
+        if (opt == -1) {
+            return -1;
+        }
+
+        return beans.getThresholdManager().getThresholdLevel(route, avg - opt);
     }
 
     @Override

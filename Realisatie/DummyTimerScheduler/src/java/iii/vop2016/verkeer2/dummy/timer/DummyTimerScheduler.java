@@ -80,12 +80,17 @@ public class DummyTimerScheduler implements TimerSchedulerRemote {
 
     @Override
     public int getCurrentInterval() {
-        return Math.toIntExact(interval);
+        return Math.toIntExact(interval/1000);
     }
 
     @Override
     public long getCurrentTime() {
         return time;
+    }
+
+    @Override
+    public int getPercentDoneToNextInterval() {
+        return 0;
     }
 
 }

@@ -80,10 +80,10 @@ public class TrafficDataDownstreamAnalyser implements TrafficDataDownstreamAnaly
         for (IRoute route : routes) {
             List<IRouteData> routeData = mapping.get(route.getId());
             if (routeData != null) {
-                int avg = dataProvider.getAvgDuration(route, null);
+                int opt = dataProvider.getOptimalDuration(route, null);
                 int mean = dataProvider.getMeanDurationFromRouteData(routeData);
-                if (avg != -1 && mean != -1) {
-                    int delay = mean - avg;
+                if (opt != -1 && mean != -1) {
+                    int delay = mean - opt;
                     threshold.EvalThresholdLevel(route, delay);
                 }
             }
