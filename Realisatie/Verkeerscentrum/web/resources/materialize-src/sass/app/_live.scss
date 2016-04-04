@@ -52,31 +52,7 @@
                 font-size: 0.8rem;
                 border-radius: 2px;
                 padding:2px 5px;
-
-                &.veryslow {
-                  color: #fff;
-                  background-color: black;
-                }
-                
-                &.slow {
-                  color: #fff;
-                  background-color: red;
-                }
-
-                &.medium {
-                  color: #fff;
-                  background-color: orange;
-                }
-
-                &.fast {
-                  color: #fff;
-                  background-color: green;
-                }
-                
-                &.veryfast {
-                  color: #fff;
-                  background-color: greenyellow;
-                }
+                color: white;
             }
 
             .traffic-list li{

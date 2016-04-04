@@ -2,6 +2,7 @@
 /* global Materialize, L */
 
 var timerProgress = 98;
+
 var map;
 var mymap;
 var layer;
@@ -9,6 +10,7 @@ var trafficData = [];
 var modus = "live";
 var urlGeoJSON = "http://localhost:8080/RestApi/v2/geojson/all";
 var urlAllRoutes = "http://localhost:8080/RestApi/v2/routes/all";
+var urlTimerNewData = "http://localhost:8080/RestApi/v2/timers/newdata";
 
 /*
 trafficData = [
@@ -62,7 +64,14 @@ function setTimerProgress(){
     progressBar.attr("style","width:"+timerProgress+"%;");
 }
 
-
+function initTimer(data){
+    console.log(data);
+    var full = data.interval;
+    var currentTimeTimer = data.time;
+    var currentTime = (new Date()).getTime();
+    //alert("Interval timer = "+full+", al gedaan = "+(currentTime-currentTimeTimer)%1000);
+    setInterval(setTimerProgress,1500);
+}
 
 function refreshLiveData(){
     
@@ -70,12 +79,12 @@ function refreshLiveData(){
         url: urlAllRoutes,
         dataType: "json",
         success: function(data, textStatus, jqXHR ){
-            Materialize.toast('De verkeerssituatie werd zonet geüpdated', 4000, 'toast bottom');
+            Materialize.toast('De verkeerssituatie werd zonet geüpdated', 4000, 'toast bottom success');
             trafficData = data;
             setModus(modus);
         },
         error: function(jqXHR, textStatus, errorThrown ){
-            Materialize.toast('Er kan geen nieuwe data worden opgehaald!', 4000, 'toast bottom');
+            Materialize.toast('Er kan geen nieuwe data worden opgehaald!', 4000, 'toast bottom error');
         }
     });
 }
@@ -170,15 +179,17 @@ function setLiveList(){
     trafficList = $(".traffic-list");
     if(trafficData.length>0){
         for (var i = 0; i < trafficData.length; i++) {
-            var duration, id, name, delay, trend, delayClass, delayTxt, durationTxt;
+            var duration = {"min":0,"sec":0};
+            var delay = {"min":0,"sec":0};
+            var id, name, delay, trend, delayClass, delayTxt, durationTxt;
             id = trafficData[i].id;
             name = trafficData[i].name;
-            duration.min = trafficData[i]%60;
-            duration.sec = (trafficData[i]-duration.min);
+            duration.min = Math.round((trafficData[i].currentDuration)/60);
+            duration.sec = (trafficData[i].currentDuration-duration.min);
             durationTxt = duration.min+" min";
-            if(trafficData[i].optimalDuration < 0){
-                delay.sec = trafficData[i].currentDuration-trafficData[i].optimalDuration;
-                delay.min = delay.sec%60;
+            if(trafficData[i].optimalDuration >= 0){
+                delay.sec = trafficData[i].currentDuration - trafficData[i].optimalDuration;
+                delay.min = Math.round(delay.sec/60);
                 delayTxt = delay.min+" min";
             }else{
                 delayTxt = "? min";
@@ -191,11 +202,11 @@ function setLiveList(){
                 trend = "";
             }
             
-            delayClass = "";
+            delayClass = "default";
             switch(trafficData[i].currentDelayLevel){
                 case 0: delayClass = "veryfast"; break;
                 case 1: delayClass = "fast"; break;
-                case 2: delayClass = "medium"; break;
+                case 2: delayClass = "intermediate"; break;
                 case 3: delayClass = "slow"; break;
                 case 4: delayClass = "verslow"; break;
             }
@@ -203,8 +214,8 @@ function setLiveList(){
             trafficListItem = $("<li/>").append($("<table/>").addClass("highlight").append($("<thead/>")
                     .append($("<tr/>")
                     .append($("<td/>").text(name).attr("width","50%"))
-                    .append($("<td/>").text(duration).attr("width","20%").addClass("center"))
-                    .append($("<td/>").append($("<span/>").addClass("badge "+delayClass).text(delay)).attr("width","20%").addClass("center"))
+                    .append($("<td/>").text(durationTxt).attr("width","20%").addClass("center"))
+                    .append($("<td/>").append($("<span/>").addClass("badge "+delayClass).text(delayTxt)).attr("width","20%").addClass("center"))
                     .append($("<td/>").attr("width","10%").append($("<i/>").addClass("material-icons").text(trend)))
             )));
             trafficList.append(trafficListItem);
@@ -258,12 +269,23 @@ function setAvgList(){
 
 
 function setGeoJson(data){
+    console.log(data);
+    
+    
     if(layer != undefined){
         mymap.removeLayer(layer);
     }
     layer = L.geoJson(data, {
         style: function (feature) {
-            return {color: feature.properties.color};
+            var color;
+            switch(feature.properties.currentDelayLevel){
+                case 0: color = "green"; break;
+                case 1: color = "green"; break;
+                case 2: color = "orange"; break;
+                case 3: color = "red"; break;
+                case 4: color = "black"; break;
+            }
+            return {color: color};
         },
         onEachFeature: function (feature, layer) {
             layer.on('click', function(){
@@ -277,7 +299,7 @@ function setGeoJson(data){
 
 
 function failedCall(data){
-    Materialize.toast("Er is onmogelijk data op te halen", 4000, 'toast bottom') // 4000 is the duration of the toast
+    Materialize.toast("Er is onmogelijk data op te halen", 4000, 'toast bottom error') // 4000 is the duration of the toast
 }
 
 
@@ -295,10 +317,18 @@ $(document).ready(function() {
     mymap = L.map('map').setView([51.096434, 3.744511], 11);
     setModus("live");
     initGUI();
-    setInterval(setTimerProgress,1500);
     //$("#text").text("no route");
     refreshLiveData();
     requestGeoJson();
+    
+    $.ajax({
+        url: urlTimerNewData,
+        dataType: "json",
+        success: initTimer,
+        error: function(jqXHR, textStatus, errorThrown ){
+            Materialize.toast('Er kan geen data worden opgehaald over de timer op de server!', 4000, 'toast bottom error');
+        }
+    });
     
 });
 

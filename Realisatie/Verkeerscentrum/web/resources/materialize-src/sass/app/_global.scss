@@ -33,30 +33,62 @@ form{
     padding-top: $navbar-height;
 }
 
+/*
+** COLOR
+*/
+
+.default{
+    color: #fff;
+    background-color: color("light-blue","darken-3");
+}
+
 .veryslow {
     color: #fff;
-    background-color: black;
+    background-color: color("deep-orange","darken-4");
 }
 
 .slow {
     color: #fff;
-    background-color: red;
+    background-color: color("orange","darken-4");
 }
 
-.medium {
+.intermediate {
+    @extend .orange;
     color:  #fff;
-    background-color: orange;
 }
 
 .fast {
+    @extend .lime;
     color: #fff;
-    background-color: green;
 }
 
 .veryfast {
+    @extend .light-green;
     color: #fff;
-    background-color: greenyellow;
 }
+
+.success{
+    @extend .light-green;
+   // background: color("lime","darken-1")
+}
+
+.warning{
+    background: color("amber","lighten-1");
+}
+
+.error{
+    @extend .red;
+}
+
+.info{
+    background: color("blue","lighten-3");
+}
+
+
+/*
+** SIDEBAR
+*/
+
 
 .sidebar{
     

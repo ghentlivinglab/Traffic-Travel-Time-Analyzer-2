@@ -65,6 +65,10 @@ function setRouteMultiplicity(multiplicity){
            break;
     }
 }
+function setActiveNavTab(btn){
+    $(".navigation li").removeClass("active");
+    btn.parent("li").addClass("active");
+}
 
 $(document).ready(function(){
 
@@ -77,36 +81,42 @@ $(document).ready(function(){
       resetSlider();
       showSlider();
       setRouteMultiplicity();
+      setActiveNavTab($(this));
   });
   $("#btnAvgTraffic").click(function(){
       inittabs = ["singleperiod","singleroute","providers"];
       resetSlider();
       showSlider();
       setRouteMultiplicity();
+      setActiveNavTab($(this));
   });
   $("#btnDelayWeekday").click(function(){
       inittabs = ["singleperiod","singleroute","providers"];
       resetSlider();
       showSlider();
       setRouteMultiplicity();
+      setActiveNavTab($(this));
   });
   $("#btnRushHours").click(function(){
       inittabs = ["singleperiod","singleroute","providers"];
       resetSlider();
       showSlider();
       setRouteMultiplicity();
+      setActiveNavTab($(this));
   });
   $("#btnCompareRoutes").click(function(){
       inittabs = ["singleperiod","singleroute","providers"];
       resetSlider();
       showSlider();
       setRouteMultiplicity("multi");
+      setActiveNavTab($(this));
   });
   $("#btnComparePeriods").click(function(){
       inittabs = ["multiperiod","singleroute","providers"];
       resetSlider();
       showSlider();
       setRouteMultiplicity();
+      setActiveNavTab($(this));
   });
 
   $(".btnNextSlide").click(nextSlide);
