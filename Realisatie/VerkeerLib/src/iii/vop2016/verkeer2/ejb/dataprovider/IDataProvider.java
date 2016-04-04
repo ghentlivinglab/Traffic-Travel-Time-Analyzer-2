@@ -45,6 +45,8 @@ public interface IDataProvider {
     int getCurrentDelayLevel(IRoute route, List<String> providers);
 
     int getDelayLevel(IRoute route, List<String> providers, Date start, Date end);
+    
+    int getAvgDelayLevel(IRoute route, List<String> providers);
 
     //return the mean distance for this route
     int getDistance(IRoute route, List<String> providers);

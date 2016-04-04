@@ -88,4 +88,9 @@ public class DummyTimerScheduler implements TimerSchedulerRemote {
         return time;
     }
 
+    @Override
+    public int getPercentDoneToNextInterval() {
+        return 0;
+    }
+
 }

@@ -68,6 +68,7 @@ public class TimersResource {
         result.put("time",beans.getTimer().getCurrentTime());
         result.put("active", beans.getTimer().isTimerRunning());
         result.put("interval", beans.getTimer().getCurrentInterval());
+        result.put("percentDone", beans.getTimer().getPercentDoneToNextInterval());
         return result.toString();
     }
     
