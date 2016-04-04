@@ -2,7 +2,40 @@
 <application version="7" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/application_7.xsd">
   <display-name>Verkeer2</display-name>
   <module>
+    <ejb>GoogleMapsSourceAdapter.jar</ejb>
+  </module>
+  <module>
+    <ejb>GeneralDAO.jar</ejb>
+  </module>
+  <module>
+    <ejb>HereSourceAdapter.jar</ejb>
+  </module>
+  <module>
     <ejb>TimerScheduler.jar</ejb>
+  </module>
+  <module>
+    <ejb>Thresholds.jar</ejb>
+  </module>
+  <module>
+    <ejb>DummyGeneralDAO.jar</ejb>
+  </module>
+  <module>
+    <ejb>DummySourceAdapter.jar</ejb>
+  </module>
+  <module>
+    <ejb>DummyTrafficDataDAO.jar</ejb>
+  </module>
+  <module>
+    <ejb>DataProvider.jar</ejb>
+  </module>
+  <module>
+    <ejb>DummyTimerScheduler.jar</ejb>
+  </module>
+  <module>
+    <ejb>TrafficDataDownstreamAnalyser.jar</ejb>
+  </module>
+  <module>
+    <ejb>Logger.jar</ejb>
   </module>
   <module>
     <web>
@@ -11,48 +44,15 @@
     </web>
   </module>
   <module>
-    <ejb>TrafficDataDownstreamAnalyser.jar</ejb>
-  </module>
-  <module>
     <ejb>TomTomSourceAdapter.jar</ejb>
   </module>
   <module>
     <ejb>TrafficDataDAO.jar</ejb>
   </module>
   <module>
-    <ejb>Logger.jar</ejb>
-  </module>
-  <module>
-    <ejb>GeneralDAO.jar</ejb>
-  </module>
-  <module>
-    <ejb>Thresholds.jar</ejb>
-  </module>
-  <module>
-    <ejb>HereSourceAdapter.jar</ejb>
-  </module>
-  <module>
     <ejb>GeoJsonProvider.jar</ejb>
   </module>
   <module>
-    <ejb>GoogleMapsSourceAdapter.jar</ejb>
-  </module>
-  <module>
     <ejb>TrafficDataDownloader.jar</ejb>
-  </module>
-  <module>
-    <ejb>DataProvider.jar</ejb>
-  </module>
-  <module>
-    <ejb>DummySourceAdapter.jar</ejb>
-  </module>
-  <module>
-    <ejb>DummyTimerScheduler.jar</ejb>
-  </module>
-  <module>
-    <ejb>DummyGeneralDAO.jar</ejb>
-  </module>
-  <module>
-    <ejb>DummyTrafficDataDAO.jar</ejb>
   </module>
 </application>

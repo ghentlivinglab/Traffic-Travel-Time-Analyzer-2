@@ -1,0 +1,383 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+        <ui:composition template="./templates/HeaderBodySideRight.xhtml">
+            
+            <ui:define name="page"> Analyse </ui:define>
+
+            <ui:define name="content">
+                <form action="/web/analyse/datasources" method="get">
+                <div class="analyse">
+  
+                    <div class="index pull-bottom">
+                        <div class="banner">
+                            
+                              <div class="initprocess">
+                                <ul class="inittabs">
+                                  <li id="inittab_singleperiod">
+                                        <div class="row header">
+                                            <div class="col s12">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col s3">
+                                                            <h3>Stap 1:</h3>
+                                                        </div>
+                                                        <div class="col s9">
+                                                            <h3>Selecteer een periode</h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="determinate" style="width: 33%"></div>
+                                        </div>
+                                      <div class="container">
+                                        <div class="row">
+                                            <div class="col s7">
+                                                <p>Hieronder kan u een periode selecteren.</p>
+                                            </div>
+                                            <div class="col s5">
+                                                <p class="right-align">
+                                                    <a href="#!" class="btn disabled">Vorige</a>
+                                                    <a href="#!" class="btn btnNextSlide">Volgende</a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col m6">
+                                                <section>
+                                                    <h4>Begin</h4>
+                                                    <input type="text" class="datetimepicker" id="periodStart" />
+                                                    <input name="periodStart" type="hidden" />
+                                                </section> 
+                                             
+                                            </div>
+                                            <div class="col m6">
+                                                <section>
+                                                    <h4>Einde</h4>
+                                                    <input type="text" class="datetimepicker" id="periodEnd" /> 
+                                                    <input name="periodEnd" type="hidden" />
+                                                </section>      
+                                             
+                                            </div>
+                                        </div>
+                                        
+                                      </div>
+                     
+                                  </li>
+                                  <li id="inittab_multiperiod">
+                                        <div class="row header">
+                                            <div class="col s12">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col s3">
+                                                            <h3>Stap 1:</h3>
+                                                        </div>
+                                                        <div class="col s9">
+                                                            <h3>Selecteer een periode</h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="determinate" style="width: 33%"></div>
+                                        </div>
+                                      <div class="container">
+                                        <div class="row">
+                                            <div class="col s7">
+                                                <p>Hieronder kan u een periode selecteren.</p>
+                                            </div>
+                                            <div class="col s5">
+                                                <p class="right-align">
+                                                    <a href="#!" class="btn disabled">Vorige</a>
+                                                    <a href="#!" class="btn btnNextSlide">Volgende</a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col m12 scrollable medium">
+                                                <table id="newPeriodList">
+                                                    <thead>
+                                                      <tr>
+                                                          <th data-field="id">Begin</th>
+                                                          <th data-field="name">Einde</th>
+                                                          <th data-field="price"></th>
+                                                      </tr>
+                                                    </thead>
+
+                                                    <tbody>
+                                                      
+                                                      <tr>
+                                                        <td colspan="3">
+                                                            <p>Geen periodes toegevoegd</p>
+                                                        </td>
+                                                      </tr>
+                                                      
+                                                    </tbody>
+                                                  </table>
+                                                <br />
+                                                
+                                            </div>
+                                            <br />
+                                            <a href="#!" class="btn blue" onclick="$('#modelAddNewPeriod').openModal();"> Nieuwe periode </a>
+                                            <input name="periodsStart" type="hidden" />
+                                            <input name="periodsEnd" type="hidden" />
+                                            <!---
+                                            <div class="col m6">
+                                                <section class="white">
+                                                    
+                                                    <div class="row">
+                                                        <div class="col l12">
+                                                            Begin:
+                                                        </div>
+                                                        <div class="col l12">
+                                                            <input type="text" class="datetimepicker" id="" /> 
+                                                        </div>     
+                                                    </div> 
+                                                    <div class="row">
+                                                        <div class="col l12">
+                                                            Einde:
+                                                        </div>
+                                                        <div class="col l12">
+                                                            <input type="text" class="datetimepicker" id="" /> 
+                                                        </div>     
+                                                    </div> 
+                                                    <a href="#!" class="btn blue" onclick="$('#modal1').openModal();"> Nieuwe periode </a>
+                                                </section>
+                                            </div>
+                                            -->
+                                        </div>
+                                                                                 
+                                        
+                                        
+                                      </div>
+                     
+                                  </li>  
+                                  <li id="inittab_singleroute">
+                                    
+                                        <div class="row header">
+                                            <div class="col s12">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col s3">
+                                                            <h3>Stap 2:</h3>
+                                                        </div>
+                                                        <div class="col s9">
+                                                            <h3>Selecteer een traject</h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="determinate" style="width: 66%"></div>
+                                        </div>
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col s7">
+                                                    <p>Hieronder kan u een of meerdere te analyseren trajecten selecteren.</p>
+                                                </div>
+                                                <div class="col s5 right-align">
+                                                    <p class="right-align">
+                                                        <a href="#!" class="btn btnPrevSlide">Vorige</a>
+                                                        <a href="#!" class="btn btnNextSlide">Volgende</a>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col s6">
+
+                                                    <div class="multiselectsection">
+                                                        <ul id="availableRoutesList" class="availableRoutesList">
+                                                            <c:forEach var="route" items="#{routeDAO.availableRoutes}">
+                                                                <ol>
+                                                                    <input id="route#{route.id}" type="radio" value="#{route.id}" name="routeId" />
+                                                                    <label for="route#{route.id}"><span>#{route.name}</span></label>
+                                                                </ol>
+                                                            </c:forEach>
+                                                        </ul>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col s6">
+                                                    <img src="" class="responsive-img" id="routePreview"  />
+                                                </div>
+                                            </div>
+                                        </div>
+                                      
+                                      
+                                      
+                                      
+                                  </li>
+                                  <li id="inittab_providers">
+                                    
+                                        <div class="row header">
+                                            <div class="col s12">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col s3">
+                                                            <h3>Stap 3:</h3>
+                                                        </div>
+                                                        <div class="col s9">
+                                                            <h3>Databronnen</h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="determinate" style="width: 100%"></div>
+                                        </div>
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col m7">
+                                                    <p>Hieronder kan u selecteren welke bronnen mogen deel uitmaken van de analyse.</p>
+                                                </div>
+                                                <div class="col m5 right-align">
+                                                    <p class="right-align">
+                                                        <a href="#!" class="btn btnPrevSlide">Vorige</a>
+                                                        <button type="submit" href="#!" class="btn green">Analyseer</button>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col s12">
+                                                    <p>
+                                                        <input type="checkbox" name="provider" value="Google Maps" class="filled-in" id="dataprovider1" checked="checked" />
+                                                        <label for="dataprovider1">Google Maps</label>
+                                                    </p>
+                                                    <p>
+                                                        <input type="checkbox" name="provider" value="Tom Tom" class="filled-in" id="dataprovider2" checked="checked" />
+                                                        <label for="dataprovider2">Tom Tom</label>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                      
+                                      
+                                  </li>
+                                  
+                                </ul>
+                              </div>
+                            
+                        </div>
+                            
+                    </div>
+                
+                </div>
+                
+                </form>
+            </ui:define>
+
+            <ui:define name="right">
+                <div class="sidebar">
+                    <img src="#{resourceURLimg}/vcg.png" class="logo img-responsive" />
+                    <div class="navigation">
+                        <ul id="staggered-list">
+                            <li>
+                                <a href="#!" id="btnAvgTraffic">
+                                    <i class="material-icons">navigation</i>
+                                    Gemiddelde verkeerssituaties
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#!" id="btnDelayWeekday">
+                                    <i class="material-icons">query_builder</i>
+                                    Vertragingen per weekdag
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#!" id="btnRushHours">
+                                    <i class="material-icons">settings_input_antenna</i>
+                                    Spitsuren tijdens werkdagen
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#!" id="btnCompareRoutes">
+                                    <i class="material-icons">settings</i>
+                                    Trajecten vergelijken
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#!" id="btnComparePeriods">
+                                    <i class="material-icons">settings</i>
+                                    Perioden vergelijken
+                               </a>
+                            </li>
+                            <li>
+                                <!-- <h:link outcome="pretty:analyse-datasources" id="btnCompareSources"> -->
+                                <a href="#!" id="btnCompareSources">
+                                    <i class="material-icons">open_in_browser</i>
+                                    Databronnen vergelijken
+                                </a>
+                            </li>
+                        </ul>
+                        
+      
+                        
+                      
+                    </div>
+                    
+                
+                    
+                </div>
+                
+                
+                
+                 <!-- Modal Structure -->
+                <div id="modelAddNewPeriod" class="modal">
+                  <div class="modal-content">
+                    <h4>Selecteer een periode</h4>
+                    <div class="row">
+                        <div class="col s3 pull-bottom valign-wrapper">
+                            <p class="valign">Begin:</p>
+                        </div>
+                        <div class="col s9">
+                            <input type="text" class="datepicker" id="txtNewPeriodStart" />
+                            <input name="txtNewPeriodStart" type="hidden" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s3 pull-bottom valign-wrapper">
+                            <p class="valign">Einde:</p>
+                        </div>
+                        <div class="col s9">
+                            <input type="text" class="datepicker" id="txtNewPeriodEnd" />
+                            <input name="txtNewPeriodEnd" type="hidden" />
+                        </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="#!" id="btnAddNewPeriod" class=" modal-action modal-close waves-effect waves-green btn-flat green">Voeg toe</a>
+                  </div>
+                </div>
+                
+            </ui:define>
+            
+                
+    
+            <ui:define name="javascript">
+                
+                <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse.js" />
+                
+                <script>
+                    $(document).ready(function(){
+                        Materialize.showStaggeredList('#staggered-list');
+                    });                    
+                </script>
+                
+            </ui:define>
+
+        </ui:composition>
+
+    
+    
+
+
+</html>

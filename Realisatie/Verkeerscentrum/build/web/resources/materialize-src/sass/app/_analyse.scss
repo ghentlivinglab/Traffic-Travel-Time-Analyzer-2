@@ -1,0 +1,363 @@
+
+.analyse{
+    
+    .container{
+        width:90%;
+    }
+        
+    .row{
+        clear: both;
+    }
+    
+    height: 100%;
+    
+    
+    .availableRoutesList{
+        ol{
+            padding: 0;
+        }
+    }
+    
+    .index{
+
+        .banner{
+            width: 100%;
+            height: 100%;
+            background-image: url("../img/homepage.jpg");
+            background-size: cover;
+        }
+
+        .slider {
+            display:none;
+            ul.slides{
+                background: color("grey","lighten-4");
+                > li{
+                    background:none;
+
+                    .header{
+                        background: color("blue","darken-2");
+                        margin: 0;
+                        color: white;
+                    }
+                    .progress{
+                        background: color("grey","lighten-1");
+                        .determinate{
+                            background: color("yellow","darken-2");
+                        }
+                    }
+                }
+            }
+            ul.indicators{
+                padding:20px;
+                .indicator-item{
+                    background: color("grey","darken-1");
+                    &.active{
+                        background: color("blue","darken-1");
+                    }
+                }
+            }
+            section{
+                margin: 10px;
+                padding: 10px;
+            }
+
+        }
+
+
+    }
+   
+    
+    .page{
+        
+       //background: $secondary-color;
+        height: 100%;
+        overflow-y:auto;
+
+        .viewSwitch {
+            
+            li{
+                
+                border: 1px solid color("blue", "darken-1");
+                padding: 0;
+                
+                a{
+                    display: block;
+                    padding: 0 20px;
+                }
+            
+                &.active{
+                    background: color("blue", "darken-1");
+                }
+            }
+            
+            
+            
+        }
+
+        
+        .header{
+            background: color("blue", "darken-1");
+            
+            color: white;
+            padding: 30px 30px;
+            
+            h3{
+                margin: 0;
+                color: white;
+            }
+            
+            .btn{
+                @extend .white;
+                color: black;
+            }
+            
+        }
+                
+        .content{
+            //height:100%;
+            //background: yellow;
+            padding: 20px;
+        }
+        
+    }
+    
+    
+    .sidebar{
+        
+        //@extend .z-depth-2;
+       
+        width: 100%;
+        //background:green;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        background: color("grey","lighten-3");
+        max-height: 100%;
+        height:100%;
+        
+        .header {
+            display: block;
+            min-height: $collapsible-height;
+            line-height: $collapsible-height;
+            padding: 0 1rem;
+            //border-bottom: 1px solid gray;
+            background: color("blue-grey", "lighten-2");
+            width:100%;
+            
+            .row{
+                margin: 0;
+            }
+
+            .btn_back{
+
+            }
+
+            .title{
+                text-align: center;
+                font-weight: 500;
+                text-transform: uppercase;
+            }
+
+            i {
+              width: 2rem;
+              font-size: 1.6rem;
+              line-height: $collapsible-height;
+              display: block;
+              float: left;
+              text-align: center;
+              margin-right: 1rem;
+              color: black;
+            }
+
+            span{
+                width:100%;
+                text-align: center;
+                margin: auto auto;
+            }
+
+        }
+
+        .content{
+            padding: 20px;
+            max-height: 100%;
+            height: 100%;
+            overflow-y: scroll;
+            
+            i {
+              width: 2rem;
+              font-size: 1.6rem;
+              line-height: $collapsible-height;
+              display: block;
+              float: left;
+              text-align: center;
+              margin-right: 1rem;
+              color: black;
+            }
+            
+            section{
+                padding: 10px;
+                background: white;
+            }
+        }
+        
+        .collapsible{
+            
+            background: white;
+            
+            
+            .collapsible-header{
+                background:  white;
+                i{
+                    color: color("deep-orange","darken-2");
+                }
+            }
+                
+            .collapsible-body {
+
+                section{
+                    margin: 20px;
+                }
+
+                ul{
+                    margin: 0;
+                    padding: 0;
+
+                    li{
+                        background: white;
+                        width: 100%;
+                        padding: 10px;
+                    }
+
+                    li:hover{
+                        background: grey;
+                    }
+                }
+                .btn{
+                    @extend .white;
+                    color: black;
+                    width: 100%;
+                    color: color("deep-orange","darken-2");
+                }
+                p{
+                    padding: 0;
+                    margin: auto 0;
+                }
+                input{
+                    height: 2rem;
+                }
+            }
+        }
+        
+
+        
+    }
+    
+    
+    
+}
+
+
+
+
+
+
+
+.initprocess {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display:none;
+
+
+    .inittabs {
+        background-color: $slider-bg-color;
+        margin: 0;
+        height: 100%;
+        display: none;
+        height: 100%;
+        background: color("grey","lighten-4");
+
+        li {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            width: 100%;
+            height: inherit;
+            overflow: hidden;
+            
+            background:none;
+
+            .header{
+                background: color("blue","darken-2");
+                margin: 0;
+                color: white;
+            }
+            .progress{
+                background: color("grey","lighten-1");
+                .determinate{
+                    background: color("yellow","darken-2");
+                }
+            }
+
+            img {
+                height: 100%;
+                width: 100%;
+                background-size: cover;
+                background-position: center;
+            }
+
+            .caption {
+                color: #fff;
+                position: absolute;
+                top: 15%;
+                left: 15%;
+                width: 70%;
+                opacity: 0;
+
+                p { color: $slider-bg-color-light; }
+            }
+
+        &.active {
+            z-index: 2;
+            opacity: 1;
+        }
+      }
+    }
+
+
+    .indicators {
+        position: absolute;
+        text-align: center;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: 0;
+        padding:20px;
+
+        .indicator-item {
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+            height: 16px;
+            width: 16px;
+            margin: 0 12px;
+
+            transition: background-color .3s;
+            border-radius: 50%;
+            
+            background: color("grey","darken-1");
+            &.active{
+                background: color("blue","darken-1");
+            }
+
+        }
+    }
+  
+    section{
+        margin: 10px;
+        padding: 10px;
+    }
+
+}
+

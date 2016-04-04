@@ -191,7 +191,7 @@ public class GeneralDAO implements GeneralDAORemote {
     public List<IRoute> getRoutes(List<Long> ids) {
         List<IRoute> ret = new ArrayList<>();
         try {
-            Query q = em.createQuery("SELECT g FROM GeoLocationMappingEntity g WHERE g.route.id in :id");
+            Query q = em.createQuery("SELECT g FROM RouteEntity g WHERE g.id in :id");
             q.setParameter("id", ids);
             List<IRoute> routes = q.getResultList();
 

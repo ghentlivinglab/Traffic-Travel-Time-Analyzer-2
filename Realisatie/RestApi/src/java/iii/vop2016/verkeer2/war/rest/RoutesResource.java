@@ -98,15 +98,36 @@ public class RoutesResource {
     public Response initRoutes() throws InvalidCoordinateException {
 
         try {
+            
+            IRoute r1 = initRoute("Rooigemlaan (R40) northbound",51.0560905,3.6951634,51.0663037,3.6996797,"Drongensesteenweg","Palinghuizen");
+            IRoute r2 = initRoute("Rooigemlaan (R40) southbound",51.066296,3.699685,51.056104,3.695152,"Palinghuizen","Drongensesteenweg");
+            IRoute r3 = initRoute("Gasmeterlaan (R40) eastbound",51.066271,3.699709,51.067505,3.727959,"Palinghuizen","Neuseplein");
+            IRoute r4 = initRoute("Nieuwevaart (R40) westbound",51.067690,3.727868,51.066271,3.699709,"Neuseplein","Palinghuizen");
+            IRoute r5 = initRoute("Dok-Noord (R40) southbound",51.067137,3.726568,51.056536,3.738477,"Neuseplein","Dampoort");
+            IRoute r6 = initRoute("Dok-Noord (R40) northbound",51.057116,3.738622,51.067633,3.727523,"Dampoort","Neuseplein");
+            IRoute r7 = initRoute("Heernislaan (R40) southbound",51.056536,3.738477,51.038613,3.736007,"Dampoort","Zuidparklaan");
+            
+            
+            
+            return Response.status(Response.Status.OK).entity("Routes have been initialised").build();
+        } catch (Exception ex) {
+            Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("An error has occured").build();
+        }
+    }
+    
+    private IRoute initRoute(String routeName, double startlat, double startlong, double endlat, double endlong, String startName, String endName) throws InvalidCoordinateException{
+        IRoute r = new Route(routeName);
+        //try {
             ITrafficDataDownstreamAnalyser analyser = beans.getTrafficDataDownstreamAnalyser();
 
-            IRoute r = new Route("Rooigemlaan (R40) northbound");
+            //IRoute r = new Route("Rooigemlaan (R40) northbound");
 
             //r.setInverseRoute(r);
-            IGeoLocation geolocation1 = new GeoLocation(51.0560905, 3.6951634);
-            IGeoLocation geolocation2 = new GeoLocation(51.0663037, 3.6996797);
-            geolocation1.setName("Drongensesteenweg");
-            geolocation2.setName("Palinghuizen");
+            IGeoLocation geolocation1 = new GeoLocation(startlat, startlong);
+            IGeoLocation geolocation2 = new GeoLocation(endlat, endlong);
+            geolocation1.setName(startName);
+            geolocation2.setName(endName);
             r.addGeolocation(geolocation1);
             r.addGeolocation(geolocation2);
             r = beans.getGeneralDAO().addRoute(r);
@@ -121,16 +142,20 @@ public class RoutesResource {
                     System.out.println("Name: " + route.getName());
                     System.out.println("Geolocaties: " + route.getGeolocations());
                 }
-
+                return r;
                 //TODO return proper representation object
-                return Response.status(Response.Status.OK).entity("Routes have been initialised").build();
+                //return Response.status(Response.Status.OK).entity("Routes have been initialised").build();
             }else{
-                return Response.status(Response.Status.EXPECTATION_FAILED).entity("The provided data is already in the database (same name?)").build();
+                return null;
+                //return Response.status(Response.Status.EXPECTATION_FAILED).entity("The provided data is already in the database (same name?)").build();
             }
-        } catch (Exception ex) {
-            Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("An error has occured").build();
-        }
+            
+            
+        //} catch (Exception ex) {
+            //Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
+            //return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("An error has occured").build();
+        //}
+      
     }
 
     @GET
@@ -230,6 +255,7 @@ public class RoutesResource {
             List<Long> idslist = new ArrayList<>();
             String[] parts = ids.split(",");
             for (String s : parts) {
+                System.out.println(s);
                 try {
                     idslist.add(Long.parseLong(s, 10));
                 } catch (NumberFormatException e) {
@@ -319,7 +345,7 @@ public class RoutesResource {
         result.put("description", description);
         JSONArray tm = new JSONArray();
         for (Date d : timestamps) {
-            tm.put(d);
+            tm.put(d.getTime());
         }
         result.put("x-ax", tm);
         JSONArray datarow = new JSONArray();
