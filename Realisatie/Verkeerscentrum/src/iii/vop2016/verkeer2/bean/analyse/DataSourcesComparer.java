@@ -51,7 +51,6 @@ public class DataSourcesComparer extends AnalysePage implements ITableView, IGra
    
     @Override
     public String getSubTitle() {
-        
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM YYYY (HH:mm)");
         String format1 = formatter.format(period.getKey());
         String format2 = formatter.format(period.getValue());
@@ -73,7 +72,6 @@ public class DataSourcesComparer extends AnalysePage implements ITableView, IGra
         super.setRouteDAO(routeDAO);
         this.route = routeDAO.getSelectedRoutes().get(0);
     }
-    
     
     
 }

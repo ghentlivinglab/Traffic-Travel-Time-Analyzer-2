@@ -45,8 +45,8 @@ public class ProviderResource {
     @Context
     private UriInfo context;
 
-    @Resource
-    private SessionContext sctx;
+    //@Resource
+    //private SessionContext sctx;
     private InitialContext ctx;
     private static BeanFactory beans;
     
@@ -65,7 +65,7 @@ public class ProviderResource {
         } catch (NamingException ex) {
             Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        beans = BeanFactory.getInstance(ctx, sctx);
+        beans = BeanFactory.getInstance(ctx, null);
     }
 
     /**

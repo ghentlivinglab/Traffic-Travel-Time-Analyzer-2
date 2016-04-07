@@ -248,14 +248,12 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col s12">
-                                                    <p>
-                                                        <input type="checkbox" name="provider" value="Google Maps" class="filled-in" id="dataprovider1" checked="checked" />
-                                                        <label for="dataprovider1">Google Maps</label>
-                                                    </p>
-                                                    <p>
-                                                        <input type="checkbox" name="provider" value="Tom Tom" class="filled-in" id="dataprovider2" checked="checked" />
-                                                        <label for="dataprovider2">Tom Tom</label>
-                                                    </p>
+                                                    <c:forEach var="provider" items="#{dataproviderDAO.availableProviders}">
+                                                        <p>
+                                                            <input type="checkbox" name="provider" value="#{provider.name}" class="filled-in" id="chk#{provider.name}" checked="checked" />
+                                                            <label for="chk#{provider.name}">#{provider.name}</label>
+                                                        </p>
+                                                    </c:forEach>
                                                 </div>
                                             </div>
                                         </div>

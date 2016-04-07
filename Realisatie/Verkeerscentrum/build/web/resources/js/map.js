@@ -1,8 +1,7 @@
 
 /* global Materialize, L */
 
-var timerProgress = 98;
-
+var timerProgress = 0;
 var map;
 var mymap;
 var layer;
@@ -66,11 +65,10 @@ function setTimerProgress(){
 
 function initTimer(data){
     console.log(data);
-    var full = data.interval;
-    var currentTimeTimer = data.time;
-    var currentTime = (new Date()).getTime();
-    //alert("Interval timer = "+full+", al gedaan = "+(currentTime-currentTimeTimer)%1000);
-    setInterval(setTimerProgress,1500);
+    var interval = Math.floor(data.interval*100/60);
+    setInterval(setTimerProgress,interval);
+    timerProgress = data.percentDone;
+    alert("om de "+interval+"ms + reeds gedaan = "+data.percentDone);
 }
 
 function refreshLiveData(){
@@ -212,7 +210,7 @@ function setLiveList(){
                 case 4: delayClass = "verslow"; break;
             }
 
-            trafficListItem = $("<li/>").append($("<table/>").addClass("highlight").append($("<thead/>")
+            trafficListItem = $("<li/>").attr("id","route"+id).append($("<table/>").addClass("highlight").append($("<thead/>")
                     .append($("<tr/>")
                     .append($("<td/>").text(name).attr("width","50%"))
                     .append($("<td/>").text(durationTxt).attr("width","20%").addClass("center"))
@@ -268,30 +266,68 @@ function setAvgList(){
 }
 
 
-
-function setGeoJson(data){
-    console.log(data);
     
+function highlightRouteInList(routeid){
+    $("#traffic-list ul li").removeClass("active");
+    $("#route"+routeid).addClass("active");
+    $('.sidebar').animate({
+        scrollTop: $('#traffic-list #route'+routeid).offset().top
+    }, 'slow');
+}
+    
+function setGeoJson(data){
     
     if(layer != undefined){
         mymap.removeLayer(layer);
     }
+    
+    console.log(data);
+    
     layer = L.geoJson(data, {
+        
         style: function (feature) {
-            var color;
+            var colorClass = "default";
             switch(feature.properties.currentDelayLevel){
-                case 0: color = "green"; break;
-                case 1: color = "green"; break;
-                case 2: color = "orange"; break;
-                case 3: color = "red"; break;
-                case 4: color = "black"; break;
+                case 0: colorClass = "veryfast"; break;
+                case 1: colorClass = "fast"; break;
+                case 2: colorClass = "intermediate"; break;
+                case 3: colorClass = "slow"; break;
+                case 4: colorClass = "veryslow"; break;
             }
+            var color = $("."+colorClass).first().css("background-color")
             return {color: color};
         },
         onEachFeature: function (feature, layer) {
-            layer.on('click', function(){
+            
+            layer.on('click', function(e){
+                console.log(feature.properties);
                 $("#text").text("route " + feature.properties.description);
+                
                 //functie voor aanroepen hilight in tabel
+                //click event that triggers the popup and centres it on the polygon
+                
+                var popup = L.popup()
+                .setLatLng(e.latlng)
+                .setContent("<h5>Route</h5> <p> ID = "+feature.properties.description+"</p>")
+                .openOn(mymap);
+        
+                highlightRouteInList(feature.properties.description);
+                
+                click = true;
+        
+        
+            });
+            layer.on('mouseover', function(){
+                //$("#text").text("route " + feature.properties.description);
+                //functie voor aanroepen hilight in tabel
+                click = false;
+                highlightRouteInList(feature.properties.description);
+            });
+            layer.on('mouseout', function(){
+                if(!click){
+                    $("#traffic-list ul li").removeClass("active");
+                }
+                click = false;
             });
         }
     }).addTo(mymap);    

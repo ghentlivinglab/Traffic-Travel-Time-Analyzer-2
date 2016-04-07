@@ -6,6 +6,11 @@
 package iii.vop2016.verkeer2.bean.analyse;
 
 import iii.vop2016.verkeer2.bean.components.Route;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +21,8 @@ import javafx.util.Pair;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
@@ -65,6 +72,34 @@ abstract class AnalysePage {
         return dataproviderDAO;
     }
     
+    public JSONObject getJSON(String url_string){
+        JSONObject jsonobj = new JSONObject();
+        try{
+                URL url = new URL(url_string);
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                
+                //Optional, GET is default
+                con.setRequestMethod("GET");
+
+                StringBuilder response;
+                try ( //This sections puts the HttpAnswer in a String
+                        BufferedReader in = new BufferedReader(
+                                new InputStreamReader(con.getInputStream()))) {
+                    String inputLine;
+                    response = new StringBuilder();
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                }
+
+                //This section interpretes the JSON
+                jsonobj = new JSONObject(response.toString());
+                
+        }catch(IOException | JSONException ex){
+            
+        }
+        return jsonobj;
+    }
     
     
     

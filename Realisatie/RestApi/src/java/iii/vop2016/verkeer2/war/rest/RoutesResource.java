@@ -52,8 +52,8 @@ public class RoutesResource {
     @Context
     private UriInfo context;
 
-    @Resource
-    private WebServiceContext webServiceContext;
+    //@Resource
+    //private WebServiceContext webServiceContext;
     private InitialContext ctx;
     private static BeanFactory beans;
 

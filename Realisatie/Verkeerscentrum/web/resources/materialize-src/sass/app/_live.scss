@@ -56,6 +56,11 @@
 
             .traffic-list li{
                 opacity: 0;
+                
+                &.active{
+                    background-color: color("grey","lighten-2");
+                }
+                
             }
 
         }

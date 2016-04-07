@@ -6,6 +6,8 @@
 package iii.vop2016.verkeer2.bean.analyse;
 
 import iii.vop2016.verkeer2.bean.components.DataProvider;
+import iii.vop2016.verkeer2.bean.components.Route;
+import iii.vop2016.verkeer2.bean.helpers.JSONMethods;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +15,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -25,6 +29,9 @@ public class DataproviderDAO {
     protected List<DataProvider> availableProviders;
     protected List<DataProvider> selectedProviders;
     
+    private static String urlAllProviders = "http://localhost:8080/RestApi/v2/providers";
+
+    
     /**
      * Creates a new instance of DataproviderDAO
      */
@@ -32,20 +39,20 @@ public class DataproviderDAO {
         availableProviders = new ArrayList<>();
         selectedProviders = new ArrayList<>();
         
-        //
-        // AJAX CALL OM ROUTES OP TE HALEN
-        //
-         
+        
         // AVAILABLE ROUTES
-        availableProviders.add(new DataProvider("Google Maps"));
+        JSONArray providers = JSONMethods.getArrayFromURL(urlAllProviders);
+        for(int i=0; i<providers.length(); i++){
+            availableProviders.add(new DataProvider(providers.getString(i)));
+        }
         
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();        
         Map<String, String[]> parameterMap = request.getParameterMap();
-        String[] providers = parameterMap.get("provider");
+        String[] providersArray = parameterMap.get("provider");
         
-        if(providers != null){
-            for(String provider : providers){
-                selectedProviders.add(new DataProvider(provider));
+        if(providersArray != null){
+            for(String provider : providersArray){
+                selectedProviders.add(getDataProvider(provider));
             }
         }
         
@@ -57,6 +64,18 @@ public class DataproviderDAO {
 
     public List<DataProvider> getSelectedProviders() {
         return selectedProviders;
+    }
+
+    
+    private DataProvider getDataProvider(String s) {
+        int i=0;
+        while(i < availableProviders.size()){
+            if(availableProviders.get(i).getName().equals(s)){
+                return availableProviders.get(i);
+            }
+            i++;
+        }
+        return null;
     }
     
 }

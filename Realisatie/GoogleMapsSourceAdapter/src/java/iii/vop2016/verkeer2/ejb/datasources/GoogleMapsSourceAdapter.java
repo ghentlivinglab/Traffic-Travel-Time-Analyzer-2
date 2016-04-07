@@ -35,8 +35,8 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
 
     //This final variables may be better in resourcefile?
     //Free key for the Google API, connected to the project. Limited usage.
-    //private final String key = "AIzaSyDCx8SzAp2pjZHacrgJ9DDcC45UdGR_yQw";
-    private final String key = "AIzaSyAfLig5CJvQkTrsXEuia0unxy5K928pCY4";
+    private final String key = "AIzaSyDCx8SzAp2pjZHacrgJ9DDcC45UdGR_yQw"; //Own key
+    //private final String key = "AIzaSyBIDsxZBGy62Iu2JBXujEeW8YNeqK9LtDw"; // Key with more calls
     
     private final String basicURL = "https://maps.googleapis.com/maps/api/distancematrix/json?";
     private static final String providerName = "GoogleMaps";

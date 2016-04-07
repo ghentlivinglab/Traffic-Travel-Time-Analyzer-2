@@ -2647,6 +2647,8 @@ form {
         color: white; }
       .map .sidebar .trafficinfo .traffic-list li {
         opacity: 0; }
+        .map .sidebar .trafficinfo .traffic-list li.active {
+          background-color: #e0e0e0; }
 
 .index .banner {
   width: 100%;
