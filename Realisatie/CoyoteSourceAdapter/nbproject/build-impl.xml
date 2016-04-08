@@ -802,104 +802,24 @@ exists or setup the property manually. For example like this:
     <target depends="compile,-library-inclusion-in-archive-weblogic,-library-inclusion-in-archive-by-user" name="library-inclusion-in-archive"/>
     <target if="is.jars.in.ejbjar" name="-library-inclusion-in-archive-by-user">
         <copyfiles files="${reference.VerkeerLib.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.selenium-java-2.53.0.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.apache-mime4j-0.6.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.bsh-2.0b4.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.cglib-nodep-2.1_3.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.commons-codec-1.10.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.commons-exec-1.3.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.commons-io-2.4.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.commons-logging-1.2.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.gson-2.3.1.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.guava-19.0.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.hamcrest-core-1.3.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.hamcrest-library-1.3.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.httpclient-4.5.1.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.httpcore-4.4.3.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.httpmime-4.5.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.jcommander-1.48.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.jna-4.1.0.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.jna-platform-4.1.0.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.junit-4.12.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.netty-3.5.7.Final.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.phantomjsdriver-1.2.1.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.testng-6.9.9.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.json-20151123.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.jsoup-1.8.3.jar}" todir="${build.classes.dir}"/>
     </target>
     <target if="is.server.weblogic" name="-library-inclusion-in-archive-weblogic">
         <basename file="${reference.VerkeerLib.jar}" property="manifest.reference.VerkeerLib.jar"/>
-        <basename file="${file.reference.selenium-java-2.53.0.jar}" property="manifest.file.reference.selenium-java-2.53.0.jar"/>
-        <basename file="${file.reference.apache-mime4j-0.6.jar}" property="manifest.file.reference.apache-mime4j-0.6.jar"/>
-        <basename file="${file.reference.bsh-2.0b4.jar}" property="manifest.file.reference.bsh-2.0b4.jar"/>
-        <basename file="${file.reference.cglib-nodep-2.1_3.jar}" property="manifest.file.reference.cglib-nodep-2.1_3.jar"/>
-        <basename file="${file.reference.commons-codec-1.10.jar}" property="manifest.file.reference.commons-codec-1.10.jar"/>
-        <basename file="${file.reference.commons-exec-1.3.jar}" property="manifest.file.reference.commons-exec-1.3.jar"/>
-        <basename file="${file.reference.commons-io-2.4.jar}" property="manifest.file.reference.commons-io-2.4.jar"/>
-        <basename file="${file.reference.commons-logging-1.2.jar}" property="manifest.file.reference.commons-logging-1.2.jar"/>
-        <basename file="${file.reference.gson-2.3.1.jar}" property="manifest.file.reference.gson-2.3.1.jar"/>
-        <basename file="${file.reference.guava-19.0.jar}" property="manifest.file.reference.guava-19.0.jar"/>
-        <basename file="${file.reference.hamcrest-core-1.3.jar}" property="manifest.file.reference.hamcrest-core-1.3.jar"/>
-        <basename file="${file.reference.hamcrest-library-1.3.jar}" property="manifest.file.reference.hamcrest-library-1.3.jar"/>
-        <basename file="${file.reference.httpclient-4.5.1.jar}" property="manifest.file.reference.httpclient-4.5.1.jar"/>
-        <basename file="${file.reference.httpcore-4.4.3.jar}" property="manifest.file.reference.httpcore-4.4.3.jar"/>
-        <basename file="${file.reference.httpmime-4.5.jar}" property="manifest.file.reference.httpmime-4.5.jar"/>
-        <basename file="${file.reference.jcommander-1.48.jar}" property="manifest.file.reference.jcommander-1.48.jar"/>
-        <basename file="${file.reference.jna-4.1.0.jar}" property="manifest.file.reference.jna-4.1.0.jar"/>
-        <basename file="${file.reference.jna-platform-4.1.0.jar}" property="manifest.file.reference.jna-platform-4.1.0.jar"/>
-        <basename file="${file.reference.junit-4.12.jar}" property="manifest.file.reference.junit-4.12.jar"/>
-        <basename file="${file.reference.netty-3.5.7.Final.jar}" property="manifest.file.reference.netty-3.5.7.Final.jar"/>
-        <basename file="${file.reference.phantomjsdriver-1.2.1.jar}" property="manifest.file.reference.phantomjsdriver-1.2.1.jar"/>
-        <basename file="${file.reference.testng-6.9.9.jar}" property="manifest.file.reference.testng-6.9.9.jar"/>
+        <basename file="${file.reference.json-20151123.jar}" property="manifest.file.reference.json-20151123.jar"/>
+        <basename file="${file.reference.jsoup-1.8.3.jar}" property="manifest.file.reference.jsoup-1.8.3.jar"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Extension-List" value="jar-1 jar-2 jar-3 jar-4 jar-5 jar-6 jar-7 jar-8 jar-9 jar-10 jar-11 jar-12 jar-13 jar-14 jar-15 jar-16 jar-17 jar-18 jar-19 jar-20 jar-21 jar-22 jar-23 "/>
+            <attribute name="Extension-List" value="jar-1 jar-2 jar-3 "/>
             <attribute name="jar-1-Extension-Name" value="${manifest.reference.VerkeerLib.jar}"/>
-            <attribute name="jar-2-Extension-Name" value="${manifest.file.reference.selenium-java-2.53.0.jar}"/>
-            <attribute name="jar-3-Extension-Name" value="${manifest.file.reference.apache-mime4j-0.6.jar}"/>
-            <attribute name="jar-4-Extension-Name" value="${manifest.file.reference.bsh-2.0b4.jar}"/>
-            <attribute name="jar-5-Extension-Name" value="${manifest.file.reference.cglib-nodep-2.1_3.jar}"/>
-            <attribute name="jar-6-Extension-Name" value="${manifest.file.reference.commons-codec-1.10.jar}"/>
-            <attribute name="jar-7-Extension-Name" value="${manifest.file.reference.commons-exec-1.3.jar}"/>
-            <attribute name="jar-8-Extension-Name" value="${manifest.file.reference.commons-io-2.4.jar}"/>
-            <attribute name="jar-9-Extension-Name" value="${manifest.file.reference.commons-logging-1.2.jar}"/>
-            <attribute name="jar-10-Extension-Name" value="${manifest.file.reference.gson-2.3.1.jar}"/>
-            <attribute name="jar-11-Extension-Name" value="${manifest.file.reference.guava-19.0.jar}"/>
-            <attribute name="jar-12-Extension-Name" value="${manifest.file.reference.hamcrest-core-1.3.jar}"/>
-            <attribute name="jar-13-Extension-Name" value="${manifest.file.reference.hamcrest-library-1.3.jar}"/>
-            <attribute name="jar-14-Extension-Name" value="${manifest.file.reference.httpclient-4.5.1.jar}"/>
-            <attribute name="jar-15-Extension-Name" value="${manifest.file.reference.httpcore-4.4.3.jar}"/>
-            <attribute name="jar-16-Extension-Name" value="${manifest.file.reference.httpmime-4.5.jar}"/>
-            <attribute name="jar-17-Extension-Name" value="${manifest.file.reference.jcommander-1.48.jar}"/>
-            <attribute name="jar-18-Extension-Name" value="${manifest.file.reference.jna-4.1.0.jar}"/>
-            <attribute name="jar-19-Extension-Name" value="${manifest.file.reference.jna-platform-4.1.0.jar}"/>
-            <attribute name="jar-20-Extension-Name" value="${manifest.file.reference.junit-4.12.jar}"/>
-            <attribute name="jar-21-Extension-Name" value="${manifest.file.reference.netty-3.5.7.Final.jar}"/>
-            <attribute name="jar-22-Extension-Name" value="${manifest.file.reference.phantomjsdriver-1.2.1.jar}"/>
-            <attribute name="jar-23-Extension-Name" value="${manifest.file.reference.testng-6.9.9.jar}"/>
+            <attribute name="jar-2-Extension-Name" value="${manifest.file.reference.json-20151123.jar}"/>
+            <attribute name="jar-3-Extension-Name" value="${manifest.file.reference.jsoup-1.8.3.jar}"/>
         </manifest>
     </target>
     <target depends="compile" name="library-inclusion-in-manifest">
         <copyfiles files="${reference.VerkeerLib.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.selenium-java-2.53.0.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.apache-mime4j-0.6.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.bsh-2.0b4.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.cglib-nodep-2.1_3.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.commons-codec-1.10.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.commons-exec-1.3.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.commons-io-2.4.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.commons-logging-1.2.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.gson-2.3.1.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.guava-19.0.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.hamcrest-core-1.3.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.hamcrest-library-1.3.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.httpclient-4.5.1.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.httpcore-4.4.3.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.httpmime-4.5.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jcommander-1.48.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jna-4.1.0.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jna-platform-4.1.0.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.junit-4.12.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.netty-3.5.7.Final.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.phantomjsdriver-1.2.1.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.testng-6.9.9.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.json-20151123.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jsoup-1.8.3.jar}" todir="${dist.ear.dir}/lib"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
     <target name="-copy-meta-inf">
