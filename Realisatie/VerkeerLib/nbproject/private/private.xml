@@ -3,9 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Verkeerscentrum/verkeer-2/Realisatie/VerkeerLib/src/iii/vop2016/verkeer2/ejb/components/GeoLocationComparator.java</file>
-            <file>file:/D:/Verkeerscentrum/verkeer-2/Realisatie/VerkeerLib/src/iii/vop2016/verkeer2/ejb/components/GeoLocation.java</file>
-            <file>file:/D:/Verkeerscentrum/verkeer-2/Realisatie/VerkeerLib/src/iii/vop2016/verkeer2/ejb/components/Route.java</file>
+            <file>file:/C:/Users/tobia/Documents/baproef/verkeer-2/Realisatie/VerkeerLib/src/iii/vop2016/verkeer2/ejb/dao/IGeneralDAO.java</file>
+            <file>file:/C:/Users/tobia/Documents/baproef/verkeer-2/Realisatie/VerkeerLib/src/iii/vop2016/verkeer2/ejb/dao/GeneralDAORemote.java</file>
         </group>
     </open-files>
 </project-private>
