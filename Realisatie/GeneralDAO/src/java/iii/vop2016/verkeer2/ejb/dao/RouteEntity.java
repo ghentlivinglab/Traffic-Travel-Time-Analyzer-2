@@ -5,10 +5,12 @@
  */
 package iii.vop2016.verkeer2.ejb.dao;
 
+import iii.vop2016.verkeer2.ejb.components.GeoLocationComparator;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.Route;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -43,6 +45,7 @@ public class RouteEntity extends Route {
         for (IGeoLocation loc : getGeolocations()) {
             l.add(new GeoLocationEntity(loc));
         }
+        Collections.sort(l, new GeoLocationComparator());
         setGeolocations(l);
     }
 

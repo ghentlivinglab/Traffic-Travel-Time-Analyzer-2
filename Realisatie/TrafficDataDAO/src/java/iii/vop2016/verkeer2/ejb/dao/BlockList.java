@@ -54,6 +54,11 @@ public class BlockList {
             }
             this.valid = true;
         } catch (Exception e) {
+            if (sublist.size() == 0) {
+                BlockList l = new BlockList(blockSize, dao, this, 0);
+                this.sublist.put(0L, l);
+            }
+
             this.valid = false;
         }
     }
@@ -123,6 +128,11 @@ public class BlockList {
                 prevEntry = entry;
             }
 
+            //this situation only occurs when no blocklist could be generated
+            if (entry.getValue().startDate == null) {
+                return this.startId;
+            }
+
             if (!entry.getValue().startDate.before(date)) {
                 BlockList l = prevEntry.getValue();
                 if (l.sublist != null) {
@@ -150,6 +160,11 @@ public class BlockList {
         for (Map.Entry<Long, BlockList> entry : sublist.entrySet()) {
             if (prevEntry == null) {
                 prevEntry = entry;
+            }
+
+            //this situation only occurs when no blocklist could be generated
+            if (entry.getValue().startDate == null) {
+                return this.startId;
             }
 
             if (entry.getValue().startDate.after(date)) {
