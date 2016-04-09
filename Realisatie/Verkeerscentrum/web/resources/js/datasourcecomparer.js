@@ -43,7 +43,27 @@ $(document).ready(function () {
 
 
 
-
+function splitToArraySorted(obj, xdata, ydata){
+    var keys = [];
+    var k, i, len;
+    
+    for (k in obj) {
+        if (obj.hasOwnProperty(k)) {
+            keys.push(k);
+        }
+    }
+    
+    keys.sort();
+    
+    len = keys.length;
+    
+    for (i = 0; i < len; i++) {
+        k = keys[i];
+        //alert(k + ':' + obj[k]);
+        xdata.push(k);
+        ydata.push(obj[k]);
+    }
+}
 
 function viewAnalyseData(data){
     
@@ -52,18 +72,42 @@ function viewAnalyseData(data){
     var route = data[0];
     
     //
-    // X - AX
+    // PARSE
     //
-    console.log(route.data[0]["data"]["duration"]["x-ax"]);
-    var xdata = route.data[0]["data"]["duration"]["x-ax"].sort();
     var x = [];
-    x[0] = 'x';
-    for (var k=0; k<xdata.length; k++) {
-        x[parseInt(k) + 1] = new Date(xdata[k]);
+    var y = [];
+    for(var i=0; i<route.data.length; i++){
+        
+        var durationData = route.data[i].data.duration.data;
+        var xdata = [];
+        var ydata = [];
+        splitToArraySorted(durationData, xdata, ydata);
+        //
+        // X - AX
+        //
+        x = [];
+        x[0] = 'x';
+        for (var k=0; k<xdata.length; k++) {
+            x[parseInt(k) + 1] = new Date(new Number(xdata[k]));
+        }
+        //
+        // Y - AX
+        //
+        var y2 = [];
+        y2[0] = route.data[i].provider;
+        for (var k=0; k<ydata.length; k++) {
+            y2[parseInt(k) + 1] = ydata[k];
+        }
+        y.push(y2);
     }
     
+    
+    
+    
+    
+    
     //
-    // DRAW RESULTS
+    // DRAW RESULTS (TABLE)
     //
     var divOuter = $("<div />").addClass("outer");
     var divInner = $("<div />").addClass("inner");
@@ -72,29 +116,29 @@ function viewAnalyseData(data){
     var row;;
     var col;
     
+    
     //HEADER
     row = $("<tr />");
     col = $("<th />").text("");
     row.append(col);
-    console.log(x.length);
     for(i=1; i<x.length; i++){
-        col = $("<td />").text(x[i].format("dd/mm")+"\n"+x[i].format("HH:MM"));
+        col = $("<td />").text(x[i].format("dd/mm")+"\n"+x[i].format("HH:MM")); 
         row.append(col);
     }
     table.append(row);
     
-    //DATA
     
-    for(i=0; i<route.data.length; i++){
-        providerData = route.data[i];
+    //DATA
+    for(k=0; k<y.length; k++){
         row = $("<tr />");
-        col = $("<th />").text(providerData.provider);
+        var providerName = y[k][0];
+        col = $("<th />").text(providerName);
         row.append(col);        
-        ydata = providerData.data.duration["y-ax"];
-        console.log(ydata.length);
-        for(j=0; j<ydata.length; j++){
-            col = $("<td />").text(Math.floor(ydata[j]/60/1000)+" min");
-            row.append(col);     
+        console.log(y[k]);
+        for(i=1; i<y[k].length; i++){
+            ydata = y[k][i];
+            col = $("<td />").text(Math.floor(ydata/60/1000)+" min");
+            row.append(col);  
         }
         table.append(row);
     }
@@ -104,6 +148,88 @@ function viewAnalyseData(data){
     divOuter.append(divInner);
     $("#tableTab").append(divOuter);
     $("#tableTab").addClass("scrollable horizontal");
+    
+    
+    
+    //
+    // DRAW RESULTS (GRAPH)
+    //
+    // COLUMNS
+    var columns = [];
+    columns.push(x);
+    for(var i=0; i<y.length; i++){
+        columns.push(y[i]);
+    }
+    // COLORS
+    var colorMapping = {};
+    var colors = ['#1565c0','#ffb300','#f44336','#7cb342','#26a69a'];
+    for(var i=0; i<y.length; i++){
+        colors[y[i][0]] = colors[i];
+    }
+
+    
+    chart = c3.generate({
+        bindto: '#chart',
+        data: {
+            x: 'x',
+            columns: columns,
+            colors: colorMapping
+        },
+        grid: {
+            y: {
+                show: true,
+                ticks: 5
+            }
+        },
+        axis: {
+            x: {
+                show: true,
+                type: 'timeseries',
+                tick: {
+                    format: '%a %I:%M',
+                    culling: {
+                        max: 7 // the number of tick texts will be adjusted to less than this value
+                    }
+                },
+                label: {// ADD
+                    text: 'Tijdstip',
+                    position: 'outer-center'
+                }
+            },
+            y: {
+                type: 'timeseries',
+                tick: {
+                    format: d3.time.format('%M\'%S\"'),
+                    culling: 2// for some reason this doesn't work
+                },
+                label: {// ADD
+                    text: 'Reistijd',
+                    position: 'outer-middle'
+                }
+            }
+        },
+        tooltip: {
+            format: {
+                value: function (v) {
+                    var mind = v / 60000;
+                    var minutes = Math.floor(mind);
+
+                    var secd = (mind % minutes) * 60;
+                    var seconds = Math.floor(secd);
+
+                    var string = minutes + 'm ' + seconds;
+                    return string;
+                }
+//            value: d3.format(',') // apply this format to both y and y2
+            }
+        },
+        subchart: {
+            show: true
+        },
+        zoom: {
+            enabled: true
+        }
+    });
     
     
     
