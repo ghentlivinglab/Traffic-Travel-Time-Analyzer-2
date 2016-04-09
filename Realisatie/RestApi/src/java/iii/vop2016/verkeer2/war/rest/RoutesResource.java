@@ -327,32 +327,27 @@ public class RoutesResource {
         JSONObject result = new JSONObject();
         Map<Date, Integer> recentData = beans.getDataProvider().getRecentData(route, providers);
 
-        List<Date> timestamps = new ArrayList<>();
-        timestamps.addAll(recentData.keySet());
-        List<Integer> durations = new ArrayList<>();
-        durations.addAll(recentData.values());
 
-        result.put("duration", JSONData("TrendDurations " + route.getId(),
+        result.put("duration", JSONData("recentData " + route.getId(),
                 "This data are the durations over the last hour for route " + route.getId(),
-                timestamps,
-                durations));
+                recentData));
         return result;
     }
 
-    private JSONObject JSONData(String name, String description, List<Date> timestamps, List<Integer> data) {
+    private JSONObject JSONData(String name, String description, Map<Date,Integer> dataMap) {
         JSONObject result = new JSONObject();
         result.put("name", name);
         result.put("description", description);
-        JSONArray tm = new JSONArray();
-        for (Date d : timestamps) {
-            tm.put(d.getTime());
+        
+        JSONObject data= new JSONObject();
+        List<Date> timestamps=new ArrayList<>();
+        timestamps.addAll(dataMap.keySet());
+        for (Date timestamp : timestamps) {
+            result.put(String.valueOf(timestamp.getTime()),dataMap.get(timestamp));
         }
-        result.put("x-ax", tm);
-        JSONArray datarow = new JSONArray();
-        for (int i : data) {
-            datarow.put(i);
-        }
-        result.put("y-ax", datarow);
+        
+        
+        result.put("data", data);
         return result;
     }
 
@@ -377,19 +372,14 @@ public class RoutesResource {
             //mapVelocities=beans.getDataProvider().getDataVelocityByDay(route,providers,day);            
         }
 
-        List<Date> timestamps = new ArrayList<>();
-        timestamps.addAll(mapDurations.keySet());
-        List<Integer> durations = new ArrayList<>();
-        durations.addAll(mapDurations.values());
-        List<Integer> velocities = new ArrayList<>();
-        durations.addAll(mapVelocities.values());
+        
 
         result.put("duration", JSONData("durations " + day + " " + route.getId(),
                 "This data are the durations on a " + day + " for route " + route.getId(),
-                timestamps, durations));
+                mapDurations));
         result.put("velocity", JSONData("velocities " + day + " " + route.getId(),
                 "This data are the velocities on a " + day + " for route " + route.getId(),
-                timestamps, velocities));
+                mapVelocities));
         return result;
     }
 
@@ -405,19 +395,13 @@ public class RoutesResource {
             mapVelocities = beans.getDataProvider().getDataVelocityByDayInWorkWeek(route, providers);
         }
 
-        List<Date> timestamps = new ArrayList<>();
-        timestamps.addAll(mapDurations.keySet());
-        List<Integer> durations = new ArrayList<>();
-        durations.addAll(mapDurations.values());
-        List<Integer> velocities = new ArrayList<>();
-        durations.addAll(mapVelocities.values());
 
         result.put("duration", JSONData("rushhourDurations " + route.getId(),
                 "This data are the durations for a workday for route " + route.getId(),
-                timestamps, durations));
+                mapDurations));
         result.put("velocity", JSONData("rushhourVelocities " + route.getId(),
                 "This data are the velocities for a workday for route " + route.getId(),
-                timestamps, velocities));
+                mapVelocities));
         return result;
     }
 
@@ -442,19 +426,13 @@ public class RoutesResource {
         mapDurations = beans.getDataProvider().getData(route, providers, startTimes.get(periodnumber), endTimes.get(periodnumber));
         mapVelocities = beans.getDataProvider().getDataVelocity(route, providers, startTimes.get(periodnumber), endTimes.get(periodnumber));
 
-        List<Date> timestamps = new ArrayList<>();
-        timestamps.addAll(mapDurations.keySet());
-        List<Integer> durations = new ArrayList<>();
-        durations.addAll(mapDurations.values());
-        List<Integer> velocities = new ArrayList<>();
-        durations.addAll(mapVelocities.values());
 
         obj.put("duration", JSONData("Period" + periodnumber + "Durations " + route.getId(),
                 "This data are the durations for period " + periodnumber + " for route " + route.getId(),
-                timestamps, durations));
+                mapDurations));
         obj.put("velocity", JSONData("Period" + periodnumber + "Velocities " + route.getId(),
                 "This data are the velocities for period " + periodnumber + " for route " + route.getId(),
-                timestamps, velocities));
+                mapVelocities));
 
         result.put("data", obj);
         return result;
@@ -487,19 +465,13 @@ public class RoutesResource {
             //mapVelocities=beans.getDataProvider().getDataVelocity(route,lprovider);               
         }
 
-        List<Date> timestamps = new ArrayList<>();
-        timestamps.addAll(mapDurations.keySet());
-        List<Integer> durations = new ArrayList<>();
-        durations.addAll(mapDurations.values());
-        List<Integer> velocities = new ArrayList<>();
-        durations.addAll(mapVelocities.values());
 
         obj.put("duration", JSONData("providerDurations " + provider + " " + route.getId(),
                 "This data are the duration provided by " + provider + " for route " + route.getId(),
-                timestamps, durations));
+                mapDurations));
         obj.put("velocity", JSONData("providerVelocities " + provider + " " + route.getId(),
                 "This data are the velocities provided by " + provider + " for route " + route.getId(),
-                timestamps, velocities));
+                mapVelocities));
 
         result.put("data", obj);
         return result;

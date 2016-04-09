@@ -7,6 +7,8 @@ package iii.vop2016.verkeer2.ejb.components;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -42,6 +44,7 @@ public class Route implements IRoute {
         for (IGeoLocation loc : getGeolocations()) {
             l.add(new GeoLocation(loc));
         }
+        Collections.sort(l, new GeoLocationComparator());
         setGeolocations(l);
     }
 
@@ -62,7 +65,6 @@ public class Route implements IRoute {
 
     @Override
     public List<IGeoLocation> getGeolocations() {
-        geolocations.sort(new GeoLocationComparator());
         return geolocations;
     }
 
@@ -92,9 +94,6 @@ public class Route implements IRoute {
     @Override
     public void setGeolocations(List<IGeoLocation> locations) {
         geolocations = locations;
-        for (int i = 0; i < geolocations.size(); i++) {
-            geolocations.get(i).setSortRank(i + 1);
-        }
     }
 
     @Override

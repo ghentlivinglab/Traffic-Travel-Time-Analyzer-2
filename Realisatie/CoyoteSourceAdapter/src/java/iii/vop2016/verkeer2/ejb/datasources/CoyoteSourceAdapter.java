@@ -19,9 +19,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.json.JSONObject;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 /**
  *
@@ -36,7 +38,7 @@ public class CoyoteSourceAdapter implements CoyoteSourceAdapterRemote {
 
     private static long lastDownload = 0;
     private static long timeDifference = 240000; // 4 min = 4*60*1000
-    private static String downloadedString = null;
+    private static JSONObject downloadedJSON = null;
 
     @PostConstruct
     public void init() {
@@ -55,6 +57,7 @@ public class CoyoteSourceAdapter implements CoyoteSourceAdapterRemote {
 
         //ik kijk na of er al een keer gedownload is
         //of of de huidige timeStamp minstens 4 minuten groter is dan lastDownload
+        //anders gaat hij elke keer het volledige JSON-object ophalen wat ook mag maar dit is beter denk ik
         if (lastDownload == 0 || (currentLong - timeDifference) > lastDownload) {
             try {
                 download();
@@ -63,115 +66,64 @@ public class CoyoteSourceAdapter implements CoyoteSourceAdapterRemote {
             }
         }
 
-        //onderstaande code zal ik nog opkuisen & aanvullen met excepties en dergelijke
+        rd = new RouteData();
+        String routeName = route.getName();
+
+        //hoofdletter Northbound/northbound of Southbound/
+        int index = routeName.indexOf(')');
+        routeName = routeName.substring(0, index + 1) + " " + routeName.substring(index + 2, index + 3).toUpperCase() + routeName.substring(index + 3);
+
+        String geoStart = route.getStartLocation().getName();
+        String geoEnd = route.getEndLocation().getName();
+        
+        //System.out.println(routeName + " - " + geoStart + " - " + geoEnd);
+        
         try {
-            rd = new RouteData();
-            String baseString = route.getName();
 
-            String baseToRegexString = baseString.replaceAll("\\(", "\\\\(").replaceAll("\\)", "\\\\)");
-            //  System.out.println(test);
+            JSONObject traject = downloadedJSON.getJSONObject(routeName + " - " + geoStart + " - " + geoEnd);
 
-            String pattern = "(?m)((" + baseToRegexString + "(.*))\\+.*)";
-            //  System.out.println(pattern);
-            // Create a Pattern object
-            Pattern p1 = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+            seconds = traject.getBigDecimal("real_time").intValue();
+            //System.out.println(seconds);
 
-            // Now create matcher object.
-            Matcher m1 = p1.matcher(downloadedString);
-            String coyoteString = null;
-            if (m1.find()) {
-                coyoteString = m1.group(0).trim();
-                //  System.out.println(coyoteString);
-                //    String s2 = m1.group(2).trim();
-                //     System.out.println("Traject: " + s2);
-                //   System.out.println("Found value: " + m.group(1) );
-                // System.out.println("Found value: " + m.group(4) );
-            } else {
-                System.out.println("NO MATCH");
-            }
-
-            String pattern2 = "\\((\\d*)m\\)";
-
-            // Create a Pattern object
-            Pattern p2 = Pattern.compile(pattern2);
-            // Now create matcher object.
-            Matcher m2 = p2.matcher(coyoteString);
-            if (m2.find()) {
-                seconds = Integer.parseInt(m2.group(1)) * 60;
-                //System.out.println("Reistijd: " + seconds);
-                //   System.out.println("Found value: " + m.group(1) );
-                //   System.out.println("Found value: " + m.group(2) );
-            } else {
-                System.out.println("NO MATCH");
-            }
-
-            String pattern3 = "(\\d*\\.\\d*) km";
-
-            // Create a Pattern object
-            Pattern r3 = Pattern.compile(pattern3);
-            // Now create matcher object.
-            Matcher m3 = r3.matcher(coyoteString);
-            if (m3.find()) {
-                distance = (int) (Double.parseDouble(m3.group(1)) * 1000);
-                //  int s = j;
-                //System.out.println("Afstand: " + distance);
-                //   System.out.println("Found value: " + m.group(1) );
-                //   System.out.println("Found value: " + m.group(2) );
-            } else {
-                System.out.println("NO MATCH");
-            }
+            distance = traject.getInt("length");
+            //System.out.println(distance);
 
             rd.setProvider(getProviderName());
             rd.setDistance(distance);
             rd.setDuration(seconds);
             rd.setRouteId(route.getId());
             rd.setTimestamp(new Date());
+            
         } catch (Exception e) {
-            throw new DataAccessException("Can't find Regex-match in " + providerName + "for this route: " + route.getName());
+            throw new DataAccessException("Can't find JSON-match in " + providerName + " for this route: " + route.getName());
         }
         return rd;
     }
 
-    private WebDriver startDriver() throws URLException {
-        Date current = new Date();
-        lastDownload = current.getTime(); //laatste download = nu
-        WebDriver driver = null;
-        try {
-            driver = new FirefoxDriver();
-            driver.get("https://maps.coyotesystems.com/traffic/");
-            //  driver.manage().window().maximize();
-            driver.findElement(By.name("login")).sendKeys(login);
-            driver.findElement(By.name("password")).sendKeys(password);
-            driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
-            driver.findElement(By.xpath("//input[@type='submit']")).click();
-        } catch (Exception e) {
-            throw new URLException("Website " + providerName + " doesn't work");
-        }
-        return driver;
-    }
-
     private void download() throws URLException {
         try {
-            WebDriver driver = startDriver();
-            driver.findElement(By.id("location_list")).click(); //p1
-            downloadedString = driver.findElement(By.id("path_list")).findElement(By.xpath("table/tbody")).getText(); //overschrijf oude downloadedString
+            Connection.Response loginForm = Jsoup.connect("https://maps.coyotesystems.com/traffic/")
+                    .method(Connection.Method.GET)
+                    .execute();
 
-            driver.findElement(By.id("path_list")).findElement(By.className("next")).click(); //p2
-            downloadedString += driver.findElement(By.id("path_list")).findElement(By.xpath("table/tbody")).getText();
+            Document document = Jsoup.connect("https://maps.coyotesystems.com/traffic/")
+                    .data("cookieexists", "false")
+                    .data("login", login)
+                    .data("password", password)
+                    .cookies(loginForm.cookies())
+                    .post();
 
-            driver.findElement(By.id("path_list")).findElement(By.className("next")).click(); //p3
-            downloadedString += driver.findElement(By.id("path_list")).findElement(By.xpath("table/tbody")).getText();
-
-            driver.findElement(By.id("path_list")).findElement(By.className("next")).click(); //p4
-            downloadedString += driver.findElement(By.id("path_list")).findElement(By.xpath("table/tbody")).getText();
-
-            driver.close();
+            Document document2 = Jsoup.connect("https://maps.coyotesystems.com/traffic/ajax/get_perturbation_list.ajax.php")
+                    .method(Connection.Method.GET)
+                    .cookies(loginForm.cookies())
+                    .ignoreContentType(true)
+                    .get();
+            Element body = document2.body();
+            JSONObject obj = new JSONObject(body.text());
+            downloadedJSON = obj.getJSONObject("Gand");
         } catch (Exception e) {
             throw new URLException("Website " + providerName + " doesn't work");
         }
-        //ofwel laten we de driver altijd openstaan?
-        //voordeel: hij moet Firefox niet altijd opnieuw starten
-        //nadeel: misschien geraakt hij na een tijdje zijn sessie kwijt / wat als Firefox vanzelf crasht na een uur of 3?
     }
 
     @Override
