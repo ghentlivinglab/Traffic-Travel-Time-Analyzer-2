@@ -65,6 +65,15 @@ public class DataproviderDAO {
     public List<DataProvider> getSelectedProviders() {
         return selectedProviders;
     }
+    
+    public boolean isSelected(DataProvider provider) {
+        int i=0;
+        while(i<selectedProviders.size()){
+            if(selectedProviders.get(i).equals(provider)) return true;
+            i++;
+        }
+        return false;
+    }
 
     
     private DataProvider getDataProvider(String s) {

@@ -19,9 +19,10 @@
         <link rel="icon" href="/web/resources/img/favicon.ico" type="image/x-icon" />
 
         <!--Import materialize.css-->  
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+        <link type="text/css" rel="stylesheet" href="#{requestScope.resourceURLcss}/c3.min.css"  media="screen,projection" />
         <link type="text/css" rel="stylesheet" href="#{requestScope.resourceURLcss}/materialize.css"  media="screen,projection" />
         <link type="text/css" rel="stylesheet" href="#{requestScope.resourceURLcss}/app.css"  media="screen,projection" />
-        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
       
         <!--Let browser know website is optimized for mobile-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -107,6 +108,9 @@
         
         <script src="#{requestScope.resourceURLjs}/classie.js"></script>
         <script src="#{requestScope.resourceURLjs}/sidebarEffects.js"></script>
+        
+        
+        <script type="text/javascript" src="#{requestScope.resourceURLjs}/date.format.js" />
         
         <ui:insert name="javascript"></ui:insert>
         

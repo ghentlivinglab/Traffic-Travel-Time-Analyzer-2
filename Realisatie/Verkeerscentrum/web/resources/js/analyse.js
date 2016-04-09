@@ -70,6 +70,24 @@ function setActiveNavTab(btn){
     btn.parent("li").addClass("active");
 }
 
+function switchToModus(modus){
+    if(modus === null){
+        modus = "graph";
+    }
+    var btn, tab;
+    switch(modus){
+        case "graph": btn = $("#btnSwitchToGraph"); tab = $("#chartTab"); break;
+        case "table": btn = $("#btnSwitchToTable"); tab = $("#tableTab"); break;
+        case "map": btn = $("#btnSwitchToMap"); tab = $("#mapTab"); break;
+    }
+
+    $(".modusBtnGroup li").removeClass("active");
+    btn.parent().addClass("active");
+    $(".analyseContent > div").hide();
+    tab.show();
+}
+
+
 $(document).ready(function(){
 
   $("#availableRoutesList label").mouseover(showRoutePreview)
@@ -158,6 +176,16 @@ $(document).ready(function(){
          });
   });
   
+  $("#btnSwitchToGraph").click(function(){
+        switchToModus("graph");
+  });
+
+
+  $("#btnSwitchToTable").click(function(){
+        switchToModus("table");
+  });
+  
+  switchToModus("graph");
 
 });
 
@@ -188,9 +216,34 @@ $("#btnAddNewPeriod").click(function(){
     $("[name=periodsStart]").val(oldPeriodStart+""+newPeriodStart);
     $("[name=periodsEnd]").val(oldPeriodEnd+""+newPeriodEnd);
    
-
-  
 });
+
+$("#btnSelectRoutes").click(function(){
+    /*switch($(this).data("multiplicity")){
+        case "multi": 
+            for(i=0; i<20; i++){
+                 $("#availableRoutesList")
+                         .append($("<li />")
+                         .append($("<input />").attr("id","route"+i).attr("type","checkbox"))
+                         .append($("<label />").attr("for","route"+i).mouseover(showRoutePreview).mouseleave(hideRoutePreview).click(addRouteToList)
+                         .append($("<span />").text("R4: Gent - Zelzate")
+                         )));
+            }
+             break;
+        case "single": 
+             for(i=0; i<20; i++){
+                 $("#availableRoutesList")
+                         .append($("<li />")
+                         .append($("<input />").attr("id","route"+i).attr("type","radio").attr("name","route"))
+                         .append($("<label />").attr("for","route"+i).mouseover(showRoutePreview).mouseleave(hideRoutePreview).click(addRouteToList)
+                         .append($("<span />").text("R4: Gent - Zelzate")
+                         )));
+                }
+            break;
+    }
+    */
+    $('#selectRoutesModel').openModal();
+ });
 
                   
 
@@ -204,30 +257,6 @@ $(document).ready(function() {
         weekStart : 1        
     });
     
-    $("#selectRoutes").click(function(){
-        switch($(this).data("multiplicity")){
-            case "multi": 
-                for(i=0; i<20; i++){
-                     $("#availableRoutesList")
-                             .append($("<li />")
-                             .append($("<input />").attr("id","route"+i).attr("type","checkbox"))
-                             .append($("<label />").attr("for","route"+i).mouseover(showRoutePreview).mouseleave(hideRoutePreview).click(addRouteToList)
-                             .append($("<span />").text("R4: Gent - Zelzate")
-                             )));
-                }
-                 break;
-            case "single": 
-                 for(i=0; i<20; i++){
-                     $("#availableRoutesList")
-                             .append($("<li />")
-                             .append($("<input />").attr("id","route"+i).attr("type","radio").attr("name","route"))
-                             .append($("<label />").attr("for","route"+i).mouseover(showRoutePreview).mouseleave(hideRoutePreview).click(addRouteToList)
-                             .append($("<span />").text("R4: Gent - Zelzate")
-                             )));
-                    }
-                break;
-        }
-        $('#selectRoutesModel').openModal();
-     });
+    
 });
 */

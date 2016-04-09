@@ -1,0 +1,42 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 16-mrt-2016, 18:04:52
+    Author     : Simon
+*/
+
+#chart {
+    width: 1200px;
+    height: 560px
+}
+
+.c3 svg g g.c3-axis.c3-axis-x {
+    font: 12px sans-serif;
+    font-weight: bold;
+}
+
+.c3 svg g g.c3-axis.c3-axis-y {
+    font: 12px sans-serif;
+    font-weight: bold;
+    
+
+}
+.c3 .c3-line{
+    stroke-width: 2px;
+}
+
+.c3-legend-item-hidden{
+    opacity: 0.3;
+}
+
+.c3-tooltip{
+    opacity: 1;
+} 
+
+.c3-tooltip th{
+   background-color: #1565c0; 
+}
+

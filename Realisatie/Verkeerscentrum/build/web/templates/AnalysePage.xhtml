@@ -1,0 +1,292 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+    
+    
+    
+    <ui:composition template="./HeaderBody.xhtml">
+        
+        <ui:define name="page"> Analyse </ui:define>
+        
+        <ui:define name="content">
+            
+            
+            <div class="analyse">
+                
+                <div id="st-container" class="st-container">
+                    
+                    <!-- content push wrapper -->
+                    <div class="st-pusher">
+                        <section class="st-menu st-effect-3" id="menu-3">
+                            
+                            <div class="sidebar">
+                                <form method="GET" id="formRefreshAnalyse">   
+                                    <div class="header">
+                                        <div class="row">
+                                            <div class="col s1 btn_back">
+                                                <h:link outcome="pretty:analyse">
+                                                    <i class="material-icons">keyboard_backspace</i>
+                                                </h:link>
+                                            </div>
+                                            <div class="col s10 title"><span> Databronnen vergelijken </span></div>
+                                            <div class="col s1 btn_back">
+                                                <a href="#!" id="btnResetSidebar">
+                                                    <!---  class="btnRefreshAnalyse" -->
+                                                    <i class="material-icons">close</i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    
+                                    <ul class="collapsible" data-collapsible="accordion">
+                                        <li>
+                                            <div class="collapsible-header"><i class="material-icons">filter_drama</i>Periode</div>
+                                            <div class="collapsible-body">
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                <section>
+                                                    <div class="row">
+                                                        <div class="col s5 valign-wrapper">
+                                                            <p class="valign">Begin</p>
+                                                        </div>
+                                                        <div class="col s7"> 
+                                                            <h:inputText value="#{DataSourcesComparer.period.key}" class="datetimepicker" id="periodStart" a:name="periodStartDummy">  
+                                                                <f:convertDateTime pattern="dd MMMM YYYY - HH:mm"/>  
+                                                            </h:inputText>
+                                                            <h:inputText value="#{DataSourcesComparer.period.key.getTime()}" a:name="periodStart" a:type="hidden" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col s5 valign-wrapper">
+                                                            <p class="valign">Eind</p>
+                                                        </div>
+                                                        <div class="col s7"> 
+                                                            <h:inputText value="#{DataSourcesComparer.period.value}" class="datetimepicker" id="periodEnd" a:name="periodEndDummy">  
+                                                                <f:convertDateTime pattern="dd MMMM YYYY - HH:mm"/>  
+                                                            </h:inputText>
+                                                            <h:inputText value="#{DataSourcesComparer.period.value.getTime()}" a:name="periodEnd" a:type="hidden" />
+                                                        </div>
+                                                    </div>
+                                                </section>
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="collapsible-header"><i class="material-icons">place</i>Trajecten</div>
+                                            <div class="collapsible-body">
+                                                
+                                                
+                                                
+                                                <ul id="routeList">
+                                                    <c:forEach var="route" items="#{routeDAO.selectedRoutes}">
+                                                        <li>
+                                                            <h:outputText value="#{route.name}"/> 
+                                                            <input type="hidden" name="routeId" value="#{route.id}" /> 
+                                                        </li>
+                                                    </c:forEach>
+                                                </ul>
+                                                
+                                                <a href="#!" class="btn" id="btnSelectRoutes" data-multiplicity="single">Selecteer trajecten</a> 
+                                                
+                                                
+                                                
+                                                
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="collapsible-header"><i class="material-icons">whatshot</i>Databronnen</div>
+                                            <div class="collapsible-body">
+                                                
+                                                
+                                                <ul id="routeList">
+                                                    <c:forEach var="provider" items="#{dataproviderDAO.availableProviders}">
+                                                        <c:if test="#{dataproviderDAO.isSelected(provider)}">
+                                                            <li> 
+                                                                <p>
+                                                                    <input type="checkbox" name="provider" value="#{provider.name}" class="filled-in" id="chk#{provider.name}" checked="checked" />
+                                                                    <label for="chk#{provider.name}">#{provider.name}</label>
+                                                                </p> 
+                                                            </li>
+                                                        </c:if>
+                                                        <c:if test="#{ not dataproviderDAO.isSelected(provider)}">
+                                                            <li> 
+                                                                <p>
+                                                                    <input type="checkbox" name="provider" value="#{provider.name}" class="filled-in" id="chk#{provider.name}"  />
+                                                                    <label for="chk#{provider.name}">#{provider.name}</label>
+                                                                </p> 
+                                                            </li>
+                                                        </c:if>
+                                                        
+                                                    </c:forEach>
+                                                </ul>
+                                                
+                                                
+                                                
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    
+                                    <button type="submit" class="btn btn-large" id="refreshAnalyse">Analyseren</button>
+                                    
+                                    
+                                </form> 
+                            </div>
+                        </section>
+                        
+                        
+                        <div class="st-content"><!-- this is the wrapper for the content -->
+                            <div class="st-content-inner"><!-- extra div for emulating position:fixed of the menu -->
+                                
+                                <div class="page">
+                                    
+                                    
+                                    <div class="header">
+                                        <div class="row">
+                                            <div class="col m3">
+                                                <a href="#!" class="btn st-effect-trigger" data-effect="st-effect-3">
+                                                    <i class="material-icons left">mode_edit</i>
+                                                    Wijzig aanvraag
+                                                </a>
+                                            </div>
+                                            <div class="col m8">
+                                                <h3><h:outputText value="#{DataSourcesComparer.title}" /></h3> 
+                                                <span><h:outputText value="#{DataSourcesComparer.subTitle}" /></span>
+                                            </div>
+                                            <div class="col m1">
+                                                <h:link outcome="pretty:analyse" class="white-text">
+                                                    <i class="material-icons">clear_all</i>
+                                                </h:link>
+                                            </div>
+                                            
+                                        </div>  
+                                    </div>
+                                    
+                                    <div class="content">
+                                        
+                                        
+                                        
+                                        <ui:insert name="analyseContent">Content</ui:insert>
+                                        
+                                        
+                                        
+                                    </div>
+                                </div>
+                            </div><!-- /st-content-inner -->
+                        </div><!-- /st-content -->
+                    </div><!-- /st-pusher -->
+                    
+                </div><!-- /st-container -->
+                
+            </div>
+            
+            
+            <!-- Modal Structure -->
+            <div id="selectRoutesModel" class="modal modal-fixed-footer analyse">
+                <div class="modal-content">
+                    <h4>Trajecten selecteren</h4>
+                    <p>Selecteer een of meerdere traject(en) waarover je data wil vergelijken</p>
+                    <div class="row">
+                        <div class="col s6">
+                            
+                            <div class="multiselectsection">
+                                <ul id="availableRoutesList" class="availableRoutesList">
+                                    <c:forEach var="route" items="#{routeDAO.availableRoutes}">
+                                        <c:if test="#{routeDAO.isSelected(route)}">
+                                            <ol>
+                                                <input id="route#{route.id}" type="radio" value="#{route.id}" name="routeId" checked="checked" />
+                                                <label for="route#{route.id}"><span>#{route.name}</span></label>
+                                            </ol>
+                                        </c:if>
+                                        <c:if test="#{ not routeDAO.isSelected(route)}">
+                                            <ol>
+                                                <input id="route#{route.id}" type="radio" value="#{route.id}" name="routeId" />
+                                                <label for="route#{route.id}"><span>#{route.name}</span></label>
+                                            </ol>
+                                        </c:if>
+                                        
+                                    </c:forEach>
+                                </ul>
+                            </div>
+                            
+                        </div>
+                        <div class="col s6">
+                            <img src="" class="responsive-img" id="routePreview"  />
+                        </div>
+                        
+                    </div>
+                    
+                    
+                </div>
+                <div class="modal-footer">
+                    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Ok</a>
+                </div>
+            </div>
+            
+      
+            
+            
+        </ui:define>
+        
+        
+        
+        
+        <ui:define name="javascript">
+            
+            
+            <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse.js" />
+            
+            <script type="text/javascript" src="#{requestScope.resourceURLjs}/d3.min.js" />
+            <script type="text/javascript" src="#{requestScope.resourceURLjs}/c3.min.js" />
+            <script type="text/javascript" src="#{requestScope.resourceURLjs}/datasourcecomparer.js" />
+            
+            <script>
+                (function () {
+                    var selList = document.getElementById('availableRoutesList'),
+                    items = selList.querySelectorAll('li');
+
+                    // fill the initial checked elements (mozilla)
+                    [].slice.call(items).forEach(function (el) {
+                        el.parentNode.className = el.checked ? 'selected' : '';
+                    });
+
+                    function checkUncheck(el) {
+                        el.parentNode.className = el.checked ? '' : 'selected';
+                        el.checked = !el.checked;
+                    }
+
+
+                })();
+            </script>
+            
+            
+        </ui:define>
+        
+    </ui:composition>
+    
+    
+    
+    
+    
+</html>

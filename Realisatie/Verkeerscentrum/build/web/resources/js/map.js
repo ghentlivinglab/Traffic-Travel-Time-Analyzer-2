@@ -64,11 +64,9 @@ function setTimerProgress(){
 }
 
 function initTimer(data){
-    console.log(data);
-    var interval = Math.floor(data.interval*100/60);
+    var interval = Math.floor(data.interval/200*1000);
     setInterval(setTimerProgress,interval);
     timerProgress = data.percentDone;
-    alert("om de "+interval+"ms + reeds gedaan = "+data.percentDone);
 }
 
 function refreshLiveData(){

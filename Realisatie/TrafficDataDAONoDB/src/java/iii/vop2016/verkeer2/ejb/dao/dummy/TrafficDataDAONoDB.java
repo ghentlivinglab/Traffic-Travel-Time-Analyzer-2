@@ -7,6 +7,7 @@ package iii.vop2016.verkeer2.ejb.dao.dummy;
 
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
+import iii.vop2016.verkeer2.ejb.dao.AggregationContainer;
 import iii.vop2016.verkeer2.ejb.datasources.ISourceAdapter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -73,7 +74,6 @@ public class TrafficDataDAONoDB implements TrafficDataDAONoDBRemote {
         return results;
     }
 
-    @Override
     public List<IRouteData> getData(ISourceAdapter adapter, Date time1, Date time2) {
         List<IRouteData> results = new ArrayList<>();
         for(IRouteData d : data){
@@ -89,9 +89,43 @@ public class TrafficDataDAONoDB implements TrafficDataDAONoDBRemote {
         return null;
     }
 
-    @Override
     public List<IRouteData> getCurrentTrafficSituation(IRoute route, ISourceAdapter adapter) {
         return null;
+    }
+
+    @Override
+    public List<IRouteData> getData(String adapter, Date time1, Date time2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<IRouteData> getCurrentTrafficSituation(IRoute route, List<String> adapter) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public IRouteData getDataByID(long id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void fillDummyData(long i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<IRouteData> getData(IRoute route, List<Date> startList, List<Date> endList) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Long> getAggregateData(IRoute route, Date time1, Date time2, AggregationContainer... aggr) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Long> getAggregateData(IRoute route, List<Date> startList, List<Date> endList, AggregationContainer... aggr) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     

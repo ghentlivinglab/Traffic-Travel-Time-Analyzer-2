@@ -28,14 +28,7 @@ public class DataSourcesComparer extends AnalysePage implements ITableView, IGra
     private Pair<Date,Date> period = null;
     private List<DataProvider> dataproviders = null;
 
-    public Route getRoute() {
-        return route;
-    }
-
-    public Pair<Date, Date> getPeriod() {
-        return period;
-    }
-    
+        
     public DataSourcesComparer() {
         super();
     }
@@ -63,14 +56,24 @@ public class DataSourcesComparer extends AnalysePage implements ITableView, IGra
         this.period = periodDAO.getPeriod();
     }
 
+    @Override
     public void setDataproviderDAO(DataproviderDAO dataproviderDAO) {
         super.setDataproviderDAO(dataproviderDAO);
         this.dataproviders = dataproviderDAO.getSelectedProviders();
     }
 
+    @Override
     public void setRouteDAO(RouteDAO routeDAO) {
         super.setRouteDAO(routeDAO);
         this.route = routeDAO.getSelectedRoutes().get(0);
+    }
+    
+    public Route getRoute() {
+        return route;
+    }
+
+    public Pair<Date, Date> getPeriod() {
+        return period;
     }
     
     

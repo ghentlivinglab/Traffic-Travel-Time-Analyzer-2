@@ -73,7 +73,7 @@
         height: 100%;
         overflow-y:auto;
 
-        .viewSwitch {
+        .modusBtnGroup {
             
             li{
                 
@@ -246,6 +246,15 @@
                 }
             }
         }
+        
+        #refreshAnalyse{
+            @extend .green;
+            width: 100%;
+            color: white;
+            position: absolute;
+            bottom: 0;
+        }
+        
         
 
         

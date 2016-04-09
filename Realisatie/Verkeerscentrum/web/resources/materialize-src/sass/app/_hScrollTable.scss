@@ -1,0 +1,27 @@
+
+.scrollable.horizontal{
+table {
+  table-layout: fixed; 
+  width: 100%;
+  *margin-left: -100px;/*ie7*/
+}
+td, th {
+  vertical-align: top;
+  border-top: 1px solid #ccc;
+  padding:10px;
+  width:100px;
+}
+th {
+  position:absolute;
+  *position: relative; /*ie7*/
+  left:0; 
+  width:10%;
+}
+.outer {position:relative}
+.inner {
+  overflow-x:scroll;
+  overflow-y:visible;
+  width: 90%; 
+  margin-left:10%;
+}
+}

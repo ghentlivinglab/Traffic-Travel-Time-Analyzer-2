@@ -5,6 +5,7 @@
  */
 package iii.vop2016.verkeer2.bean.analyse;
 
+import iii.vop2016.verkeer2.bean.components.DataProvider;
 import iii.vop2016.verkeer2.bean.components.Route;
 import iii.vop2016.verkeer2.bean.helpers.JSONMethods;
 import java.io.BufferedReader;
@@ -93,6 +94,14 @@ public class RouteDAO {
         return null;
     }
     
+    public boolean isSelected(Route route) {
+        int i=0;
+        while(i<selectedRoutes.size()){
+            if(selectedRoutes.get(i).equals(route)) return true;
+            i++;
+        }
+        return false;
+    }
     
     
 }

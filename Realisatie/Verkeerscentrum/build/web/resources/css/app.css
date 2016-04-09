@@ -814,85 +814,85 @@
 .teal-text.text-accent-4 {
   color: #00bfa5 !important; }
 
-.green.lighten-5 {
+.green.lighten-5, .analyse .sidebar .lighten-5#refreshAnalyse {
   background-color: #E8F5E9 !important; }
 
 .green-text.text-lighten-5 {
   color: #E8F5E9 !important; }
 
-.green.lighten-4 {
+.green.lighten-4, .analyse .sidebar .lighten-4#refreshAnalyse {
   background-color: #C8E6C9 !important; }
 
 .green-text.text-lighten-4 {
   color: #C8E6C9 !important; }
 
-.green.lighten-3 {
+.green.lighten-3, .analyse .sidebar .lighten-3#refreshAnalyse {
   background-color: #A5D6A7 !important; }
 
 .green-text.text-lighten-3 {
   color: #A5D6A7 !important; }
 
-.green.lighten-2 {
+.green.lighten-2, .analyse .sidebar .lighten-2#refreshAnalyse {
   background-color: #81C784 !important; }
 
 .green-text.text-lighten-2 {
   color: #81C784 !important; }
 
-.green.lighten-1 {
+.green.lighten-1, .analyse .sidebar .lighten-1#refreshAnalyse {
   background-color: #66BB6A !important; }
 
 .green-text.text-lighten-1 {
   color: #66BB6A !important; }
 
-.green {
+.green, .analyse .sidebar #refreshAnalyse {
   background-color: #4CAF50 !important; }
 
 .green-text {
   color: #4CAF50 !important; }
 
-.green.darken-1 {
+.green.darken-1, .analyse .sidebar .darken-1#refreshAnalyse {
   background-color: #43A047 !important; }
 
 .green-text.text-darken-1 {
   color: #43A047 !important; }
 
-.green.darken-2 {
+.green.darken-2, .analyse .sidebar .darken-2#refreshAnalyse {
   background-color: #388E3C !important; }
 
 .green-text.text-darken-2 {
   color: #388E3C !important; }
 
-.green.darken-3 {
+.green.darken-3, .analyse .sidebar .darken-3#refreshAnalyse {
   background-color: #2E7D32 !important; }
 
 .green-text.text-darken-3 {
   color: #2E7D32 !important; }
 
-.green.darken-4 {
+.green.darken-4, .analyse .sidebar .darken-4#refreshAnalyse {
   background-color: #1B5E20 !important; }
 
 .green-text.text-darken-4 {
   color: #1B5E20 !important; }
 
-.green.accent-1 {
+.green.accent-1, .analyse .sidebar .accent-1#refreshAnalyse {
   background-color: #B9F6CA !important; }
 
 .green-text.text-accent-1 {
   color: #B9F6CA !important; }
 
-.green.accent-2 {
+.green.accent-2, .analyse .sidebar .accent-2#refreshAnalyse {
   background-color: #69F0AE !important; }
 
 .green-text.text-accent-2 {
   color: #69F0AE !important; }
 
-.green.accent-3 {
+.green.accent-3, .analyse .sidebar .accent-3#refreshAnalyse {
   background-color: #00E676 !important; }
 
 .green-text.text-accent-3 {
   color: #00E676 !important; }
 
-.green.accent-4 {
+.green.accent-4, .analyse .sidebar .accent-4#refreshAnalyse {
   background-color: #00C853 !important; }
 
 .green-text.text-accent-4 {
@@ -2695,13 +2695,13 @@ form {
   .analyse .page {
     height: 100%;
     overflow-y: auto; }
-    .analyse .page .viewSwitch li {
+    .analyse .page .modusBtnGroup li {
       border: 1px solid #1E88E5;
       padding: 0; }
-      .analyse .page .viewSwitch li a {
+      .analyse .page .modusBtnGroup li a {
         display: block;
         padding: 0 20px; }
-      .analyse .page .viewSwitch li.active {
+      .analyse .page .modusBtnGroup li.active {
         background: #1E88E5; }
     .analyse .page .header {
       background: #1E88E5;
@@ -2790,6 +2790,11 @@ form {
         margin: auto 0; }
       .analyse .sidebar .collapsible .collapsible-body input {
         height: 2rem; }
+    .analyse .sidebar #refreshAnalyse {
+      width: 100%;
+      color: white;
+      position: absolute;
+      bottom: 0; }
 
 .initprocess {
   position: relative;
@@ -2861,5 +2866,62 @@ form {
   .initprocess section {
     margin: 10px;
     padding: 10px; }
+
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 16-mrt-2016, 18:04:52
+    Author     : Simon
+*/
+#chart {
+  width: 1200px;
+  height: 560px; }
+
+.c3 svg g g.c3-axis.c3-axis-x {
+  font: 12px sans-serif;
+  font-weight: bold; }
+
+.c3 svg g g.c3-axis.c3-axis-y {
+  font: 12px sans-serif;
+  font-weight: bold; }
+
+.c3 .c3-line {
+  stroke-width: 2px; }
+
+.c3-legend-item-hidden {
+  opacity: 0.3; }
+
+.c3-tooltip {
+  opacity: 1; }
+
+.c3-tooltip th {
+  background-color: #1565c0; }
+
+.scrollable.horizontal table {
+  table-layout: fixed;
+  width: 100%;
+  *margin-left: -100px;
+  /*ie7*/ }
+.scrollable.horizontal td, .scrollable.horizontal th {
+  vertical-align: top;
+  border-top: 1px solid #ccc;
+  padding: 10px;
+  width: 100px; }
+.scrollable.horizontal th {
+  position: absolute;
+  *position: relative;
+  /*ie7*/
+  left: 0;
+  width: 10%; }
+.scrollable.horizontal .outer {
+  position: relative; }
+.scrollable.horizontal .inner {
+  overflow-x: scroll;
+  overflow-y: visible;
+  width: 90%;
+  margin-left: 10%; }
 
 /*# sourceMappingURL=app.css.map */
