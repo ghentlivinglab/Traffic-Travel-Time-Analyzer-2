@@ -343,7 +343,7 @@ public class RoutesResource {
         List<Date> timestamps=new ArrayList<>();
         timestamps.addAll(dataMap.keySet());
         for (Date timestamp : timestamps) {
-            result.put(String.valueOf(timestamp.getTime()),dataMap.get(timestamp));
+            data.put(String.valueOf(timestamp.getTime()),dataMap.get(timestamp));
         }
         
         
