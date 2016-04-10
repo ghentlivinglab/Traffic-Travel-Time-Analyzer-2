@@ -10,5 +10,5 @@ package iii.vop2016.verkeer2.ejb.dao;
  * @author tobia
  */
 public enum Aggregation {
-    sum
+    sum,none,dateless
 }

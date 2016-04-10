@@ -75,6 +75,11 @@ public class Parameter<T> {
                     b.append(fields);
                     b.append(")");
                     break;
+                case none:
+                    b.append("(");
+                    b.append(fields);
+                    b.append(")");
+                    break;
             }
         } else {
             b.append("(");

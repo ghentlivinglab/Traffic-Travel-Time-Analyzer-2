@@ -8,6 +8,7 @@ package iii.vop2016.verkeer2.ejb.dataprovider;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.Weekdays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,7 @@ public interface IDataProvider {
     int getCurrentDelayLevel(IRoute route, List<String> providers);
 
     int getDelayLevel(IRoute route, List<String> providers, Date start, Date end);
-    
+
     int getAvgDelayLevel(IRoute route, List<String> providers);
 
     //return the mean distance for this route
@@ -60,9 +61,13 @@ public interface IDataProvider {
     Map<Date, Integer> getRecentData(IRoute route, List<String> providers);
 
     //get the list of mean data for the specific day
-    Map<Date, Integer> getDataByDay(IRoute route, List<String> providers, Date start, Date end, Weekdays day);
+    Map<Weekdays, List<Integer>> getDataByDay(IRoute route, List<String> providers, Weekdays... days);
 
-    Map<Date, Integer> getDataVelocityByDay(IRoute route, List<String> providers, Date start, Date end, Weekdays day);
+    Map<Weekdays, List<Integer>> getDataVelocityByDay(IRoute route, List<String> providers, Weekdays... days);
+
+    Map<Weekdays, List<Integer>> getDataByDay(IRoute route, List<String> providers, Date start, Date end, Weekdays... days);
+
+    Map<Weekdays, List<Integer>> getDataVelocityByDay(IRoute route, List<String> providers, Date start, Date end, Weekdays... days);
 
     //get the list of mean data for a mean day in the week (2 month)
     Map<Date, Integer> getDataByDayInWorkWeek(IRoute route, List<String> providers);
@@ -77,9 +82,10 @@ public interface IDataProvider {
     Map<Date, Integer> getData(IRoute route, List<String> providers, Date start, Date end);
 
     Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers, Date start, Date end);
-    
+
     //helper function for datadownstream
     int getMeanDurationFromRouteData(List<IRouteData> routeData);
-    
+
     void invalidateCurrentData();
+
 }

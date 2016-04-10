@@ -7,6 +7,7 @@ package iii.vop2016.verkeer2.ejb.dao;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -19,11 +20,19 @@ public class Request {
     private Parameter[] param;
     private boolean ascending;
     private int limitResult;
+    private long groupbyTimeFrames;
+    private boolean dataless;
 
     public Request(boolean ascending, int limitResult) {
         this.ascending = ascending;
         this.limitResult = limitResult;
         this.param = new Parameter[1];
+        this.groupbyTimeFrames = -1;
+        this.dataless = false;
+    }
+
+    public void setDataless(boolean dataless) {
+        this.dataless = dataless;
     }
 
     public Request addParam(int place, Parameter p) {
@@ -58,17 +67,18 @@ public class Request {
             for (int i = 0; i < param.length; i++) {
                 Parameter p = param[i];
                 if (p != null && p.isAggregation) {
-                    if(count != 0)
+                    if (count != 0) {
                         b.append(",");
+                    }
                     p.build(b);
                     count++;
                 }
-                
+
             }
-        }else{
+        } else {
             b.append("r");
         }
-        
+
         b.append(" FROM RouteDataEntity r");
 
         //append where clauses (if there are any)
@@ -98,6 +108,14 @@ public class Request {
             b.append(" ORDER BY r.id DESC");
         }
 
+        if (groupbyTimeFrames > 0) {
+            if (dataless) {
+                b.append(" GROUP BY FUNCTION('FLOOR',(MOD(FUNCTION('UNIX_TIMESTAMP',r.timestamp),86400) / :gbp))");
+            } else {
+                b.append(" GROUP BY FUNCTION('FLOOR',(FUNCTION('UNIX_TIMESTAMP',r.timestamp) / :gbp))");
+            }
+        }
+
         Query q = em.createQuery(b.toString());
 
         //fill values for every where clause
@@ -111,10 +129,19 @@ public class Request {
 
         }
 
+        //fill value for groupby
+        if (groupbyTimeFrames > 0) {
+            q.setParameter("gbp", groupbyTimeFrames);
+        }
+
         //limit results if requested
         if (limitResult != 0) {
             q.setMaxResults(limitResult);
         }
         return q;
+    }
+
+    void setGroupBy(long groupbyTimeFrames) {
+        this.groupbyTimeFrames = groupbyTimeFrames;
     }
 }

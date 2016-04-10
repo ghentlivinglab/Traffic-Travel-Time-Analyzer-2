@@ -362,8 +362,8 @@ public class RoutesResource {
 
     private JSONObject JSONDayData(IRoute route, Weekdays day) {
         JSONObject result = new JSONObject();
-        Map<Date, Integer> mapDurations = null;
-        Map<Date, Integer> mapVelocities = null;
+        Map<Weekdays, List<Integer>> mapDurations = null;
+        Map<Weekdays, List<Integer>> mapVelocities = null;
         if (startTime != null & endTime != null) {
             mapDurations = beans.getDataProvider().getDataByDay(route, providers, startTime, endTime, day);
             mapVelocities = beans.getDataProvider().getDataVelocityByDay(route, providers, startTime, endTime, day);
@@ -373,13 +373,13 @@ public class RoutesResource {
         }
 
         
-
+/*
         result.put("duration", JSONData("durations " + day + " " + route.getId(),
                 "This data are the durations on a " + day + " for route " + route.getId(),
                 mapDurations));
         result.put("velocity", JSONData("velocities " + day + " " + route.getId(),
                 "This data are the velocities on a " + day + " for route " + route.getId(),
-                mapVelocities));
+                mapVelocities));*/
         return result;
     }
 
