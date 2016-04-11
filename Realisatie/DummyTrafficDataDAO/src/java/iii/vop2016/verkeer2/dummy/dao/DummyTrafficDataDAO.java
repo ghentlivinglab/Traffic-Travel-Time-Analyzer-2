@@ -46,7 +46,7 @@ public class DummyTrafficDataDAO implements TrafficDataDAORemote {
     }
 
     @Override
-    public List<IRouteData> getData(IRoute route, Date time1, Date time2) {
+    public List<IRouteData> getData(IRoute route, Date time1, Date time2, List<String> adapter) {
         List<IRouteData> ret = new ArrayList<>();
         for (IRouteData data : this.data) {
             if (data.getRouteId() == route.getId() && data.getTimestamp().before(time2) && data.getTimestamp().after(time1)) {
@@ -121,7 +121,7 @@ public class DummyTrafficDataDAO implements TrafficDataDAORemote {
     }
 
     @Override
-    public List<IRouteData> getData(IRoute route, List<Date> startList, List<Date> endList) {
+    public List<IRouteData> getData(IRoute route, List<Date> startList, List<Date> endList, List<String> adapter) {
         List<IRouteData> ret = new ArrayList<>();
 
         if (startList.size() != endList.size()) {
@@ -141,7 +141,7 @@ public class DummyTrafficDataDAO implements TrafficDataDAORemote {
     }
 
     @Override
-    public List<Long> getAggregateData(IRoute route, Date time1, Date time2, AggregationContainer... aggr) {
+    public List<Long> getAggregateData(IRoute route, List<String> adapter, Date time1, Date time2, AggregationContainer... aggr) {
         List<Long> ret = new ArrayList<>();
         for (AggregationContainer container : aggr) {
             switch (container.aggregation) {
@@ -182,7 +182,7 @@ public class DummyTrafficDataDAO implements TrafficDataDAORemote {
     }
 
     @Override
-    public List<Long> getAggregateData(IRoute route, List<Date> startList, List<Date> endList, AggregationContainer... aggr) {
+    public List<Long> getAggregateData(IRoute route, List<String> adapter, List<Date> startList, List<Date> endList, AggregationContainer... aggr) {
         List<Long> ret = new ArrayList<>();
 
         if (startList.size() != endList.size()) {
@@ -240,22 +240,22 @@ public class DummyTrafficDataDAO implements TrafficDataDAORemote {
     }
 
     @Override
-    public List<Long> getAggregateData(IRoute route, Date time1, Date time2, long groupbyTimeFrames, AggregationContainer... aggr) {
+    public List<Long> getAggregateData(IRoute route, List<String> adapter, Date time1, Date time2, long groupbyTimeFrames, AggregationContainer... aggr) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<Long> getAggregateData(IRoute route, List<Date> startList, List<Date> endList, long groupbyTimeFrames, AggregationContainer... aggr) {
+    public List<Long> getAggregateData(IRoute route, List<String> adapter, List<Date> startList, List<Date> endList, long groupbyTimeFrames, AggregationContainer... aggr) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<Long> getAggregateData(IRoute route, Date time1, Date time2, long groupbyTimeFrames, boolean truncateDate, AggregationContainer... aggr) {
+    public List<Long> getAggregateData(IRoute route, List<String> adapter, Date time1, Date time2, long groupbyTimeFrames, boolean truncateDate, AggregationContainer... aggr) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<Long> getAggregateData(IRoute route, List<Date> startList, List<Date> endList, long groupbyTimeFrames, boolean truncateDate, AggregationContainer... aggr) {
+    public List<Long> getAggregateData(IRoute route, List<String> adapter, List<Date> startList, List<Date> endList, long groupbyTimeFrames, boolean truncateDate, AggregationContainer... aggr) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -69,15 +69,6 @@ public interface IDataProvider {
 
     Map<Weekdays, List<Integer>> getDataVelocityByDay(IRoute route, List<String> providers, Date start, Date end, Weekdays... days);
 
-    //get the list of mean data for a mean day in the week (2 month)
-    Map<Date, Integer> getDataByDayInWorkWeek(IRoute route, List<String> providers);
-
-    Map<Date, Integer> getDataVelocityByDayInWorkWeek(IRoute route, List<String> providers);
-
-    Map<Date, Integer> getDataByDayInWorkWeek(IRoute route, List<String> providers, Date start, Date end);
-
-    Map<Date, Integer> getDataVelocityByDayInWorkWeek(IRoute route, List<String> providers, Date start, Date end);
-
     //get the list of mean data for a mean day in duration (2week)
     Map<Date, Integer> getData(IRoute route, List<String> providers, Date start, Date end);
 

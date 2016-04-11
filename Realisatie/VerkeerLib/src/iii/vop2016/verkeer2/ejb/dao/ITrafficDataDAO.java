@@ -22,7 +22,7 @@ public interface ITrafficDataDAO {
 
     public List<IRouteData> addData(List<IRouteData> data);
 
-    public List<IRouteData> getData(IRoute route, Date time1, Date time2);
+    public List<IRouteData> getData(IRoute route, Date time1, Date time2, List<String> adapter);
 
     public List<IRouteData> getData(String adapter, Date time1, Date time2);
 
@@ -34,18 +34,18 @@ public interface ITrafficDataDAO {
 
     void fillDummyData(long i);
 
-    public List<IRouteData> getData(IRoute route, List<Date> startList, List<Date> endList);
+    public List<IRouteData> getData(IRoute route, List<Date> startList, List<Date> endList, List<String> adapter);
 
-    public List<Long> getAggregateData(IRoute route, Date time1, Date time2, AggregationContainer... aggr);
+    public List<Long> getAggregateData(IRoute route, List<String> adapter, Date time1, Date time2, AggregationContainer... aggr);
 
-    public List<Long> getAggregateData(IRoute route, List<Date> startList, List<Date> endList, AggregationContainer... aggr);
+    public List<Long> getAggregateData(IRoute route, List<String> adapter, List<Date> startList, List<Date> endList, AggregationContainer... aggr);
 
-    public List<Long> getAggregateData(IRoute route, Date time1, Date time2, long groupbyTimeFrames, AggregationContainer... aggr);
+    public List<Long> getAggregateData(IRoute route, List<String> adapter, Date time1, Date time2, long groupbyTimeFrames, AggregationContainer... aggr);
 
-    public List<Long> getAggregateData(IRoute route, List<Date> startList, List<Date> endList, long groupbyTimeFrames, AggregationContainer... aggr);
+    public List<Long> getAggregateData(IRoute route, List<String> adapter, List<Date> startList, List<Date> endList, long groupbyTimeFrames, AggregationContainer... aggr);
 
-    public List<Long> getAggregateData(IRoute route, Date time1, Date time2, long groupbyTimeFrames, boolean truncateDate, AggregationContainer... aggr);
+    public List<Long> getAggregateData(IRoute route, List<String> adapter, Date time1, Date time2, long groupbyTimeFrames, boolean truncateDate, AggregationContainer... aggr);
 
-    public List<Long> getAggregateData(IRoute route, List<Date> startList, List<Date> endList, long groupbyTimeFrames, boolean truncateDate, AggregationContainer... aggr);
+    public List<Long> getAggregateData(IRoute route, List<String> adapter, List<Date> startList, List<Date> endList, long groupbyTimeFrames, boolean truncateDate, AggregationContainer... aggr);
 
 }

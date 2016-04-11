@@ -74,7 +74,7 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
     }
 
     @Override
-    public List<IRouteData> getData(IRoute route, Date time1, Date time2) {
+    public List<IRouteData> getData(IRoute route, Date time1, Date time2, List<String> adapter) {
         List<IRouteData> data = new ArrayList<>();
         try {
             long[] range = blocklist.getIdRange(time1, time2);
@@ -82,10 +82,15 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
                 throw new NoResultException("Could not retrieve id segment from blocklist");
             }
 
-            Parameter p0 = new Parameter("id", range[0], range[1], Operation.between);
-            Parameter p1 = new Parameter("routeId", route.getId(), Operation.eq);
-            Parameter p2 = new Parameter("timestamp", time1, time2, Operation.between);
-            Request r = new Request(true, 0).addParam(0, p0).addParam(1, p1).addParam(2, p2);
+            int i = 0;
+            Request r = new Request(true, 0);
+            r.addParam(i++, new Parameter("id", range[0], range[1], Operation.between));
+            r.addParam(i++, new Parameter("routeId", route.getId(), Operation.eq));
+            if (adapter != null && !adapter.isEmpty()) {
+                Parameter p = new Parameter("provider", adapter, Operation.eq);
+                r.addParam(i++, p);
+            }
+            r.addParam(i++, new Parameter("timestamp", time1, time2, Operation.between));
 
             List<IRouteData> routesEntities = r.PrepareQuery(em).getResultList();
             for (IRouteData rdata : routesEntities) {
@@ -135,7 +140,7 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
             Parameter p1 = new Parameter("routeId", route.getId(), Operation.eq);
             Request r = new Request(false, 1);
             r.addParam(0, p1);
-            if (adapters != null && adapters.size() != 0) {
+            if (adapters != null && !adapters.isEmpty()) {
                 Parameter p2 = new Parameter("provider", adapters, Operation.eq);
                 r.addParam(1, p2);
             }
@@ -221,7 +226,7 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
     }
 
     @Override
-    public List<IRouteData> getData(IRoute route, List<Date> startList, List<Date> endList) {
+    public List<IRouteData> getData(IRoute route, List<Date> startList, List<Date> endList, List<String> adapter) {
         List<IRouteData> data = new ArrayList<>();
         if (route == null) {
             return data;
@@ -239,6 +244,10 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
         int i = 0;
         r.addParam(i++, new Parameter("id", idRange[0], idRange[1], Operation.between));
         r.addParam(i++, new Parameter("routeId", route.getId(), Operation.eq));
+        if (adapter != null && !adapter.isEmpty()) {
+            Parameter p = new Parameter("provider", adapter, Operation.eq);
+            r.addParam(i++, p);
+        }
         r.addParam(i++, new Parameter("timestamp", startList, endList, Operation.between));
 
         List<RouteDataEntity> routesEntities = r.PrepareQuery(em).getResultList();
@@ -251,27 +260,27 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
     }
 
     @Override
-    public List<Long> getAggregateData(IRoute route, List<Date> startList, List<Date> endList, AggregationContainer... aggr) {
-        return getAggregateData(route, startList, endList, -1, false, aggr);
+    public List<Long> getAggregateData(IRoute route, List<String> adapter, List<Date> startList, List<Date> endList, AggregationContainer... aggr) {
+        return getAggregateData(route, adapter, startList, endList, -1, false, aggr);
     }
 
     @Override
-    public List<Long> getAggregateData(IRoute route, Date time1, Date time2, AggregationContainer... aggr) {
-        return getAggregateData(route, time1, time2, -1, false, aggr);
+    public List<Long> getAggregateData(IRoute route, List<String> adapter, Date time1, Date time2, AggregationContainer... aggr) {
+        return getAggregateData(route, adapter, time1, time2, -1, false, aggr);
     }
 
     @Override
-    public List<Long> getAggregateData(IRoute route, Date time1, Date time2, long groupbyTimeFrames, AggregationContainer... aggr) {
-        return getAggregateData(route, time1, time2, groupbyTimeFrames, false, aggr);
+    public List<Long> getAggregateData(IRoute route, List<String> adapter, Date time1, Date time2, long groupbyTimeFrames, AggregationContainer... aggr) {
+        return getAggregateData(route, adapter, time1, time2, groupbyTimeFrames, false, aggr);
     }
 
     @Override
-    public List<Long> getAggregateData(IRoute route, List<Date> startList, List<Date> endList, long groupbyTimeFrames, AggregationContainer... aggr) {
-        return getAggregateData(route, startList, endList, groupbyTimeFrames, false, aggr);
+    public List<Long> getAggregateData(IRoute route, List<String> adapter, List<Date> startList, List<Date> endList, long groupbyTimeFrames, AggregationContainer... aggr) {
+        return getAggregateData(route, adapter, startList, endList, groupbyTimeFrames, false, aggr);
     }
 
     @Override
-    public List<Long> getAggregateData(IRoute route, Date time1, Date time2, long groupbyTimeFrames, boolean truncateDate, AggregationContainer... aggr) {
+    public List<Long> getAggregateData(IRoute route, List<String> adapter, Date time1, Date time2, long groupbyTimeFrames, boolean truncateDate, AggregationContainer... aggr) {
         List<Long> data = new ArrayList<>();
         try {
             long[] range = blocklist.getIdRange(time1, time2);
@@ -283,6 +292,10 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
             Request r = new Request(true, 0);
             r.addParam(i++, new Parameter("id", range[0], range[1], Operation.between));
             r.addParam(i++, new Parameter("routeId", route.getId(), Operation.eq));
+            if (adapter != null && !adapter.isEmpty()) {
+                Parameter p = new Parameter("provider", adapter, Operation.eq);
+                r.addParam(i++, p);
+            }
             r.addParam(i++, new Parameter("timestamp", time1, time2, Operation.between));
             for (AggregationContainer c : aggr) {
                 r.addParam(i++, new Parameter(c.aggregation, c.attr));
@@ -321,7 +334,7 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
     }
 
     @Override
-    public List<Long> getAggregateData(IRoute route, List<Date> startList, List<Date> endList, long groupbyTimeFrames, boolean truncateDate, AggregationContainer... aggr) {
+    public List<Long> getAggregateData(IRoute route, List<String> adapter, List<Date> startList, List<Date> endList, long groupbyTimeFrames, boolean truncateDate, AggregationContainer... aggr) {
         List<Long> data = new ArrayList<>();
         try {
             if (route == null) {
@@ -345,6 +358,10 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
 
             r.addParam(i++, new Parameter("id", idRange[0], idRange[1], Operation.between));
             r.addParam(i++, new Parameter("routeId", route.getId(), Operation.eq));
+            if (adapter != null && !adapter.isEmpty()) {
+                Parameter p = new Parameter("provider", adapter, Operation.eq);
+                r.addParam(i++, p);
+            }
             r.addParam(i++, new Parameter("timestamp", startList, endList, Operation.between));
             for (AggregationContainer c : aggr) {
                 r.addParam(i++, new Parameter(c.aggregation, c.attr));

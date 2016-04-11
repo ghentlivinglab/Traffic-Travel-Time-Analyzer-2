@@ -368,8 +368,8 @@ public class RoutesResource {
             mapDurations = beans.getDataProvider().getDataByDay(route, providers, startTime, endTime, day);
             mapVelocities = beans.getDataProvider().getDataVelocityByDay(route, providers, startTime, endTime, day);
         } else {
-            //mapDurations=beans.getDataProvider().getDataByDay(route,providers,day);
-            //mapVelocities=beans.getDataProvider().getDataVelocityByDay(route,providers,day);            
+            mapDurations=beans.getDataProvider().getDataByDay(route,providers,day);
+            mapVelocities=beans.getDataProvider().getDataVelocityByDay(route,providers,day);            
         }
 
         
@@ -387,6 +387,7 @@ public class RoutesResource {
         JSONObject result = new JSONObject();
         Map<Date, Integer> mapDurations;
         Map<Date, Integer> mapVelocities;
+        /*
         if (startTime != null & endTime != null) {
             mapDurations = beans.getDataProvider().getDataByDayInWorkWeek(route, providers, startTime, endTime);
             mapVelocities = beans.getDataProvider().getDataVelocityByDayInWorkWeek(route, providers, startTime, endTime);
@@ -401,7 +402,7 @@ public class RoutesResource {
                 mapDurations));
         result.put("velocity", JSONData("rushhourVelocities " + route.getId(),
                 "This data are the velocities for a workday for route " + route.getId(),
-                mapVelocities));
+                mapVelocities));*/
         return result;
     }
 
