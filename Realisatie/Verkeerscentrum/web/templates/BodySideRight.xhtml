@@ -14,7 +14,11 @@
         <title><ui:insert name="title">Verkeerscentrum Gent</ui:insert></title>
         <!--Import Google Icon Font-->
         <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-        <!--Import materialize.css-->     
+        <!--Import materialize.css-->    
+        
+        
+        <link rel="icon" href="#{requestScope.resourceURLimg}/favicon.ico" type="image/x-icon" />
+
         
         <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
         <link type="text/css" rel="stylesheet" href="#{requestScope.resourceURLcss}/c3.min.css"  media="screen,projection" />
@@ -39,6 +43,8 @@
             </div>
             
         </main>  
+        
+        <script type="text/javascript" src="#{requestScope.resourceURLjs}/globalVars.js" />
        
         <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
         <script type="text/javascript" src="#{requestScope.resourceURLjs}/materialize.min.js"></script>

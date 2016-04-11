@@ -4,53 +4,52 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
-
-        <ui:composition template="./templates/HeaderBodySideRight.xhtml">
-            
-            <ui:define name="page"> Map </ui:define>
-
-            <ui:define name="content">
-                <div class="map">
-                    <div id="map"></div>
+    
+    <ui:composition template="./templates/HeaderBodySideRight.xhtml">
+        
+        <ui:define name="page"> Map </ui:define>
+        
+        <ui:define name="content">
+            <div class="map">
+                <div id="map">
+                    
                 </div>
-            </ui:define>
-
-            <ui:define name="right">
-                <div class="map">
-                    <div class="sidebar"> 
-                        <div class="progress">
-                            <div class="determinate" id="timerProgress"></div>
-                        </div>
-
-                        <div class="trafficinfo">
-                            <div id="traffic-list"></div>
+            </div>
+        </ui:define>
+        
+        <ui:define name="right">
+            <div class="map">
+                <div class="sidebar"> 
+                    <div class="progress">
+                        <div class="determinate" id="timerProgress"></div>
+                    </div>
+                    
+                    <div class="trafficinfo">
+                        <div id="traffic-list">
+                            
                         </div>
                     </div>
                 </div>
-            </ui:define>
-            
-                
-    
-            <ui:define name="javascript">
-                
-                 
-                 
-                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCG3pbrFs7g35VSYnL1X3jwftuQmm5s18g&amp;callback=initMap"
-                async="" defer=""></script>
-                
-                
-        <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
-               
-               <script src="/web/resources/js/map.js" />
-                
+            </div>
+        </ui:define>
         
-                
-            </ui:define>
-
-        </ui:composition>
-
+        
+        
+        <ui:define name="javascript">
+            
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCG3pbrFs7g35VSYnL1X3jwftuQmm5s18g&amp;callback=initMap"
+            async="" defer=""></script>
+            
+            <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script> 
+            
+            <script src="#{requestScope.resourceURLjs}/map/map.js" />
+            
+        </ui:define>
+        
+    </ui:composition>
     
     
-
-
+    
+    
+    
 </html>

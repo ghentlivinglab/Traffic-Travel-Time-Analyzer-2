@@ -3,22 +3,34 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
-
-        <ui:composition template="./templates/HeaderBodySideRight.xhtml">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:pretty="http://ocpsoft.com/prettyfaces">
+    
+    
+    <ui:composition template="./templates/HeaderBodySideRight.xhtml">
+        
+        <ui:define name="page"> Analyse </ui:define>
+        
+        <ui:define name="content">
             
-            <ui:define name="page"> Analyse </ui:define>
-
-            <ui:define name="content">
-                <form action="/web/analyse/datasources" method="get">
+            <pretty:urlbuffer var="analyseAVGTraffic" mappingId="analyse-avgtraffic" />
+            <pretty:urlbuffer var="analyseWeekdays" mappingId="analyse-weekdays" />
+            <pretty:urlbuffer var="analyseRushhours" mappingId="analyse-rushhours" />
+            <pretty:urlbuffer var="analysePeriods" mappingId="analyse-periods" />
+            <pretty:urlbuffer var="analyseRoutes" mappingId="analyse-routes" />
+            <pretty:urlbuffer var="analyseDatasources" mappingId="analyse-datasources" />
+            
+            <!-- action will be set by JS -->
+            <form action="" method="get" id="analyseInitForm">
                 <div class="analyse">
-  
+                    
                     <div class="index pull-bottom">
                         <div class="banner">
                             
-                              <div class="initprocess">
+                            <div class="initprocess">
+                                <input type="hidden" value="single" name="periodtype" />
                                 <ul class="inittabs">
-                                  <li id="inittab_singleperiod">
+                                    <li id="inittab_singleperiod">
                                         <div class="row header">
                                             <div class="col s12">
                                                 <div class="container">
@@ -36,131 +48,131 @@
                                         <div class="progress">
                                             <div class="determinate" style="width: 33%"></div>
                                         </div>
-                                      <div class="container">
-                                        <div class="row">
-                                            <div class="col s7">
-                                                <p>Hieronder kan u een periode selecteren.</p>
-                                            </div>
-                                            <div class="col s5">
-                                                <p class="right-align">
-                                                    <a href="#!" class="btn disabled">Vorige</a>
-                                                    <a href="#!" class="btn btnNextSlide">Volgende</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col m6">
-                                                <section>
-                                                    <h4>Begin</h4>
-                                                    <input type="text" class="datetimepicker" id="periodStart" />
-                                                    <input name="periodStart" type="hidden" />
-                                                </section> 
-                                             
-                                            </div>
-                                            <div class="col m6">
-                                                <section>
-                                                    <h4>Einde</h4>
-                                                    <input type="text" class="datetimepicker" id="periodEnd" /> 
-                                                    <input name="periodEnd" type="hidden" />
-                                                </section>      
-                                             
-                                            </div>
-                                        </div>
-                                        
-                                      </div>
-                     
-                                  </li>
-                                  <li id="inittab_multiperiod">
-                                        <div class="row header">
-                                            <div class="col s12">
-                                                <div class="container">
-                                                    <div class="row">
-                                                        <div class="col s3">
-                                                            <h3>Stap 1:</h3>
-                                                        </div>
-                                                        <div class="col s9">
-                                                            <h3>Selecteer een periode</h3>
-                                                        </div>
-                                                    </div>
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col s7">
+                                                    <p>Hieronder kan u een periode selecteren.</p>
+                                                </div>
+                                                <div class="col s5">
+                                                    <p class="right-align">
+                                                        <a href="#!" class="btn disabled">Vorige</a>
+                                                        <a href="#!" class="btn btnNextSlide">Volgende</a>
+                                                    </p>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="determinate" style="width: 33%"></div>
-                                        </div>
-                                      <div class="container">
-                                        <div class="row">
-                                            <div class="col s7">
-                                                <p>Hieronder kan u een periode selecteren.</p>
-                                            </div>
-                                            <div class="col s5">
-                                                <p class="right-align">
-                                                    <a href="#!" class="btn disabled">Vorige</a>
-                                                    <a href="#!" class="btn btnNextSlide">Volgende</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col m12 scrollable medium">
-                                                <table id="newPeriodList">
-                                                    <thead>
-                                                      <tr>
-                                                          <th data-field="id">Begin</th>
-                                                          <th data-field="name">Einde</th>
-                                                          <th data-field="price"></th>
-                                                      </tr>
-                                                    </thead>
-
-                                                    <tbody>
-                                                      
-                                                      <tr>
-                                                        <td colspan="3">
-                                                            <p>Geen periodes toegevoegd</p>
-                                                        </td>
-                                                      </tr>
-                                                      
-                                                    </tbody>
-                                                  </table>
-                                                <br />
-                                                
-                                            </div>
-                                            <br />
-                                            <a href="#!" class="btn blue" onclick="$('#modelAddNewPeriod').openModal();"> Nieuwe periode </a>
-                                            <input name="periodsStart" type="hidden" />
-                                            <input name="periodsEnd" type="hidden" />
-                                            <!---
-                                            <div class="col m6">
-                                                <section class="white">
+                                            <div class="row">
+                                                <div class="col m6">
+                                                    <section>
+                                                        <h4>Begin</h4>
+                                                        <input type="text" class="datetimepicker" id="periodStart" />
+                                                        <input name="periodStart" type="hidden" />
+                                                    </section> 
                                                     
-                                                    <div class="row">
-                                                        <div class="col l12">
-                                                            Begin:
-                                                        </div>
-                                                        <div class="col l12">
-                                                            <input type="text" class="datetimepicker" id="" /> 
-                                                        </div>     
-                                                    </div> 
-                                                    <div class="row">
-                                                        <div class="col l12">
-                                                            Einde:
-                                                        </div>
-                                                        <div class="col l12">
-                                                            <input type="text" class="datetimepicker" id="" /> 
-                                                        </div>     
-                                                    </div> 
-                                                    <a href="#!" class="btn blue" onclick="$('#modal1').openModal();"> Nieuwe periode </a>
-                                                </section>
+                                                </div>
+                                                <div class="col m6">
+                                                    <section>
+                                                        <h4>Einde</h4>
+                                                        <input type="text" class="datetimepicker" id="periodEnd" /> 
+                                                        <input name="periodEnd" type="hidden" />
+                                                    </section>      
+                                                    
+                                                </div>
                                             </div>
-                                            -->
+                                            
                                         </div>
-                                                                                 
                                         
+                                    </li>
+                                    <li id="inittab_multiperiod">
+                                        <div class="row header">
+                                            <div class="col s12">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col s3">
+                                                            <h3>Stap 1:</h3>
+                                                        </div>
+                                                        <div class="col s9">
+                                                            <h3>Selecteer een periode</h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="determinate" style="width: 33%"></div>
+                                        </div>
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col s7">
+                                                    <p>Hieronder kan u een periode selecteren.</p>
+                                                </div>
+                                                <div class="col s5">
+                                                    <p class="right-align">
+                                                        <a href="#!" class="btn disabled">Vorige</a>
+                                                        <a href="#!" class="btn btnNextSlide">Volgende</a>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col m12 scrollable medium">
+                                                    <table id="newPeriodList">
+                                                        <thead>
+                                                            <tr>
+                                                                <th data-field="id">Begin</th>
+                                                                <th data-field="name">Einde</th>
+                                                                <th data-field="price"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        
+                                                        <tbody>
+                                                            
+                                                            <tr>
+                                                                <td colspan="3">
+                                                                    <p>Geen periodes toegevoegd</p>
+                                                                </td>
+                                                            </tr>
+                                                            
+                                                        </tbody>
+                                                    </table>
+                                                    <br />
+                                                    
+                                                </div>
+                                                <br />
+                                                <a href="#!" class="btn blue" onclick="$('#modelAddNewPeriod').openModal();"> Nieuwe periode </a>
+                                                <input name="periodsStart" type="hidden" />
+                                                <input name="periodsEnd" type="hidden" />
+                                                <!---
+                                                <div class="col m6">
+                                                    <section class="white">
+                                                        
+                                                        <div class="row">
+                                                            <div class="col l12">
+                                                                Begin:
+                                                            </div>
+                                                            <div class="col l12">
+                                                                <input type="text" class="datetimepicker" id="" /> 
+                                                            </div>     
+                                                        </div> 
+                                                        <div class="row">
+                                                            <div class="col l12">
+                                                                Einde:
+                                                            </div>
+                                                            <div class="col l12">
+                                                                <input type="text" class="datetimepicker" id="" /> 
+                                                            </div>     
+                                                        </div> 
+                                                        <a href="#!" class="btn blue" onclick="$('#modal1').openModal();"> Nieuwe periode </a>
+                                                    </section>
+                                                </div>
+                                                -->
+                                            </div>
+                                            
+                                            
+                                            
+                                        </div>
                                         
-                                      </div>
-                     
-                                  </li>  
-                                  <li id="inittab_singleroute">
-                                    
+                                    </li>  
+                                    <li id="inittab_route">
+                                        
                                         <div class="row header">
                                             <div class="col s12">
                                                 <div class="container">
@@ -192,8 +204,9 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col s6">
-
+                                                    
                                                     <div class="multiselectsection">
+                                                        <input type="hidden" value="single" name="routetype" />
                                                         <ul id="availableRoutesList" class="availableRoutesList">
                                                             <c:forEach var="route" items="#{routeDAO.availableRoutes}">
                                                                 <ol>
@@ -203,20 +216,20 @@
                                                             </c:forEach>
                                                         </ul>
                                                     </div>
-
+                                                    
                                                 </div>
                                                 <div class="col s6">
                                                     <img src="" class="responsive-img" id="routePreview"  />
                                                 </div>
                                             </div>
                                         </div>
-                                      
-                                      
-                                      
-                                      
-                                  </li>
-                                  <li id="inittab_providers">
-                                    
+                                        
+                                        
+                                        
+                                        
+                                    </li>
+                                    <li id="inittab_providers">
+                                        
                                         <div class="row header">
                                             <div class="col s12">
                                                 <div class="container">
@@ -257,80 +270,79 @@
                                                 </div>
                                             </div>
                                         </div>
-                                      
-                                      
-                                  </li>
-                                  
+                                        
+                                        
+                                    </li>
+                                    
                                 </ul>
-                              </div>
+                            </div>
                             
                         </div>
-                            
-                    </div>
-                
-                </div>
-                
-                </form>
-            </ui:define>
-
-            <ui:define name="right">
-                <div class="sidebar">
-                    <img src="#{resourceURLimg}/vcg.png" class="logo img-responsive" />
-                    <div class="navigation">
-                        <ul id="staggered-list">
-                            <li>
-                                <a href="#!" id="btnAvgTraffic">
-                                    <i class="material-icons">navigation</i>
-                                    Gemiddelde verkeerssituaties
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#!" id="btnDelayWeekday">
-                                    <i class="material-icons">query_builder</i>
-                                    Vertragingen per weekdag
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#!" id="btnRushHours">
-                                    <i class="material-icons">settings_input_antenna</i>
-                                    Spitsuren tijdens werkdagen
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#!" id="btnCompareRoutes">
-                                    <i class="material-icons">settings</i>
-                                    Trajecten vergelijken
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#!" id="btnComparePeriods">
-                                    <i class="material-icons">settings</i>
-                                    Perioden vergelijken
-                               </a>
-                            </li>
-                            <li>
-                                <!-- <h:link outcome="pretty:analyse-datasources" id="btnCompareSources"> -->
-                                <a href="#!" id="btnCompareSources">
-                                    <i class="material-icons">open_in_browser</i>
-                                    Databronnen vergelijken
-                                </a>
-                            </li>
-                        </ul>
                         
-      
-                        
-                      
                     </div>
                     
+                </div>
                 
+            </form>
+        </ui:define>
+        
+        <ui:define name="right">
+            <div class="sidebar">
+                <img src="#{resourceURLimg}/vcg.png" class="logo img-responsive" />
+                <div class="navigation">
+                    <ul id="staggered-list">
+                        <li>
+                            <a href="#{requestScope.analyseAVGTraffic}" id="btnAvgTraffic">
+                                <i class="material-icons">navigation</i>
+                                Gemiddelde verkeerssituaties
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#{requestScope.analyseWeekdays}" id="btnDelayWeekday">
+                                <i class="material-icons">query_builder</i>
+                                Vertragingen per weekdag
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#{requestScope.analyseRushhours}" id="btnRushHours">
+                                <i class="material-icons">settings_input_antenna</i>
+                                Spitsuren tijdens werkdagen
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#{requestScope.analyseRoutes}" id="btnCompareRoutes">
+                                <i class="material-icons">settings</i>
+                                Trajecten vergelijken
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#{requestScope.analysePeriods}" id="btnComparePeriods">
+                                <i class="material-icons">settings</i>
+                                Perioden vergelijken
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#{requestScope.analyseDatasources}" id="btnCompareSources">
+                                <i class="material-icons">open_in_browser</i>
+                                Databronnen vergelijken
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    
+                    
                     
                 </div>
                 
                 
                 
-                 <!-- Modal Structure -->
-                <div id="modelAddNewPeriod" class="modal">
-                  <div class="modal-content">
+            </div>
+            
+            
+            
+            <!-- Modal Structure -->
+            <div id="modelAddNewPeriod" class="modal">
+                <div class="modal-content">
                     <h4>Selecteer een periode</h4>
                     <div class="row">
                         <div class="col s3 pull-bottom valign-wrapper">
@@ -350,32 +362,28 @@
                             <input name="txtNewPeriodEnd" type="hidden" />
                         </div>
                     </div>
-                  </div>
-                  <div class="modal-footer">
-                    <a href="#!" id="btnAddNewPeriod" class=" modal-action modal-close waves-effect waves-green btn-flat green">Voeg toe</a>
-                  </div>
                 </div>
-                
-            </ui:define>
+                <div class="modal-footer">
+                    <a href="#!" id="btnAddNewPeriod" class=" modal-action modal-close waves-effect waves-green btn-flat green">Voeg toe</a>
+                </div>
+            </div>
             
-                
-    
-            <ui:define name="javascript">
-                
-                <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse.js" />
-                
-                <script>
-                    $(document).ready(function(){
-                        Materialize.showStaggeredList('#staggered-list');
-                    });                    
-                </script>
-                
-            </ui:define>
-
-        </ui:composition>
-
+        </ui:define>
+        
+        
+        
+        <ui:define name="javascript">
+            
+            <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/index.js" />
+            <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/components.js" />
+            
+            
+        </ui:define>
+        
+    </ui:composition>
     
     
-
-
+    
+    
+    
 </html>

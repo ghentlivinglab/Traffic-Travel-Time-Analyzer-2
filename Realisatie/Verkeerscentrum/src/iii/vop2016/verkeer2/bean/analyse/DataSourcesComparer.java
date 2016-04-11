@@ -75,6 +75,11 @@ public class DataSourcesComparer extends AnalysePage implements ITableView, IGra
     public Pair<Date, Date> getPeriod() {
         return period;
     }
+
+    @Override
+    public String getDataURL() {
+        return super.prop.getProperty("urlProviderComparer");
+    }
     
     
 }
