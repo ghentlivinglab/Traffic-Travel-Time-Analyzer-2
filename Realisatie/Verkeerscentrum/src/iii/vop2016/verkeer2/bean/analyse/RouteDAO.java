@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package iii.vop2016.verkeer2.bean.analyse;
 
 import iii.vop2016.verkeer2.bean.components.DataProvider;
@@ -31,21 +31,22 @@ import org.json.JSONObject;
 @ManagedBean(name = "routeDAO", eager = true)
 @RequestScoped
 public class RouteDAO {
-
+    
     protected List<Route> availableRoutes;
     protected List<Route> selectedRoutes;
-    
+    protected boolean multiRoutes;
+   
     private static String urlAllRoutes = "http://localhost:8080/RestApi/v2/routes/all";
-
+    
     public List<Route> getSelectedRoutes() {
         return selectedRoutes;
     }
-
+    
     public List<Route> getAvailableRoutes() {
         return availableRoutes;
     }
     
-
+    
     public RouteDAO() {
         availableRoutes = new ArrayList<>();
         selectedRoutes = new ArrayList<>();
@@ -54,7 +55,7 @@ public class RouteDAO {
         // AJAX CALL OM ROUTES OP TE HALEN
         //
         
-         
+        
         // AVAILABLE ROUTES
         JSONArray routes = JSONMethods.getArrayFromURL(urlAllRoutes);
         for(int i=0; i<routes.length(); i++){
@@ -62,9 +63,9 @@ public class RouteDAO {
             availableRoutes.add(JSONtoRoute(routeJSON));
         }
         
-        // SELECTED ROUTES
-        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();        
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         Map<String, String[]> parameterMap = request.getParameterMap();
+        // SELECTED ROUTES
         String[] ids = parameterMap.get("routeId");
         if(ids != null){
             for(String s : ids){
@@ -72,8 +73,16 @@ public class RouteDAO {
                 selectedRoutes.add(getRoute(id));
             }
         }
-        
-            
+
+        // ROUTETYPE
+        String[] stype = parameterMap.get("routetype");
+        if(stype != null && stype.length>0 && stype[0].equals("multi")){
+            multiRoutes = true;
+        }else{
+            multiRoutes = false;
+        }
+
+
     }
     
     public Route JSONtoRoute(JSONObject obj){
@@ -82,7 +91,7 @@ public class RouteDAO {
         Route route = new Route(id, name);
         return route;
     }
-
+    
     private Route getRoute(long id) {
         int i=0;
         while(i < availableRoutes.size()){
@@ -101,6 +110,15 @@ public class RouteDAO {
             i++;
         }
         return false;
+    }
+    
+    
+    public boolean isMultiRoutes() {
+        return multiRoutes;
+    }
+
+    public static String getUrlAllRoutes() {
+        return urlAllRoutes;
     }
     
     

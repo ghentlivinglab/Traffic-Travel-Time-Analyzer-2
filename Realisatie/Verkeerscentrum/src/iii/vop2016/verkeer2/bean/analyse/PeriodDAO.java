@@ -25,7 +25,9 @@ public class PeriodDAO {
     
     private Pair<Date, Date> period = null;
     private List<Pair<Date, Date>> periods;
-        
+    private boolean multiPeriods;
+
+    
     
     
     /**
@@ -70,6 +72,14 @@ public class PeriodDAO {
             }
         }
         
+        // PERIODTYPE
+        String[] stype = parameterMap.get("periodtype");
+        if(stype != null && stype.length>0 && stype[0].equals("multi")){
+            multiPeriods = true;
+        }else{
+            multiPeriods = false;
+        }
+        
     }
     
     
@@ -80,5 +90,10 @@ public class PeriodDAO {
     public List<Pair<Date, Date>> getPeriods() {
         return periods;
     }
+    
+    public boolean isMultiPeriods() {
+        return multiPeriods;
+    }
+        
     
 }

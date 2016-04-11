@@ -78,3 +78,6 @@ Datum,Start,Einde,Plaats,Categorie,Omschrijving,Issue #,Opmerkingen
 07/04/16,20:00,23:59,Thuis,Web,Add graph to analyse,,
 08/04/16,12:00,16:30,Thuis,Web,Add graph + table to analyse,,
 09/04/16,11:00,14:00,Thuis,Web,Add graph + table to analyse + looking for bugs,,
+10/04/16,11:00,15:30,Thuis,Web,Web code opgekuisd + functionaliteiten analyse uitgebreid,,
+11/04/16,10:00,11:30,School,Bespreking,Bespreken einde sprint2,,
+11/04/16,11:30,12:30,School,Web,Toevoegen JNDI lookup voor global variablen in web + afstellen JSF,,
