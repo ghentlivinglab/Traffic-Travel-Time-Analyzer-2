@@ -126,39 +126,62 @@ public class DataProvider implements DataProviderRemote {
         }
     };
 
-    private Map<IRoute, Integer> currentDuration = new HashMap<>();
+    private int getDataFromBuffer(Map<Long, Map<IRoute, Integer>> buffer, IRoute route, List<String> providers, long hash) {
+        if (buffer.containsKey(hash)) {
+            Map<IRoute, Integer> lowerBuffer = buffer.get(hash);
+            if (lowerBuffer.containsKey(route)) {
+                return lowerBuffer.get(route);
+            }
+        }
+        return -1;
+    }
+
+    private void setDataInBuffer(int value, Map<Long, Map<IRoute, Integer>> buffer, IRoute route, List<String> providers, long hash) {
+        if (value != -1) {
+            if (buffer.containsKey(hash)) {
+                buffer.get(hash).put(route, value);
+            } else {
+                Map<IRoute, Integer> m = new HashMap<>();
+                m.put(route, value);
+                buffer.put(hash, m);
+            }
+        }
+    }
+
+    private Map<Long, Map<IRoute, Integer>> currentDuration = new HashMap<>();
 
     @Override
     public int getCurrentDuration(IRoute route, List<String> providers) {
-        if (!currentDuration.containsKey(route)) {
+        long hash = calculateHash(providers);
+        int buffer = getDataFromBuffer(currentDuration, route, providers, hash);
+        if (buffer == -1) {
             ITrafficDataDAO dao = beans.getTrafficDataDAO();
             List<IRouteData> list = dao.getCurrentTrafficSituation(route, providers);
 
-            if (list == null || list.size() == 0) {
+            if (list == null || list.isEmpty()) {
                 return -1;
             }
 
-            int ret = CalculateArithmaticMean(list, new Function<IRouteData, Long>() {
+            buffer = CalculateArithmaticMean(list, new Function<IRouteData, Long>() {
                 @Override
                 public Long apply(IRouteData t) {
                     return new Long(t.getDuration());
                 }
             }, function_distance);
 
-            if (ret != -1) {
-                currentDuration.put(route, ret);
-            }
-
-            return ret;
+            setDataInBuffer(buffer, currentDuration, route, providers, hash);
         }
-        return currentDuration.get(route);
+        return buffer;
     }
 
-    private Map<IRoute, Integer> currentSpeed = new HashMap<>();
+    private Map<Long, Map<IRoute, Integer>> currentSpeed = new HashMap<>();
 
     @Override
     public int getCurrentVelocity(IRoute route, List<String> providers) {
-        if (!currentSpeed.containsKey(route)) {
+        long hash = calculateHash(providers);
+        int buffer = getDataFromBuffer(currentSpeed, route, providers, hash);
+
+        if (buffer == -1) {
             ITrafficDataDAO dao = beans.getTrafficDataDAO();
             List<IRouteData> list = dao.getCurrentTrafficSituation(route, providers);
 
@@ -166,61 +189,56 @@ public class DataProvider implements DataProviderRemote {
                 return -1;
             }
 
-            int ret = CalculateArithmaticMean(list, new Function<IRouteData, Long>() {
+            buffer = CalculateArithmaticMean(list, new Function<IRouteData, Long>() {
                 @Override
                 public Long apply(IRouteData t) {
                     return (long) t.getDistance() / (long) t.getDuration();
                 }
             }, function_distance);
 
-            if (ret != -1) {
-                currentSpeed.put(route, ret);
-            }
-
-            return ret;
+            setDataInBuffer(buffer, currentSpeed, route, providers, hash);
         }
-        return currentSpeed.get(route);
+        return buffer;
     }
 
-    private Map<IRoute, Integer> optimalDuration = new HashMap<>();
+    private Map<Long, Map<IRoute, Integer>> optimalDuration = new HashMap<>();
 
     @Override
     public int getOptimalDuration(IRoute route, List<String> providers) {
-        if (!optimalDuration.containsKey(route)) {
+        long hash = calculateHash(providers);
+        int buffer = getDataFromBuffer(optimalDuration, route, providers, hash);
+
+        if (buffer == -1) {
             Properties properties = getProperties();
             long timeframe = Integer.parseInt(properties.getProperty("OptimalDurationTimeFrame", "0")) * (long) 1000;
             long currentTime = beans.getTimer().getCurrentTime();
             Date startDate = new Date(currentTime - timeframe);
             Date endDate = new Date(currentTime);
 
-            int dur = getOptimalDuration(route, providers, startDate, endDate);
-            if (dur != -1) {
-                optimalDuration.put(route, dur);
-            }
-
-            return dur;
+            buffer = getOptimalDuration(route, providers, startDate, endDate);
+            setDataInBuffer(buffer, optimalDuration, route, providers, hash);
         }
-        return optimalDuration.get(route);
+        return buffer;
     }
 
-    private Map<IRoute, Integer> optimalSpeed = new HashMap<>();
+    private Map<Long, Map<IRoute, Integer>> optimalSpeed = new HashMap<>();
 
     @Override
     public int getOptimalVelocity(IRoute route, List<String> providers) {
-        if (!optimalSpeed.containsKey(route)) {
+        long hash = calculateHash(providers);
+        int buffer = getDataFromBuffer(optimalSpeed, route, providers, hash);
+
+        if (buffer == -1) {
             Properties properties = getProperties();
             long timeframe = Integer.parseInt(properties.getProperty("OptimalDurationTimeFrame", "0")) * (long) 1000;
             long currentTime = beans.getTimer().getCurrentTime();
             Date startDate = new Date(currentTime - timeframe);
             Date endDate = new Date(currentTime);
 
-            int dur = getOptimalVelocity(route, providers, startDate, endDate);
-            if (dur != -1) {
-                optimalSpeed.put(route, dur);
-            }
-            return dur;
+            buffer = getOptimalVelocity(route, providers, startDate, endDate);
+            setDataInBuffer(buffer, optimalSpeed, route, providers, hash);
         }
-        return optimalSpeed.get(route);
+        return buffer;
     }
 
     @Override
@@ -269,44 +287,44 @@ public class DataProvider implements DataProviderRemote {
         return -1;
     }
 
-    private Map<IRoute, Integer> avgDuration = new HashMap<>();
+    private Map<Long, Map<IRoute, Integer>> avgDuration = new HashMap<>();
 
     @Override
     public int getAvgDuration(IRoute route, List<String> providers) {
-        if (!avgDuration.containsKey(route)) {
+        long hash = calculateHash(providers);
+        int buffer = getDataFromBuffer(avgDuration, route, providers, hash);
+
+        if (buffer == -1) {
             Properties properties = getProperties();
             long timeframe = Integer.parseInt(properties.getProperty("AvgDurationTimeFrame", "0")) * (long) 1000;
             long currentTime = beans.getTimer().getCurrentTime();
             Date startDate = new Date(currentTime - timeframe);
             Date endDate = new Date(currentTime);
 
-            int dur = getAvgDuration(route, providers, startDate, endDate);
-            if (dur != -1) {
-                avgDuration.put(route, dur);
-            }
-            return dur;
+            buffer = getAvgDuration(route, providers, startDate, endDate);
+            setDataInBuffer(buffer, avgDuration, route, providers, hash);
         }
-        return avgDuration.get(route);
+        return buffer;
     }
 
-    private Map<IRoute, Integer> avgSpeed = new HashMap<>();
+    private Map<Long, Map<IRoute, Integer>> avgSpeed = new HashMap<>();
 
     @Override
     public int getAvgVelocity(IRoute route, List<String> providers) {
-        if (!avgSpeed.containsKey(route)) {
+        long hash = calculateHash(providers);
+        int buffer = getDataFromBuffer(avgSpeed, route, providers, hash);
+
+        if (buffer == -1) {
             Properties properties = getProperties();
             long timeframe = Integer.parseInt(properties.getProperty("AvgDurationTimeFrame", "0")) * (long) 1000;
             long currentTime = beans.getTimer().getCurrentTime();
             Date startDate = new Date(currentTime - timeframe);
             Date endDate = new Date(currentTime);
 
-            int dur = getAvgVelocity(route, providers, startDate, endDate);
-            if (dur != -1) {
-                avgSpeed.put(route, dur);
-            }
-            return dur;
+            buffer = getAvgVelocity(route, providers, startDate, endDate);
+            setDataInBuffer(buffer, avgSpeed, route, providers, hash);
         }
-        return avgSpeed.get(route);
+        return buffer;
     }
 
     @Override
@@ -350,6 +368,7 @@ public class DataProvider implements DataProviderRemote {
         }
 
         int current = getCurrentDuration(route, providers);
+
         return beans.getThresholdManager().getThresholdLevel(route, current - opt);
     }
 
@@ -383,31 +402,49 @@ public class DataProvider implements DataProviderRemote {
         return beans.getThresholdManager().getThresholdLevel(route, avg - opt);
     }
 
+    private Map<Long, Map<IRoute, Integer>> distance = new HashMap<>();
+
     @Override
     public int getDistance(IRoute route, List<String> providers) {
-        ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        List<IRouteData> list = dao.getCurrentTrafficSituation(route, providers);
+        long hash = calculateHash(providers);
+        int buffer = getDataFromBuffer(distance, route, providers, hash);
 
-        long distance = 0;
+        if (buffer == -1) {
+            ITrafficDataDAO dao = beans.getTrafficDataDAO();
+            List<IRouteData> list = dao.getCurrentTrafficSituation(route, providers);
 
-        int i = 0;
-        for (IRouteData r : list) {
-            distance += r.getDistance();
-            i++;
+            long distance = 0;
+
+            int i = 0;
+            for (IRouteData r : list) {
+                distance += r.getDistance();
+                i++;
+            }
+
+            buffer = Math.toIntExact(distance / i);
+            setDataInBuffer(buffer, this.distance, route, providers, hash);
         }
-
-        if (i == 0) {
-            return -1;
-        }
-
-        return Math.toIntExact(distance / i);
-
+        return buffer;
     }
+
+    private Map<Long, Map<IRoute, Integer>> trend = new HashMap<>();
 
     @Override
     public int getTrend(IRoute route, List<String> providers) {
-        ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return 0;
+        long hash = calculateHash(providers);
+        int buffer = getDataFromBuffer(trend, route, providers, hash);
+
+        if (buffer == -1) {
+            Properties properties = getProperties();
+            long timeframe = Integer.parseInt(properties.getProperty("TrendTimeFrame", "0")) * (long) 1000;
+            long currentTime = beans.getTimer().getCurrentTime();
+            Date startDate = new Date(currentTime - timeframe);
+            Date endDate = new Date(currentTime);
+
+            buffer = getTrend(route, providers,startDate,endDate);
+            setDataInBuffer(buffer, trend, route, providers, hash);
+        }
+        return buffer;
     }
 
     @Override
@@ -423,15 +460,90 @@ public class DataProvider implements DataProviderRemote {
     }
 
     @Override
-    public Map<Date, Integer> getDataByDay(IRoute route, List<String> providers, Date start, Date end, Weekdays day) {
-        ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return new HashMap<>();
+    public Map<Weekdays, List<Integer>> getDataByDay(IRoute route, List<String> providers, Weekdays... days) {
+        Properties properties = getProperties();
+        long timeframe = Integer.parseInt(properties.getProperty("DataByDayTimeFrame", "0")) * (long) 1000;
+        long currentTime = beans.getTimer().getCurrentTime();
+        Date startDate = new Date(currentTime - timeframe);
+        Date endDate = new Date(currentTime);
+
+        return getDataByDay(route, providers, startDate, endDate, days);
     }
 
     @Override
-    public Map<Date, Integer> getDataVelocityByDay(IRoute route, List<String> providers, Date start, Date end, Weekdays day) {
+    public Map<Weekdays, List<Integer>> getDataVelocityByDay(IRoute route, List<String> providers, Weekdays... days) {
+        Properties properties = getProperties();
+        long timeframe = Integer.parseInt(properties.getProperty("DataByDayTimeFrame", "0")) * (long) 1000;
+        long currentTime = beans.getTimer().getCurrentTime();
+        Date startDate = new Date(currentTime - timeframe);
+        Date endDate = new Date(currentTime);
+
+        return getDataVelocityByDay(route, providers, startDate, endDate, days);
+    }
+
+    @Override
+    public Map<Weekdays, List<Integer>> getDataByDay(IRoute route, List<String> providers, Date start, Date end, Weekdays... days) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        return new HashMap<>();
+        Map<Weekdays, List<Integer>> ret = new HashMap<>();
+
+        GregorianCalendar startHour = new GregorianCalendar(0, 0, 0, 6, 0, 0);
+        GregorianCalendar endHour = new GregorianCalendar(0, 0, 0, 2, 0);
+        List<List<List<Date>>> list = generateListsForDayOfWeek(start, end, startHour, endHour, true);
+
+        for (Weekdays day : days) {
+            int weekday = day.ordinal();
+            List<Long> data = dao.getAggregateData(route, list.get(0).get(weekday), list.get(1).get(weekday), 3600, true, new AggregationContainer(Aggregation.none, "timestamp"), new AggregationContainer(Aggregation.sum, "duration * distance"), new AggregationContainer(Aggregation.sum, "distance"));
+
+            ret.put(day, MapDataByDay(data));
+        }
+        return ret;
+    }
+
+    @Override
+    public Map<Weekdays, List<Integer>> getDataVelocityByDay(IRoute route, List<String> providers, Date start, Date end, Weekdays... days) {
+        ITrafficDataDAO dao = beans.getTrafficDataDAO();
+        Map<Weekdays, List<Integer>> ret = new HashMap<>();
+
+        GregorianCalendar startHour = new GregorianCalendar(0, 0, 0, 6, 0, 0);
+        GregorianCalendar endHour = new GregorianCalendar(0, 0, 0, 2, 0);
+        List<List<List<Date>>> list = generateListsForDayOfWeek(start, end, startHour, endHour, true);
+
+        for (Weekdays day : days) {
+            int weekday = day.ordinal();
+            List<Long> data = dao.getAggregateData(route, list.get(0).get(weekday), list.get(1).get(weekday), 3600, true, new AggregationContainer(Aggregation.none, "timestamp"), new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
+
+            ret.put(day, MapDataByDay(data));
+        }
+        return ret;
+    }
+
+    private List<Integer> MapDataByDay(List<Long> data) {
+        int index = 0;
+        int hour = 6;
+        Calendar cal = new GregorianCalendar();
+        List<Integer> arr = new ArrayList<>();
+        while (index < data.size()) {
+            Date d = new Date(data.get(index++));
+            cal.setTime(d);
+
+            Long exp = data.get(index++);
+            Long div = data.get(index++);
+            int res = Math.toIntExact(exp / div);
+
+            int nextHour = cal.get(GregorianCalendar.HOUR_OF_DAY);
+
+            for (int i = hour + 1; i < nextHour; i++) {
+                arr.add(-1);
+            }
+            arr.add(res);
+            hour = nextHour;
+
+        }
+        for (int i = hour + 1; i <= (24 + 2); i++) {
+            arr.add(-1);
+        }
+
+        return arr;
     }
 
     @Override
@@ -526,7 +638,8 @@ public class DataProvider implements DataProviderRemote {
         return null;
     }
 
-    private List<Date> GenerateListForHourBetweenDates(Calendar time, Date startDate, Date endDate) {
+    //generate a list with all specific hours between 2 dates (for example all 06:00 bewteen 02/02/16 04/04/16)
+    private List<Date> GenerateListForHourBetweenDates(Calendar hour, Date startDate, Date endDate) {
         List<Date> dates = new ArrayList<>();
 
         Calendar cStart = new GregorianCalendar();
@@ -534,8 +647,8 @@ public class DataProvider implements DataProviderRemote {
         Calendar cEnd = new GregorianCalendar();
         cEnd.setTime(endDate);
 
-        cStart.set(Calendar.HOUR_OF_DAY, time.get(Calendar.HOUR_OF_DAY));
-        cStart.set(Calendar.MINUTE, time.get(Calendar.MINUTE));
+        cStart.set(Calendar.HOUR_OF_DAY, hour.get(Calendar.HOUR_OF_DAY));
+        cStart.set(Calendar.MINUTE, hour.get(Calendar.MINUTE));
 
         while (cStart.before(cEnd)) {
             dates.add(cStart.getTime());
@@ -544,10 +657,78 @@ public class DataProvider implements DataProviderRemote {
         return dates;
     }
 
+    //List contains 2 list, 1 for startDates, other for endDates. In those dates there is a list for every day of the week.
+    //nextday indicated that the endHour is in the next day
+    private List<List<List<Date>>> generateListsForDayOfWeek(Date startDate, Date endDate, Calendar startHour, Calendar endHour, boolean nextDay) {
+        List<List<List<Date>>> ret = new ArrayList<>();
+        for (int j = 0; j < 2; j++) {
+            ret.add(new ArrayList<List<Date>>());
+            for (int i = 0; i < 7; i++) {
+                ret.get(j).add(new ArrayList<Date>());
+            }
+        }
+
+        GregorianCalendar start = new GregorianCalendar();
+        GregorianCalendar end = new GregorianCalendar();
+
+        start.setTime(startDate);
+        //hour and minutes are adjusted, not seconds
+        start.set(GregorianCalendar.SECOND, 0);
+
+        end.setTime(endDate);
+
+        while (start.before(end)) {
+            int weekday = start.get(GregorianCalendar.DAY_OF_WEEK);
+
+            //correct weekday to 0 based index, and shift monday to first
+            weekday -= 2;
+            if (weekday < 0) {
+                weekday = 6;
+            }
+
+            start.set(GregorianCalendar.HOUR_OF_DAY, startHour.get(GregorianCalendar.HOUR_OF_DAY));
+            start.set(GregorianCalendar.MINUTE, startHour.get(GregorianCalendar.MINUTE));
+            ret.get(0).get(weekday).add(start.getTime());
+
+            //adds the endDate if the hour is in same day
+            if (!nextDay) {
+                start.set(GregorianCalendar.HOUR_OF_DAY, endHour.get(GregorianCalendar.HOUR_OF_DAY));
+                start.set(GregorianCalendar.MINUTE, endHour.get(GregorianCalendar.MINUTE));
+                ret.get(1).get(weekday).add(start.getTime());
+            }
+
+            start.add(GregorianCalendar.DAY_OF_MONTH, 1);
+
+            //adds the endDate if the hour was in the next day
+            if (nextDay) {
+                start.set(GregorianCalendar.HOUR_OF_DAY, endHour.get(GregorianCalendar.HOUR_OF_DAY));
+                start.set(GregorianCalendar.MINUTE, endHour.get(GregorianCalendar.MINUTE));
+                ret.get(1).get(weekday).add(start.getTime());
+            }
+
+            //for eval of end, so that the last day is certainly included in the generation
+            start.set(GregorianCalendar.HOUR_OF_DAY, 0);
+        }
+
+        return ret;
+    }
+
     @Override
     public void invalidateCurrentData() {
         this.currentDuration.clear();
         this.currentSpeed.clear();
+        this.distance.clear();
+        this.trend.clear();
     }
 
+    private long calculateHash(List<String> providers) {
+        if (providers == null) {
+            return 0;
+        }
+        long hash = 0;
+        for (String s : providers) {
+            hash += s.hashCode();
+        }
+        return hash;
+    }
 }

@@ -252,6 +252,76 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
 
     @Override
     public List<Long> getAggregateData(IRoute route, List<Date> startList, List<Date> endList, AggregationContainer... aggr) {
+        return getAggregateData(route, startList, endList, -1, false, aggr);
+    }
+
+    @Override
+    public List<Long> getAggregateData(IRoute route, Date time1, Date time2, AggregationContainer... aggr) {
+        return getAggregateData(route, time1, time2, -1, false, aggr);
+    }
+
+    @Override
+    public List<Long> getAggregateData(IRoute route, Date time1, Date time2, long groupbyTimeFrames, AggregationContainer... aggr) {
+        return getAggregateData(route, time1, time2, groupbyTimeFrames, false, aggr);
+    }
+
+    @Override
+    public List<Long> getAggregateData(IRoute route, List<Date> startList, List<Date> endList, long groupbyTimeFrames, AggregationContainer... aggr) {
+        return getAggregateData(route, startList, endList, groupbyTimeFrames, false, aggr);
+    }
+
+    @Override
+    public List<Long> getAggregateData(IRoute route, Date time1, Date time2, long groupbyTimeFrames, boolean truncateDate, AggregationContainer... aggr) {
+        List<Long> data = new ArrayList<>();
+        try {
+            long[] range = blocklist.getIdRange(time1, time2);
+            if (range[0] == -1 || range[1] == -1) {
+                throw new NoResultException("Could not retrieve id segment from blocklist");
+            }
+
+            int i = 0;
+            Request r = new Request(true, 0);
+            r.addParam(i++, new Parameter("id", range[0], range[1], Operation.between));
+            r.addParam(i++, new Parameter("routeId", route.getId(), Operation.eq));
+            r.addParam(i++, new Parameter("timestamp", time1, time2, Operation.between));
+            for (AggregationContainer c : aggr) {
+                r.addParam(i++, new Parameter(c.aggregation, c.attr));
+            }
+
+            r.setGroupBy(groupbyTimeFrames);
+            r.setDataless(truncateDate);
+
+            List<Object> objList = new ArrayList<>();
+            if (groupbyTimeFrames == -1) {
+                Object obj = r.PrepareQuery(em).getSingleResult();
+                objList.add(obj);
+            } else {
+                objList = r.PrepareQuery(em).getResultList();
+            }
+            for (Object obj : objList) {
+                if (obj instanceof Object[]) {
+                    Object[] arr = (Object[]) obj;
+                    for (Object l : arr) {
+                        if (l instanceof Long) {
+                            data.add((Long) l);
+                        } else if (l instanceof Date) {
+                            data.add(((Date) l).getTime());
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            Logger logger = Logger.getLogger(this.getClass().getName());
+            logger.severe(e.getMessage());
+        } finally {
+
+        }
+        return data;
+    }
+
+    @Override
+    public List<Long> getAggregateData(IRoute route, List<Date> startList, List<Date> endList, long groupbyTimeFrames, boolean truncateDate, AggregationContainer... aggr) {
         List<Long> data = new ArrayList<>();
         try {
             if (route == null) {
@@ -280,49 +350,25 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
                 r.addParam(i++, new Parameter(c.aggregation, c.attr));
             }
 
-            Object obj = r.PrepareQuery(em).getSingleResult();
-            if (obj instanceof Object[]) {
-                Object[] arr = (Object[]) obj;
-                for (Object l : arr) {
-                    if (l instanceof Long) {
-                        data.add((Long) l);
-                    }
-                }
+            r.setGroupBy(groupbyTimeFrames);
+            r.setDataless(truncateDate);
+
+            List<Object> objList = new ArrayList<>();
+            if (groupbyTimeFrames == -1) {
+                Object obj = r.PrepareQuery(em).getSingleResult();
+                objList.add(obj);
+            } else {
+                objList = r.PrepareQuery(em).getResultList();
             }
-
-        } catch (Exception e) {
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.severe(e.getMessage());
-        } finally {
-
-        }
-        return data;
-    }
-
-    @Override
-    public List<Long> getAggregateData(IRoute route, Date time1, Date time2, AggregationContainer... aggr) {
-        List<Long> data = new ArrayList<>();
-        try {
-            long[] range = blocklist.getIdRange(time1, time2);
-            if (range[0] == -1 || range[1] == -1) {
-                throw new NoResultException("Could not retrieve id segment from blocklist");
-            }
-
-            int i = 0;
-            Request r = new Request(true, 0);
-            r.addParam(i++, new Parameter("id", range[0], range[1], Operation.between));
-            r.addParam(i++, new Parameter("routeId", route.getId(), Operation.eq));
-            r.addParam(i++, new Parameter("timestamp", time1, time2, Operation.between));
-            for (AggregationContainer c : aggr) {
-                r.addParam(i++, new Parameter(c.aggregation, c.attr));
-            }
-
-            Object obj = r.PrepareQuery(em).getSingleResult();
-            if (obj instanceof Object[]) {
-                Object[] arr = (Object[]) obj;
-                for (Object l : arr) {
-                    if (l instanceof Long) {
-                        data.add((Long) l);
+            for (Object obj : objList) {
+                if (obj instanceof Object[]) {
+                    Object[] arr = (Object[]) obj;
+                    for (Object l : arr) {
+                        if (l instanceof Long) {
+                            data.add((Long) l);
+                        } else if (l instanceof Date) {
+                            data.add(((Date) l).getTime());
+                        }
                     }
                 }
             }

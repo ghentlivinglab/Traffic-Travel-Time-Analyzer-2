@@ -239,4 +239,24 @@ public class DummyTrafficDataDAO implements TrafficDataDAORemote {
         return ret;
     }
 
+    @Override
+    public List<Long> getAggregateData(IRoute route, Date time1, Date time2, long groupbyTimeFrames, AggregationContainer... aggr) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Long> getAggregateData(IRoute route, List<Date> startList, List<Date> endList, long groupbyTimeFrames, AggregationContainer... aggr) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Long> getAggregateData(IRoute route, Date time1, Date time2, long groupbyTimeFrames, boolean truncateDate, AggregationContainer... aggr) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Long> getAggregateData(IRoute route, List<Date> startList, List<Date> endList, long groupbyTimeFrames, boolean truncateDate, AggregationContainer... aggr) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
