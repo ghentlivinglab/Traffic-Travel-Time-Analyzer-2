@@ -62,7 +62,7 @@ public class CoyoteSourceAdapter implements CoyoteSourceAdapterRemote {
             try {
                 download();
             } catch (Exception e) {
-                throw new URLException("Website " + providerName + " doesn't work");
+                throw new URLException("Can't connect to URL for " + providerName + " adapter");
             }
         }
 
@@ -75,9 +75,8 @@ public class CoyoteSourceAdapter implements CoyoteSourceAdapterRemote {
 
         String geoStart = route.getStartLocation().getName();
         String geoEnd = route.getEndLocation().getName();
-        
+
         //System.out.println(routeName + " - " + geoStart + " - " + geoEnd);
-        
         try {
 
             JSONObject traject = downloadedJSON.getJSONObject(routeName + " - " + geoStart + " - " + geoEnd);
@@ -93,7 +92,7 @@ public class CoyoteSourceAdapter implements CoyoteSourceAdapterRemote {
             rd.setDuration(seconds);
             rd.setRouteId(route.getId());
             rd.setTimestamp(new Date());
-            
+
         } catch (Exception e) {
             throw new DataAccessException("Can't find JSON-match in " + providerName + " for this route: " + route.getName());
         }
@@ -122,7 +121,7 @@ public class CoyoteSourceAdapter implements CoyoteSourceAdapterRemote {
             JSONObject obj = new JSONObject(body.text());
             downloadedJSON = obj.getJSONObject("Gand");
         } catch (Exception e) {
-            throw new URLException("Website " + providerName + " doesn't work");
+            throw new URLException("Can't connect to URL for " + providerName + " adapter");
         }
     }
 

@@ -102,7 +102,7 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
         }
              */
         } catch (URLException e) {
-            throw new URLException("Wrong URL for " + providerName + " adapter or internet connection is lost");
+            throw new URLException("Can't connect to URL for " + providerName + " adapter");
         } catch (JSONException | DataAccessException e) {
             throw new DataAccessException("Cannot access data from " + providerName + " adapter");
         }
@@ -122,17 +122,15 @@ public class HereSourceAdapter implements HereSourceAdapterRemote {
             }
             //System.out.println(buffer.toString());
             return buffer.toString();
-        } catch (MalformedURLException ex) {
-            throw new URLException("Wrong URL for " + providerName + " adapter or internet connection is lost");
-        } catch (IOException e) {
-            throw new DataAccessException("Cannot access data from " + providerName + " adapter");
+        } catch (Exception ex) {
+            throw new URLException("Can't connect to URL for " + providerName + " adapter");
         } finally {
             try {
                 if (reader != null) {
                     reader.close();
                 }
             } catch (IOException e) {
-                throw new DataAccessException("Cannot access data from " + providerName + " adapter");
+                throw new URLException("Can't connect to URL for " + providerName + " adapter");
             }
         }
     }

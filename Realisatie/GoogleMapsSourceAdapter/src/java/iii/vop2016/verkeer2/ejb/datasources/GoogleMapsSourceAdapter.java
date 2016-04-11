@@ -111,7 +111,7 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
             }
             } 
             catch (IOException ex) {
-                throw new URLException("Wrong URL for " + providerName + " adapter or internet connection is lost");
+                throw new URLException("Can't connect to URL for " + providerName + " adapter");
             }
             
         }
