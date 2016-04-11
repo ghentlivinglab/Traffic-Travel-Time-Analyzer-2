@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -137,7 +138,11 @@ public class DataProvider implements DataProviderRemote {
     }
 
     private void setDataInBuffer(int value, Map<Long, Map<IRoute, Integer>> buffer, IRoute route, List<String> providers, long hash) {
-        if (value != -1) {
+        setDataInBuffer(value, buffer, route, providers, hash, -1);
+    }
+
+    private void setDataInBuffer(int value, Map<Long, Map<IRoute, Integer>> buffer, IRoute route, List<String> providers, long hash, int err) {
+        if (value != err) {
             if (buffer.containsKey(hash)) {
                 buffer.get(hash).put(route, value);
             } else {
@@ -441,8 +446,8 @@ public class DataProvider implements DataProviderRemote {
             Date startDate = new Date(currentTime - timeframe);
             Date endDate = new Date(currentTime);
 
-            buffer = getTrend(route, providers,startDate,endDate);
-            setDataInBuffer(buffer, trend, route, providers, hash);
+            buffer = getTrend(route, providers, startDate, endDate);
+            setDataInBuffer(buffer, trend, route, providers, hash, 0);
         }
         return buffer;
     }
@@ -450,6 +455,41 @@ public class DataProvider implements DataProviderRemote {
     @Override
     public int getTrend(IRoute route, List<String> providers, Date start, Date end) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
+        List<IRouteData> data = dao.getData(route, start, end);
+
+        Map<Date, List<IRouteData>> sortedData = new HashMap<>();
+
+        if (data == null || data.isEmpty()) {
+            return 0;
+        }
+
+        for (IRouteData d : data) {
+            if (sortedData.containsKey(d.getTimestamp())) {
+                sortedData.get(d.getTimestamp()).add(d);
+            } else {
+                List<IRouteData> arr = new ArrayList<>();
+                arr.add(d);
+                sortedData.put(d.getTimestamp(), arr);
+            }
+        }
+
+        Map<Date, Integer> aggrData = new TreeMap<>();
+
+        for (Map.Entry<Date, List<IRouteData>> entry : sortedData.entrySet()) {
+            aggrData.put(entry.getKey(), getMeanDurationFromRouteData(entry.getValue()));
+        }
+        
+        List<Integer> delta = new ArrayList<>();
+        int prev = -1;
+        for (Map.Entry<Date, Integer> entry : aggrData.entrySet()) {
+            if(prev == -1){
+                prev = entry.getValue();
+            }else{
+                delta.add(entry.getValue() - prev);
+                prev = entry.getValue();
+            }
+        }
+
         return 0;
     }
 
