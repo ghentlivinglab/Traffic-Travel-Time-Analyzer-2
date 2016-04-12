@@ -1,3 +1,16 @@
+NEW CONFIG:
+-----------
+PROJECT_URL: verkeer-2.bp.tiwi.be
+ROOT_PASSWORD: Wc7miuZpA6
+
+SSH ACCESS:
+ssh root@146.185.151.29
+
+Glassfish: admin/<root pass>
+MySQL: root/root
+
+OLD CONFIG:
+-----------
 PROJECT_URL: verkeer-2.bp.tiwi.be
 PROJECT_PROXY: tiwibp2.ugent.be
 PROJECT_SSHPORT: 30022
