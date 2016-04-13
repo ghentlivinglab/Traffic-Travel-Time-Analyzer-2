@@ -558,6 +558,9 @@ public class DataProvider implements DataProviderRemote {
             buffer = aggrData;
 
             setDataInBuffer(buffer, recentData, route, providers, hash, null);
+            
+        }else{
+             buffer = new HashMap<>();
         }
         return buffer;
     }
