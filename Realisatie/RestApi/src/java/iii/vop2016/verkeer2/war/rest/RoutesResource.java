@@ -38,6 +38,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyser;
 import java.util.Calendar;
+import java.util.Set;
 import javax.xml.ws.WebServiceContext;
 
 /**
@@ -59,10 +60,18 @@ public class RoutesResource {
 
     Date startTime;
     Date endTime;
+    
     Date avgStartTime;
     Date avgEndTime;
+    
+    Date optimalStartTime;
+    Date optimalEndTime;
+    
     List<Date> startTimes;
     List<Date> endTimes;
+    
+    int precision = -1;
+    
     List<String> providers;
 
     /**
@@ -221,6 +230,8 @@ public class RoutesResource {
         setStartTimes(startTimes);
         setEndTimes(endTimes);
 
+        setPrecision();
+        
         List<IRoute> routes = getRoutes(sid);
 
         JSONArray result = JSONRoutes(routes);
@@ -235,6 +246,8 @@ public class RoutesResource {
     @Produces("application/json")
     public String getProviderData(@PathParam("id") String sid) {
         setAnalysisParameters();
+        
+        setPrecision();
 
         List<IRoute> routes = getRoutes(sid);
 
@@ -302,11 +315,16 @@ public class RoutesResource {
 
         obj.put("currentDuration", beans.getDataProvider().getCurrentDuration(route, providers));
         obj.put("currentVelocity", beans.getDataProvider().getCurrentVelocity(route, providers));
+        
+        if(optimalStartTime != null && optimalEndTime != null){
+            obj.put("optimalDuration", beans.getDataProvider().getOptimalDuration(route, providers,optimalStartTime,optimalEndTime));
+            obj.put("optimalVelocity", beans.getDataProvider().getOptimalVelocity(route, providers,optimalStartTime,optimalEndTime));
+        }else{
+            obj.put("optimalDuration", beans.getDataProvider().getOptimalDuration(route, providers));
+            obj.put("optimalVelocity", beans.getDataProvider().getOptimalVelocity(route, providers));
+        }
 
-        obj.put("optimalDuration", beans.getDataProvider().getOptimalDuration(route, providers));
-        obj.put("optimalVelocity", beans.getDataProvider().getOptimalVelocity(route, providers));
-
-        if (avgStartTime != null & avgEndTime != null) {
+        if (avgStartTime != null && avgEndTime != null) {
             obj.put("avgDuration", beans.getDataProvider().getAvgDuration(route, providers, avgStartTime, avgEndTime));
             obj.put("avgVelocity", beans.getDataProvider().getAvgVelocity(route, providers, avgStartTime, avgEndTime));
         } else {
@@ -340,7 +358,7 @@ public class RoutesResource {
         result.put("description", description);
         
         JSONObject data= new JSONObject();
-        List<Date> timestamps = new ArrayList<>();
+        List<Date> timestamps=new ArrayList<>();
         timestamps.addAll(dataMap.keySet());
         for (Date timestamp : timestamps) {
             data.put(String.valueOf(timestamp.getTime()),dataMap.get(timestamp));
@@ -350,59 +368,84 @@ public class RoutesResource {
         result.put("data", data);
         return result;
     }
+    
+    private JSONObject JSONDayData(String name, String description, List<Integer> dataList, List<String> hours){
+        JSONObject result = new JSONObject();
+        result.put("name", name);
+        result.put("description",description);
+        
+        JSONObject data = new JSONObject();
+        for (int i = 0; i<dataList.size();i++){
+            data.put(hours.get(0),dataList.get(0));
+        }
+        
+        result.put("data",data);
+        return result;
+    }
 
-    private JSONObject JSONDaysData(IRoute route) {
+    /*private JSONObject JSONDaysData(IRoute route) {
         JSONObject result = new JSONObject();
         Weekdays[] days = Weekdays.values();
         for (Weekdays day : days) {
             result.put(day.toString(), JSONDayData(route, day));
         }
         return result;
-    }
+    }*/
 
-    private JSONObject JSONDayData(IRoute route, Weekdays day) {
+    private JSONObject JSONDaysData(IRoute route) {
         JSONObject result = new JSONObject();
         Map<Weekdays, List<Integer>> mapDurations = null;
         Map<Weekdays, List<Integer>> mapVelocities = null;
-        if (startTime != null & endTime != null) {
-            mapDurations = beans.getDataProvider().getDataByDay(route, providers, startTime, endTime, day);
-            mapVelocities = beans.getDataProvider().getDataVelocityByDay(route, providers, startTime, endTime, day);
-        } else {
-            mapDurations=beans.getDataProvider().getDataByDay(route,providers,day);
-            mapVelocities=beans.getDataProvider().getDataVelocityByDay(route,providers,day);            
-        }
-
+        List<String> hours = beans.getDataProvider().getDataByDayHours();
         
-/*
-        result.put("duration", JSONData("durations " + day + " " + route.getId(),
-                "This data are the durations on a " + day + " for route " + route.getId(),
-                mapDurations));
-        result.put("velocity", JSONData("velocities " + day + " " + route.getId(),
-                "This data are the velocities on a " + day + " for route " + route.getId(),
-                mapVelocities));*/
+        if (startTime != null && endTime != null) {
+            mapDurations = beans.getDataProvider().getDataByDay(route, providers, startTime, endTime,Weekdays.MONDAY,Weekdays.TUESDAY,Weekdays.WEDNESDAY,Weekdays.THURSDAY,Weekdays.FRIDAY,Weekdays.SATERDAY,Weekdays.SUNDAY);
+            mapVelocities = beans.getDataProvider().getDataVelocityByDay(route, providers, startTime, endTime,Weekdays.MONDAY,Weekdays.TUESDAY,Weekdays.WEDNESDAY,Weekdays.THURSDAY,Weekdays.FRIDAY,Weekdays.SATERDAY,Weekdays.SUNDAY);
+        } else {
+            mapDurations=beans.getDataProvider().getDataByDay(route,providers,Weekdays.MONDAY,Weekdays.TUESDAY,Weekdays.WEDNESDAY,Weekdays.THURSDAY,Weekdays.FRIDAY,Weekdays.SATERDAY,Weekdays.SUNDAY);
+            mapVelocities=beans.getDataProvider().getDataVelocityByDay(route,providers,Weekdays.MONDAY,Weekdays.TUESDAY,Weekdays.WEDNESDAY,Weekdays.THURSDAY,Weekdays.FRIDAY,Weekdays.SATERDAY,Weekdays.SUNDAY);            
+        }
+        
+        Set<Weekdays> days = mapDurations.keySet();
+        for(Weekdays day:days){
+            JSONObject dayObject = new JSONObject();
+            dayObject.put("duration", JSONDayData("durations " + day.toString() + " " + route.getId(),
+                "This data are the durations on a " + day.toString() + " for route " + route.getId(),
+                mapDurations.get(day),hours));
+            dayObject.put("velocity", JSONDayData("velocities " + day.toString() + " " + route.getId(),
+                "This data are the velocities on a " + day.toString() + " for route " + route.getId(),
+                mapVelocities.get(day),hours));
+            
+            result.put(day.toString(),dayObject);
+        }
+        
         return result;
     }
 
+    //TODO
     private JSONObject JSONRushhourData(IRoute route) {
         JSONObject result = new JSONObject();
-        Map<Date, Integer> mapDurations;
-        Map<Date, Integer> mapVelocities;
-        /*
-        if (startTime != null & endTime != null) {
-            mapDurations = beans.getDataProvider().getDataByDayInWorkWeek(route, providers, startTime, endTime);
-            mapVelocities = beans.getDataProvider().getDataVelocityByDayInWorkWeek(route, providers, startTime, endTime);
+        
+        List<Integer> listDurations;
+        List<Integer> listVelocities;
+        
+        List<String> hours = beans.getDataProvider().getDataByDayHours();
+        
+        if (startTime != null && endTime != null) {
+            listDurations = beans.getDataProvider().getDataByCombinedDay(route, providers, startTime, endTime);
+            listVelocities = beans.getDataProvider().getDataVelocityByCombinedDay(route, providers, startTime, endTime);
         } else {
-            mapDurations = beans.getDataProvider().getDataByDayInWorkWeek(route, providers);
-            mapVelocities = beans.getDataProvider().getDataVelocityByDayInWorkWeek(route, providers);
+            listDurations = beans.getDataProvider().getDataByCombinedDay(route, providers);
+            listVelocities = beans.getDataProvider().getDataVelocityByCombinedDay(route, providers);
         }
 
-
-        result.put("duration", JSONData("rushhourDurations " + route.getId(),
+        
+        result.put("duration", JSONDayData("rushhourDurations " + route.getId(),
                 "This data are the durations for a workday for route " + route.getId(),
-                mapDurations));
-        result.put("velocity", JSONData("rushhourVelocities " + route.getId(),
+                listDurations,hours));
+        result.put("velocity", JSONDayData("rushhourVelocities " + route.getId(),
                 "This data are the velocities for a workday for route " + route.getId(),
-                mapVelocities));*/
+                listVelocities,hours));
         return result;
     }
 
@@ -424,9 +467,14 @@ public class RoutesResource {
         Map<Date, Integer> mapDurations;
         Map<Date, Integer> mapVelocities;
 
+        if(precision != -1){
+            mapDurations = beans.getDataProvider().getData(route, providers, precision, startTimes.get(periodnumber), endTimes.get(periodnumber));
+            mapVelocities = beans.getDataProvider().getDataVelocity(route, providers, precision, startTimes.get(periodnumber), endTimes.get(periodnumber));
+        }else{
         mapDurations = beans.getDataProvider().getData(route, providers, startTimes.get(periodnumber), endTimes.get(periodnumber));
         mapVelocities = beans.getDataProvider().getDataVelocity(route, providers, startTimes.get(periodnumber), endTimes.get(periodnumber));
-
+        }
+        
 
         obj.put("duration", JSONData("Period" + periodnumber + "Durations " + route.getId(),
                 "This data are the durations for period " + periodnumber + " for route " + route.getId(),
@@ -458,13 +506,25 @@ public class RoutesResource {
         Map<Date, Integer> mapDurations = null;
         Map<Date, Integer> mapVelocities = null;
 
-        if (startTime != null & endTime != null) {
-            mapDurations = beans.getDataProvider().getData(route, lprovider, startTime, endTime);
-            mapVelocities = beans.getDataProvider().getDataVelocity(route, lprovider, startTime, endTime);
-        } else {
-            //mapDurations=beans.getDataProvider().getData(route,lprovider);
-            //mapVelocities=beans.getDataProvider().getDataVelocity(route,lprovider);               
+        if (precision != -1){
+            if (startTime != null && endTime != null){
+                mapDurations= beans.getDataProvider().getData(route,lprovider,precision,startTime,endTime);
+                mapVelocities=beans.getDataProvider().getDataVelocity(route,lprovider,precision, startTime, endTime);
+            }else{
+                mapDurations=beans.getDataProvider().getData(route, providers,precision);
+                mapVelocities=beans.getDataProvider().getDataVelocity(route, providers,precision);
+            }
         }
+        else{
+            if (startTime != null && endTime != null){
+                mapDurations= beans.getDataProvider().getData(route,lprovider,startTime,endTime);
+                mapVelocities=beans.getDataProvider().getDataVelocity(route,lprovider, startTime, endTime);
+            }else{
+                mapDurations=beans.getDataProvider().getData(route, providers);
+                mapVelocities=beans.getDataProvider().getDataVelocity(route, providers);
+            }
+        }
+        
 
 
         obj.put("duration", JSONData("providerDurations " + provider + " " + route.getId(),
@@ -483,7 +543,7 @@ public class RoutesResource {
         setBasicParameters();
         String start = context.getQueryParameters().getFirst("start");
         String end = context.getQueryParameters().getFirst("end");
-        if (start != null & end != null) {
+        if (start != null && end != null) {
             setStartTime(start);
             setEndTime(end);
         } else {
@@ -496,12 +556,21 @@ public class RoutesResource {
         setProviders();
         String avgStart = context.getQueryParameters().getFirst("avgstart");
         String avgEnd = context.getQueryParameters().getFirst("avgend");
-        if (avgStart != null & avgEnd != null) {
+        if (avgStart != null && avgEnd != null) {
             setAVGStartTime(avgStart);
             setAVGEndTime(avgEnd);
         } else {
             avgStartTime = null;
             avgEndTime = null;
+        }
+        String optimalStart = context.getQueryParameters().getFirst("optimalstart");
+        String optimalEnd = context.getQueryParameters().getFirst("optimalend");
+        if (optimalStart != null && optimalEnd != null) {
+            setOptimalStartTime(optimalStart);
+            setOptimalEndTime(optimalEnd);
+        } else {
+            optimalStartTime = null;
+            optimalEndTime = null;
         }
 
     }
@@ -522,6 +591,23 @@ public class RoutesResource {
             Logger.getGlobal().log(Level.WARNING, endTime + " could not be converted to Long");
         }
     }
+    
+    private void setOptimalStartTime(String startTime) {
+        try {
+            this.optimalStartTime = new Date(Long.parseLong(startTime, 10));
+        } catch (NumberFormatException e) {
+            Logger.getGlobal().log(Level.WARNING, startTime + " could not be converted to Long");
+        }
+    }
+
+    private void setOptimalEndTime(String endTime) {
+        try {
+            this.optimalEndTime = new Date(Long.parseLong(endTime, 10));
+
+        } catch (NumberFormatException e) {
+            Logger.getGlobal().log(Level.WARNING, endTime + " could not be converted to Long");
+        }
+    }
 
     private void setProviders() {
         /* PROVIDERS */
@@ -533,21 +619,27 @@ public class RoutesResource {
                 this.providers.add(s);
             }
         } else {
-            //setNoProviders();
             setAllProviders();
         }
     }
 
     private void setAllProviders() {
         providers = new ArrayList<>();
-        for (ISourceAdapter adapter : beans.getSourceAdaptors()) {
-            providers.add(adapter.getProviderName());
+    }
+    
+    private void setNoProviders(){
+        providers = new ArrayList<>();
+    }
+    
+    private void setPrecision(){
+        String precision = context.getQueryParameters().getFirst("precision");
+        if(precision != null){
+            this.precision=Integer.parseInt(precision);
+        }else{
+            this.precision=-1;
         }
     }
 
-    private void setNoProviders() {
-        providers = new ArrayList<>();
-    }
 
     private void setStartTime(String startTime) {
         try {
