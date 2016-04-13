@@ -13,6 +13,8 @@ import iii.vop2016.verkeer2.ejb.dao.AggregationContainer;
 import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -254,7 +256,7 @@ public class DataProvider implements DataProviderRemote {
 
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
 
-        List<Long> list = dao.getAggregateData(route,providers, startList, endList, new AggregationContainer(Aggregation.sum, "duration * distance"), new AggregationContainer(Aggregation.sum, "distance"));
+        List<Long> list = dao.getAggregateData(route, providers, startList, endList, new AggregationContainer(Aggregation.sum, "duration * distance"), new AggregationContainer(Aggregation.sum, "distance"));
 
         if (list == null || list.size() == 0) {
             return -1;
@@ -277,7 +279,7 @@ public class DataProvider implements DataProviderRemote {
 
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
 
-        List<Long> list = dao.getAggregateData(route,providers, startList, endList, new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
+        List<Long> list = dao.getAggregateData(route, providers, startList, endList, new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
 
         if (list == null || list.size() == 0) {
             return -1;
@@ -333,7 +335,7 @@ public class DataProvider implements DataProviderRemote {
     public int getAvgDuration(IRoute route, List<String> providers, Date start, Date end) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
 
-        List<Long> list = dao.getAggregateData(route,providers, start, end, new AggregationContainer(Aggregation.sum, "duration * distance"), new AggregationContainer(Aggregation.sum, "distance"));
+        List<Long> list = dao.getAggregateData(route, providers, start, end, new AggregationContainer(Aggregation.sum, "duration * distance"), new AggregationContainer(Aggregation.sum, "distance"));
 
         if (list == null || list.size() == 0) {
             return -1;
@@ -349,7 +351,7 @@ public class DataProvider implements DataProviderRemote {
     public int getAvgVelocity(IRoute route, List<String> providers, Date start, Date end) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
 
-        List<Long> list = dao.getAggregateData(route,providers, start, end, new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
+        List<Long> list = dao.getAggregateData(route, providers, start, end, new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
 
         if (list == null || list.size() == 0) {
             return -1;
@@ -452,7 +454,7 @@ public class DataProvider implements DataProviderRemote {
     @Override
     public int getTrend(IRoute route, List<String> providers, Date start, Date end) {
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        List<IRouteData> data = dao.getData(route, start, end,providers);
+        List<IRouteData> data = dao.getData(route, start, end, providers);
 
         Map<Date, List<IRouteData>> sortedData = new HashMap<>();
 
@@ -532,9 +534,9 @@ public class DataProvider implements DataProviderRemote {
 
             //calculate
             ITrafficDataDAO dao = beans.getTrafficDataDAO();
-            List<IRouteData> data = dao.getData(route, startDate, endDate,providers);
+            List<IRouteData> data = dao.getData(route, startDate, endDate, providers);
             if (data == null || data.isEmpty()) {
-                return buffer;
+                return new HashMap<>();
             }
 
             Map<Date, List<IRouteData>> sortedData = new HashMap<>();
@@ -558,9 +560,11 @@ public class DataProvider implements DataProviderRemote {
             buffer = aggrData;
 
             setDataInBuffer(buffer, recentData, route, providers, hash, null);
-            
-        }else{
-             buffer = new HashMap<>();
+
+        }
+
+        if (buffer == null) {
+            buffer = new HashMap<>();
         }
         return buffer;
     }
@@ -591,6 +595,10 @@ public class DataProvider implements DataProviderRemote {
             buffer = getDataByDay(route, providers, startDate, endDate, days);
             setDataInBuffer(buffer, dataByDay, route, providers, hash, null);
         }
+
+        if (buffer == null) {
+            buffer = new HashMap<>();
+        }
         return buffer;
     }
 
@@ -611,6 +619,11 @@ public class DataProvider implements DataProviderRemote {
             buffer = getDataVelocityByDay(route, providers, startDate, endDate, days);
             setDataInBuffer(buffer, velocityByDay, route, providers, hash, null);
         }
+
+        if (buffer == null) {
+            buffer = new HashMap<>();
+        }
+
         return buffer;
     }
 
@@ -625,10 +638,15 @@ public class DataProvider implements DataProviderRemote {
 
         for (Weekdays day : days) {
             int weekday = day.ordinal();
-            List<Long> data = dao.getAggregateData(route,providers, list.get(0).get(weekday), list.get(1).get(weekday), 3600, true, new AggregationContainer(Aggregation.none, "timestamp"), new AggregationContainer(Aggregation.sum, "duration * distance"), new AggregationContainer(Aggregation.sum, "distance"));
+            List<Long> data = dao.getAggregateData(route, providers, list.get(0).get(weekday), list.get(1).get(weekday), 3600, true, new AggregationContainer(Aggregation.none, "timestamp"), new AggregationContainer(Aggregation.sum, "duration * distance"), new AggregationContainer(Aggregation.sum, "distance"));
 
             ret.put(day, MapDataByDay(data));
         }
+
+        if (ret == null) {
+            ret = new HashMap<>();
+        }
+
         return ret;
     }
 
@@ -643,10 +661,15 @@ public class DataProvider implements DataProviderRemote {
 
         for (Weekdays day : days) {
             int weekday = day.ordinal();
-            List<Long> data = dao.getAggregateData(route,providers, list.get(0).get(weekday), list.get(1).get(weekday), 3600, true, new AggregationContainer(Aggregation.none, "timestamp"), new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
+            List<Long> data = dao.getAggregateData(route, providers, list.get(0).get(weekday), list.get(1).get(weekday), 3600, true, new AggregationContainer(Aggregation.none, "timestamp"), new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
 
             ret.put(day, MapDataByDay(data));
         }
+
+        if (ret == null) {
+            ret = new HashMap<>();
+        }
+
         return ret;
     }
 
@@ -677,60 +700,6 @@ public class DataProvider implements DataProviderRemote {
         }
 
         return arr;
-    }
-
-    @Override
-    public Map<Date, Integer> getData(IRoute route, List<String> providers, Date start, Date end) {
-        Map<Date, Integer> ret = new HashMap<>();
-        ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        List<IRouteData> list = dao.getData(route, start, end,providers);
-
-        //map all retrieved data to specified date
-        Map<Date, List<IRouteData>> reduce = new HashMap<>();
-        for (IRouteData r : list) {
-            List<IRouteData> data = reduce.get(r.getTimestamp());
-            if (data == null) {
-                data = new ArrayList<>();
-                data.add(r);
-                reduce.put(r.getTimestamp(), data);
-            } else {
-                data.add(r);
-            }
-        }
-
-        //reduce data to mean for that day
-        for (Map.Entry<Date, List<IRouteData>> entry : reduce.entrySet()) {
-            ret.put(entry.getKey(), CalculateArithmaticMean(entry.getValue(), function_distanceMulDuration, function_distance));
-        }
-
-        return ret;
-    }
-
-    @Override
-    public Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers, Date start, Date end) {
-        Map<Date, Integer> ret = new HashMap<>();
-        ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        List<IRouteData> list = dao.getData(route, start, end,providers);
-
-        //map all retrieved data to specified date
-        Map<Date, List<IRouteData>> reduce = new HashMap<>();
-        for (IRouteData r : list) {
-            List<IRouteData> data = reduce.get(r.getTimestamp());
-            if (data == null) {
-                data = new ArrayList<>();
-                data.add(r);
-                reduce.put(r.getTimestamp(), data);
-            } else {
-                data.add(r);
-            }
-        }
-
-        //reduce data to mean for that day
-        for (Map.Entry<Date, List<IRouteData>> entry : reduce.entrySet()) {
-            ret.put(entry.getKey(), CalculateArithmaticMean(entry.getValue(), function_distanceMulDistanceDivDuration, function_distance));
-        }
-
-        return ret;
     }
 
     protected Pattern timeFormat = Pattern.compile("([0-9]{2})-([0-9]{2})");
@@ -884,9 +853,74 @@ public class DataProvider implements DataProviderRemote {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    private DateFormat dateFormatter = new SimpleDateFormat("hh:mm");
+
     @Override
     public List<String> getDataByDayHours() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int index = 0;
+        int hour = 6;
+        int maxHour = 2;
+        Calendar cal = new GregorianCalendar();
+        List<String> arr = new ArrayList<>();
+
+        while (cal.get(GregorianCalendar.HOUR_OF_DAY) != maxHour) {
+            arr.add(dateFormatter.format(cal.getTime()));
+            cal.add(GregorianCalendar.HOUR_OF_DAY, 1);
+        }
+        arr.add(dateFormatter.format(cal.getTime()));
+        return arr;
+    }
+
+    private Map<Long, Map<IRoute, Map<Date, Integer>>> dataBuffer = new HashMap<>();
+
+    @Override
+    public Map<Date, Integer> getData(IRoute route, List<String> providers) {
+        long hash = calculateHash(providers);
+        Map<Date, Integer> buffer = getDataFromBuffer(dataBuffer, route, providers, hash);
+
+        if (buffer == null || buffer.isEmpty()) {
+            Properties properties = getProperties();
+            int precision = Integer.parseInt(properties.getProperty("DataDefaultPrecision", "100"));
+            long timeframe = Integer.parseInt(properties.getProperty("DataTimeFrame", "0")) * (long) 1000;
+            long currentTime = beans.getTimer().getCurrentTime();
+            Date startDate = new Date(currentTime - timeframe);
+            Date endDate = new Date(currentTime);
+
+            buffer = getData(route, providers, precision, startDate, endDate);
+            setDataInBuffer(buffer, dataBuffer, route, providers, hash, null);
+        }
+
+        if (buffer == null) {
+            buffer = new HashMap<>();
+        }
+
+        return buffer;
+    }
+
+    private Map<Long, Map<IRoute, Map<Date, Integer>>> dataVelocityBuffer = new HashMap<>();
+
+    @Override
+    public Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers) {
+        long hash = calculateHash(providers);
+        Map<Date, Integer> buffer = getDataFromBuffer(dataVelocityBuffer, route, providers, hash);
+
+        if (buffer == null || buffer.isEmpty()) {
+            Properties properties = getProperties();
+            int precision = Integer.parseInt(properties.getProperty("DataDefaultPrecision", "100"));
+            long timeframe = Integer.parseInt(properties.getProperty("DataTimeFrame", "0")) * (long) 1000;
+            long currentTime = beans.getTimer().getCurrentTime();
+            Date startDate = new Date(currentTime - timeframe);
+            Date endDate = new Date(currentTime);
+
+            buffer = getDataVelocity(route, providers, precision, startDate, endDate);
+            setDataInBuffer(buffer, dataVelocityBuffer, route, providers, hash, null);
+        }
+
+        if (buffer == null) {
+            buffer = new HashMap<>();
+        }
+
+        return buffer;
     }
 
     @Override
@@ -901,21 +935,39 @@ public class DataProvider implements DataProviderRemote {
 
     @Override
     public Map<Date, Integer> getData(IRoute route, List<String> providers, int precision) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Properties properties = getProperties();
+        long timeframe = Integer.parseInt(properties.getProperty("DataTimeFrame", "0")) * (long) 1000;
+        long currentTime = beans.getTimer().getCurrentTime();
+        Date startDate = new Date(currentTime - timeframe);
+        Date endDate = new Date(currentTime);
+
+        return getData(route, providers, precision, startDate, endDate);
     }
 
     @Override
     public Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers, int precision) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Properties properties = getProperties();
+        long timeframe = Integer.parseInt(properties.getProperty("DataTimeFrame", "0")) * (long) 1000;
+        long currentTime = beans.getTimer().getCurrentTime();
+        Date startDate = new Date(currentTime - timeframe);
+        Date endDate = new Date(currentTime);
+
+        return getDataVelocity(route, providers, precision, startDate, endDate);
     }
 
     @Override
-    public Map<Date, Integer> getData(IRoute route, List<String> providers) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Map<Date, Integer> getData(IRoute route, List<String> providers, Date start, Date end) {
+        Properties properties = getProperties();
+        int precision = Integer.parseInt(properties.getProperty("DataDefaultPrecision", "100"));
+
+        return getData(route, providers, precision, start, end);
     }
 
     @Override
-    public Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers, Date start, Date end) {
+        Properties properties = getProperties();
+        int precision = Integer.parseInt(properties.getProperty("DataDefaultPrecision", "100"));
+
+        return getDataVelocity(route, providers, precision, start, end);
     }
 }
