@@ -69,10 +69,35 @@ public interface IDataProvider {
 
     Map<Weekdays, List<Integer>> getDataVelocityByDay(IRoute route, List<String> providers, Date start, Date end, Weekdays... days);
 
+    
+    //get the list of mean data for the specific day
+    List<Integer> getDataByCombinedDay(IRoute route, List<String> providers);
+
+    List<Integer> getDataVelocityByCombinedDay(IRoute route, List<String> providers);
+
+    List<Integer> getDataByCombinedDay(IRoute route, List<String> providers, Date start, Date end);
+
+    List<Integer> getDataVelocityByCombinedDay(IRoute route, List<String> providers, Date start, Date end);
+
+    
+    List<String> getDataByDayHours();
+    
     //get the list of mean data for a mean day in duration (2week)
+    Map<Date, Integer> getData(IRoute route, List<String> providers, int precision, Date start, Date end);
+
+    Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers, int precision, Date start, Date end);
+    
+    Map<Date, Integer> getData(IRoute route, List<String> providers, int precision);
+
+    Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers, int precision);
+    
     Map<Date, Integer> getData(IRoute route, List<String> providers, Date start, Date end);
 
     Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers, Date start, Date end);
+    
+    Map<Date, Integer> getData(IRoute route, List<String> providers);
+
+    Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers);
 
     //helper function for datadownstream
     int getMeanDurationFromRouteData(List<IRouteData> routeData);
