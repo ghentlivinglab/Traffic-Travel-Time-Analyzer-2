@@ -7,51 +7,15 @@ var mymap;
 var layer;
 var trafficData = [];
 var modus = "live";
-var urlGeoJSON = "http://localhost:8080/RestApi/v2/geojson/all/current";
-var urlAllRoutes = "http://localhost:8080/RestApi/v2/routes/all";
-var urlTimerNewData = "http://localhost:8080/RestApi/v2/timers/newdata";
 
-/*
-trafficData = [
-   {
-      distance:14685,
-      trend:0,
-      currentDelayLevel:0,
-      optimalDuration:734,
-      avgDuration:734,
-      currentVelocity:19,
-      recentData:{
-         "duration":{
-            "name":"TrendDurations 1",
-            "description":"This data are the durations over the last hour for route 1",
-            "x-ax":[
-
-            ],
-            "y-ax":[
-
-            ]
-         }
-      },
-      avgVelocity:2,
-      optimalVelocity:2,
-      name:"R4 Gent - Zelzate",
-      currentDuration:753,
-      id:1,
-      geolocations:[
-         {
-            latitude:51.192226,
-            name:"Zelzate",
-            longitude:3.776342
-         },
-         {
-            latitude:51.086447,
-            name:"Gent",
-            longitude:3.672188
-         }
-      ]
-   }
-];
-*/
+$.ajax({
+    url: urlTimerNewData,
+    dataType: "json",
+    success: initTimer,
+    error: function(jqXHR, textStatus, errorThrown ){
+        Materialize.toast('Er kan geen data worden opgehaald over de timer op de server!', 4000, 'toast bottom error');
+    }
+});
 
 function setTimerProgress(){
     timerProgress += 0.5;
@@ -70,7 +34,6 @@ function initTimer(data){
 }
 
 function refreshLiveData(){
-    
     $.ajax({
         url: urlAllRoutes,
         dataType: "json",
@@ -81,6 +44,9 @@ function refreshLiveData(){
         },
         error: function(jqXHR, textStatus, errorThrown ){
             Materialize.toast('Er kan geen nieuwe data worden opgehaald!', 4000, 'toast bottom error');
+            trafficList = $(".traffic-list");
+            trafficListItem = $("<li/>").text("Geen trajecten om weer te geven...");
+            trafficList.add(trafficListItem);
         }
     });
 }
@@ -340,10 +306,10 @@ function failedCall(data){
 
 function requestGeoJson(){
     $.ajax({
-            url: urlGeoJSON,
-            dataType: "json",
-            success: setGeoJson,
-            error:failedCall
+        url: urlGeoJSON,
+        dataType: "json",
+        success: setGeoJson,
+        error:failedCall
     });
 }
 
@@ -352,19 +318,10 @@ $(document).ready(function() {
     mymap = L.map('map').setView([51.096434, 3.744511], 11);
     setModus("live");
     initGUI();
-    //$("#text").text("no route");
     refreshLiveData();
     requestGeoJson();
-    
-    $.ajax({
-        url: urlTimerNewData,
-        dataType: "json",
-        success: initTimer,
-        error: function(jqXHR, textStatus, errorThrown ){
-            Materialize.toast('Er kan geen data worden opgehaald over de timer op de server!', 4000, 'toast bottom error');
-        }
-    });
-    
 });
+
+
 
 

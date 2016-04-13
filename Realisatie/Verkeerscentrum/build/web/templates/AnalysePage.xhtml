@@ -5,9 +5,11 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:pretty="http://ocpsoft.com/prettyfaces">
+
     
-    
+    <pretty:urlbuffer var="formURL" mappingId="analyse-datasources" />
     
     <ui:composition template="./HeaderBody.xhtml">
         
@@ -25,7 +27,7 @@
                         <section class="st-menu st-effect-3" id="menu-3">
                             
                             <div class="sidebar">
-                                <form method="GET" id="formRefreshAnalyse">   
+                                <form method="GET" id="formRefreshAnalyse" action="#{requestScope.formURL}" onsubmit="return refreshAnalysePre()">   
                                     <div class="header">
                                         <div class="row">
                                             <div class="col s1 btn_back">
@@ -51,37 +53,77 @@
                                             <div class="collapsible-body">
                                                 
                                                 
-                                                
-                                                
-                                                
-                                                
-                                                
-                                                
-                                                <section>
-                                                    <div class="row">
-                                                        <div class="col s5 valign-wrapper">
-                                                            <p class="valign">Begin</p>
+                                                <c:if test="#{not periodDAO.multiPeriods}">
+                                                    
+                                                    <input type="hidden" name="periodtype" value="single" />
+                                                    <section>
+                                                        <div class="row">
+                                                            <div class="col s5 valign-wrapper">
+                                                                <p class="valign">Begin</p>
+                                                            </div>
+                                                            <div class="col s7"> 
+                                                                <h:inputText value="#{DataSourcesComparer.period.key}" class="datetimepicker" id="periodStart" a:name="periodStartDummy">  
+                                                                    <f:convertDateTime pattern="dd MMMM YYYY - HH:mm"/>  
+                                                                </h:inputText>
+                                                                <h:inputText value="#{DataSourcesComparer.period.key.getTime()}" a:name="periodStart" a:type="hidden" />
+                                                            </div>
                                                         </div>
-                                                        <div class="col s7"> 
-                                                            <h:inputText value="#{DataSourcesComparer.period.key}" class="datetimepicker" id="periodStart" a:name="periodStartDummy">  
-                                                                <f:convertDateTime pattern="dd MMMM YYYY - HH:mm"/>  
-                                                            </h:inputText>
-                                                            <h:inputText value="#{DataSourcesComparer.period.key.getTime()}" a:name="periodStart" a:type="hidden" />
+                                                        <div class="row">
+                                                            <div class="col s5 valign-wrapper">
+                                                                <p class="valign">Eind</p>
+                                                            </div>
+                                                            <div class="col s7"> 
+                                                                <h:inputText value="#{DataSourcesComparer.period.value}" class="datetimepicker" id="periodEnd" a:name="periodEndDummy">  
+                                                                    <f:convertDateTime pattern="dd MMMM YYYY - HH:mm"/>  
+                                                                </h:inputText>
+                                                                <h:inputText value="#{DataSourcesComparer.period.value.getTime()}" a:name="periodEnd" a:type="hidden" />
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col s5 valign-wrapper">
-                                                            <p class="valign">Eind</p>
-                                                        </div>
-                                                        <div class="col s7"> 
-                                                            <h:inputText value="#{DataSourcesComparer.period.value}" class="datetimepicker" id="periodEnd" a:name="periodEndDummy">  
-                                                                <f:convertDateTime pattern="dd MMMM YYYY - HH:mm"/>  
-                                                            </h:inputText>
-                                                            <h:inputText value="#{DataSourcesComparer.period.value.getTime()}" a:name="periodEnd" a:type="hidden" />
-                                                        </div>
-                                                    </div>
-                                                </section>
+                                                    </section>
+                                                    
+                                                    
+                                                </c:if>
                                                 
+                                                
+                                                
+                                                <c:if test="#{periodDAO.multiPeriods}">
+                                                    
+                                                    <input type="hidden" name="periodtype" value="multi" />
+                                                    <section>
+                                                        <div class="row">
+                                                            <div class="col m12 scrollable medium">
+                                                                <table id="newPeriodList">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th data-field="id">Begin</th>
+                                                                            <th data-field="name">Einde</th>
+                                                                            <th data-field="price"></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                        
+                                                                    <tbody>
+                                                                        
+                                                                        <tr>
+                                                                            <td colspan="3">
+                                                                                <p>Geen periodes toegevoegd</p>
+                                                                            </td>
+                                                                        </tr>
+                                                                            
+                                                                    </tbody>
+                                                                </table>
+                                                                <br />
+                                                                    
+                                                            </div>
+                                                            <br />
+                                                            
+                                                            <input name="periodsStart" type="hidden" />
+                                                            <input name="periodsEnd" type="hidden" />
+                                                                
+                                                        </div>
+                                                    </section>
+                                                    <a href="#!" class="btn blue" onclick="$('#modelAddNewPeriod').openModal();"> Nieuwe periode </a>
+                                                    
+                                                </c:if>
                                                 
                                                 
                                                 
@@ -97,19 +139,44 @@
                                             <div class="collapsible-header"><i class="material-icons">place</i>Trajecten</div>
                                             <div class="collapsible-body">
                                                 
+                                                <c:if test="#{routeDAO.multiRoutes}">
+                                                    <input type="hidden" name="routetype" value="multi" />
+                                                </c:if>
+                                                <c:if test="#{not routeDAO.multiRoutes}">
+                                                    <input type="hidden" name="routetype" value="single" />
+                                                </c:if>
                                                 
                                                 
-                                                <ul id="routeList">
-                                                    <c:forEach var="route" items="#{routeDAO.selectedRoutes}">
-                                                        <li>
-                                                            <h:outputText value="#{route.name}"/> 
-                                                            <input type="hidden" name="routeId" value="#{route.id}" /> 
+                                                <ul>
+                                                    
+                                                    <c:forEach var="route" items="#{routeDAO.availableRoutes}">
+                                                        <li> 
+                                                            <p>
+                                                                <c:if test="#{routeDAO.multiRoutes}">
+                                                                    <c:if test="#{routeDAO.isSelected(route)}">
+                                                                        <input type="checkbox" name="routeId" value="#{route.id}" class="filled-in" id="chk#{route.name}" checked="checked" />
+                                                                    </c:if>
+                                                                    <c:if test="#{not routeDAO.isSelected(route)}">
+                                                                        <input type="checkbox" name="routeId" value="#{route.id}" class="filled-in" id="chk#{route.name}" />
+                                                                    </c:if>
+                                                                </c:if>
+                                                                <c:if test="#{not routeDAO.multiRoutes}">
+                                                                    <c:if test="#{routeDAO.isSelected(route)}">
+                                                                        <input type="radio" name="routeId" value="#{route.id}" class="filled-in" id="chk#{route.name}" checked="checked" />
+                                                                    </c:if>
+                                                                    <c:if test="#{not routeDAO.isSelected(route)}">
+                                                                        <input type="radio" name="routeId" value="#{route.id}" class="filled-in" id="chk#{route.name}" />
+                                                                    </c:if>
+                                                                </c:if>
+                                                                <label for="chk#{route.name}">#{route.name}</label>
+                                                            </p> 
                                                         </li>
                                                     </c:forEach>
+                                                    
                                                 </ul>
-                                                
+                                                <!--
                                                 <a href="#!" class="btn" id="btnSelectRoutes" data-multiplicity="single">Selecteer trajecten</a> 
-                                                
+                                                -->
                                                 
                                                 
                                                 
@@ -120,7 +187,7 @@
                                             <div class="collapsible-body">
                                                 
                                                 
-                                                <ul id="routeList">
+                                                <ul>
                                                     <c:forEach var="provider" items="#{dataproviderDAO.availableProviders}">
                                                         <c:if test="#{dataproviderDAO.isSelected(provider)}">
                                                             <li> 
@@ -203,6 +270,7 @@
             
             
             <!-- Modal Structure -->
+            <!-- 
             <div id="selectRoutesModel" class="modal modal-fixed-footer analyse">
                 <div class="modal-content">
                     <h4>Trajecten selecteren</h4>
@@ -244,7 +312,38 @@
                 </div>
             </div>
             
-      
+            -->
+            
+            
+            
+            <!-- Modal Structure -->
+                <div id="modelAddNewPeriod" class="modal">
+                  <div class="modal-content">
+                    <h4>Selecteer een periode</h4>
+                    <div class="row">
+                        <div class="col s3 pull-bottom valign-wrapper">
+                            <p class="valign">Begin:</p>
+                        </div>
+                        <div class="col s9">
+                            <input type="text" class="datepicker" id="txtNewPeriodStart" />
+                            <input name="txtNewPeriodStart" type="hidden" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s3 pull-bottom valign-wrapper">
+                            <p class="valign">Einde:</p>
+                        </div>
+                        <div class="col s9">
+                            <input type="text" class="datepicker" id="txtNewPeriodEnd" />
+                            <input name="txtNewPeriodEnd" type="hidden" />
+                        </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="#!" id="btnAddNewPeriod" class=" modal-action modal-close waves-effect waves-green btn-flat green">Voeg toe</a>
+                  </div>
+                </div>
+            
             
             
         </ui:define>
@@ -254,32 +353,16 @@
         
         <ui:define name="javascript">
             
+            <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/index.js" />
+            <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/components.js" />
             
-            <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse.js" />
+            <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/analyse.js" />
             
-            <script type="text/javascript" src="#{requestScope.resourceURLjs}/d3.min.js" />
-            <script type="text/javascript" src="#{requestScope.resourceURLjs}/c3.min.js" />
-            <script type="text/javascript" src="#{requestScope.resourceURLjs}/datasourcecomparer.js" />
+            <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/d3.min.js" />
+            <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/c3.min.js" />
             
-            <script>
-                (function () {
-                    var selList = document.getElementById('availableRoutesList'),
-                    items = selList.querySelectorAll('li');
-
-                    // fill the initial checked elements (mozilla)
-                    [].slice.call(items).forEach(function (el) {
-                        el.parentNode.className = el.checked ? 'selected' : '';
-                    });
-
-                    function checkUncheck(el) {
-                        el.parentNode.className = el.checked ? '' : 'selected';
-                        el.checked = !el.checked;
-                    }
-
-
-                })();
-            </script>
             
+            <ui:insert name="javascriptAnalyse"></ui:insert>
             
         </ui:define>
         

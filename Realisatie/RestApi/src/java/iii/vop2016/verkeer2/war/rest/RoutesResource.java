@@ -340,7 +340,7 @@ public class RoutesResource {
         result.put("description", description);
         
         JSONObject data= new JSONObject();
-        List<Date> timestamps=new ArrayList<>();
+        List<Date> timestamps = new ArrayList<>();
         timestamps.addAll(dataMap.keySet());
         for (Date timestamp : timestamps) {
             data.put(String.valueOf(timestamp.getTime()),dataMap.get(timestamp));

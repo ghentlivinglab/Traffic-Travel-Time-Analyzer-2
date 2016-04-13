@@ -8,6 +8,7 @@ package iii.vop2016.verkeer2.bean.analyse;
 import iii.vop2016.verkeer2.bean.components.DataProvider;
 import iii.vop2016.verkeer2.bean.components.Route;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javafx.util.Pair;
@@ -78,7 +79,41 @@ public class DataSourcesComparer extends AnalysePage implements ITableView, IGra
 
     @Override
     public String getDataURL() {
-        return super.prop.getProperty("urlProviderComparer");
+        List<String> urlParts = new ArrayList<>();
+        
+        if(period.getKey() != null){
+            urlParts.add("start="+period.getKey().getTime());
+        }
+        if(period.getValue() != null){
+            urlParts.add("end="+period.getValue().getTime());
+        }
+        if(dataproviders != null || dataproviders.size()==0){
+            StringBuilder providersURLS = new StringBuilder();
+            if(this.dataproviders.size() > 0){
+                providersURLS.append("providers=");
+                for(DataProvider provider : this.dataproviders){
+                    providersURLS.append(provider.getName()).append(",");
+                }
+                providersURLS.delete(providersURLS.length()-1, providersURLS.length());
+                urlParts.add(providersURLS.toString());
+            }else{
+                System.out.println("geen providers in url beschikbaar");
+            }
+            
+            
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append(super.prop.getProperty("urlProviderComparer"));
+        if(urlParts.size()>0){
+            sb.append("?").append(urlParts.get(0));
+            for(int i=1; i<urlParts.size(); i++){
+                sb.append("&").append(urlParts.get(i));
+            }
+        }
+        System.out.println(sb.toString());
+                
+        return sb.toString();
     }
     
     

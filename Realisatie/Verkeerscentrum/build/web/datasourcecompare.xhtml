@@ -8,53 +8,101 @@
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
     
     
-
-<ui:composition template="./templates/AnalysePage.xhtml">
-
-    <ui:define name="analyseContent"> 
-
-        <div class="container">
-
-            <div class="row">
-                <div class="col m12 right-align">
-                    <div class="modusBtnGroup">
-                        <ul class="pagination">
-                            <li class="active">
-                                <a href="#!" id="btnSwitchToGraph">Grafiek</a>
-                            </li>
-                            <li>
-                                <a href="#!" id="btnSwitchToTable">Tabel</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>  
-
-             <div class="analyseContent">
-                 <div id="chartTab">
-                     <div id="chart">
-                         Graph
-                     </div>
-                     <br /><br />
-                 </div>
-                 <div id="tableTab">
-                     Tabel
-                 </div>
-
-
-             </div>                                                        
-
-
-            <br /><br />
-
-        </div>
-
-
-    </ui:define>
-            
-</ui:composition>
-
     
-
-
+    <ui:composition template="./templates/AnalysePage.xhtml">
+        
+        <ui:define name="analyseContent"> 
+            
+            <div class="container">
+                
+                <div class="row">
+                    <div class="col m12 right-align">
+                        <div class="modusBtnGroup">
+                            <ul class="pagination">
+                                <li class="active">
+                                    <a href="#!" id="btnSwitchToGraph">Grafiek</a>
+                                </li>
+                                <li>
+                                    <a href="#!" id="btnSwitchToTable">Tabel</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>  
+                
+                <div class="analyseContent">
+                    <div id="chartTab">
+                        <div id="chart" class="center">
+                            <div class="preloader-wrapper big active">
+                                <div class="spinner-layer spinner-blue">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div><div class="gap-patch">
+                                        <div class="circle"></div>
+                                    </div><div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="spinner-layer spinner-red">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div><div class="gap-patch">
+                                        <div class="circle"></div>
+                                    </div><div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="spinner-layer spinner-yellow">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div><div class="gap-patch">
+                                        <div class="circle"></div>
+                                    </div><div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="spinner-layer spinner-green">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div><div class="gap-patch">
+                                        <div class="circle"></div>
+                                    </div><div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br /><br />
+                    </div>
+                    <div id="tableTab">
+                        Tabel
+                    </div>
+                    
+                    
+                </div>                                                        
+                
+                
+                <br /><br />
+                
+            </div>
+            
+            
+        </ui:define>
+        
+        <ui:define name="javascriptAnalyse"> 
+            <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/datasourcecomparer.js" />
+            <script>
+                initAnalyse('#{DataSourcesComparer.dataURL}');
+            </script>
+                
+        </ui:define>
+        
+    </ui:composition>
+    
+    
+    
+    
 </html>

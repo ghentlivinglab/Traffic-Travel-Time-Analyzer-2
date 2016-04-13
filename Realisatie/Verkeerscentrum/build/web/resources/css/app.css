@@ -1066,85 +1066,85 @@
 .lime-text.text-accent-4 {
   color: #aeea00 !important; }
 
-.yellow.lighten-5 {
+.yellow.lighten-5, .analyse .sidebar .collapsible .lighten-5.collapsible-header {
   background-color: #fffde7 !important; }
 
 .yellow-text.text-lighten-5 {
   color: #fffde7 !important; }
 
-.yellow.lighten-4 {
+.yellow.lighten-4, .analyse .sidebar .collapsible .lighten-4.collapsible-header {
   background-color: #fff9c4 !important; }
 
 .yellow-text.text-lighten-4 {
   color: #fff9c4 !important; }
 
-.yellow.lighten-3 {
+.yellow.lighten-3, .analyse .sidebar .collapsible .lighten-3.collapsible-header {
   background-color: #fff59d !important; }
 
 .yellow-text.text-lighten-3 {
   color: #fff59d !important; }
 
-.yellow.lighten-2 {
+.yellow.lighten-2, .analyse .sidebar .collapsible .lighten-2.collapsible-header {
   background-color: #fff176 !important; }
 
 .yellow-text.text-lighten-2 {
   color: #fff176 !important; }
 
-.yellow.lighten-1 {
+.yellow.lighten-1, .analyse .sidebar .collapsible .lighten-1.collapsible-header {
   background-color: #ffee58 !important; }
 
 .yellow-text.text-lighten-1 {
   color: #ffee58 !important; }
 
-.yellow {
+.yellow, .analyse .sidebar .collapsible .collapsible-header {
   background-color: #ffeb3b !important; }
 
 .yellow-text {
   color: #ffeb3b !important; }
 
-.yellow.darken-1 {
+.yellow.darken-1, .analyse .sidebar .collapsible .darken-1.collapsible-header {
   background-color: #fdd835 !important; }
 
 .yellow-text.text-darken-1 {
   color: #fdd835 !important; }
 
-.yellow.darken-2 {
+.yellow.darken-2, .analyse .sidebar .collapsible .darken-2.collapsible-header {
   background-color: #fbc02d !important; }
 
 .yellow-text.text-darken-2 {
   color: #fbc02d !important; }
 
-.yellow.darken-3 {
+.yellow.darken-3, .analyse .sidebar .collapsible .darken-3.collapsible-header {
   background-color: #f9a825 !important; }
 
 .yellow-text.text-darken-3 {
   color: #f9a825 !important; }
 
-.yellow.darken-4 {
+.yellow.darken-4, .analyse .sidebar .collapsible .darken-4.collapsible-header {
   background-color: #f57f17 !important; }
 
 .yellow-text.text-darken-4 {
   color: #f57f17 !important; }
 
-.yellow.accent-1 {
+.yellow.accent-1, .analyse .sidebar .collapsible .accent-1.collapsible-header {
   background-color: #ffff8d !important; }
 
 .yellow-text.text-accent-1 {
   color: #ffff8d !important; }
 
-.yellow.accent-2 {
+.yellow.accent-2, .analyse .sidebar .collapsible .accent-2.collapsible-header {
   background-color: #ffff00 !important; }
 
 .yellow-text.text-accent-2 {
   color: #ffff00 !important; }
 
-.yellow.accent-3 {
+.yellow.accent-3, .analyse .sidebar .collapsible .accent-3.collapsible-header {
   background-color: #ffea00 !important; }
 
 .yellow-text.text-accent-3 {
   color: #ffea00 !important; }
 
-.yellow.accent-4 {
+.yellow.accent-4, .analyse .sidebar .collapsible .accent-4.collapsible-header {
   background-color: #ffd600 !important; }
 
 .yellow-text.text-accent-4 {
@@ -2726,14 +2726,15 @@ form {
       min-height: 3rem;
       line-height: 3rem;
       padding: 0 1rem;
-      background: #90a4ae;
+      background: #fb8c00;
       width: 100%; }
       .analyse .sidebar .header .row {
         margin: 0; }
       .analyse .sidebar .header .title {
         text-align: center;
         font-weight: 500;
-        text-transform: uppercase; }
+        text-transform: uppercase;
+        color: black; }
       .analyse .sidebar .header i {
         width: 2rem;
         font-size: 1.6rem;
@@ -2765,16 +2766,22 @@ form {
         padding: 10px;
         background: white; }
     .analyse .sidebar .collapsible {
-      background: white; }
+      background: white;
+      border-top: 0px solid #000;
+      border-right: 0px solid #000;
+      border-left: 0px solid #000; }
       .analyse .sidebar .collapsible .collapsible-header {
-        background: white; }
+        color: black;
+        border-bottom: 1px solid black; }
         .analyse .sidebar .collapsible .collapsible-header i {
-          color: #e64a19; }
+          color: black; }
       .analyse .sidebar .collapsible .collapsible-body section {
         margin: 20px; }
       .analyse .sidebar .collapsible .collapsible-body ul {
         margin: 0;
-        padding: 0; }
+        padding: 0;
+        overflow-y: auto;
+        max-height: 300px; }
         .analyse .sidebar .collapsible .collapsible-body ul li {
           background: white;
           width: 100%;
@@ -2795,6 +2802,14 @@ form {
       color: white;
       position: absolute;
       bottom: 0; }
+  .analyse .analyseContent table tr.header td {
+    background: #1976D2;
+    color: white;
+    border-radius: 0; }
+  .analyse .analyseContent table .th {
+    background: #1976D2;
+    color: white;
+    border-radius: 0; }
 
 .initprocess {
   position: relative;
