@@ -424,6 +424,10 @@ public class DataProvider implements DataProviderRemote {
                 distance += r.getDistance();
                 i++;
             }
+            
+            if(i == 0){
+                return -1;
+            }
 
             buffer = Math.toIntExact(distance / i);
             setDataInBuffer(buffer, this.distance, route, providers, hash, -1);
