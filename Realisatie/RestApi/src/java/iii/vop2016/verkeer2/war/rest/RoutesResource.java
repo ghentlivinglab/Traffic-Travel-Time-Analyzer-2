@@ -460,8 +460,8 @@ public class RoutesResource {
     private JSONObject JSONPeriodData(IRoute route, int periodnumber) {
         JSONObject result = new JSONObject();
         result.put("period", "period" + periodnumber);
-        result.put("start", startTimes.get(periodnumber));
-        result.put("end", endTimes.get(periodnumber));
+        result.put("start", startTimes.get(periodnumber).getTime());
+        result.put("end", endTimes.get(periodnumber).getTime());
 
         JSONObject obj = new JSONObject();
         Map<Date, Integer> mapDurations;

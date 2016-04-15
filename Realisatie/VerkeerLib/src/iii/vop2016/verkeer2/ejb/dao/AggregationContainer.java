@@ -5,11 +5,13 @@
  */
 package iii.vop2016.verkeer2.ejb.dao;
 
+import java.io.Serializable;
+
 /**
  *
  * @author tobia
  */
-public class AggregationContainer {
+public class AggregationContainer implements Serializable{
     public Aggregation aggregation;
     public String attr;
 
