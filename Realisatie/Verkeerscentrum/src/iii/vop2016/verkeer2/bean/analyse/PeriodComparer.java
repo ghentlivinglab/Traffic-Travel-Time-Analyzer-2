@@ -13,24 +13,23 @@ import java.util.Date;
 import java.util.List;
 import javafx.util.Pair;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 
 /**
  *
  * @author Mike
  */
-@ManagedBean(name = "DataSourcesComparer", eager = true)
+@ManagedBean(name = "PeriodComparer", eager = true)
 @RequestScoped
-public class DataSourcesComparer extends AnalysePage implements ITableView, IGraphView {
+public class PeriodComparer extends AnalysePage implements ITableView, IGraphView {
 
    
     private Route route = null;
-    private Pair<Date,Date> period = null;
+    private List<Pair<Date,Date>> periods = null;
     private List<DataProvider> dataproviders = null;
 
         
-    public DataSourcesComparer() {
+    public PeriodComparer() {
         super();
     }
 
@@ -45,16 +44,13 @@ public class DataSourcesComparer extends AnalysePage implements ITableView, IGra
    
     @Override
     public String getSubTitle() {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM YYYY (HH:mm)");
-        String format1 = formatter.format(period.getKey());
-        String format2 = formatter.format(period.getValue());
-        return "Periode: "+format1+" - "+format2;
+        return this.periods.size()+" perioden geselecteerd voor vergelijking";
     }
     
     @Override
     public void setPeriodDAO(PeriodDAO periodDAO) {
         super.setPeriodDAO(periodDAO);
-        this.period = periodDAO.getPeriod();
+        this.periods = periodDAO.getPeriods();
     }
 
     @Override
@@ -73,16 +69,12 @@ public class DataSourcesComparer extends AnalysePage implements ITableView, IGra
         return route;
     }
 
-    public Pair<Date, Date> getPeriod() {
-        return period;
-    }
-
+    
     @Override
     public String getDataURL() {
-        List<String> urlParts = new ArrayList<>();
         
         StringBuilder url = new StringBuilder();
-        url.append(super.prop.getProperty("urlProviderComparer"));
+        url.append(super.prop.getProperty("urlPeriodComparer"));
         
         //
         // ROUTE
@@ -92,16 +84,24 @@ public class DataSourcesComparer extends AnalysePage implements ITableView, IGra
         //
         // PERIODS
         //
-        if(period.getKey() != null){
-            urlParts.add("start="+period.getKey().getTime());
-        }
-        if(period.getValue() != null){
-            urlParts.add("end="+period.getValue().getTime());
+        StringBuilder urlPartStart = new StringBuilder();
+        StringBuilder urlPartEnd = new StringBuilder();
+        if(periods != null || periods.isEmpty()){
+            if(this.periods.size() > 0){
+                for(Pair<Date,Date> period : this.periods){
+                    urlPartStart.append(period.getKey().getTime()).append(",");
+                    urlPartEnd.append(period.getValue().getTime()).append(",");
+                }
+                urlPartStart.delete(urlPartStart.length()-1, urlPartStart.length());
+                urlPartEnd.delete(urlPartEnd.length()-1, urlPartEnd.length());
+            }
         }
         
         //
-        // PROVIDERS
+        // FILTERS
         //
+        List<String> urlParts = new ArrayList<>();
+        
         if(dataproviders != null || dataproviders.size()==0){
             StringBuilder providersURLS = new StringBuilder();
             if(this.dataproviders.size() > 0){
@@ -114,7 +114,6 @@ public class DataSourcesComparer extends AnalysePage implements ITableView, IGra
             }
         }
         
-        
         if(urlParts.size()>0){
             url.append("?").append(urlParts.get(0));
             for(int i=1; i<urlParts.size(); i++){
@@ -122,12 +121,16 @@ public class DataSourcesComparer extends AnalysePage implements ITableView, IGra
             }
         }
         
-        
-        String surl = url.toString();
-        surl = surl.replaceAll("\\{id\\}", ""+route.getId());
                 
-        System.out.println(surl);
+        String surl = url.toString();
+          
+        surl = surl.replaceAll("\\{id\\}", ""+route.getId());
+        surl = surl.replaceAll("\\{starts\\}", urlPartStart.toString());
+        surl = surl.replaceAll("\\{ends\\}", urlPartEnd.toString());
         
+        
+        System.out.println("URL = "+surl);
+                
         return surl;
     }
     

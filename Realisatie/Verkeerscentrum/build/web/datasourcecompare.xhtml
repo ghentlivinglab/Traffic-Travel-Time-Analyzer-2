@@ -11,6 +11,14 @@
     
     <ui:composition template="./templates/AnalysePage.xhtml">
         
+         <ui:define name="analyseTitle">
+            <h:outputText value="#{DataSourcesComparer.title}" />
+        </ui:define>
+        
+        <ui:define name="analyseSubTitle">
+            <h:outputText value="#{DataSourcesComparer.subTitle}" />
+        </ui:define>
+        
         <ui:define name="analyseContent"> 
             
             <div class="container">

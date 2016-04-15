@@ -11,14 +11,19 @@
     
     <ui:composition template="./templates/AnalysePage.xhtml">
         
-         <ui:define name="analyseTitle">
-            <h:outputText value="#{DataSourcesComparer.title}" />
+        
+        <ui:define name="analyseTitle">
+            <h:outputText value="#{PeriodComparer.title}" />
         </ui:define>
         
         <ui:define name="analyseSubTitle">
-            <h:outputText value="#{DataSourcesComparer.subTitle}" />
+            <h:outputText value="#{PeriodComparer.subTitle}" />
         </ui:define>
         
+        
+        <ui:define name="analyseContent">
+            
+        </ui:define>
         <ui:define name="analyseContent"> 
             
             <div class="container">
@@ -101,11 +106,11 @@
         </ui:define>
         
         <ui:define name="javascriptAnalyse"> 
-            <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/datasourcecomparer.js" />
+            <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/periodcomparer.js" />
             <script>
-                initAnalyse('#{DataSourcesComparer.dataURL}');
+                initAnalyse('#{PeriodComparer.dataURL}');
             </script>
-                
+            
         </ui:define>
         
     </ui:composition>

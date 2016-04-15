@@ -62,10 +62,10 @@
                                                                 <p class="valign">Begin</p>
                                                             </div>
                                                             <div class="col s7"> 
-                                                                <h:inputText value="#{DataSourcesComparer.period.key}" class="datetimepicker" id="periodStart" a:name="periodStartDummy">  
+                                                                <h:inputText value="#{periodDAO.period.key}" class="datetimepicker" id="periodStart" a:name="periodStartDummy">  
                                                                     <f:convertDateTime pattern="dd MMMM YYYY - HH:mm"/>  
                                                                 </h:inputText>
-                                                                <h:inputText value="#{DataSourcesComparer.period.key.getTime()}" a:name="periodStart" a:type="hidden" />
+                                                                <h:inputText value="#{periodDAO.period.key.getTime()}" a:name="periodStart" a:type="hidden" />
                                                             </div>
                                                         </div>
                                                         <div class="row">
@@ -73,10 +73,10 @@
                                                                 <p class="valign">Eind</p>
                                                             </div>
                                                             <div class="col s7"> 
-                                                                <h:inputText value="#{DataSourcesComparer.period.value}" class="datetimepicker" id="periodEnd" a:name="periodEndDummy">  
+                                                                <h:inputText value="#{periodDAO.period.value}" class="datetimepicker" id="periodEnd" a:name="periodEndDummy">  
                                                                     <f:convertDateTime pattern="dd MMMM YYYY - HH:mm"/>  
                                                                 </h:inputText>
-                                                                <h:inputText value="#{DataSourcesComparer.period.value.getTime()}" a:name="periodEnd" a:type="hidden" />
+                                                                <h:inputText value="#{periodDAO.period.value.getTime()}" a:name="periodEnd" a:type="hidden" />
                                                             </div>
                                                         </div>
                                                     </section>
@@ -238,8 +238,12 @@
                                                 </a>
                                             </div>
                                             <div class="col m8">
-                                                <h3><h:outputText value="#{DataSourcesComparer.title}" /></h3> 
-                                                <span><h:outputText value="#{DataSourcesComparer.subTitle}" /></span>
+                                                <h3>
+                                                    <ui:insert name="analyseTitle"></ui:insert>
+                                                </h3> 
+                                                <span>
+                                                    <ui:insert name="analyseSubTitle"></ui:insert>
+                                                </span>
                                             </div>
                                             <div class="col m1">
                                                 <h:link outcome="pretty:analyse" class="white-text">

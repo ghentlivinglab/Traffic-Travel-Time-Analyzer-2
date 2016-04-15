@@ -38,7 +38,7 @@ function refreshLiveData(){
         url: urlAllRoutes,
         dataType: "json",
         success: function(data, textStatus, jqXHR ){
-            Materialize.toast('De verkeerssituatie werd zonet geüpdated', 4000, 'toast bottom success');
+            Materialize.toast('De verkeerssituatie werd zonet geüpdatet', 4000, 'toast bottom success');
             trafficData = data;
             setModus(modus);
         },
@@ -77,13 +77,13 @@ function initGUI(){
 
 
 function setLiveMap(){
-    //teken Live data
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
         maxZoom: 18,
         id: 'tobiasvdp.ac4aa6b2',
         accessToken: 'pk.eyJ1IjoidG9iaWFzdmRwIiwiYSI6ImNpbGpxcTFwaTAwYjF3NGx6bWZ2bGZkcG8ifQ.DTe2IBQLNc9zQa62kD-4_g'
     }).addTo(mymap);
+    requestGeoJson();  
 }
 
 function setAvgMap(){
@@ -316,10 +316,10 @@ function requestGeoJson(){
 
 $(document).ready(function() {
     mymap = L.map('map').setView([51.096434, 3.744511], 11);
-    setModus("live");
     initGUI();
+    setModus("live");
     refreshLiveData();
-    requestGeoJson();
+    //requestGeoJson();
 });
 
 
