@@ -5,6 +5,7 @@
  */
 package iii.vop2016.verkeer2.ejb.components;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Observer;
 
@@ -12,7 +13,7 @@ import java.util.Observer;
  *
  * @author tobia
  */
-public interface IThreshold{
+public interface IThreshold extends Serializable{
 
     boolean isThresholdReached(IRoute route, int delay);
     
