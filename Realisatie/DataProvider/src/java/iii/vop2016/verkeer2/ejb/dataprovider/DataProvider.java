@@ -840,24 +840,46 @@ public class DataProvider implements DataProviderRemote {
         return hash;
     }
 
+    private List<Integer> mapDataByCombinedDay(Map<Weekdays, List<Integer>> data) {
+        List<Integer> ret = null;
+        for (Map.Entry<Weekdays, List<Integer>> entry : data.entrySet()) {
+            List<Integer> list = entry.getValue();
+            if (ret == null) {
+                ret = list;
+            } else {
+                for (int i = 0; i < ret.size(); i++) {
+                    ret.set(i, ret.get(i) + list.get(i));
+                }
+            }
+        }
+        for (int i = 0; i < ret.size(); i++) {
+            ret.set(i, ret.get(i) / data.size());
+        }
+        return ret;
+    }
+
     @Override
     public List<Integer> getDataByCombinedDay(IRoute route, List<String> providers) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Weekdays, List<Integer>> data = getDataByDay(route, providers, Weekdays.MONDAY, Weekdays.TUESDAY, Weekdays.WEDNESDAY, Weekdays.THURSDAY, Weekdays.FRIDAY);
+        return mapDataByCombinedDay(data);
     }
 
     @Override
     public List<Integer> getDataVelocityByCombinedDay(IRoute route, List<String> providers) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Weekdays, List<Integer>> data = getDataVelocityByDay(route, providers, Weekdays.MONDAY, Weekdays.TUESDAY, Weekdays.WEDNESDAY, Weekdays.THURSDAY, Weekdays.FRIDAY);
+        return mapDataByCombinedDay(data);
     }
 
     @Override
     public List<Integer> getDataByCombinedDay(IRoute route, List<String> providers, Date start, Date end) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Weekdays, List<Integer>> data = getDataByDay(route, providers,start,end, Weekdays.MONDAY, Weekdays.TUESDAY, Weekdays.WEDNESDAY, Weekdays.THURSDAY, Weekdays.FRIDAY);
+        return mapDataByCombinedDay(data);
     }
 
     @Override
     public List<Integer> getDataVelocityByCombinedDay(IRoute route, List<String> providers, Date start, Date end) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Weekdays, List<Integer>> data = getDataVelocityByDay(route, providers,start,end, Weekdays.MONDAY, Weekdays.TUESDAY, Weekdays.WEDNESDAY, Weekdays.THURSDAY, Weekdays.FRIDAY);
+        return mapDataByCombinedDay(data);
     }
 
     private DateFormat dateFormatter = new SimpleDateFormat("hh:mm");
@@ -868,6 +890,9 @@ public class DataProvider implements DataProviderRemote {
         int hour = 6;
         int maxHour = 2;
         Calendar cal = new GregorianCalendar();
+        cal.set(GregorianCalendar.HOUR_OF_DAY, hour);
+        cal.set(GregorianCalendar.MINUTE, 0);
+        cal.set(GregorianCalendar.SECOND, 0);
         List<String> arr = new ArrayList<>();
 
         while (cal.get(GregorianCalendar.HOUR_OF_DAY) != maxHour) {
@@ -993,7 +1018,7 @@ public class DataProvider implements DataProviderRemote {
         precisionDistance /= precision;
 
         ret = GenerateListForPrecisionPointBewteenDates(start, end, precisionDistance);
-        List<Long> data = dao.getAggregateData(route, providers, start, end, precisionDistance / 1000, false, new AggregationContainer(Aggregation.none, "timestamp"),new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
+        List<Long> data = dao.getAggregateData(route, providers, start, end, precisionDistance / 1000, false, new AggregationContainer(Aggregation.none, "timestamp"), new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
 
         Iterator<Map.Entry<Date, Integer>> it = ret.entrySet().iterator();
         GregorianCalendar cal = new GregorianCalendar();
