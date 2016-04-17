@@ -5,13 +5,13 @@ var addedPeriods = 0;
 
 showRoutePreview = function(){
     $("#routePreview").css("display","block");
-    $("#routePreview").attr("src","http://localhost:8080/web/resources/img/traject.PNG");
+    //$("#routePreview").attr("src","http://localhost:8080/web/resources/img/traject.PNG");
 };
 hideRoutePreview = function(){
     if(lastSelectedRoute === null)
         $("#routePreview").css("display","none");
-    else
-        $("#routePreview").attr("src","http://localhost:8080/web/resources/img/traject.PNG");
+    //else
+        //$("#routePreview").attr("src","http://localhost:8080/web/resources/img/traject.PNG");
 };
 addRouteToList = function(){
     lastSelectedRoute = $("#"+$(this).attr("for")).val();

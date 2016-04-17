@@ -9,10 +9,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import javafx.util.Pair;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.naming.InitialContext;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -28,7 +30,7 @@ public class PeriodDAO {
     private boolean multiPeriods;
 
     
-    
+   
     
     /**
      * Creates a new instance of PeriodDAO

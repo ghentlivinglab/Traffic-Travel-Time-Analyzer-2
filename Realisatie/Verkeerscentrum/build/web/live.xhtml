@@ -44,6 +44,12 @@
             
             <script src="#{requestScope.resourceURLjs}/map/map.js" />
             
+            <script>
+                initRoutesURL('#{urlDAO.allRoutes}');
+                initGeoJSONURL('#{urlDAO.geoJSONAllRoutes}');
+                initTimerURL('#{urlDAO.newDataTimer}');
+            </script>
+            
         </ui:define>
         
     </ui:composition>

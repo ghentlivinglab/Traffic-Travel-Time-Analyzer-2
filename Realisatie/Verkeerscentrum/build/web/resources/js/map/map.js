@@ -7,15 +7,31 @@ var mymap;
 var layer;
 var trafficData = [];
 var modus = "live";
+var urlTimerNewData;
+var urlAllRoutes;
+var urlGeoJSON;
 
-$.ajax({
-    url: urlTimerNewData,
-    dataType: "json",
-    success: initTimer,
-    error: function(jqXHR, textStatus, errorThrown ){
-        Materialize.toast('Er kan geen data worden opgehaald over de timer op de server!', 4000, 'toast bottom error');
-    }
-});
+
+function initTimerURL(url){
+    urlTimerNewData = url;
+    $.ajax({
+        url: urlTimerNewData,
+        dataType: "json",
+        success: initTimer,
+        error: function(jqXHR, textStatus, errorThrown ){
+            Materialize.toast('Er kan geen data worden opgehaald over de timer op de server!', 4000, 'toast bottom error');
+        }
+    });
+}
+
+function initRoutesURL(url){
+    urlAllRoutes = url;
+}
+
+function initGeoJSONURL(url){
+    urlGeoJSON = url;
+}
+
 
 function setTimerProgress(){
     timerProgress += 0.5;

@@ -103,7 +103,7 @@ public class RouteDAO {
 
     }
     
-     private Properties getProperties() {
+    private Properties getProperties() {
         return HelperFunctions.RetrievePropertyFile(JNDILOOKUP_PROPERTYFILE, ctx, Logger.getGlobal());
     }
     
@@ -140,7 +140,7 @@ public class RouteDAO {
     }
 
     public static String getUrlAllRoutes() {
-        String url = prop.getProperty("urlRESTroutes");
+        String url = prop.getProperty("urlRoutes");
         url = url.replaceAll("\\{id\\}", "all");
         return url;
     }
