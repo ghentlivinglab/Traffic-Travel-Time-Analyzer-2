@@ -680,9 +680,13 @@ public class DataProvider implements DataProviderRemote {
 
     private List<Integer> MapDataByDay(List<Long> data) {
         int index = 0;
-        int hour = 6;
+
         Calendar cal = new GregorianCalendar();
         List<Integer> arr = new ArrayList<>();
+        for (int i = 6; i != 3; i = (i + 1) % 24) {
+            arr.add(-1);
+        }
+
         while (index < data.size()) {
             Date d = new Date(data.get(index++));
             cal.setTime(d);
@@ -693,17 +697,12 @@ public class DataProvider implements DataProviderRemote {
             if (div != 0) {
                 res = Math.toIntExact(exp / div);
             }
-            int nextHour = cal.get(GregorianCalendar.HOUR_OF_DAY);
-
-            for (int i = hour + 1; i < nextHour; i++) {
-                arr.add(-1);
+            int hour = cal.get(GregorianCalendar.HOUR_OF_DAY);
+            if (hour >= 6) {
+                arr.set(hour - 6, res);
+            } else if (hour <= 2 && hour >= 0) {
+                arr.set(hour + 18, res);
             }
-            arr.add(res);
-            hour = nextHour;
-
-        }
-        for (int i = hour + 1; i <= (24 + 2); i++) {
-            arr.add(-1);
         }
 
         return arr;
@@ -872,13 +871,13 @@ public class DataProvider implements DataProviderRemote {
 
     @Override
     public List<Integer> getDataByCombinedDay(IRoute route, List<String> providers, Date start, Date end) {
-        Map<Weekdays, List<Integer>> data = getDataByDay(route, providers,start,end, Weekdays.MONDAY, Weekdays.TUESDAY, Weekdays.WEDNESDAY, Weekdays.THURSDAY, Weekdays.FRIDAY);
+        Map<Weekdays, List<Integer>> data = getDataByDay(route, providers, start, end, Weekdays.MONDAY, Weekdays.TUESDAY, Weekdays.WEDNESDAY, Weekdays.THURSDAY, Weekdays.FRIDAY);
         return mapDataByCombinedDay(data);
     }
 
     @Override
     public List<Integer> getDataVelocityByCombinedDay(IRoute route, List<String> providers, Date start, Date end) {
-        Map<Weekdays, List<Integer>> data = getDataVelocityByDay(route, providers,start,end, Weekdays.MONDAY, Weekdays.TUESDAY, Weekdays.WEDNESDAY, Weekdays.THURSDAY, Weekdays.FRIDAY);
+        Map<Weekdays, List<Integer>> data = getDataVelocityByDay(route, providers, start, end, Weekdays.MONDAY, Weekdays.TUESDAY, Weekdays.WEDNESDAY, Weekdays.THURSDAY, Weekdays.FRIDAY);
         return mapDataByCombinedDay(data);
     }
 

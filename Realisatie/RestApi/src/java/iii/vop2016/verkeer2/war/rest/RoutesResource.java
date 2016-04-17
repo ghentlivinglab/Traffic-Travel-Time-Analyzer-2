@@ -189,6 +189,7 @@ public class RoutesResource {
         return JSONRoutes(routes).toString();
     }
 
+    @GET
     @Path("{id}/days")
     @Produces("application/json")
     public String getDayData(@PathParam("id") String sid) {
