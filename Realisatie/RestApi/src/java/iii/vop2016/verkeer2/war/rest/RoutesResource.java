@@ -377,7 +377,7 @@ public class RoutesResource {
         
         JSONObject data = new JSONObject();
         for (int i = 0; i<dataList.size();i++){
-            data.put(hours.get(0),dataList.get(0));
+            data.put(hours.get(i),dataList.get(i));
         }
         
         result.put("data",data);

@@ -881,7 +881,7 @@ public class DataProvider implements DataProviderRemote {
         return mapDataByCombinedDay(data);
     }
 
-    private DateFormat dateFormatter = new SimpleDateFormat("hh:mm");
+    private DateFormat dateFormatter = new SimpleDateFormat("HH:mm");
 
     @Override
     public List<String> getDataByDayHours() {
