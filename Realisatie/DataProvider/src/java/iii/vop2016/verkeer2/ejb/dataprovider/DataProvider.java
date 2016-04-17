@@ -20,6 +20,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -424,8 +425,8 @@ public class DataProvider implements DataProviderRemote {
                 distance += r.getDistance();
                 i++;
             }
-            
-            if(i == 0){
+
+            if (i == 0) {
                 return -1;
             }
 
@@ -679,28 +680,29 @@ public class DataProvider implements DataProviderRemote {
 
     private List<Integer> MapDataByDay(List<Long> data) {
         int index = 0;
-        int hour = 6;
+
         Calendar cal = new GregorianCalendar();
         List<Integer> arr = new ArrayList<>();
+        for (int i = 6; i != 3; i = (i + 1) % 24) {
+            arr.add(-1);
+        }
+
         while (index < data.size()) {
             Date d = new Date(data.get(index++));
             cal.setTime(d);
 
             Long exp = data.get(index++);
             Long div = data.get(index++);
-            int res = Math.toIntExact(exp / div);
-
-            int nextHour = cal.get(GregorianCalendar.HOUR_OF_DAY);
-
-            for (int i = hour + 1; i < nextHour; i++) {
-                arr.add(-1);
+            int res = -1;
+            if (div != 0) {
+                res = Math.toIntExact(exp / div);
             }
-            arr.add(res);
-            hour = nextHour;
-
-        }
-        for (int i = hour + 1; i <= (24 + 2); i++) {
-            arr.add(-1);
+            int hour = cal.get(GregorianCalendar.HOUR_OF_DAY);
+            if (hour >= 6) {
+                arr.set(hour - 6, res);
+            } else if (hour <= 2 && hour >= 0) {
+                arr.set(hour + 18, res);
+            }
         }
 
         return arr;
@@ -837,27 +839,49 @@ public class DataProvider implements DataProviderRemote {
         return hash;
     }
 
+    private List<Integer> mapDataByCombinedDay(Map<Weekdays, List<Integer>> data) {
+        List<Integer> ret = null;
+        for (Map.Entry<Weekdays, List<Integer>> entry : data.entrySet()) {
+            List<Integer> list = entry.getValue();
+            if (ret == null) {
+                ret = list;
+            } else {
+                for (int i = 0; i < ret.size(); i++) {
+                    ret.set(i, ret.get(i) + list.get(i));
+                }
+            }
+        }
+        for (int i = 0; i < ret.size(); i++) {
+            ret.set(i, ret.get(i) / data.size());
+        }
+        return ret;
+    }
+
     @Override
     public List<Integer> getDataByCombinedDay(IRoute route, List<String> providers) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Weekdays, List<Integer>> data = getDataByDay(route, providers, Weekdays.MONDAY, Weekdays.TUESDAY, Weekdays.WEDNESDAY, Weekdays.THURSDAY, Weekdays.FRIDAY);
+        return mapDataByCombinedDay(data);
     }
 
     @Override
     public List<Integer> getDataVelocityByCombinedDay(IRoute route, List<String> providers) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Weekdays, List<Integer>> data = getDataVelocityByDay(route, providers, Weekdays.MONDAY, Weekdays.TUESDAY, Weekdays.WEDNESDAY, Weekdays.THURSDAY, Weekdays.FRIDAY);
+        return mapDataByCombinedDay(data);
     }
 
     @Override
     public List<Integer> getDataByCombinedDay(IRoute route, List<String> providers, Date start, Date end) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Weekdays, List<Integer>> data = getDataByDay(route, providers, start, end, Weekdays.MONDAY, Weekdays.TUESDAY, Weekdays.WEDNESDAY, Weekdays.THURSDAY, Weekdays.FRIDAY);
+        return mapDataByCombinedDay(data);
     }
 
     @Override
     public List<Integer> getDataVelocityByCombinedDay(IRoute route, List<String> providers, Date start, Date end) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Weekdays, List<Integer>> data = getDataVelocityByDay(route, providers, start, end, Weekdays.MONDAY, Weekdays.TUESDAY, Weekdays.WEDNESDAY, Weekdays.THURSDAY, Weekdays.FRIDAY);
+        return mapDataByCombinedDay(data);
     }
 
-    private DateFormat dateFormatter = new SimpleDateFormat("hh:mm");
+    private DateFormat dateFormatter = new SimpleDateFormat("HH:mm");
 
     @Override
     public List<String> getDataByDayHours() {
@@ -865,6 +889,9 @@ public class DataProvider implements DataProviderRemote {
         int hour = 6;
         int maxHour = 2;
         Calendar cal = new GregorianCalendar();
+        cal.set(GregorianCalendar.HOUR_OF_DAY, hour);
+        cal.set(GregorianCalendar.MINUTE, 0);
+        cal.set(GregorianCalendar.SECOND, 0);
         List<String> arr = new ArrayList<>();
 
         while (cal.get(GregorianCalendar.HOUR_OF_DAY) != maxHour) {
@@ -929,12 +956,110 @@ public class DataProvider implements DataProviderRemote {
 
     @Override
     public Map<Date, Integer> getData(IRoute route, List<String> providers, int precision, Date start, Date end) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Date, Integer> ret = new HashMap<>();
+
+        ITrafficDataDAO dao = beans.getTrafficDataDAO();
+        long precisionDistance = Math.abs(end.getTime() - start.getTime());
+        precisionDistance /= precision;
+
+        ret = GenerateListForPrecisionPointBewteenDates(start, end, precisionDistance);
+        List<Long> data = dao.getAggregateData(route, providers, start, end, precisionDistance / 1000, false, new AggregationContainer(Aggregation.none, "timestamp"), new AggregationContainer(Aggregation.sum, "duration * distance"), new AggregationContainer(Aggregation.sum, "distance"));
+
+        Iterator<Map.Entry<Date, Integer>> it = ret.entrySet().iterator();
+        GregorianCalendar cal = new GregorianCalendar();
+        int index = 0;
+        Map.Entry<Date, Integer> preventry = null;
+        Map.Entry<Date, Integer> entry = null;
+        while (index < data.size()) {
+            Date d = new Date(data.get(index++));
+            cal.setTime(d);
+
+            Long exp = data.get(index++);
+            Long div = data.get(index++);
+            int res;
+            if (div != 0) {
+                res = Math.toIntExact(exp / div);
+            } else {
+                res = -1;
+            }
+
+            boolean found = false;
+            if (entry != null) {
+                if (entry.getKey().after(d)) {
+                    found = true;
+                    if (preventry != null) {
+                        preventry.setValue((res + entry.getValue()) / 2);
+                    }
+
+                }
+            }
+            while (it.hasNext() && !found) {
+                preventry = entry;
+                entry = it.next();
+                if (entry.getKey().after(d)) {
+                    found = true;
+                    if (preventry != null) {
+                        preventry.setValue(res);
+                    }
+                }
+            }
+        }
+
+        return ret;
     }
 
     @Override
     public Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers, int precision, Date start, Date end) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Date, Integer> ret = new HashMap<>();
+
+        ITrafficDataDAO dao = beans.getTrafficDataDAO();
+        long precisionDistance = Math.abs(end.getTime() - start.getTime());
+        precisionDistance /= precision;
+
+        ret = GenerateListForPrecisionPointBewteenDates(start, end, precisionDistance);
+        List<Long> data = dao.getAggregateData(route, providers, start, end, precisionDistance / 1000, false, new AggregationContainer(Aggregation.none, "timestamp"), new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
+
+        Iterator<Map.Entry<Date, Integer>> it = ret.entrySet().iterator();
+        GregorianCalendar cal = new GregorianCalendar();
+        int index = 0;
+        Map.Entry<Date, Integer> preventry = null;
+        Map.Entry<Date, Integer> entry = null;
+        while (index < data.size()) {
+            Date d = new Date(data.get(index++));
+            cal.setTime(d);
+
+            Long exp = data.get(index++);
+            Long div = data.get(index++);
+            int res;
+            if (div != 0) {
+                res = Math.toIntExact(exp / div);
+            } else {
+                res = -1;
+            }
+
+            boolean found = false;
+            if (entry != null) {
+                if (entry.getKey().after(d)) {
+                    found = true;
+                    if (preventry != null) {
+                        preventry.setValue((res + entry.getValue()) / 2);
+                    }
+
+                }
+            }
+            while (it.hasNext() && !found) {
+                preventry = entry;
+                entry = it.next();
+                if (entry.getKey().after(d)) {
+                    found = true;
+                    if (preventry != null) {
+                        preventry.setValue(res);
+                    }
+                }
+            }
+        }
+
+        return ret;
     }
 
     @Override
@@ -973,5 +1098,21 @@ public class DataProvider implements DataProviderRemote {
         int precision = Integer.parseInt(properties.getProperty("DataDefaultPrecision", "100"));
 
         return getDataVelocity(route, providers, precision, start, end);
+    }
+
+    private Map<Date, Integer> GenerateListForPrecisionPointBewteenDates(Date start, Date end, long precisionDistance) {
+        Map<Date, Integer> ret = new TreeMap<>();
+        Calendar cal = new GregorianCalendar();
+        Calendar endCal = new GregorianCalendar();
+        cal.setTime(start);
+        endCal.setTime(end);
+        int distance = Math.toIntExact(precisionDistance);
+
+        while (cal.before(endCal)) {
+            ret.put(cal.getTime(), -1);
+            cal.add(GregorianCalendar.MILLISECOND, distance);
+        }
+        ret.put(end, -1);
+        return ret;
     }
 }

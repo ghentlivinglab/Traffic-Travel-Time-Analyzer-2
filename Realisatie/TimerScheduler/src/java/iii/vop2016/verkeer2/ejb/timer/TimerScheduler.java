@@ -102,21 +102,28 @@ public class TimerScheduler implements TimerSchedulerRemote {
     private Properties getProperties() {
         return HelperFunctions.RetrievePropertyFile(JNDILOOKUP_PROPERTYFILE, ctx, Logger.getGlobal());
     }
+    
+    public void Tick(){
+    
+    }
 
     /**
      * Ticks are driven by the Timers, they start the new download cycle for
      * data
      */
-    @Override
     @Timeout
-    public void Tick() {
+    public void Tick(Timer timer) {
         isTimeInvalid = true;
-        
-        if(!beans.isBeanActive("TimerScheduler/TimerScheduler")){
+
+        if (!beans.isBeanActive("TimerScheduler/TimerScheduler")) {
             return;
         }
-        
+
         if (!isRunning) {
+            return;
+        }
+
+        if (!t.equals(timer)) {
             return;
         }
 
@@ -299,6 +306,6 @@ public class TimerScheduler implements TimerSchedulerRemote {
 
     @Override
     public int getPercentDoneToNextInterval() {
-        return ((ticks-1) * 100) / interval;
+        return ((ticks - 1) * 100) / interval;
     }
 }
