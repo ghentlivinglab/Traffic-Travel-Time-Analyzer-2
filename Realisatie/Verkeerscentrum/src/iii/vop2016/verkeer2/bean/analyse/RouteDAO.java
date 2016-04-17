@@ -68,7 +68,7 @@ public class RouteDAO {
          
         
             // AVAILABLE ROUTES
-            JSONArray routes = JSONMethods.getArrayFromURL(getUrlAllRoutes());
+            JSONArray routes = JSONMethods.getArrayFromURL(getUrlAllRoutes(), prop);
             for(int i=0; i<routes.length(); i++){
                 JSONObject routeJSON = (JSONObject)routes.get(i);
                 availableRoutes.add(JSONtoRoute(routeJSON));

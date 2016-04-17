@@ -74,7 +74,11 @@ function viewAnalyseData(data){
         var y2 = [];
         y2[0] = route.data[i].period;
         for (var k=0; k<ydata.length; k++) {
-            y2[parseInt(k) + 1] = ydata[k];
+            if(ydata[k] < 0){
+                y2[parseInt(k) + 1] = null;
+            }else{
+                y2[parseInt(k) + 1] = ydata[k];
+            }
         }
         y.push(y2);
     }
@@ -115,7 +119,13 @@ function viewAnalyseData(data){
         row.append(col);    
         for(i=1; i<y[k].length; i++){
             ydata = y[k][i];
-            col = $("<td />").text(Math.floor(ydata/60/1000)+" min");
+            console.log(ydata);
+            if(ydata === null){
+                col = "";
+            }else{
+                col = $("<td />").text(Math.floor(ydata/60/1000)+" min");
+            }
+            
             row.append(col);  
         }
         table.append(row);
@@ -144,6 +154,13 @@ function viewAnalyseData(data){
     for(var i=0; i<y.length; i++){
         colors[y[i][0]] = colors[i];
     }
+    
+    parseToMinSec = function(data){
+        var date = new Date();
+        date.setTime(0);
+        date.setSeconds(data);
+        return dateFormat(date, "MM")+"m"+dateFormat(date, "ss");
+    };
 
     
     chart = c3.generate({
@@ -164,7 +181,7 @@ function viewAnalyseData(data){
                 show: true,
                 type: 'timeseries',
                 tick: {
-                    format: '%a %H:%M',
+                    format: '%d/%m/%Y \n %H:%M',
                     culling: {
                         max: 7 // the number of tick texts will be adjusted to less than this value
                     }
@@ -175,9 +192,9 @@ function viewAnalyseData(data){
                 }
             },
             y: {
-                type: 'timeseries',
+                type: 'number',
                 tick: {
-                    format: d3.time.format('%M\'%S\"'),
+                    format: parseToMinSec,
                     culling: 2// for some reason this doesn't work
                 },
                 label: {// ADD
@@ -188,15 +205,13 @@ function viewAnalyseData(data){
         },
         tooltip: {
             format: {
-                value: function (v) {
-                    var mind = v / 60000;
-                    var minutes = Math.floor(mind);
+                value: function (data) {
 
-                    var secd = (mind % minutes) * 60;
-                    var seconds = Math.floor(secd);
-
-                    var string = minutes + 'm ' + seconds;
-                    return string;
+                        var date = new Date();
+                        date.setTime(0);
+                        date.setSeconds(data);
+                        return dateFormat(date, "MM")+"m"+dateFormat(date, "ss");
+                    
                 }
 //            value: d3.format(',') // apply this format to both y and y2
             }

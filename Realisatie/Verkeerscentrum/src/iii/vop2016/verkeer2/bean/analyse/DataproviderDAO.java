@@ -54,7 +54,7 @@ public class DataproviderDAO {
             prop = getProperties();
         
             // AVAILABLE ROUTES
-            JSONArray providers = JSONMethods.getArrayFromURL(prop.getProperty("urlAllProviders"));
+            JSONArray providers = JSONMethods.getArrayFromURL(prop.getProperty("urlAllProviders"), prop);
             for(int i=0; i<providers.length(); i++){
                 availableProviders.add(new DataProvider(providers.getString(i)));
             }
