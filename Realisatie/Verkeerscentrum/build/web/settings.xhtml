@@ -10,16 +10,17 @@
         <ui:define name="page"> Setings </ui:define>
         
         <ui:define name="content">
-            Ajaj
-           
             
+            <div class="container">
+            <h1>Instellingen</h1>
+            </div>
             
         </ui:define>
         
         
         <ui:define name="right">
             
-            
+            Navigatie voor instellingenpagina
             
             
         </ui:define>
@@ -27,20 +28,7 @@
         
         <ui:define name="javascript">
             
-             <script>
-                $.ajax({
-                    url: "http://datatank.stad.gent/4/bevolking/bevolkingssamenstellingvrouwen.json",
-                    dataType: "json",
-                    success: function(data){
-                        alert(data.length);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown ){
-                        Materialize.toast('Er kan geen nieuwe data worden opgehaald!', 4000, 'toast bottom error');
-                    }
-                });
-
-            </script>
-                
+                            
             
         </ui:define>
         

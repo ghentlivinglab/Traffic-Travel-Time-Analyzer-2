@@ -40,6 +40,13 @@ function splitToArraySorted(obj, xdata, ydata){
     }
 }
 
+function formatDuration(data) {
+        var date = new Date();
+        date.setTime(0);
+        date.setSeconds(data);
+        return dateFormat(date, "MM")+"m"+dateFormat(date, "ss");
+};
+
 function viewAnalyseData(data){
     
     var route = data[0];
@@ -98,7 +105,7 @@ function viewAnalyseData(data){
     col = $("<th />").text("").addClass("pull-bottom th");
     row.append(col);
     for(i=1; i<x.length; i++){
-        col = $("<td />").text(x[i].format("dd/mm")+"\n"+x[i].format("HH:MM")); 
+        col = $("<td />").addClass("center").text(x[i].format("dd/mm")+"\n"+x[i].format("HH:MM")); 
         row.append(col);
     }
     table.append(row);
@@ -113,10 +120,11 @@ function viewAnalyseData(data){
         console.log(y[k]);
         for(i=1; i<y[k].length; i++){
             ydata = y[k][i];
-            if(ydata){
-                col = $("<td />").text("/");
+            if(ydata == null){
+                col = $("<td />").addClass("center").text("/");
             }else{
-                col = $("<td />").text(Math.floor(ydata/60/1000)+" min");
+                var d = formatDuration(ydata);
+                col = $("<td />").addClass("center").text(d);
             }
             row.append(col);  
         }

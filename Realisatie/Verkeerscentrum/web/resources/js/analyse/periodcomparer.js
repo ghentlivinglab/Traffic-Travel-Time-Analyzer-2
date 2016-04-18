@@ -42,6 +42,14 @@ function splitToArraySorted(obj, xdata, ydata){
     }
 }
 
+
+function formatDuration(data) {
+        var date = new Date();
+        date.setTime(0);
+        date.setSeconds(data);
+        return dateFormat(date, "MM")+"m"+dateFormat(date, "ss");
+};
+
 function viewAnalyseData(data){
     
     console.log(data);
@@ -115,10 +123,11 @@ function viewAnalyseData(data){
         row.append(col);    
         for(i=1; i<y[k].length; i++){
             ydata = y[k][i];
-            if(ydata === null){
-                col = "";
+            if(ydata == null){
+                col = $("<td />").addClass("center").text("/");
             }else{
-                col = $("<td />").text(Math.floor(ydata/60/1000)+" min");
+                var d = formatDuration(ydata);
+                col = $("<td />").addClass("center").text(d);
             }
             
             row.append(col);  
@@ -151,10 +160,7 @@ function viewAnalyseData(data){
     }
     
     parseToMinSec = function(data){
-        var date = new Date();
-        date.setTime(0);
-        date.setSeconds(data);
-        return dateFormat(date, "MM")+"m"+dateFormat(date, "ss");
+        return formatDuration(data);
     };
 
     

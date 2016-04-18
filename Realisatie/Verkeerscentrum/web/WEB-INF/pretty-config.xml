@@ -24,8 +24,8 @@
 	</url-mapping>
         
        
-        <url-mapping id="map">
-		<pattern value="/map" />
+        <url-mapping id="live">
+		<pattern value="/live" />
 		<view-id value="/faces/live.xhtml" />
 	</url-mapping>
         

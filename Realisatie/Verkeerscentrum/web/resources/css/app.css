@@ -2614,6 +2614,9 @@ form {
 	display: none;
 }
 */
+#navGeneralDropdown {
+  width: 300px; }
+
 .map {
   height: 100%; }
   .map #map {

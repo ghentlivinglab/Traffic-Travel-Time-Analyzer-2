@@ -39,37 +39,7 @@
         <header id="top">
             
             <div class="navbar-fixed">
-                <nav>
-                    <span class="brand-logo center hide-on-med-and-down"><ui:insert name="page">Dashboard</ui:insert></span>
-                    <h:link outcome="pretty:index" styleClass="brand-logo">
-                        <img src="#{requestScope.resourceURLimg}/logo.png" />
-                    </h:link>
-                    <ul class="right hide-on-med-and-down">
-                        <li>
-                            <h:link outcome="pretty:map">
-                                <i class="material-icons">navigation</i>
-                            </h:link>
-                        </li>
-                        <li>
-                            <h:link outcome="pretty:analyse">
-                                <i class="material-icons">equalizer</i>
-                            </h:link>
-                        </li>
-                        <li>
-                            <h:link outcome="pretty:settings">
-                                <i class="material-icons">settings</i>
-                            </h:link>
-                        </li>
-                        <li><a href="#!"><i class="material-icons">view_module</i></a></li>
-                        <li><a href="#!"><i class="material-icons">refresh</i></a></li>
-                        <li><a href="#!"><i class="material-icons">more_vert</i></a></li>
-                    </ul>
-                    <ul id="slide-out" class="side-nav">
-                      <li><a href="#!">Live traffic</a></li>
-                      <li><a href="#!">Settings</a></li>
-                    </ul>
-                    <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
-                </nav>
+                <ui:include src="/templates/_navigation.xhtml" />
             </div>
             
         </header>

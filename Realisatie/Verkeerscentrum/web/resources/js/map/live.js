@@ -1,5 +1,7 @@
 
 
+/* global Materialize */
+
 var timerProgress = 0;
 var map;
 var mymap;
@@ -206,10 +208,9 @@ function setAvgList(){
     header = $("<ul/>").addClass("traffic-list")
             .append($("<li/>").append($("<table/>").addClass("highlight").append($("<thead/>")
             .append($("<tr/>")
-            .append($("<th/>").text("Traject").attr("width","50%").attr("data-field","id"))
+            .append($("<th/>").text("Traject").attr("width","60%").attr("data-field","id"))
             .append($("<th/>").text("Reistijd").attr("width","20%").attr("data-field","duration").addClass("center"))
             .append($("<th/>").text("Vertraging").attr("width","20%").attr("data-field","delay").addClass("center"))
-            .append($("<th/>").attr("width","10%"))
     ))));
 
     trafficListBox.append(header);
@@ -217,17 +218,36 @@ function setAvgList(){
     trafficList = $(".traffic-list");
     if(trafficData.length>0){
         for (var i = 0; i < trafficData.length; i++) {
+            var duration = {"min":0,"sec":0};
+            var delay = {"min":0,"sec":0};
+            var id, name, delay, trend, delayClass, delayTxt, durationTxt;
             id = trafficData[i].id;
             name = trafficData[i].name;
-            duration = "8 min";
-            delay = "1 min";
+            duration.min = Math.round((trafficData[i].avgDuration)/60);
+            duration.sec = (trafficData[i].avgDuration-duration.min);
+            durationTxt = duration.min+" min";
+            if(trafficData[i].optimalDuration >= 0){
+                delay.sec = trafficData[i].avgDuration - trafficData[i].optimalDuration;
+                delay.min = Math.round(delay.sec/60);
+                delayTxt = delay.min+" min";
+            }else{
+                delayTxt = "? min";
+            }
+                        
+            delayClass = "default";
+            switch(trafficData[i].currentDelayLevel){
+                case 0: delayClass = "veryfast"; break;
+                case 1: delayClass = "fast"; break;
+                case 2: delayClass = "intermediate"; break;
+                case 3: delayClass = "slow"; break;
+                case 4: delayClass = "verslow"; break;
+            }
 
-            trafficListItem = $("<li/>").append($("<table/>").addClass("highlight").append($("<thead/>")
+            trafficListItem = $("<li/>").attr("id","route"+id).append($("<table/>").addClass("highlight").append($("<thead/>")
                     .append($("<tr/>")
                     .append($("<td/>").text(name).attr("width","50%"))
-                    .append($("<td/>").text(duration).attr("width","20%").addClass("center"))
-                    .append($("<td/>").append($("<span/>").addClass("badge slow").text(delay)).attr("width","20%").addClass("center"))
-                    .append($("<td/>").attr("width","10%"))
+                    .append($("<td/>").text(durationTxt).attr("width","20%").addClass("center"))
+                    .append($("<td/>").append($("<span/>").addClass("badge "+delayClass).text(delayTxt)).attr("width","20%").addClass("center"))
             )));
             trafficList.append(trafficListItem);
         }
