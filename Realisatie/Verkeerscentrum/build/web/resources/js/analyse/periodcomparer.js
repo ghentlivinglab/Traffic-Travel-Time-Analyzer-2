@@ -84,10 +84,6 @@ function viewAnalyseData(data){
     }
     
     
-        console.log(x);
-        console.log(y);
-    
-    
     
     //
     // DRAW RESULTS (TABLE)
@@ -119,7 +115,6 @@ function viewAnalyseData(data){
         row.append(col);    
         for(i=1; i<y[k].length; i++){
             ydata = y[k][i];
-            console.log(ydata);
             if(ydata === null){
                 col = "";
             }else{
@@ -181,7 +176,7 @@ function viewAnalyseData(data){
                 show: true,
                 type: 'timeseries',
                 tick: {
-                    format: '%d/%m/%Y \n %H:%M',
+                    format: '%H:%M',
                     culling: {
                         max: 7 // the number of tick texts will be adjusted to less than this value
                     }

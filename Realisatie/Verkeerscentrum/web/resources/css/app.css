@@ -2656,6 +2656,10 @@ form {
   background-image: url("../img/homepage.jpg");
   background-size: cover; }
 
+#routePreview {
+  width: 100%;
+  height: 500px; }
+
 .analyse {
   height: 100%; }
   .analyse .container {

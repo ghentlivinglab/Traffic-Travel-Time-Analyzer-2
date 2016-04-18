@@ -4,14 +4,16 @@ var addedPeriods = 0;
 
 
 showRoutePreview = function(){
-    $("#routePreview").css("display","block");
-    //$("#routePreview").attr("src","http://localhost:8080/web/resources/img/traject.PNG");
+    routeID = $("#"+$(this).attr("for")).val();
+    showRoutePreview(routeID);
+    
 };
 hideRoutePreview = function(){
     if(lastSelectedRoute === null)
-        $("#routePreview").css("display","none");
-    //else
-        //$("#routePreview").attr("src","http://localhost:8080/web/resources/img/traject.PNG");
+        hideRoutePreview();
+    else
+        showRoutePreview(lastSelectedRoute);
+    
 };
 addRouteToList = function(){
     lastSelectedRoute = $("#"+$(this).attr("for")).val();
@@ -94,15 +96,22 @@ $('.btnRefreshAnalyse').click(function(e) {
 });
   
 $("#btnAddNewPeriod").click(function(){
-    
+    newPeriodStart = parseInt($("[name=txtNewPeriodStart]").val());
+    newPeriodEnd = parseInt($("[name=txtNewPeriodEnd]").val());
+    addPeriodToTable(newPeriodStart,newPeriodEnd);   
+});
+
+function addPeriodToTable(start, end){
     btnEdit = $("<a />").attr("href","#!").addClass("btn-floating blue").append($("<i />").addClass("material-icons").text("create"));
     btnRemove = $("<a />").attr("href","#!").addClass("btn-floating red").append($("<i />").addClass("material-icons").text("delete"));
+    newPeriodStart = start;
+    newPeriodEnd = end;
     if(addedPeriods === 0 || addedPeriods === null) $("#newPeriodList tbody").html("");
     $("#newPeriodList tbody").append(
             $("<tr />").append(
-            $("<td />").text($("#txtNewPeriodStart").val())
+            $("<td />").text(dateFormat(new Date(newPeriodStart), "dd-mm-yyyy"))
             ).append(
-            $("<td />").text($("#txtNewPeriodEnd").val())
+            $("<td />").text(dateFormat(new Date(newPeriodEnd), "dd-mm-yyyy"))
             ).append(
             $("<td />").addClass("right-align").append(btnEdit).append(btnRemove)
             ));
@@ -111,16 +120,15 @@ $("#btnAddNewPeriod").click(function(){
     $("#txtNewPeriodEnd").val("");
     oldPeriodStart = $("[name=periodsStart]").val();
     oldPeriodEnd = $("[name=periodsEnd]").val();
-    newPeriodStart = $("[name=txtNewPeriodStart]").val();
-    newPeriodEnd = $("[name=txtNewPeriodEnd]").val();
-    if(oldPeriodStart != "") {
+    
+    if(oldPeriodStart !== "") {
         oldPeriodStart = oldPeriodStart+" ";
         oldPeriodEnd = oldPeriodEnd+" ";
     }
     $("[name=periodsStart]").val(oldPeriodStart+""+newPeriodStart);
     $("[name=periodsEnd]").val(oldPeriodEnd+""+newPeriodEnd);
-   
-});
+}
+
 
 $("#btnSelectRoutes").click(function(){
     /*switch($(this).data("multiplicity")){

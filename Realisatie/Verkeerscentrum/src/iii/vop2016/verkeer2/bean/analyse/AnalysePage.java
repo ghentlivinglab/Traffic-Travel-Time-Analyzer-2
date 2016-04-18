@@ -5,28 +5,18 @@
  */
 package iii.vop2016.verkeer2.bean.analyse;
 
-import iii.vop2016.verkeer2.bean.components.Route;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.util.Pair;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.context.FacesContext;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.http.HttpServletRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 

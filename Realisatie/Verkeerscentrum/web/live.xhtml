@@ -27,6 +27,61 @@
                     <div class="trafficinfo">
                         <div id="traffic-list">
                             
+                            <div class="valign-wrapper">
+                                <div style="width: 100%; padding-top: 50px;" class="valign center">
+                                    <div class="preloader-wrapper big active center-align">
+                                        <div class="spinner-layer spinner-blue">
+                                            <div class="circle-clipper left">
+                                                <div class="circle"></div>
+                                            </div><div class="gap-patch">
+                                                <div class="circle"></div>
+                                            </div><div class="circle-clipper right">
+                                                <div class="circle"></div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="spinner-layer spinner-red">
+                                            <div class="circle-clipper left">
+                                                <div class="circle"></div>
+                                            </div><div class="gap-patch">
+                                                <div class="circle"></div>
+                                            </div><div class="circle-clipper right">
+                                                <div class="circle"></div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="spinner-layer spinner-yellow">
+                                            <div class="circle-clipper left">
+                                                <div class="circle"></div>
+                                            </div><div class="gap-patch">
+                                                <div class="circle"></div>
+                                            </div><div class="circle-clipper right">
+                                                <div class="circle"></div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="spinner-layer spinner-green">
+                                            <div class="circle-clipper left">
+                                                <div class="circle"></div>
+                                            </div><div class="gap-patch">
+                                                <div class="circle"></div>
+                                            </div><div class="circle-clipper right">
+                                                <div class="circle"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <br /><br />
+                                    
+                                    <h5> Trajecten worden geladen... </h5>
+                                    
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            
+                            
                         </div>
                     </div>
                 </div>
@@ -37,12 +92,9 @@
         
         <ui:define name="javascript">
             
-            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCG3pbrFs7g35VSYnL1X3jwftuQmm5s18g&amp;callback=initMap"
-            async="" defer=""></script>
-            
             <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script> 
             
-            <script src="#{requestScope.resourceURLjs}/map/map.js" />
+            <script src="#{requestScope.resourceURLjs}/map/live.js" />
             
             <script>
                 initRoutesURL('#{urlDAO.allRoutes}');

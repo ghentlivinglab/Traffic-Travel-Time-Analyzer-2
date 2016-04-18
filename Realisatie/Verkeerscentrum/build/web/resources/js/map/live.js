@@ -1,5 +1,4 @@
 
-/* global Materialize, L */
 
 var timerProgress = 0;
 var map;
@@ -93,12 +92,6 @@ function initGUI(){
 
 
 function setLiveMap(){
-    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-        maxZoom: 18,
-        id: 'tobiasvdp.ac4aa6b2',
-        accessToken: 'pk.eyJ1IjoidG9iaWFzdmRwIiwiYSI6ImNpbGpxcTFwaTAwYjF3NGx6bWZ2bGZkcG8ifQ.DTe2IBQLNc9zQa62kD-4_g'
-    }).addTo(mymap);
     requestGeoJson();  
 }
 
@@ -332,8 +325,15 @@ function requestGeoJson(){
 
 $(document).ready(function() {
     mymap = L.map('map').setView([51.096434, 3.744511], 11);
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        maxZoom: 18,
+        id: 'tobiasvdp.ac4aa6b2',
+        accessToken: 'pk.eyJ1IjoidG9iaWFzdmRwIiwiYSI6ImNpbGpxcTFwaTAwYjF3NGx6bWZ2bGZkcG8ifQ.DTe2IBQLNc9zQa62kD-4_g'
+    }).addTo(mymap);
     initGUI();
-    setModus("live");
+    //setModus("live");
+    modus = "live";
     refreshLiveData();
     //requestGeoJson();
 });

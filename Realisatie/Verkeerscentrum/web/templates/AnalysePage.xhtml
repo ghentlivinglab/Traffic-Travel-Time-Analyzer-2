@@ -7,7 +7,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:pretty="http://ocpsoft.com/prettyfaces">
-
+    
     
     <pretty:urlbuffer var="formURL" mappingId="analyse-datasources" />
     
@@ -100,25 +100,21 @@
                                                                             <th data-field="price"></th>
                                                                         </tr>
                                                                     </thead>
-                                                                        
+                                                                    
                                                                     <tbody>
                                                                         
-                                                                        <tr>
-                                                                            <td colspan="3">
-                                                                                <p>Geen periodes toegevoegd</p>
-                                                                            </td>
-                                                                        </tr>
-                                                                            
+                                                                        
+                                                                        
                                                                     </tbody>
                                                                 </table>
                                                                 <br />
-                                                                    
+                                                                
                                                             </div>
                                                             <br />
                                                             
                                                             <input name="periodsStart" type="hidden" />
                                                             <input name="periodsEnd" type="hidden" />
-                                                                
+                                                            
                                                         </div>
                                                     </section>
                                                     <a href="#!" class="btn blue" onclick="$('#modelAddNewPeriod').openModal();"> Nieuwe periode </a>
@@ -321,8 +317,8 @@
             
             
             <!-- Modal Structure -->
-                <div id="modelAddNewPeriod" class="modal">
-                  <div class="modal-content">
+            <div id="modelAddNewPeriod" class="modal">
+                <div class="modal-content">
                     <h4>Selecteer een periode</h4>
                     <div class="row">
                         <div class="col s3 pull-bottom valign-wrapper">
@@ -342,11 +338,11 @@
                             <input name="txtNewPeriodEnd" type="hidden" />
                         </div>
                     </div>
-                  </div>
-                  <div class="modal-footer">
-                    <a href="#!" id="btnAddNewPeriod" class=" modal-action modal-close waves-effect waves-green btn-flat green">Voeg toe</a>
-                  </div>
                 </div>
+                <div class="modal-footer">
+                    <a href="#!" id="btnAddNewPeriod" class=" modal-action modal-close waves-effect waves-green btn-flat green">Voeg toe</a>
+                </div>
+            </div>
             
             
             
@@ -357,6 +353,7 @@
         
         <ui:define name="javascript">
             
+                        
             <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/index.js" />
             <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/components.js" />
             
@@ -364,6 +361,13 @@
             
             <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/d3.min.js" />
             <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/c3.min.js" />
+            
+            
+            <c:forEach var="period" items="#{periodDAO.periods}">
+                <script>
+                    addPeriodToTable(#{period.key.getTime()},#{period.value.getTime()});
+                </script>                                                          
+            </c:forEach>
             
             
             <ui:insert name="javascriptAnalyse"></ui:insert>
