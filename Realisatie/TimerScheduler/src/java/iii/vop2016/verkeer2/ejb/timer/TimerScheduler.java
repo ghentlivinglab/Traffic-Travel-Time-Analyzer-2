@@ -27,10 +27,12 @@ import javax.ejb.TimerConfig;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import iii.vop2016.verkeer2.ejb.datadownloader.ITrafficDataDownloader;
+import iii.vop2016.verkeer2.ejb.helper.NoInternetConnectionException;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.text.NumberFormat;
 import java.time.DateTimeException;
+import java.util.GregorianCalendar;
 import javax.ejb.Startup;
 import org.apache.commons.net.ntp.NTPUDPClient;
 import org.apache.commons.net.ntp.NtpV3Packet;
@@ -82,16 +84,22 @@ public class TimerScheduler implements TimerSchedulerRemote {
         }
         beans = BeanFactory.getInstance(ctx, ctxs);
 
-        Logger.getLogger("logger").log(Level.INFO, "TimerScheduler has been initialized.");
+        beans.getLogger().log(Level.INFO, "TimerScheduler has been initialized.");
 
         Properties prop = getProperties();
 
         //Get interval to closest time for timer from properties file
         isTimeInvalid = true;
-        Date time = getCurrentTime(prop);
+        Date time;
+        try {
+            time = getCurrentTime(prop);
+        } catch (NoInternetConnectionException ex) {
+             beans.getLogger().log(Level.WARNING, "No internet connection");
+            time = this.currentTime;
+        }
         int currentTime = getIndexedCurrentTime(time);
         interval = getIntervalForClosestTime(currentTime, prop);
-        Logger.getLogger("logger").log(Level.INFO, "Interval for Timer set to " + interval);
+        beans.getLogger().log(Level.INFO, "Interval for Timer set to " + interval);
 
         //Create timer with specified interval
         ticks = 0;
@@ -102,9 +110,9 @@ public class TimerScheduler implements TimerSchedulerRemote {
     private Properties getProperties() {
         return HelperFunctions.RetrievePropertyFile(JNDILOOKUP_PROPERTYFILE, ctx, Logger.getGlobal());
     }
-    
-    public void Tick(){
-    
+
+    public void Tick() {
+
     }
 
     /**
@@ -113,9 +121,7 @@ public class TimerScheduler implements TimerSchedulerRemote {
      */
     @Timeout
     public void Tick(Timer timer) {
-        isTimeInvalid = true;
-
-        if (!beans.isBeanActive("TimerScheduler/TimerScheduler")) {
+        if (!t.equals(timer)) {
             return;
         }
 
@@ -123,18 +129,29 @@ public class TimerScheduler implements TimerSchedulerRemote {
             return;
         }
 
-        if (!t.equals(timer)) {
+        isTimeInvalid = true;
+
+        if (!beans.isBeanActive("TimerScheduler/TimerScheduler")) {
             return;
         }
 
         Properties prop = getProperties();
 
-        Date time = getCurrentTime(prop);
-        int currentTime = getIndexedCurrentTime(time);
+        Date time = null;
+        int currentTime;
+        try {
+            time = getCurrentTime(prop);
+            currentTime = getIndexedCurrentTime(time);
+        } catch (NoInternetConnectionException ex) {
+            Logger.getLogger("logger").log(Level.WARNING, "No internet connection", ex);
+            currentTime = getIndexedCurrentTime(this.currentTime);
+        }
 
         if (ticks == interval) {
             ticks = 1;
-            DoTick(time);
+            if (time != null) {
+                DoTick(time);
+            }
         } else {
             ticks++;
         }
@@ -143,12 +160,14 @@ public class TimerScheduler implements TimerSchedulerRemote {
         int i = getIntervalForClosestTime(currentTime, prop);
         if (i != interval) {
             if (ticks != 1) {
-                DoTick(time);
+                if (time != null) {
+                    DoTick(time);
+                }
             }
 
             interval = i;
             ticks = 1;
-            Logger.getLogger("logger").log(Level.INFO, "Interval for Timer set to " + interval);
+            beans.getLogger().log(Level.INFO, "Interval for Timer set to " + interval);
         }
 
     }
@@ -158,7 +177,7 @@ public class TimerScheduler implements TimerSchedulerRemote {
         return currentTime;
     }
 
-    private Date getCurrentTime(Properties prop) {
+    private Date getCurrentTime(Properties prop) throws NoInternetConnectionException {
         if (isTimeInvalid) {
             Date time = null;
             int currentTime = -1;
@@ -168,13 +187,18 @@ public class TimerScheduler implements TimerSchedulerRemote {
                 if (time == null) {
                     throw new IOException();
                 }
+                isTimeInvalid = false;
+                this.currentTime = time;
             } catch (Exception ex) {
                 //use local server time as backup
-                Calendar cal = Calendar.getInstance();
+                Calendar cal = new GregorianCalendar();
                 time = cal.getTime();
+                isTimeInvalid = false;
+                this.currentTime = time;
+
+                throw new NoInternetConnectionException();
             }
-            isTimeInvalid = false;
-            this.currentTime = time;
+
         }
         return this.currentTime;
     }
@@ -255,7 +279,13 @@ public class TimerScheduler implements TimerSchedulerRemote {
     @Override
     public long getCurrentTime() {
         Properties prop = getProperties();
-        Date d = getCurrentTime(prop);
+        Date d = null;
+        try {
+            d = getCurrentTime(prop);
+        } catch (NoInternetConnectionException ex) {
+            Logger.getLogger("logger").log(Level.WARNING, "No internet connection", ex);
+            d = this.currentTime;
+        }
         if (d != null) {
             return d.getTime();
         }
@@ -264,10 +294,10 @@ public class TimerScheduler implements TimerSchedulerRemote {
 
     private Date getCurrentTime_ntpServer(Properties properties) throws Exception {
         NTPUDPClient client = new NTPUDPClient();
-        client.setDefaultTimeout(10000);
+        client.setDefaultTimeout(2000);
         try {
             client.open();
-            InetAddress hostAddr = InetAddress.getByName(properties.getProperty("ntpserver", ""));
+            InetAddress hostAddr = InetAddress.getByName(properties.getProperty("ntpserver", "pool.ntp.org"));
             TimeInfo info = client.getTime(hostAddr);
             return processResponse(info);
         } catch (IOException ioe) {

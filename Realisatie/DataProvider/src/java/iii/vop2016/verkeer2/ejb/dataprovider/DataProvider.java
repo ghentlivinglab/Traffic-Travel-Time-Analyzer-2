@@ -13,6 +13,7 @@ import iii.vop2016.verkeer2.ejb.dao.AggregationContainer;
 import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
+import iii.vop2016.verkeer2.ejb.logger.LoggerRemote;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,7 +62,7 @@ public class DataProvider implements DataProviderRemote {
         }
         beans = BeanFactory.getInstance(ctx, ctxs);
 
-        Logger.getLogger("logger").log(Level.INFO, "DataProvider has been initialized.");
+        beans.getLogger().log(Level.INFO, "DataProvider has been initialized.");
     }
 
     private Properties getProperties() {
@@ -157,6 +158,9 @@ public class DataProvider implements DataProviderRemote {
 
     @Override
     public int getCurrentDuration(IRoute route, List<String> providers) {
+        LoggerRemote logger = beans.getLogger();
+        logger.entering("DataProvider", "getCurrentDuration", new Object[]{route, providers});
+        
         long hash = calculateHash(providers);
         Integer buffer = getDataFromBuffer(currentDuration, route, providers, hash);
         if (buffer == null || buffer == -1) {
@@ -164,6 +168,7 @@ public class DataProvider implements DataProviderRemote {
             List<IRouteData> list = dao.getCurrentTrafficSituation(route, providers);
 
             if (list == null || list.isEmpty()) {
+                logger.exiting("DataProvider", "getCurrentDuration", -1);
                 return -1;
             }
 
@@ -176,6 +181,7 @@ public class DataProvider implements DataProviderRemote {
 
             setDataInBuffer(buffer, currentDuration, route, providers, hash, -1);
         }
+        logger.exiting("DataProvider", "getCurrentDuration", buffer);
         return buffer;
     }
 
@@ -183,6 +189,9 @@ public class DataProvider implements DataProviderRemote {
 
     @Override
     public int getCurrentVelocity(IRoute route, List<String> providers) {
+        LoggerRemote logger = beans.getLogger();
+        logger.entering("DataProvider", "getCurrentVelocity", new Object[]{route, providers});
+
         long hash = calculateHash(providers);
         Integer buffer = getDataFromBuffer(currentSpeed, route, providers, hash);
 
@@ -191,6 +200,7 @@ public class DataProvider implements DataProviderRemote {
             List<IRouteData> list = dao.getCurrentTrafficSituation(route, providers);
 
             if (list == null || list.size() == 0) {
+                logger.exiting("DataProvider", "getCurrentVelocity", -1);
                 return -1;
             }
 
@@ -203,6 +213,7 @@ public class DataProvider implements DataProviderRemote {
 
             setDataInBuffer(buffer, currentSpeed, route, providers, hash, -1);
         }
+        logger.exiting("DataProvider", "getCurrentVelocity", buffer);
         return buffer;
     }
 
@@ -248,6 +259,9 @@ public class DataProvider implements DataProviderRemote {
 
     @Override
     public int getOptimalDuration(IRoute route, List<String> providers, Date startDate, Date endDate) {
+        LoggerRemote logger = beans.getLogger();
+        logger.entering("DataProvider", "getOptimalDuration", new Object[]{route, providers, startDate, endDate});
+
         Properties properties = getProperties();
         Calendar startTime = GetTimeFromPropertyValue(properties.getProperty("OptimalDurationStartHour", "00-00"));
         Calendar endTime = GetTimeFromPropertyValue(properties.getProperty("OptimalDurationEndHour", "00-00"));
@@ -260,17 +274,24 @@ public class DataProvider implements DataProviderRemote {
         List<Long> list = dao.getAggregateData(route, providers, startList, endList, new AggregationContainer(Aggregation.sum, "duration * distance"), new AggregationContainer(Aggregation.sum, "distance"));
 
         if (list == null || list.size() == 0) {
+            logger.exiting("DataProvider", "getOptimalDuration", -1);
             return -1;
         }
 
         if (list.size() == 2 && list.get(1) != 0) {
-            return Math.toIntExact(list.get(0) / list.get(1));
+            int ret = Math.toIntExact(list.get(0) / list.get(1));
+            logger.exiting("DataProvider", "getOptimalDuration", ret);
+            return ret;
         }
+        logger.exiting("DataProvider", "getOptimalDuration", -1);
         return -1;
     }
 
     @Override
     public int getOptimalVelocity(IRoute route, List<String> providers, Date startDate, Date endDate) {
+        LoggerRemote logger = beans.getLogger();
+        logger.entering("DataProvider", "getOptimalVelocity", new Object[]{route, providers, startDate, endDate});
+
         Properties properties = getProperties();
         Calendar startTime = GetTimeFromPropertyValue(properties.getProperty("OptimalDurationStartHour", "00-00"));
         Calendar endTime = GetTimeFromPropertyValue(properties.getProperty("OptimalDurationEndHour", "00-00"));
@@ -283,12 +304,16 @@ public class DataProvider implements DataProviderRemote {
         List<Long> list = dao.getAggregateData(route, providers, startList, endList, new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
 
         if (list == null || list.size() == 0) {
+            logger.exiting("DataProvider", "getOptimalVelocity", -1);
             return -1;
         }
 
         if (list.size() == 2 && list.get(1) != 0) {
-            return Math.toIntExact(list.get(0) / list.get(1));
+            int ret = Math.toIntExact(list.get(0) / list.get(1));
+            logger.exiting("DataProvider", "getOptimalVelocity", ret);
+            return ret;
         }
+        logger.exiting("DataProvider", "getOptimalVelocity", -1);
         return -1;
     }
 
@@ -334,83 +359,120 @@ public class DataProvider implements DataProviderRemote {
 
     @Override
     public int getAvgDuration(IRoute route, List<String> providers, Date start, Date end) {
+        LoggerRemote logger = beans.getLogger();
+        logger.entering("DataProvider", "getAvgDuration", new Object[]{route, providers, start, end});
+
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
 
         List<Long> list = dao.getAggregateData(route, providers, start, end, new AggregationContainer(Aggregation.sum, "duration * distance"), new AggregationContainer(Aggregation.sum, "distance"));
 
         if (list == null || list.size() == 0) {
+            logger.exiting("DataProvider", "getAvgDuration", -1);
             return -1;
         }
 
         if (list.size() == 2 && list.get(1) != 0) {
-            return Math.toIntExact(list.get(0) / list.get(1));
+            int ret = Math.toIntExact(list.get(0) / list.get(1));
+            logger.exiting("DataProvider", "getAvgDuration", ret);
+            return ret;
         }
+        logger.exiting("DataProvider", "getAvgDuration", -1);
         return -1;
     }
 
     @Override
     public int getAvgVelocity(IRoute route, List<String> providers, Date start, Date end) {
+        LoggerRemote logger = beans.getLogger();
+        logger.entering("DataProvider", "getAvgDuration", new Object[]{route, providers, start, end});
+
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
 
         List<Long> list = dao.getAggregateData(route, providers, start, end, new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
 
         if (list == null || list.size() == 0) {
+            logger.exiting("DataProvider", "getAvgVelocity", -1);
             return -1;
         }
 
         if (list.size() == 2 && list.get(1) != 0) {
-            return Math.toIntExact(list.get(0) / list.get(1));
+            int ret = Math.toIntExact(list.get(0) / list.get(1));
+            logger.exiting("DataProvider", "getAvgVelocity", ret);
+            return ret;
+
         }
+        logger.exiting("DataProvider", "getAvgVelocity", -1);
         return -1;
     }
 
     @Override
     public int getCurrentDelayLevel(IRoute route, List<String> providers) {
+        LoggerRemote logger = beans.getLogger();
+        logger.entering("DataProvider", "getCurrentDelayLevel", new Object[]{route, providers});
+
         int opt = this.getOptimalDuration(route, providers);
 
         if (opt == -1) {
+            logger.exiting("DataProvider", "getCurrentDelayLevel", -1);
             return -1;
         }
 
         int current = getCurrentDuration(route, providers);
 
-        return beans.getThresholdManager().getThresholdLevel(route, current - opt);
+        int ret = beans.getThresholdManager().getThresholdLevel(route, current - opt);
+        logger.exiting("DataProvider", "getCurrentDelayLevel", ret);
+        return ret;
     }
 
     @Override
     public int getDelayLevel(IRoute route, List<String> providers, Date start, Date end) {
+        LoggerRemote logger = beans.getLogger();
+        logger.entering("DataProvider", "getDelayLevel", new Object[]{route, providers});
+
         int opt = this.getOptimalDuration(route, providers);
         if (opt == -1) {
+            logger.exiting("DataProvider", "getDelayLevel", -1);
             return -1;
         }
 
         int pastAvg = getAvgDuration(route, providers, start, end);
         if (opt == -1) {
+            logger.exiting("DataProvider", "getDelayLevel", -1);
             return -1;
         }
 
-        return beans.getThresholdManager().getThresholdLevel(route, pastAvg - opt);
+        int ret = beans.getThresholdManager().getThresholdLevel(route, pastAvg - opt);
+        logger.exiting("DataProvider", "getDelayLevel", ret);
+        return ret;
     }
 
     @Override
     public int getAvgDelayLevel(IRoute route, List<String> providers) {
+        LoggerRemote logger = beans.getLogger();
+        logger.entering("DataProvider", "getAvgDelayLevel", new Object[]{route, providers});
+
         int opt = this.getOptimalDuration(route, providers);
         if (opt == -1) {
+            logger.exiting("DataProvider", "getAvgDelayLevel", -1);
             return -1;
         }
 
         int avg = getAvgDuration(route, providers);
         if (opt == -1) {
+            logger.exiting("DataProvider", "getAvgDelayLevel", -1);
             return -1;
         }
-
-        return beans.getThresholdManager().getThresholdLevel(route, avg - opt);
+        int ret = beans.getThresholdManager().getThresholdLevel(route, avg - opt);
+        logger.exiting("DataProvider", "getAvgDelayLevel", ret);
+        return ret;
     }
 
     private Map<Long, Map<IRoute, Integer>> distance = new HashMap<>();
 
     @Override
     public int getDistance(IRoute route, List<String> providers) {
+        LoggerRemote logger = beans.getLogger();
+        logger.entering("DataProvider", "getDistance", new Object[]{route, providers});
+
         long hash = calculateHash(providers);
         Integer buffer = getDataFromBuffer(distance, route, providers, hash);
 
@@ -427,12 +489,14 @@ public class DataProvider implements DataProviderRemote {
             }
 
             if (i == 0) {
+                logger.exiting("DataProvider", "getDistance", -1);
                 return -1;
             }
 
             buffer = Math.toIntExact(distance / i);
             setDataInBuffer(buffer, this.distance, route, providers, hash, -1);
         }
+        logger.exiting("DataProvider", "getDistance", buffer);
         return buffer;
     }
 
@@ -458,12 +522,16 @@ public class DataProvider implements DataProviderRemote {
 
     @Override
     public int getTrend(IRoute route, List<String> providers, Date start, Date end) {
+        LoggerRemote logger = beans.getLogger();
+        logger.entering("DataProvider", "getTrend", new Object[]{route, providers, start, end});
+
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
         List<IRouteData> data = dao.getData(route, start, end, providers);
 
         Map<Date, List<IRouteData>> sortedData = new HashMap<>();
 
         if (data == null || data.isEmpty()) {
+            logger.exiting("DataProvider", "getTrend", 0);
             return 0;
         }
 
@@ -495,6 +563,7 @@ public class DataProvider implements DataProviderRemote {
         }
 
         if (delta.size() < 2) {
+            logger.exiting("DataProvider", "getDistance", 0);
             return 0;
         }
 
@@ -511,15 +580,17 @@ public class DataProvider implements DataProviderRemote {
                     trend = (i + trend) / 2;
                 } else {
                     //trend indicates stablizing
+                    logger.exiting("DataProvider", "getTrend", 0);
                     return 0;
                 }
 
             } else {
                 //no trend, deltas change signs
+                logger.exiting("DataProvider", "getTrend", 0);
                 return 0;
             }
         }
-
+        logger.exiting("DataProvider", "getTrend", trend);
         return trend;
     }
 
@@ -527,6 +598,9 @@ public class DataProvider implements DataProviderRemote {
 
     @Override
     public Map<Date, Integer> getRecentData(IRoute route, List<String> providers) {
+        LoggerRemote logger = beans.getLogger();
+        logger.entering("DataProvider", "getRecentData", new Object[]{route, providers});
+
         long hash = calculateHash(providers);
         Map<Date, Integer> buffer = getDataFromBuffer(recentData, route, providers, hash);
 
@@ -541,7 +615,9 @@ public class DataProvider implements DataProviderRemote {
             ITrafficDataDAO dao = beans.getTrafficDataDAO();
             List<IRouteData> data = dao.getData(route, startDate, endDate, providers);
             if (data == null || data.isEmpty()) {
-                return new HashMap<>();
+                buffer = new HashMap<>();
+                logger.exiting("DataProvider", "getRecentData", buffer);
+                return buffer;
             }
 
             Map<Date, List<IRouteData>> sortedData = new HashMap<>();
@@ -571,6 +647,7 @@ public class DataProvider implements DataProviderRemote {
         if (buffer == null) {
             buffer = new HashMap<>();
         }
+        logger.exiting("DataProvider", "getRecentData", buffer);
         return buffer;
     }
 
@@ -634,6 +711,9 @@ public class DataProvider implements DataProviderRemote {
 
     @Override
     public Map<Weekdays, List<Integer>> getDataByDay(IRoute route, List<String> providers, Date start, Date end, Weekdays... days) {
+        LoggerRemote logger = beans.getLogger();
+        logger.entering("DataProvider", "getDataByDay", new Object[]{route, providers, start, end});
+
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
         Map<Weekdays, List<Integer>> ret = new HashMap<>();
 
@@ -652,11 +732,16 @@ public class DataProvider implements DataProviderRemote {
             ret = new HashMap<>();
         }
 
+        logger.exiting("DataProvider", "getDataByDay", ret);
         return ret;
     }
 
     @Override
     public Map<Weekdays, List<Integer>> getDataVelocityByDay(IRoute route, List<String> providers, Date start, Date end, Weekdays... days) {
+        LoggerRemote logger = beans.getLogger();
+        logger.entering("DataProvider", "getDataVelocityByDay", new Object[]{route, providers, start, end});
+
+        
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
         Map<Weekdays, List<Integer>> ret = new HashMap<>();
 
@@ -675,6 +760,7 @@ public class DataProvider implements DataProviderRemote {
             ret = new HashMap<>();
         }
 
+        logger.exiting("DataProvider", "getDataVelocityByDay", ret);
         return ret;
     }
 
@@ -956,6 +1042,9 @@ public class DataProvider implements DataProviderRemote {
 
     @Override
     public Map<Date, Integer> getData(IRoute route, List<String> providers, int precision, Date start, Date end) {
+        LoggerRemote logger = beans.getLogger();
+        logger.entering("DataProvider", "getData", new Object[]{route, providers,precision, start, end});
+        
         Map<Date, Integer> ret = new HashMap<>();
 
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
@@ -1005,11 +1094,16 @@ public class DataProvider implements DataProviderRemote {
             }
         }
 
+        logger.exiting("DataProvider", "getData", ret);
         return ret;
     }
 
     @Override
     public Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers, int precision, Date start, Date end) {
+        LoggerRemote logger = beans.getLogger();
+        logger.entering("DataProvider", "getDataVelocity", new Object[]{route, providers,precision, start, end});
+
+        
         Map<Date, Integer> ret = new HashMap<>();
 
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
@@ -1059,6 +1153,7 @@ public class DataProvider implements DataProviderRemote {
             }
         }
 
+        logger.exiting("DataProvider", "getDataVelocity", ret);
         return ret;
     }
 

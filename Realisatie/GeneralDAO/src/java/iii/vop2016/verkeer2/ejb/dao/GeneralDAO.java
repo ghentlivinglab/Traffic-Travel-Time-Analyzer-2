@@ -12,6 +12,7 @@ import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IThreshold;
 import iii.vop2016.verkeer2.ejb.components.Route;
 import iii.vop2016.verkeer2.ejb.components.Threshold;
+import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,6 +21,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.ejb.SessionContext;
 import javax.ejb.Singleton;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -37,6 +40,9 @@ public class GeneralDAO implements GeneralDAORemote {
     @PersistenceContext(name = "GeneralDBPU")
     EntityManager em;
     private InitialContext ctx;
+    @Resource
+    private SessionContext sctx;
+    private BeanFactory beans;
 
     public GeneralDAO() {
 
@@ -50,7 +56,9 @@ public class GeneralDAO implements GeneralDAORemote {
             Logger.getLogger(GeneralDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        Logger.getLogger("logger").log(Level.INFO, "GeneralDAO has been initialized.");
+        beans = BeanFactory.getInstance(ctx, sctx);
+
+        beans.getLogger().log(Level.INFO, "GeneralDAO has been initialized.");
     }
 
     @Override
@@ -64,8 +72,7 @@ public class GeneralDAO implements GeneralDAORemote {
                 routes.add(newR);
             }
         } catch (Exception e) {
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.severe(e.getMessage());
+            beans.getLogger().log(Level.SEVERE, "Routes could not be retrieved.");
         } finally {
 
         }
@@ -87,8 +94,7 @@ public class GeneralDAO implements GeneralDAORemote {
                 route = new Route(route);
             }
         } catch (Exception e) {
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.severe(e.getMessage());
+            beans.getLogger().log(Level.SEVERE, "Route " + name + " could not be retrieved.");
         } finally {
 
         }
@@ -108,8 +114,7 @@ public class GeneralDAO implements GeneralDAORemote {
                 route = new Route(route);
             }
         } catch (Exception e) {
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.severe(e.getMessage());
+            beans.getLogger().log(Level.SEVERE, "Route id " + id + " could not be retrieved.");
         } finally {
 
         }
@@ -123,7 +128,7 @@ public class GeneralDAO implements GeneralDAORemote {
             em.persist(r);
             em.flush();
         } catch (Exception ex) {
-            Logger.getLogger(GeneralDAO.class.getName()).log(Level.SEVERE, null, ex);
+            beans.getLogger().log(Level.SEVERE, "Route " + route.getName() + " could not be saved.");
         }
 
         route = new Route(r);
@@ -149,39 +154,44 @@ public class GeneralDAO implements GeneralDAORemote {
 
     @Override
     public List<IGeoLocation> getRouteMappingGeolocations(IRoute route) {
-        Query q = em.createQuery("SELECT g FROM GeoLocationMappingEntity g WHERE g.route.id = :id");
-        q.setParameter("id", route.getId());
-        List<GeoLocationMappingEntity> list = q.getResultList();
-
         List<IGeoLocation> ret = new ArrayList<>();
-        for (GeoLocationMappingEntity e : list) {
-            ret.add(new GeoLocation(e));
+        try {
+
+            Query q = em.createQuery("SELECT g FROM GeoLocationMappingEntity g WHERE g.name = :id");
+            q.setParameter("id", route.getId() + "");
+            List<GeoLocationMappingEntity> list = q.getResultList();
+
+            for (GeoLocationMappingEntity e : list) {
+                ret.add(new GeoLocation(e));
+            }
+        } catch (Exception e) {
+            beans.getLogger().log(Level.SEVERE, "Mapping geolocations could not be retrieved.");
         }
-
         Collections.sort(ret, new GeoLocationComparator());
-
         return ret;
     }
 
     @Override
     public List<IGeoLocation> setRouteMappingGeolocations(IRoute route, List<IGeoLocation> geolocs) {
         List<IGeoLocation> retLocs = new ArrayList<>();
+        List<IGeoLocation> temp = new ArrayList<>();
         try {
-
-            route = new RouteEntity(route);
-            //vind ge dit wel veilig om zo met route te werken? ja, is handig, ok,
             List<IGeoLocation> storedLocs = getRouteMappingGeolocations(route);
-            if (storedLocs.size() == 0) {
+            if (storedLocs.isEmpty()) {
                 for (IGeoLocation geoloc : geolocs) {
                     GeoLocationMappingEntity location = new GeoLocationMappingEntity(geoloc, route);
                     em.persist(location);
-                    retLocs.add(new GeoLocation(location));
+                    temp.add(location);
                 }
             }
 
             em.flush();
+
+            for (IGeoLocation geoloc : temp) {
+                retLocs.add(new GeoLocation(geoloc));
+            }
         } catch (Exception ex) {
-            Logger.getLogger(GeneralDAO.class.getName()).log(Level.SEVERE, null, ex);
+            beans.getLogger().log(Level.SEVERE, "Mapping geolocations could not be stored.");
         }
 
         return retLocs;
@@ -205,8 +215,7 @@ public class GeneralDAO implements GeneralDAORemote {
                 ret.add(newR);
             }
         } catch (Exception e) {
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.severe(e.getMessage());
+            beans.getLogger().log(Level.SEVERE, "Routes "+ids.toString()+" could not be retrieved.");
         } finally {
 
         }
@@ -234,8 +243,7 @@ public class GeneralDAO implements GeneralDAORemote {
             }
 
         } catch (Exception e) {
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.severe(e.getMessage());
+            beans.getLogger().log(Level.SEVERE, "Thresholds could not be retrieved.");
         } finally {
 
         }
@@ -249,8 +257,7 @@ public class GeneralDAO implements GeneralDAORemote {
             em.persist(th);
             threshold = new Threshold(th);
         } catch (Exception e) {
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.severe(e.getMessage());
+            beans.getLogger().log(Level.SEVERE, "Thresholds could not be saved.");
         } finally {
 
         }

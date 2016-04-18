@@ -9,6 +9,7 @@ import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyser;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
+import iii.vop2016.verkeer2.ejb.logger.LoggerRemote;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdManager;
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,7 +58,7 @@ public class TrafficDataDownloader implements TrafficDataDownloaderRemote {
 
         sourceManager = new SourceManager();
 
-        Logger.getLogger("logger").log(Level.INFO, "TrafficDataManager has been initialized.");
+        beanFactory.getLogger().log(Level.INFO, "TrafficDataDownloader has been initialized.");
 
     }
 
@@ -65,36 +66,39 @@ public class TrafficDataDownloader implements TrafficDataDownloaderRemote {
     @Override
     public void downloadNewData(Date timestamp) {
         //Ophalen van alle routes
-         Logger.getLogger("logger").log(Level.INFO,"Started data scrubbing");
+        LoggerRemote logger = beanFactory.getLogger();
         
+        logger.log(Level.FINER, "Started data scrubbing");
+
         List<IRoute> routes = beanFactory.getGeneralDAO().getRoutes();
         ITrafficDataDownstreamAnalyser analyzer = beanFactory.getTrafficDataDownstreamAnalyser();
         if (routes != null) {
             List<IRouteData> allData = new ArrayList<>();
             analyzer.startSession();
             for (IRoute route : routes) {
-                
+
                 //opvragen van de data
                 List<IRouteData> data = sourceManager.parse(route);
-                
+
                 //opslaan van de verkregen data
-                if(data != null && data.size() != 0){
-                    for(IRouteData r : data)
+                if (data != null && data.size() != 0) {
+                    for (IRouteData r : data) {
                         r.setTimestamp(timestamp);
+                    }
                     allData.addAll(analyzer.addData(data));
                 }
             }
             analyzer.endSession(allData, routes);
-        }else{
-            Logger.getLogger("logger").log(Level.WARNING,"No routes available to scrape data for");
+        } else {
+            logger.log(Level.WARNING, "No routes available to scrape data for");
         }
-        
-         Logger.getLogger("logger").log(Level.INFO,"Data scrubbing done");
+
+        logger.log(Level.FINER, "Data scrubbing done");
 
     }
-    
+
     @PreDestroy
-    private void destroy(){
+    private void destroy() {
         sourceManager.destroy();
     }
 }

@@ -20,6 +20,7 @@ import iii.vop2016.verkeer2.ejb.datadownloader.ITrafficDataDownloader;
 import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyser;
 import iii.vop2016.verkeer2.ejb.geojson.GeoJsonRemote;
 import iii.vop2016.verkeer2.ejb.dataprovider.IDataProvider;
+import iii.vop2016.verkeer2.ejb.logger.LoggerRemote;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdManager;
 
 /**
@@ -62,6 +63,21 @@ public class BeanFactory {
     protected BeanFactory(InitialContext ctx, SessionContext sctx) {
         this.ctx = ctx;
         this.sctx = sctx;
+    }
+
+    public LoggerRemote getLogger() throws ResourceFileMissingException {
+        if (sctx != null) {
+            Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.Logger, sctx, Logger.getGlobal());
+            if (obj instanceof LoggerRemote) {
+                return (LoggerRemote) obj;
+            }
+        } else {
+            Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.Logger, ctx, Logger.getGlobal());
+            if (obj instanceof LoggerRemote) {
+                return (LoggerRemote) obj;
+            }
+        }
+        return null;
     }
 
     public ITrafficDataDownstreamAnalyser getTrafficDataDownstreamAnalyser() throws ResourceFileMissingException {
@@ -203,11 +219,12 @@ public class BeanFactory {
     }
 
     public boolean isBeanActive(String bean) {
-        for(Object val : getBeanProperties().values()){
-            if(val instanceof String){
+        for (Object val : getBeanProperties().values()) {
+            if (val instanceof String) {
                 String value = (String) val;
-                if(value.endsWith(bean))
+                if (value.endsWith(bean)) {
                     return true;
+                }
             }
         }
         return false;

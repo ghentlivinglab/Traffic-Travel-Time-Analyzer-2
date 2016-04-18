@@ -11,12 +11,9 @@ import iii.vop2016.verkeer2.ejb.components.IRoute;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -24,11 +21,9 @@ import javax.persistence.Table;
  * @author tobia
  */
 @Entity
-@Table(name = "geolocationsMapping")
+@Table(name = "geolocationsMappings")
 @Access(AccessType.PROPERTY)
 public class GeoLocationMappingEntity extends GeoLocation {
-    
-    private RouteEntity route;
 
     public GeoLocationMappingEntity() {
         super();
@@ -36,11 +31,7 @@ public class GeoLocationMappingEntity extends GeoLocation {
 
     public GeoLocationMappingEntity(IGeoLocation component,IRoute route) {
         super(component);
-        if(route instanceof RouteEntity)
-            this.route = (RouteEntity)route;
-        else
-            this.route = new RouteEntity(route);
-        
+        this.name = route.getId()+"";
     }
     
     @Id
@@ -93,16 +84,6 @@ public class GeoLocationMappingEntity extends GeoLocation {
     @Override
     public void setSortRank(int i) {
         super.setSortRank(i); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @ManyToOne(optional = false,fetch = FetchType.EAGER)
-    @JoinColumn(name = "routeId")
-    public RouteEntity getRoute() {
-        return route;
-    }
-
-    public void setRoute(RouteEntity route) {
-        this.route = route;
-    }
+    }  
 
 }

@@ -47,7 +47,7 @@ public class TrafficDataDownstreamAnalyser implements TrafficDataDownstreamAnaly
         }
         beans = BeanFactory.getInstance(ctx, sctx);
 
-        Logger.getLogger("logger").log(Level.INFO, "TrafficDataAnalyzer has been initialized.");
+        beans.getLogger().log(Level.INFO, "TrafficDataDownstreamAnalyzer has been initialized.");
     }
 
     @Override

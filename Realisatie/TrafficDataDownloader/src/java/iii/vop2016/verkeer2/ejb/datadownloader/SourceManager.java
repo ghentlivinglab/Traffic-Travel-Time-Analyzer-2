@@ -12,6 +12,7 @@ import iii.vop2016.verkeer2.ejb.datadownloader.ISourceManager;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.DataAccessException;
 import iii.vop2016.verkeer2.ejb.helper.URLException;
+import iii.vop2016.verkeer2.ejb.logger.LoggerRemote;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -29,7 +30,7 @@ import javax.naming.NamingException;
  *
  * @author Mike
  */
-public class SourceManager implements ISourceManager{
+public class SourceManager implements ISourceManager {
 
     @Resource
     private SessionContext ctxs;
@@ -37,9 +38,9 @@ public class SourceManager implements ISourceManager{
     private BeanFactory beanFactory;
 
     ExecutorService executor;
-    
+
     public SourceManager() {
-        
+
         //Initialize bean and its context
         try {
             ctx = new InitialContext();
@@ -47,27 +48,23 @@ public class SourceManager implements ISourceManager{
             Logger.getLogger(SourceManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         beanFactory = BeanFactory.getInstance(ctx, ctxs);
-                
+
         executor = Executors.newFixedThreadPool(10);
-        
-        Logger.getLogger("logger").log(Level.INFO, "SourceManager has been initialized.");        
-        
+
+        beanFactory.getLogger().log(Level.INFO, "SourceManager has been initialized.");
+
     }
-    
-    
-    
-    
+
     @Override
     public List<IRouteData> parse(final IRoute route) {
-        
+
         List<ISourceAdapter> adapters = beanFactory.getSourceAdaptors();
-        
+        LoggerRemote logger = beanFactory.getLogger();
         List<IRouteData> result = new ArrayList<>();
-        
-        
+
         List<Future<IRouteData>> futures = new ArrayList<>();
-                
-        for(final ISourceAdapter adapter : adapters){
+
+        for (final ISourceAdapter adapter : adapters) {
             futures.add(executor.submit(new Callable() {
                 @Override
                 public IRouteData call() throws URLException, DataAccessException {
@@ -75,30 +72,32 @@ public class SourceManager implements ISourceManager{
                 }
             }));
         }
-        
+
         List<Future<IRouteData>> toRemove = new ArrayList<>();
         while (!futures.isEmpty()) {
-                for(Future<IRouteData> future : futures){
-                    if(future.isDone()){
-                        try{
-                            IRouteData data = future.get();
-                            //wait indefinitely for future task to complete
-                            System.out.println("Future output = "+data);
-                            if(data != null)
-                                result.add(future.get());
-                            toRemove.add(future);
-                        }catch(Exception ex){
-                            ex.getCause().printStackTrace();
-                            toRemove.add(future);
+            for (Future<IRouteData> future : futures) {
+                if (future.isDone()) {
+                    try {
+                        IRouteData data = future.get();
+                        //wait indefinitely for future task to complete
+                        if (data != null) {
+                            result.add(future.get());
                         }
-                        
+                        toRemove.add(future);
+                        logger.log(Level.FINEST, "Parsed data for " + data.getProvider() + " " + data.toString());
+                    } catch (Exception ex) {
+                        ex.getCause().printStackTrace();
+                        toRemove.add(future);
+                        logger.log(Level.WARNING, "Failed to parse data for " + ex.toString());
                     }
+
                 }
-                if(!toRemove.isEmpty())
-                    futures.removeAll(toRemove);
+            }
+            if (!toRemove.isEmpty()) {
+                futures.removeAll(toRemove);
+            }
         }
-        
-        
+
         return result;
     }
 
@@ -106,5 +105,5 @@ public class SourceManager implements ISourceManager{
     public void destroy() {
         executor.shutdown();
     }
-    
+
 }

@@ -11,6 +11,7 @@ import iii.vop2016.verkeer2.ejb.components.Threshold;
 import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
+import iii.vop2016.verkeer2.ejb.logger.LoggerRemote;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +60,8 @@ public class ThresholdManager implements ThresholdManagerRemote {
         for (IRoute route : thresholdMap.keySet()) {
             prevThresholdLevel.put(route, -1);
         }
+        
+        beans.getLogger().log(Level.INFO, "ThresholManager has been initialized.");
     }
 
     private Properties getProperties() {
@@ -103,10 +106,13 @@ public class ThresholdManager implements ThresholdManagerRemote {
     //this function return the difference in level sinds the last check
     @Override
     public int EvalThresholdLevel(IRoute route, int delay) {
+        LoggerRemote logger = beans.getLogger();
+        
         int currentLevel = getThresholdLevel(route, delay);
         int prevLevel = prevThresholdLevel.get(route);
         if (prevLevel != currentLevel) {
             prevThresholdLevel.put(route, currentLevel);
+            logger.log(Level.FINER, "Threshold changed for " + route.getName() + " to "+currentLevel);
 
             List<IThreshold> thresholdList = getThresholds(route, prevLevel, currentLevel);
             for (IThreshold threshold : thresholdList) {
@@ -140,6 +146,7 @@ public class ThresholdManager implements ThresholdManagerRemote {
     public void addDefaultThresholds(IRoute route) {
         IGeneralDAO dao = beans.getGeneralDAO();
         Properties prop = getProperties();
+        LoggerRemote logger = beans.getLogger();
 
         String defaults = prop.getProperty("defaultThresholdLevels", "120,240,480,1200");
         String[] arr = defaults.split(",");
@@ -157,8 +164,9 @@ public class ThresholdManager implements ThresholdManagerRemote {
                     prevThresholdLevel.put(th.getRoute(), -1);
                 }
             } catch (NumberFormatException e) {
-                System.err.println("Invalid config line for defaultThresholdLevels (" + def + ")");
+                logger.log(Level.SEVERE, "Invalid config line for defaultThresholdLevels (" + def + ")");
             }
         }
+        logger.log(Level.FINE, "Added default Threshold for " + route.getName());
     }
 }

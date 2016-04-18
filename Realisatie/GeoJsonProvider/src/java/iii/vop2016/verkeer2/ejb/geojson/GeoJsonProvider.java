@@ -73,6 +73,8 @@ public class GeoJsonProvider implements GeoJsonRemote {
         beans = BeanFactory.getInstance(ctx, ctxs);
 
         fillProperties();
+        
+        beans.getLogger().log(Level.INFO, "GeoJsonProvider has been initialized.");
     }
 
     @Override
@@ -104,14 +106,16 @@ public class GeoJsonProvider implements GeoJsonRemote {
 
             List<IGeoLocation> locations = DecodeGeoJson(geojson);
 
+            beans.getLogger().log(Level.FINE, "GeoJson routes retrieved from web for route " + route.getName() + ".");
+            
             return locations;
 
         } catch (MalformedURLException ex) {
-            Logger.getLogger(GeoJsonProvider.class.getName()).log(Level.SEVERE, null, ex);
+            beans.getLogger().log(Level.SEVERE, "GeoJson routes could not be retrieved from web for route " + route.getName() + ": URL exception");
         } catch (IOException ex) {
-            Logger.getLogger(GeoJsonProvider.class.getName()).log(Level.SEVERE, null, ex);
+            beans.getLogger().log(Level.SEVERE, "GeoJson routes could not be retrieved from web for route " + route.getName() + ": IO exception");
         } catch (InvalidCoordinateException ex) {
-            Logger.getLogger(GeoJsonProvider.class.getName()).log(Level.SEVERE, null, ex);
+            beans.getLogger().log(Level.SEVERE, "GeoJson routes could not be retrieved from web for route " + route.getName() + ": Invalid coordinate exception");
         }
         return null;
     }

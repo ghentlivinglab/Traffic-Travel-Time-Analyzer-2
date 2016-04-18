@@ -8,12 +8,15 @@ package iii.vop2016.verkeer2.ejb.dao;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.RouteData;
+import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.ejb.SessionContext;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.naming.InitialContext;
@@ -33,8 +36,11 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
 
     @PersistenceContext(name = "TrafficDataDBPU")
     EntityManager em;
+    @Resource
+    private SessionContext sctx;
     private InitialContext ctx;
     private BlockList blocklist;
+    private BeanFactory beans;
 
     @PostConstruct
     public void init() {
@@ -46,7 +52,8 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
 
         generateBlockList();
 
-        Logger.getLogger("logger").log(Level.INFO, "TrafficDataDAO has been initialized.");
+        beans = BeanFactory.getInstance(ctx, sctx);
+        beans.getLogger().log(Level.INFO, "TrafficDataDAO has been initialized.");
     }
 
     public TrafficDataDAO() {
@@ -59,7 +66,7 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
         try {
             em.persist(r);
         } catch (Exception ex) {
-            Logger.getLogger(TrafficDataDAO.class.getName()).log(Level.SEVERE, null, ex);
+            beans.getLogger().log(Level.SEVERE, "Could not persist routedata: " + data.toString());
         }
         return new RouteData(r);
     }
@@ -97,8 +104,7 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
                 data.add(new RouteData(rdata));
             }
         } catch (Exception e) {
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.severe(e.getMessage());
+            beans.getLogger().log(Level.SEVERE, "Could not retrieve raw data for: " + route.getName() + " (" + time1 + " - " + time2 + ").");
         } finally {
 
         }
@@ -119,8 +125,7 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
                 data.add(new RouteData(r));
             }
         } catch (Exception e) {
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.severe(e.getMessage());
+            beans.getLogger().log(Level.SEVERE, "Could not retrieve raw data for: " + adapter + " (" + time1 + " - " + time2 + ").");
         } finally {
 
         }
@@ -169,8 +174,7 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
             }
 
         } catch (Exception e) {
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.severe(e.getMessage());
+            beans.getLogger().log(Level.SEVERE, "Could not retrieve current data for: " + route.getName() + ".");
         } finally {
 
         }
@@ -188,15 +192,20 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
 
     @Override
     public IRouteData getDataByID(long id) throws NoResultException {
-        Parameter p0 = new Parameter("id", id, Operation.eq);
-        Request r = new Request(true, 1).addParam(0, p0);
-        Object o = r.PrepareQuery(em).getSingleResult();
-        if (o != null && o instanceof IRouteData) {
-            return (IRouteData) o;
+        try {
+            Parameter p0 = new Parameter("id", id, Operation.eq);
+            Request r = new Request(true, 1).addParam(0, p0);
+            Object o = r.PrepareQuery(em).getSingleResult();
+            if (o != null && o instanceof IRouteData) {
+                return (IRouteData) o;
+            }
+        } catch (Exception e) {
+            beans.getLogger().log(Level.SEVERE, "Could not retrieve data for id: " + id + ".");
         }
         return null;
     }
 
+    @Deprecated
     public void fillDummyData(long i) {
         for (long x = 1; x <= 30; x++) {
             RouteDataEntity e = new RouteDataEntity();
@@ -227,34 +236,39 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
 
     @Override
     public List<IRouteData> getData(IRoute route, List<Date> startList, List<Date> endList, List<String> adapter) {
+
         List<IRouteData> data = new ArrayList<>();
-        if (route == null) {
-            return data;
-        }
-        if (startList == null || endList == null || startList.size() == 0 || endList.size() == 0 || startList.size() != endList.size()) {
-            return data;
-        }
-        long[] idRange = blocklist.getIdRange(startList.get(0), endList.get(endList.size() - 1));
+        try {
+            if (route == null) {
+                return data;
+            }
+            if (startList == null || endList == null || startList.size() == 0 || endList.size() == 0 || startList.size() != endList.size()) {
+                return data;
+            }
+            long[] idRange = blocklist.getIdRange(startList.get(0), endList.get(endList.size() - 1));
 
-        if (idRange == null || idRange[0] == -1 || idRange[1] == -1) {
-            return data;
-        }
+            if (idRange == null || idRange[0] == -1 || idRange[1] == -1) {
+                return data;
+            }
 
-        Request r = new Request(true, 0);
-        int i = 0;
-        r.addParam(i++, new Parameter("id", idRange[0], idRange[1], Operation.between));
-        r.addParam(i++, new Parameter("routeId", route.getId(), Operation.eq));
-        if (adapter != null && !adapter.isEmpty()) {
-            Parameter p = new Parameter("provider", adapter, Operation.eq);
-            r.addParam(i++, p);
-        }
-        r.addParam(i++, new Parameter("timestamp", startList, endList, Operation.between));
+            Request r = new Request(true, 0);
+            int i = 0;
+            r.addParam(i++, new Parameter("id", idRange[0], idRange[1], Operation.between));
+            r.addParam(i++, new Parameter("routeId", route.getId(), Operation.eq));
+            if (adapter != null && !adapter.isEmpty()) {
+                Parameter p = new Parameter("provider", adapter, Operation.eq);
+                r.addParam(i++, p);
+            }
+            r.addParam(i++, new Parameter("timestamp", startList, endList, Operation.between));
 
-        List<RouteDataEntity> routesEntities = r.PrepareQuery(em).getResultList();
+            List<RouteDataEntity> routesEntities = r.PrepareQuery(em).getResultList();
 
-        //transform all database objects to library objects via copy constructor
-        for (IRouteData rdata : routesEntities) {
-            data.add(new RouteData(rdata));
+            //transform all database objects to library objects via copy constructor
+            for (IRouteData rdata : routesEntities) {
+                data.add(new RouteData(rdata));
+            }
+        }catch(Exception e){
+            beans.getLogger().log(Level.SEVERE, "Could not retrieve raw data for: " + route.getName() + " (" + startList.toString() + " - " + endList.toString() + ").");
         }
         return data;
     }
@@ -325,8 +339,7 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
             }
 
         } catch (Exception e) {
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.severe(e.getMessage());
+            beans.getLogger().log(Level.SEVERE, "Could not retrieve agregated data for: " + route.getName() + " (" + time1 + " - " + time2 + ").");
         } finally {
 
         }
@@ -391,8 +404,7 @@ public class TrafficDataDAO implements TrafficDataDAORemote {
             }
 
         } catch (Exception e) {
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.severe(e.getMessage());
+            beans.getLogger().log(Level.SEVERE, "Could not retrieve agregated data for: " + route.getName() + " (" + startList.toString() + " - " + endList.toString() + ").");
         } finally {
 
         }

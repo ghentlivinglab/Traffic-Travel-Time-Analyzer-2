@@ -24,6 +24,7 @@ import javax.naming.NamingException;
  *
  * @author tobia
  */
+@Startup
 @Singleton
 public class Logger implements LoggerRemote {
 
@@ -35,6 +36,7 @@ public class Logger implements LoggerRemote {
             h = new FileHandler("/root/verkeer2/log.txt", true);
             l = java.util.logging.Logger.getLogger("logger");
             l.addHandler(h);
+            l.setLevel(Level.FINEST);
 
             l.log(Level.INFO, "Started Logging at " + new Date());
         } catch (IOException ex) {
@@ -58,5 +60,20 @@ public class Logger implements LoggerRemote {
                 f.close();
             }
         }
+    }
+
+    @Override
+    public void log(Level l, String message) {
+        this.l.log(l, message);
+    }
+
+    @Override
+    public void entering(String sourceClass, String sourceMethod, Object[] params) {
+        this.l.entering(sourceClass, sourceMethod,params);
+    }
+
+    @Override
+    public void exiting(String sourceClass, String sourceMethod, Object result) {
+        this.l.exiting(sourceClass, sourceMethod, result);
     }
 }
