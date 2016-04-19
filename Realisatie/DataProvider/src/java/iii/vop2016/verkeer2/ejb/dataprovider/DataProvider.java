@@ -160,7 +160,7 @@ public class DataProvider implements DataProviderRemote {
     public int getCurrentDuration(IRoute route, List<String> providers) {
         LoggerRemote logger = beans.getLogger();
         logger.entering("DataProvider", "getCurrentDuration", new Object[]{route, providers});
-        
+
         long hash = calculateHash(providers);
         Integer buffer = getDataFromBuffer(currentDuration, route, providers, hash);
         if (buffer == null || buffer == -1) {
@@ -741,7 +741,6 @@ public class DataProvider implements DataProviderRemote {
         LoggerRemote logger = beans.getLogger();
         logger.entering("DataProvider", "getDataVelocityByDay", new Object[]{route, providers, start, end});
 
-        
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
         Map<Weekdays, List<Integer>> ret = new HashMap<>();
 
@@ -1043,84 +1042,90 @@ public class DataProvider implements DataProviderRemote {
     @Override
     public Map<Date, Integer> getData(IRoute route, List<String> providers, int precision, Date start, Date end) {
         LoggerRemote logger = beans.getLogger();
-        logger.entering("DataProvider", "getData", new Object[]{route, providers,precision, start, end});
-        
-        Map<Date, Integer> ret = new HashMap<>();
+        logger.entering("DataProvider", "getData", new Object[]{route, providers, precision, start, end});
+
+        Map<Date, Integer> ret = new TreeMap<>();
+
+        //round start and end to halfhour
+        start = new Date((start.getTime() / 1800000) * 1800000);
+        end = new Date((end.getTime() / 1800000) * 1800000);
+
+        long precisionDistance = generatePrecisionDistance(start, end, precision);
+        long halfPrecisionDistance = precisionDistance / 2;
 
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        long precisionDistance = Math.abs(end.getTime() - start.getTime());
-        precisionDistance /= precision;
 
-        ret = GenerateListForPrecisionPointBewteenDates(start, end, precisionDistance);
-        List<Long> data = dao.getAggregateData(route, providers, start, end, precisionDistance / 1000, false, new AggregationContainer(Aggregation.none, "timestamp"), new AggregationContainer(Aggregation.sum, "duration * distance"), new AggregationContainer(Aggregation.sum, "distance"));
+        Map<Long, Integer> mappedList = GenerateListForPrecisionPointBewteenDates(start, end, precisionDistance);
 
-        Iterator<Map.Entry<Date, Integer>> it = ret.entrySet().iterator();
-        GregorianCalendar cal = new GregorianCalendar();
-        int index = 0;
-        Map.Entry<Date, Integer> preventry = null;
-        Map.Entry<Date, Integer> entry = null;
-        while (index < data.size()) {
-            Date d = new Date(data.get(index++));
-            cal.setTime(d);
+        precisionDistance /= 1000;
+        List<Long> data = dao.getAggregateData(route, providers, start, end, precisionDistance, false, new AggregationContainer(Aggregation.none, "timestamp"), new AggregationContainer(Aggregation.sum, "duration * distance"), new AggregationContainer(Aggregation.sum, "distance"));
 
-            Long exp = data.get(index++);
-            Long div = data.get(index++);
-            int res;
-            if (div != 0) {
-                res = Math.toIntExact(exp / div);
-            } else {
-                res = -1;
-            }
+        //map all retrieved data
+        Iterator<Map.Entry<Long, Integer>> iter = mappedList.entrySet().iterator();
+        if (iter.hasNext()) {
+            Map.Entry<Long, Integer> mappedEntry = iter.next();
+            int index = 0;
+            long lower = mappedEntry.getKey() - halfPrecisionDistance;
+            long upper = mappedEntry.getKey() + halfPrecisionDistance;
+            while (index < data.size()) {
+                Long d = data.get(index++);
 
-            boolean found = false;
-            if (entry != null) {
-                if (entry.getKey().after(d)) {
-                    found = true;
-                    if (preventry != null) {
-                        preventry.setValue((res + entry.getValue()) / 2);
-                    }
-
+                Long exp = data.get(index++);
+                Long div = data.get(index++);
+                int res;
+                if (div != 0) {
+                    res = Math.toIntExact(exp / div);
+                } else {
+                    res = -1;
                 }
-            }
-            while (it.hasNext() && !found) {
-                preventry = entry;
-                entry = it.next();
-                if (entry.getKey().after(d)) {
-                    found = true;
-                    if (preventry != null) {
-                        preventry.setValue(res);
+
+                boolean found = false;
+                while (found) {
+                    if (d < upper) {
+                        found = true;
+                        if (mappedEntry.getKey() == -1) {
+                            mappedEntry.setValue(res);
+                        } else {
+                            mappedEntry.setValue((mappedEntry.getValue() + res) / 2);
+                        }
+                    } else {
+                        if (iter.hasNext()) {
+                            mappedEntry = iter.next();
+                            lower = mappedEntry.getValue() - halfPrecisionDistance;
+                            upper = mappedEntry.getValue() + halfPrecisionDistance;
+                        }else{
+                            found = true;
+                        }
                     }
                 }
             }
         }
 
+        Map<Date, Integer> r = new TreeMap<>();
+        for (Map.Entry<Long, Integer> set : mappedList.entrySet()) {
+            r.put(new Date(set.getKey()), set.getValue());
+        }
+
         logger.exiting("DataProvider", "getData", ret);
-        return ret;
+        return r;
     }
 
     @Override
     public Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers, int precision, Date start, Date end) {
         LoggerRemote logger = beans.getLogger();
-        logger.entering("DataProvider", "getDataVelocity", new Object[]{route, providers,precision, start, end});
+        logger.entering("DataProvider", "getDataVelocity", new Object[]{route, providers, precision, start, end});
 
-        
-        Map<Date, Integer> ret = new HashMap<>();
+        Map<Date, Integer> ret = new TreeMap<>();
 
         ITrafficDataDAO dao = beans.getTrafficDataDAO();
         long precisionDistance = Math.abs(end.getTime() - start.getTime());
         precisionDistance /= precision;
 
-        ret = GenerateListForPrecisionPointBewteenDates(start, end, precisionDistance);
         List<Long> data = dao.getAggregateData(route, providers, start, end, precisionDistance / 1000, false, new AggregationContainer(Aggregation.none, "timestamp"), new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
 
-        Iterator<Map.Entry<Date, Integer>> it = ret.entrySet().iterator();
-        GregorianCalendar cal = new GregorianCalendar();
         int index = 0;
-        Map.Entry<Date, Integer> preventry = null;
-        Map.Entry<Date, Integer> entry = null;
         while (index < data.size()) {
             Date d = new Date(data.get(index++));
-            cal.setTime(d);
 
             Long exp = data.get(index++);
             Long div = data.get(index++);
@@ -1131,26 +1136,7 @@ public class DataProvider implements DataProviderRemote {
                 res = -1;
             }
 
-            boolean found = false;
-            if (entry != null) {
-                if (entry.getKey().after(d)) {
-                    found = true;
-                    if (preventry != null) {
-                        preventry.setValue((res + entry.getValue()) / 2);
-                    }
-
-                }
-            }
-            while (it.hasNext() && !found) {
-                preventry = entry;
-                entry = it.next();
-                if (entry.getKey().after(d)) {
-                    found = true;
-                    if (preventry != null) {
-                        preventry.setValue(res);
-                    }
-                }
-            }
+            ret.put(d, res);
         }
 
         logger.exiting("DataProvider", "getDataVelocity", ret);
@@ -1195,19 +1181,37 @@ public class DataProvider implements DataProviderRemote {
         return getDataVelocity(route, providers, precision, start, end);
     }
 
-    private Map<Date, Integer> GenerateListForPrecisionPointBewteenDates(Date start, Date end, long precisionDistance) {
-        Map<Date, Integer> ret = new TreeMap<>();
-        Calendar cal = new GregorianCalendar();
-        Calendar endCal = new GregorianCalendar();
-        cal.setTime(start);
-        endCal.setTime(end);
-        int distance = Math.toIntExact(precisionDistance);
+    private Map<Long, Integer> GenerateListForPrecisionPointBewteenDates(Date start, Date end, long precisionDistance) {
+        Map<Long, Integer> ret = new TreeMap<>();
+        long t = start.getTime();
+        long stop = end.getTime();
 
-        while (cal.before(endCal)) {
-            ret.put(cal.getTime(), -1);
-            cal.add(GregorianCalendar.MILLISECOND, distance);
+        while (t <= stop) {
+            ret.put(t, -1);
+            t += precisionDistance;
         }
-        ret.put(end, -1);
         return ret;
     }
+
+    private long generatePrecisionDistance(Date start, Date end, int precision) {
+        long precisionDistance = end.getTime() - start.getTime();
+        precisionDistance /= precision;
+
+        //5min min distance
+        precisionDistance = Math.max(1L, precisionDistance / 300000);
+        precisionDistance *= 300000;
+
+        int[] snapPoints = new int[]{1800000, 3600000, 7200000, 21600000, 43200000, 86400000, 604800000};
+
+        for (int snap : snapPoints) {
+            if (precisionDistance >= (snap * precision)) {
+                precisionDistance = (precisionDistance / snap) * snap;
+            } else {
+                return precisionDistance;
+            }
+        }
+
+        return precisionDistance;
+    }
+
 }
