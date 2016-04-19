@@ -1080,10 +1080,10 @@ public class DataProvider implements DataProviderRemote {
                 }
 
                 boolean found = false;
-                while (found) {
+                while (!found) {
                     if (d < upper) {
                         found = true;
-                        if (mappedEntry.getKey() == -1) {
+                        if (mappedEntry.getValue()== -1) {
                             mappedEntry.setValue(res);
                         } else {
                             mappedEntry.setValue((mappedEntry.getValue() + res) / 2);
@@ -1091,8 +1091,8 @@ public class DataProvider implements DataProviderRemote {
                     } else {
                         if (iter.hasNext()) {
                             mappedEntry = iter.next();
-                            lower = mappedEntry.getValue() - halfPrecisionDistance;
-                            upper = mappedEntry.getValue() + halfPrecisionDistance;
+                            lower = mappedEntry.getKey()- halfPrecisionDistance;
+                            upper = mappedEntry.getKey()+ halfPrecisionDistance;
                         }else{
                             found = true;
                         }
@@ -1111,36 +1111,74 @@ public class DataProvider implements DataProviderRemote {
     }
 
     @Override
-    public Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers, int precision, Date start, Date end) {
+    public Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers, int precision, Date start, Date end) {      
         LoggerRemote logger = beans.getLogger();
         logger.entering("DataProvider", "getDataVelocity", new Object[]{route, providers, precision, start, end});
 
         Map<Date, Integer> ret = new TreeMap<>();
 
-        ITrafficDataDAO dao = beans.getTrafficDataDAO();
-        long precisionDistance = Math.abs(end.getTime() - start.getTime());
-        precisionDistance /= precision;
+        //round start and end to halfhour
+        start = new Date((start.getTime() / 1800000) * 1800000);
+        end = new Date((end.getTime() / 1800000) * 1800000);
 
+        long precisionDistance = generatePrecisionDistance(start, end, precision);
+        long halfPrecisionDistance = precisionDistance / 2;
+
+        ITrafficDataDAO dao = beans.getTrafficDataDAO();
+
+        Map<Long, Integer> mappedList = GenerateListForPrecisionPointBewteenDates(start, end, precisionDistance);
+
+        precisionDistance /= 1000;
         List<Long> data = dao.getAggregateData(route, providers, start, end, precisionDistance / 1000, false, new AggregationContainer(Aggregation.none, "timestamp"), new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
 
-        int index = 0;
-        while (index < data.size()) {
-            Date d = new Date(data.get(index++));
+        //map all retrieved data
+        Iterator<Map.Entry<Long, Integer>> iter = mappedList.entrySet().iterator();
+        if (iter.hasNext()) {
+            Map.Entry<Long, Integer> mappedEntry = iter.next();
+            int index = 0;
+            long lower = mappedEntry.getKey() - halfPrecisionDistance;
+            long upper = mappedEntry.getKey() + halfPrecisionDistance;
+            while (index < data.size()) {
+                Long d = data.get(index++);
 
-            Long exp = data.get(index++);
-            Long div = data.get(index++);
-            int res;
-            if (div != 0) {
-                res = Math.toIntExact(exp / div);
-            } else {
-                res = -1;
+                Long exp = data.get(index++);
+                Long div = data.get(index++);
+                int res;
+                if (div != 0) {
+                    res = Math.toIntExact(exp / div);
+                } else {
+                    res = -1;
+                }
+
+                boolean found = false;
+                while (!found) {
+                    if (d < upper) {
+                        found = true;
+                        if (mappedEntry.getValue()== -1) {
+                            mappedEntry.setValue(res);
+                        } else {
+                            mappedEntry.setValue((mappedEntry.getValue() + res) / 2);
+                        }
+                    } else {
+                        if (iter.hasNext()) {
+                            mappedEntry = iter.next();
+                            lower = mappedEntry.getKey()- halfPrecisionDistance;
+                            upper = mappedEntry.getKey()+ halfPrecisionDistance;
+                        }else{
+                            found = true;
+                        }
+                    }
+                }
             }
-
-            ret.put(d, res);
         }
 
-        logger.exiting("DataProvider", "getDataVelocity", ret);
-        return ret;
+        Map<Date, Integer> r = new TreeMap<>();
+        for (Map.Entry<Long, Integer> set : mappedList.entrySet()) {
+            r.put(new Date(set.getKey()), set.getValue());
+        }
+
+        logger.exiting("DataProvider", "getData", ret);
+        return r;
     }
 
     @Override
