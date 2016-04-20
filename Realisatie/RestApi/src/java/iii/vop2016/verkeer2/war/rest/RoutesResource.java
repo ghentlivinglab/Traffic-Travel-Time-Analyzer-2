@@ -337,6 +337,7 @@ public class RoutesResource {
         obj.put("recentData", JSONRecentData(route));
 
         obj.put("currentDelayLevel", beans.getDataProvider().getCurrentDelayLevel(route, providers));
+        obj.put("avgDelayLevel",beans.getDataProvider().getAvgDelayLevel(route, providers));
         obj.put("distance", beans.getDataProvider().getDistance(route, providers));
 
         return obj;
@@ -460,7 +461,8 @@ public class RoutesResource {
 
     private JSONObject JSONPeriodData(IRoute route, int periodnumber) {
         JSONObject result = new JSONObject();
-        result.put("period", "period" + periodnumber);
+        int rank=periodnumber+1;
+        result.put("period", "period" + rank);
         result.put("start", startTimes.get(periodnumber).getTime());
         result.put("end", endTimes.get(periodnumber).getTime());
 
@@ -477,11 +479,11 @@ public class RoutesResource {
         }
         
 
-        obj.put("duration", JSONData("Period" + periodnumber + "Durations " + route.getId(),
-                "This data are the durations for period " + periodnumber + " for route " + route.getId(),
+        obj.put("duration", JSONData("Period" + rank + "Durations " + route.getId(),
+                "This data are the durations for period " + rank + " for route " + route.getId(),
                 mapDurations));
-        obj.put("velocity", JSONData("Period" + periodnumber + "Velocities " + route.getId(),
-                "This data are the velocities for period " + periodnumber + " for route " + route.getId(),
+        obj.put("velocity", JSONData("Period" + rank + "Velocities " + route.getId(),
+                "This data are the velocities for period " + rank + " for route " + route.getId(),
                 mapVelocities));
 
         result.put("data", obj);
