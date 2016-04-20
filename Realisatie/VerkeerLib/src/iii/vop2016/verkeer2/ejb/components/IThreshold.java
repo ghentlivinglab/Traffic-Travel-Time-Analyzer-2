@@ -5,9 +5,11 @@
  */
 package iii.vop2016.verkeer2.ejb.components;
 
+import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Observer;
+import javax.naming.InitialContext;
 
 /**
  *
@@ -33,11 +35,11 @@ public interface IThreshold extends Serializable{
 
     void setRouteId(long routeId);
     
-    List<Observer> getObservers();
+    List<String> getObservers();
     
-    void setObservers(List<Observer> observers);
+    void setObservers(List<String> observers);
     
-    void triggerThreshold(int difference);
+    void triggerThreshold(int difference,int delay,  BeanFactory fac);
     
     IRoute getRoute();
     

@@ -5,9 +5,15 @@
  */
 package iii.vop2016.verkeer2.ejb.components;
 
+import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
+import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
+import iii.vop2016.verkeer2.ejb.threshold.IThresholdHandler;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Properties;
+import java.util.logging.Logger;
+import javax.naming.InitialContext;
 
 /**
  *
@@ -19,7 +25,7 @@ public class Threshold extends Observable implements IThreshold{
     private int delayTriggerLevel;
     private long routeId;
     private IRoute route;
-    private List<Observer> observers;
+    private List<String> observers;
 
     public Threshold(){
     
@@ -71,12 +77,12 @@ public class Threshold extends Observable implements IThreshold{
     }
 
     @Override
-    public List<Observer> getObservers() {
+    public List<String> getObservers() {
         return observers;
     }
 
     @Override
-    public void setObservers(List<Observer> observers) {
+    public void setObservers(List<String> observers) {
         this.observers = observers;
     }
 
@@ -98,8 +104,11 @@ public class Threshold extends Observable implements IThreshold{
     }
 
     @Override
-    public void triggerThreshold(int difference) {
-        
+    public void triggerThreshold(int difference,int delay, BeanFactory fac) {
+        List<IThresholdHandler> beans = fac.getThresholdHandlers(observers);
+        for(IThresholdHandler handler:beans){
+            handler.notify(this.route, this.routeId,this.level,this.delayTriggerLevel,difference,delay);
+        }
     }
 
     @Override

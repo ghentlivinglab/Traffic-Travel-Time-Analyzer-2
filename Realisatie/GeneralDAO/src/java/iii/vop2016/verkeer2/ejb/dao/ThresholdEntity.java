@@ -88,12 +88,14 @@ public class ThresholdEntity extends Threshold {
     }
 
     @Override
-    public List<Observer> getObservers() {
+    public List<String> getObservers() {
         return super.getObservers(); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void setObservers(List<Observer> observers) {
+    public void setObservers(List<String> observers) {
         super.setObservers(observers); //To change body of generated methods, choose Tools | Templates.
     }
+
+    
 }

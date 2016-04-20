@@ -116,7 +116,7 @@ public class ThresholdManager implements ThresholdManagerRemote {
 
             List<IThreshold> thresholdList = getThresholds(route, prevLevel, currentLevel);
             for (IThreshold threshold : thresholdList) {
-                threshold.triggerThreshold(prevLevel - threshold.getLevel());
+                threshold.triggerThreshold(prevLevel - threshold.getLevel(),delay,beans);
             }
 
             return currentLevel - prevLevel;

@@ -21,7 +21,9 @@ import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyser;
 import iii.vop2016.verkeer2.ejb.geojson.GeoJsonRemote;
 import iii.vop2016.verkeer2.ejb.dataprovider.IDataProvider;
 import iii.vop2016.verkeer2.ejb.logger.LoggerRemote;
+import iii.vop2016.verkeer2.ejb.threshold.IThresholdHandler;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdManager;
+import java.util.Map;
 
 /**
  *
@@ -31,6 +33,7 @@ public class BeanFactory {
 
     private static final String JNDILOOKUP_BEANFILE = "resources/properties/Beans";
     private static final String JNDILOOKUP_SOURCEADAPORTSFILE = "resources/properties/SourceAdaptors";
+    private static final String JNDILOOKUP_THRESHOLDHANDLERSFILE = "resources/properties/ThresholdHandlers";
 
     private static BeanFactory instance;
 
@@ -46,6 +49,14 @@ public class BeanFactory {
 
     private Properties getBeanProperties() throws ResourceFileMissingException {
         Properties prop = HelperFunctions.RetrievePropertyFile(JNDILOOKUP_BEANFILE, ctx, Logger.getGlobal());
+        if (prop == null) {
+            throw new ResourceFileMissingException(JNDILOOKUP_BEANFILE);
+        }
+        return prop;
+    }
+
+    private Properties getThresholdHandlerProperties() throws ResourceFileMissingException {
+        Properties prop = HelperFunctions.RetrievePropertyFile(JNDILOOKUP_THRESHOLDHANDLERSFILE, ctx, Logger.getGlobal());
         if (prop == null) {
             throw new ResourceFileMissingException(JNDILOOKUP_BEANFILE);
         }
@@ -228,6 +239,44 @@ public class BeanFactory {
             }
         }
         return false;
+    }
+
+    public List<IThresholdHandler> getThresholdHandlers(List<String> observers) {
+        List<IThresholdHandler> ret = new ArrayList<>();
+        if (observers == null || observers.size() == 0) {
+            return ret;
+        }
+
+        Properties prop = getThresholdHandlerProperties();
+        for (String obs : observers) {
+            String lookup = prop.getProperty(obs, "");
+            if (!lookup.equals("")) {
+                if (sctx != null) {
+                    Object obj = HelperFunctions.getBean(lookup, sctx, Logger.getGlobal());
+                    if (obj instanceof IThresholdHandler) {
+                        ret.add((IThresholdHandler) obj);
+                    }
+                } else {
+                    Object obj = HelperFunctions.getBean(lookup, ctx, Logger.getGlobal());
+                    if (obj instanceof IThresholdHandler) {
+                        ret.add((IThresholdHandler) obj);
+                    }
+                }
+            }
+        }
+        return ret;
+    }
+    
+    public List<String> getThresholdHandlers() {
+        List<String> ret = new ArrayList<>();
+
+        Properties prop = getThresholdHandlerProperties();
+        for(Map.Entry<Object,Object> entry :  prop.entrySet()){
+            if(entry.getKey() instanceof String){
+                ret.add((String) entry.getKey());
+            }
+        }
+        return ret;
     }
 
 }
