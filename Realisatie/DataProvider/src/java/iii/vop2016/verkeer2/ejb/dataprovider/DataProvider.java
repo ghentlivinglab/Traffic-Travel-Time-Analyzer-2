@@ -843,8 +843,13 @@ public class DataProvider implements DataProviderRemote {
         start.setTime(startDate);
         //hour and minutes are adjusted, not seconds
         start.set(GregorianCalendar.SECOND, 0);
+        start.set(GregorianCalendar.MINUTE, 0);
+        start.set(GregorianCalendar.HOUR_OF_DAY, 0);
 
         end.setTime(endDate);
+        end.set(GregorianCalendar.SECOND, 59);
+        end.set(GregorianCalendar.MINUTE, 59);
+        end.set(GregorianCalendar.HOUR_OF_DAY, 23);
 
         while (start.before(end)) {
             int weekday = start.get(GregorianCalendar.DAY_OF_WEEK);
