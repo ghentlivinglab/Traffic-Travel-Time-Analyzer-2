@@ -9,9 +9,11 @@ import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.RouteData;
 import iii.vop2016.verkeer2.ejb.helper.DataAccessException;
+import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import iii.vop2016.verkeer2.ejb.helper.URLException;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +21,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -33,20 +37,37 @@ import org.jsoup.nodes.Element;
 public class CoyoteSourceAdapter implements CoyoteSourceAdapterRemote {
 
     private static final String providerName = "Coyote";
-    private static final String login = "110971610";
-    private static final String password = "50c20b94";
+    private static String login;
+    private static String password;
 
     private static long lastDownload = 0;
     private static long timeDifference = 240000; // 4 min = 4*60*1000
     private static JSONObject downloadedJSON = null;
 
+    private InitialContext ctx;
+    protected static final String JNDILOOKUP_PROPERTYFILE = "resources/properties/SourceAdapterKeys";
+
     @PostConstruct
     public void init() {
+        try {
+            ctx = new InitialContext();
+        } catch (NamingException ex) {
+            Logger.getLogger(CoyoteSourceAdapter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         Logger.getLogger("logger").log(Level.INFO, providerName + "SourceAdapter has been initialized.");
+    }
+
+    private Properties getProperties() {
+        return HelperFunctions.RetrievePropertyFile(JNDILOOKUP_PROPERTYFILE, ctx, Logger.getGlobal());
     }
 
     @Override
     public IRouteData parse(IRoute route) throws URLException, DataAccessException {
+        Properties prop = getProperties();
+        login = prop.getProperty("CoyoteUsername");
+        password = prop.getProperty("CoyotePassword");
+
         Date current = new Date();
         long currentLong = current.getTime();
 
