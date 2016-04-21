@@ -278,7 +278,7 @@ public class GeoJsonProvider implements GeoJsonRemote {
 
     private JsonObjectBuilder getGeoJsonProperties(List<IGeoLocation> l, IRoute route, int delayLevel) {
         JsonObjectBuilder b = Json.createObjectBuilder();
-        b.add("description", route.getId());
+        b.add("id", route.getId());
         b.add("currentDelayLevel", delayLevel);
         return b;
     }
