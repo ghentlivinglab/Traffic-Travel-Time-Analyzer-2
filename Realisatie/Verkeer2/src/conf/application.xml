@@ -55,4 +55,13 @@
   <module>
     <ejb>TrafficDataDownloader.jar</ejb>
   </module>
+  <module>
+    <web>
+      <web-uri>Verkeerscentrum.war</web-uri>
+      <context-root>/web</context-root>
+    </web>
+  </module>
+  <module>
+    <ejb>TwitterHandler.jar</ejb>
+  </module>
 </application>
