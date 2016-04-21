@@ -11,6 +11,7 @@ import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.RouteData;
 import iii.vop2016.verkeer2.ejb.helper.DataAccessException;
+import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import iii.vop2016.verkeer2.ejb.helper.URLException;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,11 +21,14 @@ import java.net.URL;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,19 +40,37 @@ import org.json.JSONObject;
 @Singleton
 public class HereSourceAdapter implements HereSourceAdapterRemote {
 
-    private final String appId = "KcOsDG6cNwwshKhALecH";
-    private final String appCode = "K-gS30K9dbNrznv5TonvHQ";
+    private String appId;
+    private String appCode;
     private static final String providerName = "Here";
+
+    private InitialContext ctx;
+    protected static final String JNDILOOKUP_PROPERTYFILE = "resources/properties/SourceAdapterKeys";
 
     @PostConstruct
     public void init() {
+        try {
+            ctx = new InitialContext();
+        } catch (NamingException ex) {
+            Logger.getLogger(HereSourceAdapter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         Logger.getLogger("logger").log(Level.INFO, providerName + "SourceAdapter has been initialized.");
+    }
+
+    private Properties getProperties() {
+        return HelperFunctions.RetrievePropertyFile(JNDILOOKUP_PROPERTYFILE, ctx, Logger.getGlobal());
     }
 
     @Override
     public IRouteData parse(IRoute route) throws URLException, DataAccessException {
 
         RouteData rd = null;
+        
+        Properties prop = getProperties();
+        appId = prop.getProperty("HereID");
+        appCode = prop.getProperty("HereCode");
+        
         try {
 
             //json.org.* moet geimporteerd worden

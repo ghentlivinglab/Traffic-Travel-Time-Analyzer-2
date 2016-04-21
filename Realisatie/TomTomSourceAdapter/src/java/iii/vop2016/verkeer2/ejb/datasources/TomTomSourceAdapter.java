@@ -10,6 +10,7 @@ import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.RouteData;
 import iii.vop2016.verkeer2.ejb.helper.DataAccessException;
+import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import iii.vop2016.verkeer2.ejb.helper.URLException;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,10 +19,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,18 +37,35 @@ import org.json.JSONObject;
 @Singleton
 public class TomTomSourceAdapter implements TomTomSourceAdapterRemote {
 
-    private final String appCode = "rz6c5wupat8ts4wcq8yc8bwh";
+    private String key;
     private static final String providerName = "TomTom";
+
+    private InitialContext ctx;
+    protected static final String JNDILOOKUP_PROPERTYFILE = "resources/properties/SourceAdapterKeys";
 
     @PostConstruct
     public void init() {
+        try {
+            ctx = new InitialContext();
+        } catch (NamingException ex) {
+            Logger.getLogger(TomTomSourceAdapter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         Logger.getLogger("logger").log(Level.INFO, providerName + "SourceAdapter has been initialized.");
+    }
+
+    private Properties getProperties() {
+        return HelperFunctions.RetrievePropertyFile(JNDILOOKUP_PROPERTYFILE, ctx, Logger.getGlobal());
     }
 
     @Override
     public IRouteData parse(IRoute route) throws URLException, DataAccessException {
 
         RouteData rd = null;
+
+        Properties prop = getProperties();
+        key = prop.getProperty("TomTom");
+
         try {
 
             //json.org.* moet geimporteerd worden
@@ -65,7 +86,7 @@ public class TomTomSourceAdapter implements TomTomSourceAdapterRemote {
                 builder.append(String.valueOf(waypoint.getLatitude()).replace(',', '.')).append(",").append(String.valueOf(waypoint.getLongitude()).replace(',', '.'));
             }
 
-            builder.append("/json?routeType=shortest&traffic=true&travelMode=car&key=").append(appCode);
+            builder.append("/json?routeType=shortest&traffic=true&travelMode=car&key=").append(key);
             //builder.append("&mode=fastest%3Bcar%3Btraffic%3Aenabled&app_id=KcOsDG6cNwwshKhALecH&app_code=K-gS30K9dbNrznv5TonvHQ&departure=now");
             //System.out.println(builder.toString());
             JSONObject json = new JSONObject(readUrl(builder.toString()));
