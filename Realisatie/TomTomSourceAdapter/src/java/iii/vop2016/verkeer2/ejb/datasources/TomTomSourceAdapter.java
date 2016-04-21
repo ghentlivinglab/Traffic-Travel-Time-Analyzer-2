@@ -41,7 +41,7 @@ public class TomTomSourceAdapter implements TomTomSourceAdapterRemote {
     private static final String providerName = "TomTom";
 
     private InitialContext ctx;
-    protected static final String JNDILOOKUP_PROPERTYFILE = "resources/properties/SourceAdapterKeys";
+    protected static final String JNDILOOKUP_PROPERTYFILE = "resources/properties/SourceAdaptersKeys";
 
     @PostConstruct
     public void init() {

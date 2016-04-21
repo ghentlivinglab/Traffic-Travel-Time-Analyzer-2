@@ -45,7 +45,7 @@ public class CoyoteSourceAdapter implements CoyoteSourceAdapterRemote {
     private static JSONObject downloadedJSON = null;
 
     private InitialContext ctx;
-    protected static final String JNDILOOKUP_PROPERTYFILE = "resources/properties/SourceAdapterKeys";
+    protected static final String JNDILOOKUP_PROPERTYFILE = "resources/properties/SourceAdaptersKeys";
 
     @PostConstruct
     public void init() {

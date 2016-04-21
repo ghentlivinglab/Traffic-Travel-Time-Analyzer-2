@@ -46,7 +46,7 @@ public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
     private static final String providerName = "GoogleMaps";
 
     private InitialContext ctx;
-    protected static final String JNDILOOKUP_PROPERTYFILE = "resources/properties/SourceAdapterKeys";
+    protected static final String JNDILOOKUP_PROPERTYFILE = "resources/properties/SourceAdaptersKeys";
 
     @PostConstruct
     public void init() {
