@@ -5,6 +5,8 @@
  */
 package iii.vop2016.verkeer2.ejb.logger;
 
+import iii.vop2016.verkeer2.ejb.components.Log;
+import java.util.List;
 import java.util.logging.Level;
 import javax.ejb.Remote;
 
@@ -17,4 +19,6 @@ public interface LoggerRemote {
     void log(Level l,String message);
     void entering(String sourceClass, String sourceMethod, Object params[]);
     void exiting(String sourceClass, String sourceMethod, Object result);
+    
+    List<Log> getLogs(int amount, int offset, Level filter1, String containing);
 }
