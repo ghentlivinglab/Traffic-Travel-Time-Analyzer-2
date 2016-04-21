@@ -283,7 +283,6 @@ public class TimerScheduler implements TimerSchedulerRemote {
         try {
             d = getCurrentTime(prop);
         } catch (NoInternetConnectionException ex) {
-            Logger.getLogger("logger").log(Level.WARNING, "No internet connection", ex);
             d = this.currentTime;
         }
         if (d != null) {
