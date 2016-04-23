@@ -38,7 +38,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyser;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Set;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.core.MediaType;
 import javax.xml.ws.WebServiceContext;
 
 /**
@@ -101,21 +105,65 @@ public class RoutesResource {
      *
      * @return an instance of java.lang.String
      */
-    @GET
+    @POST
     @Path("init")
     //@Produces("application/xml")
-    public Response initRoutes() throws InvalidCoordinateException {
+    public Response initRoutes(){
 
         try {
             
-            IRoute r1 = initRoute("Rooigemlaan (R40) northbound",51.0560905,3.6951634,51.0663037,3.6996797,"Drongensesteenweg","Palinghuizen");
-            IRoute r2 = initRoute("Rooigemlaan (R40) southbound",51.066296,3.699685,51.056104,3.695152,"Palinghuizen","Drongensesteenweg");
+            IRoute r1 = initRoute("Rooigemlaan (R40) northbound",51.056104,3.695152,51.066296,3.699685,"Drongensesteenweg","Palinghuizen");
+            IRoute r2 = initRoute("Rooigemlaan (R40) southbound",51.066296,3.699685,51.056011,3.695028,"Palinghuizen","Drongensesteenweg");
+            
             IRoute r3 = initRoute("Gasmeterlaan (R40) eastbound",51.066271,3.699709,51.067505,3.727959,"Palinghuizen","Neuseplein");
             IRoute r4 = initRoute("Nieuwevaart (R40) westbound",51.067690,3.727868,51.066271,3.699709,"Neuseplein","Palinghuizen");
+            
             IRoute r5 = initRoute("Dok-Noord (R40) southbound",51.067137,3.726568,51.056536,3.738477,"Neuseplein","Dampoort");
             IRoute r6 = initRoute("Dok-Noord (R40) northbound",51.057116,3.738622,51.067633,3.727523,"Dampoort","Neuseplein");
-            IRoute r7 = initRoute("Heernislaan (R40) southbound",51.056536,3.738477,51.038613,3.736007,"Dampoort","Zuidparklaan");
             
+            IRoute r7 = initRoute("Heernislaan (R40) southbound",51.056536,3.738477,51.038613,3.736007,"Dampoort","Zuidparklaan");
+            IRoute r8 = initRoute("Heernislaan (R40) northbound",51.038573,3.736090,51.056261,3.739244,"Zuidparklaan","Dampoort");
+            
+            IRoute r9 = initRoute("Martelaarslaan (R40) northbound",51.038575,3.735757,51.056459,3.694655,"Zuidparklaan","Drongensesteenweg");
+            IRoute r10 = initRoute("Martelaarslaan (R40) southbound",51.055999,3.695036,51.038567,3.736090,"Drongensesteenweg","Zuidparklaan");
+            
+            /*
+            IRoute r11 = initRoute("Blaisantvest (N430) eastbound",51.052567,3.699973,51.067425,3.727551,"Einde Were","Neuseplein");
+            IRoute r12 = initRoute("Blaisantvest (N430) westbound",51.067500,3.727196,51.052629,3.699846,"Neuseplein","Einde Were");
+            
+            IRoute r13 = initRoute("Keizer Karelstraat northbound",51.038381,3.736839,51.067327,3.727170,"Sint-Lievenslaan","Neuseplein");
+            IRoute r14 = initRoute("Keizer Karelstraat southbound",51.067260,3.726990,51.038756,3.736237,"Neuseplein","Sint-Lievenslaan");
+            
+            IRoute r15 = initRoute("Kennedylaan (R4) southbound",51.193143,3.829968,51.073780,3.733642,"E34","Port Arthurlaan");
+            IRoute r16 = initRoute("Kennedylaan (R4) northbound",51.073780,3.733642,51.193057,3.830188,"Port Arthurlaan","E34");
+            
+            IRoute r17 = initRoute("Eisenhowerlaan (R4) southbound",51.087102,3.757119,51.014070,3.726539,"Kennedylaan","E17");
+            IRoute r18 = initRoute("Eisenhowerlaan (R4) northbound",51.013386,3.726426,51.087582,3.756799,"E17","Kennedylaan");
+            
+            IRoute r19 = initRoute("Binnenring-Drongen (R4) northbound",51.014007,3.729114,51.086197,3.671618,"Sluisweg","Industrieweg");
+            IRoute r20 = initRoute("Buitenring-Drongen (R4) southbound",51.086325,3.671591,51.013397,3.726802,"Industrieweg","Sluisweg");
+            
+            IRoute r21 = initRoute("Paryslaan (R4) northbound",51.085744,3.669526,51.197610,3.785651,"Industrieweg","E34");
+            IRoute r22 = initRoute("Paryslaan (R4) southbound",51.197553,3.785324,51.086307,3.671539,"E34","Industrieweg");
+            
+            IRoute r23 = initRoute("Drongensesteenweg (N466) eastbound",51.038840,3.627002,51.056213,3.695414,"E40","Rooigemlaan");
+            IRoute r24 = initRoute("Drongensesteenweg (N466) westbound",51.056213,3.695414,51.038840,3.627002,"Rooigemlaan","E40");
+            
+            IRoute r25 = initRoute("Antwerpsesteenweg (N70) westbound",51.083877,3.794991,51.057178,3.739016,"R4","Dampoort");
+            IRoute r26 = initRoute("Antwerpsesteenweg (N70) eastbound",51.056310,3.739370,51.083877,3.794991,"Dampoort","R4");
+            
+            IRoute r27 = initRoute("B401 (northbound)",51.022863,3.735335,51.048579,3.731411,"E17","Vlaanderenstraat");
+            IRoute r28 = initRoute("B401 (southbound)",51.048579,3.731411,51.023146,3.733962,"Vlaanderenstraat","E17");
+            
+            IRoute r29 = initRoute("Brusselsesteenweg (N9) westbound",51.010225,3.791267,51.041526,3.740892,"R4","Scheldekaai");
+            IRoute r30 = initRoute("Brusselsesteenweg (N9) eastbound",51.041526,3.740892,51.010200,3.790972,"Scheldekaai","R4");
+            
+            IRoute r31 = initRoute("Oudenaardsesteenweg (N60) northbound",50.980166,3.667916,51.010200,3.726065,"E17","R40");
+            IRoute r32 = initRoute("Oudenaardsesteenweg (N60) southbound",51.038648,3.724860,50.982372,3.670051,"R40","E17");
+            
+            IRoute r33 = initRoute("Brugsevaart (N9) southbound",51.085364,3.663483,51.064294,3.702872,"R4","Gebroeders de Smetstraat");
+            IRoute r34 = initRoute("Brugsevaart (N9) northbound",51.064261,3.702575,51.085364,3.663483,"Gebroeders de Smetstraat","R4");
+            */
             
             
             return Response.status(Response.Status.OK).entity("Routes have been initialised").build();
@@ -128,11 +176,8 @@ public class RoutesResource {
     private IRoute initRoute(String routeName, double startlat, double startlong, double endlat, double endlong, String startName, String endName) throws InvalidCoordinateException{
         IRoute r = new Route(routeName);
         //try {
-            ITrafficDataDownstreamAnalyser analyser = beans.getTrafficDataDownstreamAnalyser();
+            //ITrafficDataDownstreamAnalyser analyser = beans.getTrafficDataDownstreamAnalyser();
 
-            //IRoute r = new Route("Rooigemlaan (R40) northbound");
-
-            //r.setInverseRoute(r);
             IGeoLocation geolocation1 = new GeoLocation(startlat, startlong);
             IGeoLocation geolocation2 = new GeoLocation(endlat, endlong);
             geolocation1.setName(startName);
@@ -166,6 +211,31 @@ public class RoutesResource {
         //}
       
     }
+    
+    @POST
+    @Path("news")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response addRoute(JSONObject route){
+        try{
+            String name=route.getString("name");
+        
+            double startlat=route.getDouble("startlatitude");
+            double startlong=route.getDouble("startlongitude");
+            String startname=route.getString("startname");
+        
+            double endlat=route.getDouble("endlatitude");
+            double endlong=route.getDouble("endlongitude");
+            String endname=route.getString("endname");
+        
+            IRoute r = initRoute(name,startlat,startlong,endlat,endlong,startname,endname);
+            return Response.status(Response.Status.OK).entity("Routes have been initialised").build();
+        }
+        catch(Exception ex){
+            Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("An error has occured").build();
+        }
+    }
+    
 
     @GET
     @Path("all")
@@ -666,7 +736,14 @@ public class RoutesResource {
         String[] parts = startTimes.split(",");
         for (String s : parts) {
             try {
-                this.startTimes.add(new Date(Long.parseLong(s, 10)));
+                Date start = new Date(Long.parseLong(s, 10));
+                Calendar cal=new GregorianCalendar();
+                cal.setTime(start);
+                cal.set(GregorianCalendar.SECOND, 0);
+                cal.set(GregorianCalendar.MINUTE, 0);
+                cal.set(GregorianCalendar.HOUR_OF_DAY, 0);
+                start = cal.getTime();
+                this.startTimes.add(start);
             } catch (NumberFormatException e) {
                 Logger.getGlobal().log(Level.WARNING, s + " could not be converted to Long");
             }
@@ -679,7 +756,14 @@ public class RoutesResource {
         String[] parts = endTimes.split(",");
         for (String s : parts) {
             try {
-                this.endTimes.add(new Date(Long.parseLong(s, 10)));
+                Date end = new Date(Long.parseLong(s, 10));
+                Calendar cal=new GregorianCalendar();
+                cal.setTime(end);
+                cal.set(GregorianCalendar.SECOND, 59);
+                cal.set(GregorianCalendar.MINUTE, 59);
+                cal.set(GregorianCalendar.HOUR_OF_DAY, 23);
+                end = cal.getTime();
+                this.startTimes.add(end);
             } catch (NumberFormatException e) {
                 Logger.getGlobal().log(Level.WARNING, s + " could not be converted to Long");
             }
