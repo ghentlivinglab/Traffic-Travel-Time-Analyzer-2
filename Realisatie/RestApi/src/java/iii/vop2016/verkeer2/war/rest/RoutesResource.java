@@ -441,7 +441,7 @@ public class RoutesResource {
         return result;
     }
     
-    private JSONObject JSONDayData(String name, String description, List<Integer> dataList, List<String> hours){
+    private JSONObject JSONRushhourDayData(String name, String description, List<Integer> dataList, List<String> hours){
         JSONObject result = new JSONObject();
         result.put("name", name);
         result.put("description",description);
@@ -449,6 +449,33 @@ public class RoutesResource {
         JSONObject data = new JSONObject();
         for (int i = 0; i<dataList.size();i++){
             data.put(hours.get(i),dataList.get(i));
+        }
+        
+        result.put("data",data);
+        return result;
+    }
+    
+    private JSONObject JSONDayData(String name, String description, Map<Weekdays, List<Integer>> dataMap, List<String> hours){
+        JSONObject result = new JSONObject();
+        result.put("name", name);
+        result.put("description",description);
+        
+        JSONObject data = new JSONObject();
+        
+        JSONArray hourslist = new JSONArray();
+        for (String s: hours){
+            hourslist.put(s);
+        }
+        data.put("x-ax", hourslist);
+        
+        Set<Weekdays> days = dataMap.keySet();
+        for(Weekdays day:days){
+            List<Integer> dataList = dataMap.get(day);
+            JSONArray dayData = new JSONArray();
+            for (Integer i: dataList){
+                dayData.put(i);
+            }
+            data.put(day.toString(), dayData);
         }
         
         result.put("data",data);
@@ -478,18 +505,12 @@ public class RoutesResource {
             mapVelocities=beans.getDataProvider().getDataVelocityByDay(route,providers,Weekdays.MONDAY,Weekdays.TUESDAY,Weekdays.WEDNESDAY,Weekdays.THURSDAY,Weekdays.FRIDAY,Weekdays.SATERDAY,Weekdays.SUNDAY);            
         }
         
-        Set<Weekdays> days = mapDurations.keySet();
-        for(Weekdays day:days){
-            JSONObject dayObject = new JSONObject();
-            dayObject.put("duration", JSONDayData("durations " + day.toString() + " " + route.getId(),
-                "This data are the durations on a " + day.toString() + " for route " + route.getId(),
-                mapDurations.get(day),hours));
-            dayObject.put("velocity", JSONDayData("velocities " + day.toString() + " " + route.getId(),
-                "This data are the velocities on a " + day.toString() + " for route " + route.getId(),
-                mapVelocities.get(day),hours));
-            
-            result.put(day.toString(),dayObject);
-        }
+        result.put("duration",JSONDayData("dayDataDurations " + route.getId(),
+                "This data are the durations for every day of the week for route " + route.getId(),
+                mapDurations,hours));
+        result.put("velocity",JSONDayData("dayDataVelocities " + route.getId(),
+                "This data are the velocities for every day of the week for route " + route.getId(),
+                mapVelocities,hours));
         
         return result;
     }
@@ -512,10 +533,10 @@ public class RoutesResource {
         }
 
         
-        result.put("duration", JSONDayData("rushhourDurations " + route.getId(),
+        result.put("duration", JSONRushhourDayData("rushhourDurations " + route.getId(),
                 "This data are the durations for a workday for route " + route.getId(),
                 listDurations,hours));
-        result.put("velocity", JSONDayData("rushhourVelocities " + route.getId(),
+        result.put("velocity", JSONRushhourDayData("rushhourVelocities " + route.getId(),
                 "This data are the velocities for a workday for route " + route.getId(),
                 listVelocities,hours));
         return result;
