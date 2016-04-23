@@ -6,6 +6,7 @@
 
 var mymap;
 var layer;
+var decoratorGroup;
 var coords;
 
 $.ajaxSetup({
@@ -22,6 +23,9 @@ $(document).ready(function () {
         id: 'tobiasvdp.ac4aa6b2',
         accessToken: 'pk.eyJ1IjoidG9iaWFzdmRwIiwiYSI6ImNpbGpxcTFwaTAwYjF3NGx6bWZ2bGZkcG8ifQ.DTe2IBQLNc9zQa62kD-4_g'
     }).addTo(mymap);
+    
+    decoratorGroup = L.layerGroup();
+    decoratorGroup.addTo(mymap);
 
     requestGeoJson();
 
@@ -30,6 +34,7 @@ $(document).ready(function () {
 function setGeoJson(data) {
     if (layer != undefined) {
         mymap.removeLayer(layer);
+        decoratorGroup.clearLayers();
     }
     coords = [];
     layer = L.geoJson(data, {
@@ -62,12 +67,19 @@ function setGeoJson(data) {
                 // defines a pattern of 10px-wide dashes, repeated every 20px on the line
                 {offset: 0, repeat: 80, symbol: L.Symbol.arrowHead({pixelSize: 8,headAngle: 30,pathOptions: {color: "black"}})}
             ]
-        }).addTo(mymap);
+        });
+        decoratorGroup.addLayer(dec);
     }
+    
 }
 
 function failedCall(data) {
     alert("failed to retrieve data");
+}
+
+function refresh(){
+    //requestGeoJson();
+    decoratorGroup.clearLayers();
 }
 
 
