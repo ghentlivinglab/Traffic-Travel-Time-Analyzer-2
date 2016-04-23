@@ -10,6 +10,7 @@ import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.dataprovider.IDataProvider;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
+import iii.vop2016.verkeer2.ejb.logger.LoggerRemote;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdManager;
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,11 +68,14 @@ public class TrafficDataDownstreamAnalyser implements TrafficDataDownstreamAnaly
 
     @Override
     public void startSession() {
-
+        LoggerRemote logger = beans.getLogger();
+        logger.log(Level.FINER, "Starting data scrub session.");
     }
 
     @Override
     public void endSession(List<IRouteData> data, List<IRoute> routes) {
+        LoggerRemote logger = beans.getLogger();
+         logger.log(Level.FINER, "Ending analysis session.");
         IDataProvider dataProvider = beans.getDataProvider();
         IThresholdManager threshold = beans.getThresholdManager();
 
@@ -88,8 +92,9 @@ public class TrafficDataDownstreamAnalyser implements TrafficDataDownstreamAnaly
                 }
             }
         }
-        
+
         dataProvider.invalidateCurrentData();
+        logger.log(Level.FINER, "Ended analysis session.");
     }
 
     private Map<Long, List<IRouteData>> MapDataToRoutes(List<IRouteData> routeData) {

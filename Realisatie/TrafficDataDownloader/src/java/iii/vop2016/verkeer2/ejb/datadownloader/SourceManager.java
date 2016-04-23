@@ -73,6 +73,7 @@ public class SourceManager implements ISourceManager {
             }));
         }
 
+        logger.log(Level.FINER, "Starting data retrieval for " + route.getName());
         List<Future<IRouteData>> toRemove = new ArrayList<>();
         while (!futures.isEmpty()) {
             for (Future<IRouteData> future : futures) {
@@ -97,6 +98,7 @@ public class SourceManager implements ISourceManager {
                 futures.removeAll(toRemove);
             }
         }
+        logger.log(Level.FINER, "Ended data retrieval for " + route.getName());
 
         return result;
     }
