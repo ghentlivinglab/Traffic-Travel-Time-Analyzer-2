@@ -30,6 +30,7 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(iii.vop2016.verkeer2.war.rest.GeojsonResource.class);
+        resources.add(iii.vop2016.verkeer2.war.rest.LoggingsResource.class);
         resources.add(iii.vop2016.verkeer2.war.rest.ProviderResource.class);
         resources.add(iii.vop2016.verkeer2.war.rest.RoutesResource.class);
         resources.add(iii.vop2016.verkeer2.war.rest.ThresholdsResource.class);
