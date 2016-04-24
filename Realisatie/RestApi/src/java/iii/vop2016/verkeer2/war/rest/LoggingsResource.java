@@ -100,7 +100,7 @@ public class LoggingsResource {
         if (offset != null) {
             this.offset = Integer.parseInt(offset);
         } else {
-            this.offset = 100;
+            this.offset = 0;
         }
         
         String filter= context.getQueryParameters().getFirst("filter");
