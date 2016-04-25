@@ -29,6 +29,8 @@ public interface IGeneralDAO{
     
     public Map<IRoute,List<IThreshold>> getThresholds();
     public IThreshold addThreshold(IThreshold threshold);
+
+    public void updateThreshold(IThreshold th);
     
     
 }

@@ -12,6 +12,7 @@ import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.Route;
 import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
 import iii.vop2016.verkeer2.ejb.components.Weekdays;
+import iii.vop2016.verkeer2.ejb.dataprovider.IDataProvider;
 import iii.vop2016.verkeer2.ejb.datasources.ISourceAdapter;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.InvalidCoordinateException;
@@ -39,6 +40,8 @@ import org.json.JSONObject;
 import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyser;
 import java.util.Calendar;
 import java.util.Set;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 import javax.xml.ws.WebServiceContext;
 
 /**
@@ -60,18 +63,18 @@ public class RoutesResource {
 
     Date startTime;
     Date endTime;
-    
+
     Date avgStartTime;
     Date avgEndTime;
-    
+
     Date optimalStartTime;
     Date optimalEndTime;
-    
+
     List<Date> startTimes;
     List<Date> endTimes;
-    
+
     int precision = -1;
-    
+
     List<String> providers;
 
     /**
@@ -107,64 +110,59 @@ public class RoutesResource {
     public Response initRoutes() throws InvalidCoordinateException {
 
         try {
-            
-            IRoute r1 = initRoute("Rooigemlaan (R40) northbound",51.0560905,3.6951634,51.0663037,3.6996797,"Drongensesteenweg","Palinghuizen");
-            IRoute r2 = initRoute("Rooigemlaan (R40) southbound",51.066296,3.699685,51.056104,3.695152,"Palinghuizen","Drongensesteenweg");
-            IRoute r3 = initRoute("Gasmeterlaan (R40) eastbound",51.066271,3.699709,51.067505,3.727959,"Palinghuizen","Neuseplein");
-            IRoute r4 = initRoute("Nieuwevaart (R40) westbound",51.067690,3.727868,51.066271,3.699709,"Neuseplein","Palinghuizen");
-            IRoute r5 = initRoute("Dok-Noord (R40) southbound",51.067137,3.726568,51.056536,3.738477,"Neuseplein","Dampoort");
-            IRoute r6 = initRoute("Dok-Noord (R40) northbound",51.057116,3.738622,51.067633,3.727523,"Dampoort","Neuseplein");
-            IRoute r7 = initRoute("Heernislaan (R40) southbound",51.056536,3.738477,51.038613,3.736007,"Dampoort","Zuidparklaan");
-            
-            
-            
+
+            IRoute r1 = initRoute("Rooigemlaan (R40) northbound", 51.0560905, 3.6951634, 51.0663037, 3.6996797, "Drongensesteenweg", "Palinghuizen");
+            IRoute r2 = initRoute("Rooigemlaan (R40) southbound", 51.066296, 3.699685, 51.056104, 3.695152, "Palinghuizen", "Drongensesteenweg");
+            IRoute r3 = initRoute("Gasmeterlaan (R40) eastbound", 51.066271, 3.699709, 51.067505, 3.727959, "Palinghuizen", "Neuseplein");
+            IRoute r4 = initRoute("Nieuwevaart (R40) westbound", 51.067690, 3.727868, 51.066271, 3.699709, "Neuseplein", "Palinghuizen");
+            IRoute r5 = initRoute("Dok-Noord (R40) southbound", 51.067137, 3.726568, 51.056536, 3.738477, "Neuseplein", "Dampoort");
+            IRoute r6 = initRoute("Dok-Noord (R40) northbound", 51.057116, 3.738622, 51.067633, 3.727523, "Dampoort", "Neuseplein");
+            IRoute r7 = initRoute("Heernislaan (R40) southbound", 51.056536, 3.738477, 51.038613, 3.736007, "Dampoort", "Zuidparklaan");
+
             return Response.status(Response.Status.OK).entity("Routes have been initialised").build();
         } catch (Exception ex) {
             Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("An error has occured").build();
         }
     }
-    
-    private IRoute initRoute(String routeName, double startlat, double startlong, double endlat, double endlong, String startName, String endName) throws InvalidCoordinateException{
+
+    private IRoute initRoute(String routeName, double startlat, double startlong, double endlat, double endlong, String startName, String endName) throws InvalidCoordinateException {
         IRoute r = new Route(routeName);
         //try {
-            ITrafficDataDownstreamAnalyser analyser = beans.getTrafficDataDownstreamAnalyser();
+        ITrafficDataDownstreamAnalyser analyser = beans.getTrafficDataDownstreamAnalyser();
 
-            //IRoute r = new Route("Rooigemlaan (R40) northbound");
+        //IRoute r = new Route("Rooigemlaan (R40) northbound");
+        //r.setInverseRoute(r);
+        IGeoLocation geolocation1 = new GeoLocation(startlat, startlong);
+        IGeoLocation geolocation2 = new GeoLocation(endlat, endlong);
+        geolocation1.setName(startName);
+        geolocation2.setName(endName);
+        r.addGeolocation(geolocation1);
+        r.addGeolocation(geolocation2);
+        r = beans.getGeneralDAO().addRoute(r);
+        if (r.getId() != 0) {
+            beans.getThresholdManager().addDefaultThresholds(r);
 
-            //r.setInverseRoute(r);
-            IGeoLocation geolocation1 = new GeoLocation(startlat, startlong);
-            IGeoLocation geolocation2 = new GeoLocation(endlat, endlong);
-            geolocation1.setName(startName);
-            geolocation2.setName(endName);
-            r.addGeolocation(geolocation1);
-            r.addGeolocation(geolocation2);
-            r = beans.getGeneralDAO().addRoute(r);
-            if (r.getId() != 0) {
-                beans.getThresholdManager().addDefaultThresholds(r);
-
-                List<IRoute> routes = beans.getGeneralDAO().getRoutes();
-                for (IRoute route : routes) {
-                    System.out.println("");
-                    System.out.println("Ik ben een Route met volgende eigenschappen:");
-                    System.out.println("ID: " + route.getId());
-                    System.out.println("Name: " + route.getName());
-                    System.out.println("Geolocaties: " + route.getGeolocations());
-                }
-                return r;
-                //TODO return proper representation object
-                //return Response.status(Response.Status.OK).entity("Routes have been initialised").build();
-            }else{
-                return null;
-                //return Response.status(Response.Status.EXPECTATION_FAILED).entity("The provided data is already in the database (same name?)").build();
+            List<IRoute> routes = beans.getGeneralDAO().getRoutes();
+            for (IRoute route : routes) {
+                System.out.println("");
+                System.out.println("Ik ben een Route met volgende eigenschappen:");
+                System.out.println("ID: " + route.getId());
+                System.out.println("Name: " + route.getName());
+                System.out.println("Geolocaties: " + route.getGeolocations());
             }
-            
-            
+            return r;
+            //TODO return proper representation object
+            //return Response.status(Response.Status.OK).entity("Routes have been initialised").build();
+        } else {
+            return null;
+            //return Response.status(Response.Status.EXPECTATION_FAILED).entity("The provided data is already in the database (same name?)").build();
+        }
+
         //} catch (Exception ex) {
-            //Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
-            //return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("An error has occured").build();
+        //Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
+        //return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("An error has occured").build();
         //}
-      
     }
 
     @GET
@@ -232,7 +230,7 @@ public class RoutesResource {
         setEndTimes(endTimes);
 
         setPrecision();
-        
+
         List<IRoute> routes = getRoutes(sid);
 
         JSONArray result = JSONRoutes(routes);
@@ -247,7 +245,7 @@ public class RoutesResource {
     @Produces("application/json")
     public String getProviderData(@PathParam("id") String sid) {
         setAnalysisParameters();
-        
+
         setPrecision();
 
         List<IRoute> routes = getRoutes(sid);
@@ -261,7 +259,7 @@ public class RoutesResource {
     }
 
     //convertIDs
-    private List<IRoute> getRoutes(String ids) {
+    protected static List<IRoute> getRoutes(String ids) {
         List<IRoute> result = new ArrayList<>();
         if (ids.equals("all")) {
             result = beans.getGeneralDAO().getRoutes();
@@ -283,7 +281,7 @@ public class RoutesResource {
     }
 
     //JSONTRANSFORMATIONS
-    private JSONObject transformGeoLocation(IGeoLocation location) {
+    private static JSONObject transformGeoLocation(IGeoLocation location) {
         JSONObject obj = new JSONObject();
         obj.put("name", location.getName());
         obj.put("latitude", location.getLatitude());
@@ -291,7 +289,7 @@ public class RoutesResource {
         return obj;
     }
 
-    private JSONArray transformGeoLocations(List<IGeoLocation> geolocations) {
+    private static JSONArray transformGeoLocations(List<IGeoLocation> geolocations) {
         JSONArray result = new JSONArray();
         for (IGeoLocation loc : geolocations) {
             result.put(transformGeoLocation(loc));
@@ -307,6 +305,35 @@ public class RoutesResource {
         return result;
     }
 
+    protected static JsonObjectBuilder JSONDefaultRoute(IRoute route) {
+        IDataProvider data = beans.getDataProvider();
+        JsonObjectBuilder obj = Json.createObjectBuilder();
+        obj.add("id", route.getId());
+        obj.add("name", route.getName());
+        List<IGeoLocation> geolocs = route.getGeolocations();
+        //obj.add("geolocations", transformGeoLocations(geolocs));
+
+        List<String> providers = new ArrayList<>();
+
+        obj.add("currentDuration", data.getCurrentDuration(route, providers));
+        obj.add("currentVelocity", data.getCurrentVelocity(route, providers));
+
+        obj.add("optimalDuration", data.getOptimalDuration(route, providers));
+        obj.add("optimalVelocity", data.getOptimalVelocity(route, providers));
+
+        obj.add("avgDuration", data.getAvgDuration(route, providers));
+        obj.add("avgVelocity", data.getAvgVelocity(route, providers));
+
+        obj.add("trend", data.getTrend(route, providers));
+        //obj.put("recentData", JSONRecentData(route));
+
+        obj.add("currentDelayLevel", data.getCurrentDelayLevel(route, providers));
+        obj.add("avgDelayLevel", data.getAvgDelayLevel(route, providers));
+        obj.add("distance", data.getDistance(route, providers));
+
+        return obj;
+    }
+
     private JSONObject JSONRoute(IRoute route) {
         JSONObject obj = new JSONObject();
         obj.put("id", route.getId());
@@ -316,11 +343,11 @@ public class RoutesResource {
 
         obj.put("currentDuration", beans.getDataProvider().getCurrentDuration(route, providers));
         obj.put("currentVelocity", beans.getDataProvider().getCurrentVelocity(route, providers));
-        
-        if(optimalStartTime != null && optimalEndTime != null){
-            obj.put("optimalDuration", beans.getDataProvider().getOptimalDuration(route, providers,optimalStartTime,optimalEndTime));
-            obj.put("optimalVelocity", beans.getDataProvider().getOptimalVelocity(route, providers,optimalStartTime,optimalEndTime));
-        }else{
+
+        if (optimalStartTime != null && optimalEndTime != null) {
+            obj.put("optimalDuration", beans.getDataProvider().getOptimalDuration(route, providers, optimalStartTime, optimalEndTime));
+            obj.put("optimalVelocity", beans.getDataProvider().getOptimalVelocity(route, providers, optimalStartTime, optimalEndTime));
+        } else {
             obj.put("optimalDuration", beans.getDataProvider().getOptimalDuration(route, providers));
             obj.put("optimalVelocity", beans.getDataProvider().getOptimalVelocity(route, providers));
         }
@@ -337,7 +364,7 @@ public class RoutesResource {
         obj.put("recentData", JSONRecentData(route));
 
         obj.put("currentDelayLevel", beans.getDataProvider().getCurrentDelayLevel(route, providers));
-        obj.put("avgDelayLevel",beans.getDataProvider().getAvgDelayLevel(route, providers));
+        obj.put("avgDelayLevel", beans.getDataProvider().getAvgDelayLevel(route, providers));
         obj.put("distance", beans.getDataProvider().getDistance(route, providers));
 
         return obj;
@@ -347,41 +374,39 @@ public class RoutesResource {
         JSONObject result = new JSONObject();
         Map<Date, Integer> recentData = beans.getDataProvider().getRecentData(route, providers);
 
-
         result.put("duration", JSONData("recentData " + route.getId(),
                 "This data are the durations over the last hour for route " + route.getId(),
                 recentData));
         return result;
     }
 
-    private JSONObject JSONData(String name, String description, Map<Date,Integer> dataMap) {
+    private JSONObject JSONData(String name, String description, Map<Date, Integer> dataMap) {
         JSONObject result = new JSONObject();
         result.put("name", name);
         result.put("description", description);
-        
-        JSONObject data= new JSONObject();
-        List<Date> timestamps=new ArrayList<>();
+
+        JSONObject data = new JSONObject();
+        List<Date> timestamps = new ArrayList<>();
         timestamps.addAll(dataMap.keySet());
         for (Date timestamp : timestamps) {
-            data.put(String.valueOf(timestamp.getTime()),dataMap.get(timestamp));
+            data.put(String.valueOf(timestamp.getTime()), dataMap.get(timestamp));
         }
-        
-        
+
         result.put("data", data);
         return result;
     }
-    
-    private JSONObject JSONDayData(String name, String description, List<Integer> dataList, List<String> hours){
+
+    private JSONObject JSONDayData(String name, String description, List<Integer> dataList, List<String> hours) {
         JSONObject result = new JSONObject();
         result.put("name", name);
-        result.put("description",description);
-        
+        result.put("description", description);
+
         JSONObject data = new JSONObject();
-        for (int i = 0; i<dataList.size();i++){
-            data.put(hours.get(i),dataList.get(i));
+        for (int i = 0; i < dataList.size(); i++) {
+            data.put(hours.get(i), dataList.get(i));
         }
-        
-        result.put("data",data);
+
+        result.put("data", data);
         return result;
     }
 
@@ -393,46 +418,45 @@ public class RoutesResource {
         }
         return result;
     }*/
-
     private JSONObject JSONDaysData(IRoute route) {
         JSONObject result = new JSONObject();
         Map<Weekdays, List<Integer>> mapDurations = null;
         Map<Weekdays, List<Integer>> mapVelocities = null;
         List<String> hours = beans.getDataProvider().getDataByDayHours();
-        
+
         if (startTime != null && endTime != null) {
-            mapDurations = beans.getDataProvider().getDataByDay(route, providers, startTime, endTime,Weekdays.MONDAY,Weekdays.TUESDAY,Weekdays.WEDNESDAY,Weekdays.THURSDAY,Weekdays.FRIDAY,Weekdays.SATERDAY,Weekdays.SUNDAY);
-            mapVelocities = beans.getDataProvider().getDataVelocityByDay(route, providers, startTime, endTime,Weekdays.MONDAY,Weekdays.TUESDAY,Weekdays.WEDNESDAY,Weekdays.THURSDAY,Weekdays.FRIDAY,Weekdays.SATERDAY,Weekdays.SUNDAY);
+            mapDurations = beans.getDataProvider().getDataByDay(route, providers, startTime, endTime, Weekdays.MONDAY, Weekdays.TUESDAY, Weekdays.WEDNESDAY, Weekdays.THURSDAY, Weekdays.FRIDAY, Weekdays.SATERDAY, Weekdays.SUNDAY);
+            mapVelocities = beans.getDataProvider().getDataVelocityByDay(route, providers, startTime, endTime, Weekdays.MONDAY, Weekdays.TUESDAY, Weekdays.WEDNESDAY, Weekdays.THURSDAY, Weekdays.FRIDAY, Weekdays.SATERDAY, Weekdays.SUNDAY);
         } else {
-            mapDurations=beans.getDataProvider().getDataByDay(route,providers,Weekdays.MONDAY,Weekdays.TUESDAY,Weekdays.WEDNESDAY,Weekdays.THURSDAY,Weekdays.FRIDAY,Weekdays.SATERDAY,Weekdays.SUNDAY);
-            mapVelocities=beans.getDataProvider().getDataVelocityByDay(route,providers,Weekdays.MONDAY,Weekdays.TUESDAY,Weekdays.WEDNESDAY,Weekdays.THURSDAY,Weekdays.FRIDAY,Weekdays.SATERDAY,Weekdays.SUNDAY);            
+            mapDurations = beans.getDataProvider().getDataByDay(route, providers, Weekdays.MONDAY, Weekdays.TUESDAY, Weekdays.WEDNESDAY, Weekdays.THURSDAY, Weekdays.FRIDAY, Weekdays.SATERDAY, Weekdays.SUNDAY);
+            mapVelocities = beans.getDataProvider().getDataVelocityByDay(route, providers, Weekdays.MONDAY, Weekdays.TUESDAY, Weekdays.WEDNESDAY, Weekdays.THURSDAY, Weekdays.FRIDAY, Weekdays.SATERDAY, Weekdays.SUNDAY);
         }
-        
+
         Set<Weekdays> days = mapDurations.keySet();
-        for(Weekdays day:days){
+        for (Weekdays day : days) {
             JSONObject dayObject = new JSONObject();
             dayObject.put("duration", JSONDayData("durations " + day.toString() + " " + route.getId(),
-                "This data are the durations on a " + day.toString() + " for route " + route.getId(),
-                mapDurations.get(day),hours));
+                    "This data are the durations on a " + day.toString() + " for route " + route.getId(),
+                    mapDurations.get(day), hours));
             dayObject.put("velocity", JSONDayData("velocities " + day.toString() + " " + route.getId(),
-                "This data are the velocities on a " + day.toString() + " for route " + route.getId(),
-                mapVelocities.get(day),hours));
-            
-            result.put(day.toString(),dayObject);
+                    "This data are the velocities on a " + day.toString() + " for route " + route.getId(),
+                    mapVelocities.get(day), hours));
+
+            result.put(day.toString(), dayObject);
         }
-        
+
         return result;
     }
 
     //TODO
     private JSONObject JSONRushhourData(IRoute route) {
         JSONObject result = new JSONObject();
-        
+
         List<Integer> listDurations;
         List<Integer> listVelocities;
-        
+
         List<String> hours = beans.getDataProvider().getDataByDayHours();
-        
+
         if (startTime != null && endTime != null) {
             listDurations = beans.getDataProvider().getDataByCombinedDay(route, providers, startTime, endTime);
             listVelocities = beans.getDataProvider().getDataVelocityByCombinedDay(route, providers, startTime, endTime);
@@ -441,13 +465,12 @@ public class RoutesResource {
             listVelocities = beans.getDataProvider().getDataVelocityByCombinedDay(route, providers);
         }
 
-        
         result.put("duration", JSONDayData("rushhourDurations " + route.getId(),
                 "This data are the durations for a workday for route " + route.getId(),
-                listDurations,hours));
+                listDurations, hours));
         result.put("velocity", JSONDayData("rushhourVelocities " + route.getId(),
                 "This data are the velocities for a workday for route " + route.getId(),
-                listVelocities,hours));
+                listVelocities, hours));
         return result;
     }
 
@@ -461,7 +484,7 @@ public class RoutesResource {
 
     private JSONObject JSONPeriodData(IRoute route, int periodnumber) {
         JSONObject result = new JSONObject();
-        int rank=periodnumber+1;
+        int rank = periodnumber + 1;
         result.put("period", "period" + rank);
         result.put("start", startTimes.get(periodnumber).getTime());
         result.put("end", endTimes.get(periodnumber).getTime());
@@ -470,14 +493,13 @@ public class RoutesResource {
         Map<Date, Integer> mapDurations;
         Map<Date, Integer> mapVelocities;
 
-        if(precision != -1){
+        if (precision != -1) {
             mapDurations = beans.getDataProvider().getData(route, providers, precision, startTimes.get(periodnumber), endTimes.get(periodnumber));
             mapVelocities = beans.getDataProvider().getDataVelocity(route, providers, precision, startTimes.get(periodnumber), endTimes.get(periodnumber));
-        }else{
-        mapDurations = beans.getDataProvider().getData(route, providers, startTimes.get(periodnumber), endTimes.get(periodnumber));
-        mapVelocities = beans.getDataProvider().getDataVelocity(route, providers, startTimes.get(periodnumber), endTimes.get(periodnumber));
+        } else {
+            mapDurations = beans.getDataProvider().getData(route, providers, startTimes.get(periodnumber), endTimes.get(periodnumber));
+            mapVelocities = beans.getDataProvider().getDataVelocity(route, providers, startTimes.get(periodnumber), endTimes.get(periodnumber));
         }
-        
 
         obj.put("duration", JSONData("Period" + rank + "Durations " + route.getId(),
                 "This data are the durations for period " + rank + " for route " + route.getId(),
@@ -509,26 +531,21 @@ public class RoutesResource {
         Map<Date, Integer> mapDurations = null;
         Map<Date, Integer> mapVelocities = null;
 
-        if (precision != -1){
-            if (startTime != null && endTime != null){
-                mapDurations= beans.getDataProvider().getData(route,lprovider,precision,startTime,endTime);
-                mapVelocities=beans.getDataProvider().getDataVelocity(route,lprovider,precision, startTime, endTime);
-            }else{
-                mapDurations=beans.getDataProvider().getData(route, providers,precision);
-                mapVelocities=beans.getDataProvider().getDataVelocity(route, providers,precision);
+        if (precision != -1) {
+            if (startTime != null && endTime != null) {
+                mapDurations = beans.getDataProvider().getData(route, lprovider, precision, startTime, endTime);
+                mapVelocities = beans.getDataProvider().getDataVelocity(route, lprovider, precision, startTime, endTime);
+            } else {
+                mapDurations = beans.getDataProvider().getData(route, providers, precision);
+                mapVelocities = beans.getDataProvider().getDataVelocity(route, providers, precision);
             }
+        } else if (startTime != null && endTime != null) {
+            mapDurations = beans.getDataProvider().getData(route, lprovider, startTime, endTime);
+            mapVelocities = beans.getDataProvider().getDataVelocity(route, lprovider, startTime, endTime);
+        } else {
+            mapDurations = beans.getDataProvider().getData(route, providers);
+            mapVelocities = beans.getDataProvider().getDataVelocity(route, providers);
         }
-        else{
-            if (startTime != null && endTime != null){
-                mapDurations= beans.getDataProvider().getData(route,lprovider,startTime,endTime);
-                mapVelocities=beans.getDataProvider().getDataVelocity(route,lprovider, startTime, endTime);
-            }else{
-                mapDurations=beans.getDataProvider().getData(route, providers);
-                mapVelocities=beans.getDataProvider().getDataVelocity(route, providers);
-            }
-        }
-        
-
 
         obj.put("duration", JSONData("providerDurations " + provider + " " + route.getId(),
                 "This data are the duration provided by " + provider + " for route " + route.getId(),
@@ -594,7 +611,7 @@ public class RoutesResource {
             Logger.getGlobal().log(Level.WARNING, endTime + " could not be converted to Long");
         }
     }
-    
+
     private void setOptimalStartTime(String startTime) {
         try {
             this.optimalStartTime = new Date(Long.parseLong(startTime, 10));
@@ -629,20 +646,19 @@ public class RoutesResource {
     private void setAllProviders() {
         providers = new ArrayList<>();
     }
-    
-    private void setNoProviders(){
+
+    private void setNoProviders() {
         providers = new ArrayList<>();
     }
-    
-    private void setPrecision(){
+
+    private void setPrecision() {
         String precision = context.getQueryParameters().getFirst("precision");
-        if(precision != null){
-            this.precision=Integer.parseInt(precision);
-        }else{
-            this.precision=-1;
+        if (precision != null) {
+            this.precision = Integer.parseInt(precision);
+        } else {
+            this.precision = -1;
         }
     }
-
 
     private void setStartTime(String startTime) {
         try {

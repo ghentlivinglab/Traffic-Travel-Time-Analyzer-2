@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -55,12 +56,12 @@ public class ThresholdManager implements ThresholdManagerRemote {
         if (thresholdMap == null) {
             thresholdMap = new HashMap<>();
         }
-        
+
         prevThresholdLevel = new HashMap<>();
         for (IRoute route : thresholdMap.keySet()) {
             prevThresholdLevel.put(route, -1);
         }
-        
+
         beans.getLogger().log(Level.INFO, "ThresholManager has been initialized.");
     }
 
@@ -71,18 +72,18 @@ public class ThresholdManager implements ThresholdManagerRemote {
     @Override
     public int getThresholdLevel(IRoute route, int delay) {
         List<IThreshold> thresholds = thresholdMap.get(route);
-        
-        if(thresholds == null){
+
+        if (thresholds == null) {
             //this can ony happen when a new route was added without alerting the thresholdmanager!
             thresholdMap = beans.getGeneralDAO().getThresholds();
             thresholds = thresholdMap.get(route);
-            if(thresholds == null){
+            if (thresholds == null) {
                 //if still null, then the thresholds have not been added to the database. an exception should have occured before getting here...
                 addDefaultThresholds(route);
                 thresholds = thresholdMap.get(route);
             }
         }
-        
+
         List<IThreshold> passed = new ArrayList<>();
         List<IThreshold> notPassed = new ArrayList<>();
         for (IThreshold threshold : thresholds) {
@@ -107,16 +108,16 @@ public class ThresholdManager implements ThresholdManagerRemote {
     @Override
     public int EvalThresholdLevel(IRoute route, int delay) {
         LoggerRemote logger = beans.getLogger();
-        
+
         int currentLevel = getThresholdLevel(route, delay);
         int prevLevel = prevThresholdLevel.get(route);
         if (prevLevel != currentLevel) {
             prevThresholdLevel.put(route, currentLevel);
-            logger.log(Level.FINER, "Threshold changed for " + route.getName() + " to "+currentLevel);
+            logger.log(Level.FINER, "Threshold changed for " + route.getName() + " to " + currentLevel);
 
             List<IThreshold> thresholdList = getThresholds(route, prevLevel, currentLevel);
             for (IThreshold threshold : thresholdList) {
-                threshold.triggerThreshold(prevLevel - threshold.getLevel(),delay,beans);
+                threshold.triggerThreshold(prevLevel - threshold.getLevel(), delay, beans);
             }
 
             return currentLevel - prevLevel;
@@ -168,5 +169,66 @@ public class ThresholdManager implements ThresholdManagerRemote {
             }
         }
         logger.log(Level.FINE, "Added default Threshold for " + route.getName());
+    }
+
+    @Override
+    public List<IThreshold> getThresholds(IRoute r) {
+        if (thresholdMap.containsKey(r)) {
+            return thresholdMap.get(r);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public boolean ModifyThresholds(List<IThreshold> list) {
+        IGeneralDAO dao = beans.getGeneralDAO();
+        boolean success = true;
+        for (IThreshold th : list) {
+            if (th.getRouteId() > 0) {
+                if (th.getId() == 0) {
+                    dao.addThreshold(th);
+                } else {
+                    dao.updateThreshold(th);
+                }
+                if(!InsertIntoMap(th)){
+                    success = false;
+                }
+            }
+        }
+        return success;
+    }
+
+    private boolean InsertIntoMap(final IThreshold th) {
+        boolean found = false;
+        for (Map.Entry<IRoute, List<IThreshold>> entry : thresholdMap.entrySet()) {
+            if (entry.getKey().getId() == th.getRouteId()) {
+                found = true;
+                List<IThreshold> entryList = entry.getValue();
+                entryList.removeIf(new Predicate<IThreshold>() {
+                    @Override
+                    public boolean test(IThreshold t) {
+                        if (t.getId() == th.getId()) {
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+                entryList.add(th);
+                return true;
+            }
+        }
+        if (!found) {
+            IRoute route = beans.getGeneralDAO().getRoute(th.getRouteId());
+            if (route != null) {
+                ArrayList<IThreshold> arr = new ArrayList<>();
+                arr.add(th);
+                thresholdMap.put(route, arr);
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 }

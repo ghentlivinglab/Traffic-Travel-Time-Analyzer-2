@@ -215,7 +215,7 @@ public class GeneralDAO implements GeneralDAORemote {
                 ret.add(newR);
             }
         } catch (Exception e) {
-            beans.getLogger().log(Level.SEVERE, "Routes "+ids.toString()+" could not be retrieved.");
+            beans.getLogger().log(Level.SEVERE, "Routes " + ids.toString() + " could not be retrieved.");
         } finally {
 
         }
@@ -271,5 +271,27 @@ public class GeneralDAO implements GeneralDAORemote {
             }
         }
         return null;
+    }
+
+    @Override
+    public void updateThreshold(IThreshold th) {
+        try {
+            Query q = em.createQuery("SELECT t FROM ThresholdEntity t WHERE t.id = :id");
+            q.setParameter("id", th.getId());
+            List<ThresholdEntity> resultList = q.getResultList();
+
+            if (resultList.size() != 1) {
+                throw new ArrayIndexOutOfBoundsException(resultList.size() + " doesnt equal 1");
+            }
+            
+            ThresholdEntity result = resultList.get(0);
+            
+            result.setDelayTriggerLevel(th.getDelayTriggerLevel());
+            result.setLevel(th.getLevel());
+            result.setObservers(th.getObservers());
+            result.setRouteId(th.getRouteId());
+        } catch (Exception e) {
+
+        }
     }
 }
