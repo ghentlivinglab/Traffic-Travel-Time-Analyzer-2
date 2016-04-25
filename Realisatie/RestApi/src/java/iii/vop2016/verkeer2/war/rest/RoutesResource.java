@@ -784,7 +784,7 @@ public class RoutesResource {
                 cal.set(GregorianCalendar.MINUTE, 59);
                 cal.set(GregorianCalendar.HOUR_OF_DAY, 23);
                 end = cal.getTime();
-                this.startTimes.add(end);
+                this.endTimes.add(end);
             } catch (NumberFormatException e) {
                 Logger.getGlobal().log(Level.WARNING, s + " could not be converted to Long");
             }
