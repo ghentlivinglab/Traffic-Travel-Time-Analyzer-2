@@ -5,13 +5,14 @@
  */
 package iii.vop2016.verkeer2.ejb.components;
 
+import java.io.Serializable;
 import java.util.logging.Level;
 
 /**
  *
  * @author Tobias
  */
-public class Log {
+public class Log implements Serializable{
     private Level l;
     private String message;
     private long date;

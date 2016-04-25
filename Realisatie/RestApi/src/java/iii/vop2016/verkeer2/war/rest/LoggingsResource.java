@@ -31,7 +31,7 @@ import org.json.JSONArray;
  *
  * @author Gebruiker
  */
-@Path("Loggings")
+@Path("loggings")
 @RequestScoped
 public class LoggingsResource {
 
@@ -79,6 +79,7 @@ public class LoggingsResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getLogs() {
+        setParameters();
         JSONArray result = new JSONArray();
         List<Log> logs = beans.getLogger().getLogs(amount, offset, filter, containing);
         for(Log log: logs){
