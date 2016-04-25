@@ -447,9 +447,18 @@ public class RoutesResource {
         result.put("description",description);
         
         JSONObject data = new JSONObject();
-        for (int i = 0; i<dataList.size();i++){
-            data.put(hours.get(i),dataList.get(i));
+        
+        JSONArray hourslist = new JSONArray();
+        for (String s: hours){
+            hourslist.put(s);
         }
+        data.put("x-ax", hourslist);
+        
+        JSONArray rushdata = new JSONArray();
+        for(Integer i: dataList){
+            rushdata.put(i);
+        }
+        data.put("workday",rushdata);
         
         result.put("data",data);
         return result;
@@ -515,7 +524,7 @@ public class RoutesResource {
         return result;
     }
 
-    //TODO
+    
     private JSONObject JSONRushhourData(IRoute route) {
         JSONObject result = new JSONObject();
         
