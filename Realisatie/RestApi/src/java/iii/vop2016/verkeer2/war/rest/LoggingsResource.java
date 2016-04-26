@@ -83,7 +83,7 @@ public class LoggingsResource {
         JSONArray result = new JSONArray();
         List<Log> logs = beans.getLogger().getLogs(amount, offset, filter, containing);
         for(Log log: logs){
-            String logOutput= log.getL().toString()+ "\t"+log.getMessage();
+            String logOutput= log.getL().toString()+ "\t"+log.getMessage()+"\t"+log.getDate();
             result.put(logOutput);
         }
         return result.toString();
