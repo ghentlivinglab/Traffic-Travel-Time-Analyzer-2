@@ -63,6 +63,15 @@ function initTimer(data){
     timerProgress = data.percentDone;
 }
 
+function getRoute(id){
+    var i=0;
+    while(i<trafficData.length){
+        if(trafficData[i].id == id)
+            return trafficData[i];
+        i++;
+    }
+}
+
 
 
 function refreshLiveData(){
@@ -206,6 +215,28 @@ function splitToArraySorted(obj, xdata, ydata){
 }
 
 function setLiveList(){
+    
+    var data = {};
+    for(var i=0; i<trafficData.length; i++){
+        var cDuration = trafficData[i].currentDuration;
+        var oDuration = trafficData[i].optimalDuration;
+        var id = trafficData[i].id;
+        var delay = cDuration - oDuration;
+        if(oDuration >= 0 && delay > 0){
+            data[id] = delay;
+        }else{
+            data[id] = -1;
+        }
+    }
+    var sortable = [];
+    for (var routeid in data)
+          sortable.push([routeid, data[routeid]]);
+    sortable.sort(function(a, b) {return b[1] - a[1];});
+    var keys = [];
+    for(var i=0; i<sortable.length; i++){
+       keys.push(sortable[i][0]); 
+    }
+    
     trafficListBox = $("#traffic-list");
     trafficListBox.html("");
     
@@ -223,25 +254,25 @@ function setLiveList(){
     var trend;
     var delayClass;
     if(trafficData.length>0){
-        var rows = {};        
-        for (var i = 0; i < trafficData.length; i++) {
-            var cDuration = trafficData[i].currentDuration;
-            var oDuration = trafficData[i].optimalDuration;
+        for (var i = 0; i < keys.length; i++) {
+            var route = getRoute(keys[i]);
+            var cDuration = route.currentDuration;
+            var oDuration = route.optimalDuration;
             var delay = 0;
-            var id = trafficData[i].id;
-            var name = trafficData[i].name;
+            var id = route.id;
+            var name = route.name;
             durationTxt = formatDuration(cDuration);
             
             if(oDuration >= 0){
                 delay = cDuration - oDuration;
                 delayTxt = formatDuration(delay);
-                if(trafficData[i].trend < 0){
+                if(route.trend < 0){
                     trend = "call_received";
                 }
-                if(trafficData[i].trend > 0){
+                if(route.trend > 0){
                     trend = "call_made";
                 }
-                switch(trafficData[i].currentDelayLevel){
+                switch(route.currentDelayLevel){
                     case 0: delayClass = "veryfast"; break;
                     case 1: delayClass = "fast"; break;
                     case 2: delayClass = "intermediate"; break;
@@ -254,7 +285,6 @@ function setLiveList(){
             }            
             
             var delayButton = "";
-            console.log(delay);
             if(delay > 0){
                 delayButton = $("<span/>").addClass("badge "+delayClass).text(delayTxt);
             }else{
@@ -269,20 +299,7 @@ function setLiveList(){
                     .append($("<td/>").attr("width","10%").append($("<i/>").addClass("material-icons").text(trend)))
             )));
             trafficList.append(trafficListItem);
-            /*
-            rows[delay] = trafficListItem;            
-            console.log("delay = "+delay);
-             */
         }
-        /*
-         var xdata = [];
-        var ydata = [];
-        splitToArraySorted(rows, xdata, ydata);
-        for(i=0; i<ydata.length; i++){
-            trafficList.append(ydata[i]);
-            console.log("delay2 = "+xdata[i]);
-        }
-         */
         
     }else{
         trafficListItem = $("<li/>").text("Geen trajecten om weer te geven...");

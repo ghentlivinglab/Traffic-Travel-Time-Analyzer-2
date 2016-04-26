@@ -2642,7 +2642,8 @@ form {
         .map #map .trafficColorScale ul li {
           width: 20%;
           display: inline-block;
-          height: 20px; }
+          height: 20px;
+          opacity: 0.8; }
           .map #map .trafficColorScale ul li:first-of-type {
             border-radius: 10px 0px 0px 10px; }
           .map #map .trafficColorScale ul li:last-of-type {
