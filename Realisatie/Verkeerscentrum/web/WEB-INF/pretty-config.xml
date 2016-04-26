@@ -36,40 +36,43 @@
                
         <url-mapping id="analyse-datasources">
 		<pattern value="/analyse/datasources" />
-		<view-id value="/faces/datasourcecompare.xhtml" />
+		<view-id value="/faces/pages/analyse/datasourcecompare.xhtml" />
 	</url-mapping>
         
         <url-mapping id="analyse-avgtraffic">
 		<pattern value="/analyse/avgtraffic" />
-		<view-id value="/faces/datasourcecompare.xhtml" />
+		<view-id value="/faces/pages/analyse/avgtraffic.xhtml" />
 	</url-mapping>
         
         <url-mapping id="analyse-weekdays">
 		<pattern value="/analyse/weekdays" />
-		<view-id value="/faces/datasourcecompare.xhtml" />
+		<view-id value="/faces/pages/analyse/weekdaycompare.xhtml" />
 	</url-mapping>
         
         <url-mapping id="analyse-rushhours">
 		<pattern value="/analyse/rushhours" />
-		<view-id value="/faces/datasourcecompare.xhtml" />
+		<view-id value="/faces/pages/analyse/rushhours.xhtml" />
 	</url-mapping>
         
         <url-mapping id="analyse-periods">
 		<pattern value="/analyse/periods" />
-		<view-id value="/faces/periodcompare.xhtml" />
+		<view-id value="/faces/pages/analyse/periodcompare.xhtml" />
 	</url-mapping>
         
         <url-mapping id="analyse-routes">
 		<pattern value="/analyse/routes" />
-		<view-id value="/faces/datasourcecompare.xhtml" />
+		<view-id value="/faces/pages/analyse/routecompare.xhtml" />
 	</url-mapping>
         
-        
-        
-        
+                
         <url-mapping id="settings">
 		<pattern value="/settings" />
 		<view-id value="/faces/settings.xhtml" />
+	</url-mapping>
+        
+        <url-mapping id="login">
+		<pattern value="/login" />
+		<view-id value="/faces/login.xhtml" />
 	</url-mapping>
         
 

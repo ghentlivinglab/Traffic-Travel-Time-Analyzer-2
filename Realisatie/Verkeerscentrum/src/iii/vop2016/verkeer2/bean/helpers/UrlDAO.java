@@ -25,6 +25,7 @@ public class UrlDAO {
     protected static final String JNDILOOKUP_PROPERTYFILE = "resources/properties/WebSettings";
 
     protected static Properties prop;
+   
     protected InitialContext ctx;
     
     /**
@@ -55,8 +56,14 @@ public class UrlDAO {
         return prop.getProperty("urlTimerNewData");
     }
     
-    public String getGeoJSONAllRoutes(){
-        String url = prop.getProperty("urlGeoJSON");
+    public String getGeoJSONAllRoutesCurrent(){
+        String url = prop.getProperty("urlGeoJSONcurrent");
+        url = url.replaceAll("\\{id\\}", "all");
+        return url;
+    }
+    
+    public String getGeoJSONAllRoutesAvg(){
+        String url = prop.getProperty("urlGeoJSONavg");
         url = url.replaceAll("\\{id\\}", "all");
         return url;
     }

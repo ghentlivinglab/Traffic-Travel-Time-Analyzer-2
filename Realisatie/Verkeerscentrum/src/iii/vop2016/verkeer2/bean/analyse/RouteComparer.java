@@ -80,7 +80,7 @@ public class RouteComparer extends AnalysePage implements ITableView, IGraphView
     public String getDataURL() {
         List<String> urlParts = new ArrayList<>();
         
-        String surl = super.prop.getProperty("urlRouteComparer");
+        String surl = super.prop.getProperty("urlRushhour");
         
         
         //

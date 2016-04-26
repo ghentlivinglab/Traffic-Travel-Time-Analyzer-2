@@ -15,7 +15,7 @@
     </servlet-mapping>
     <session-config>
         <session-timeout>
-            30
+            600
         </session-timeout>
     </session-config>
     <welcome-file-list>
@@ -25,4 +25,21 @@
         <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
         <param-value>true</param-value>
     </context-param>
+    <!--
+    
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/live</url-pattern>
+        <url-pattern>/analyse/*</url-pattern>
+        <url-pattern>/settings/*</url-pattern>
+        <url-pattern>/</url-pattern>
+        
+        <url-pattern>/faces/live.xhtml</url-pattern>
+        <url-pattern>/faces/analyse.xhtml</url-pattern>
+        <url-pattern>/faces/settings.xhtml</url-pattern>
+        <url-pattern>/faces/index.xhtml</url-pattern>
+    </filter-mapping>
+    
+    -->
+    
 </web-app>
