@@ -6,13 +6,13 @@
 package iii.vop2016.verkeer2.ejb.helper;
 
 import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
+import iii.vop2016.verkeer2.ejb.dao.ILoginDAO;
 import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
 import iii.vop2016.verkeer2.ejb.datasources.ISourceAdapter;
 import iii.vop2016.verkeer2.ejb.timer.ITimer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.SessionContext;
 import javax.naming.InitialContext;
@@ -277,6 +277,21 @@ public class BeanFactory {
             }
         }
         return ret;
+    }
+    
+    public ILoginDAO getLoginDAO() throws ResourceFileMissingException {
+        if (sctx != null) {
+            Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.LoginDAO, sctx, Logger.getGlobal());
+            if (obj instanceof ILoginDAO) {
+                return (ILoginDAO) obj;
+            }
+        } else {
+            Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.LoginDAO, ctx, Logger.getGlobal());
+            if (obj instanceof ILoginDAO) {
+                return (ILoginDAO) obj;
+            }
+        }
+        return null;
     }
 
 }
