@@ -7,6 +7,7 @@ package iii.vop2016.verkeer2.war.rest;
 
 import iii.vop2016.verkeer2.ejb.components.Log;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,7 +84,7 @@ public class LoggingsResource {
         JSONArray result = new JSONArray();
         List<Log> logs = beans.getLogger().getLogs(amount, offset, filter, containing);
         for(Log log: logs){
-            String logOutput= log.getL().toString()+ "\t"+log.getMessage()+"\t"+log.getDate();
+            String logOutput= log.getL().toString()+ "\t"+log.getMessage()+"\t"+ new Date(log.getDate());
             result.put(logOutput);
         }
         return result.toString();
@@ -123,6 +124,10 @@ public class LoggingsResource {
         else{
             this.containing="";
         }
+    }
+
+    private String Date(long date) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
