@@ -1,38 +1,51 @@
 
 
-/* global Materialize */
+/* global Materialize, L */
 
 var timerProgress = 0;
-var map;
 var mymap;
 var layer;
 var trafficData = [];
 var modus = "live";
 var urlTimerNewData;
 var urlAllRoutes;
-var urlGeoJSON;
+var urlGeoJSONcurrent;
+var geojsonLive;
+var geojsonAvg;
 
 
 function initTimerURL(url){
     urlTimerNewData = url;
-    $.ajax({
-        url: urlTimerNewData,
-        dataType: "json",
-        success: initTimer,
-        error: function(jqXHR, textStatus, errorThrown ){
-            Materialize.toast('Er kan geen data worden opgehaald over de timer op de server!', 4000, 'toast bottom error');
-        }
-    });
 }
 
 function initRoutesURL(url){
     urlAllRoutes = url;
 }
 
-function initGeoJSONURL(url){
-    urlGeoJSON = url;
+function initGeoJSONURLcurrent(url){
+    urlGeoJSONcurrent = url;
 }
 
+function initGeoJSONURLavg(url){
+    urlGeoJSONavg = url;
+}
+
+function startLive(){
+    if(urlTimerNewData && urlAllRoutes && urlGeoJSONcurrent){
+        $.ajax({
+            url: urlTimerNewData,
+            dataType: "json",
+            success: initTimer,
+            error: function(jqXHR, textStatus, errorThrown ){
+                Materialize.toast('Er kan geen data worden opgehaald over de timer op de server!', 4000, 'toast bottom error');
+            }
+        });
+        modus = "live";
+        refreshLiveData();
+    }else{
+        Materialize.toast('Het systeem is niet klaar om te worden gestart!', 4000, 'toast bottom error');
+    }
+}
 
 function setTimerProgress(){
     timerProgress += 0.5;
@@ -50,6 +63,8 @@ function initTimer(data){
     timerProgress = data.percentDone;
 }
 
+
+
 function refreshLiveData(){
     $.ajax({
         url: urlAllRoutes,
@@ -57,6 +72,7 @@ function refreshLiveData(){
         success: function(data, textStatus, jqXHR ){
             Materialize.toast('De verkeerssituatie werd zonet geüpdatet', 4000, 'toast bottom success');
             trafficData = data;
+            requestGeoJson();
             setModus(modus);
         },
         error: function(jqXHR, textStatus, errorThrown ){
@@ -64,22 +80,9 @@ function refreshLiveData(){
             trafficList = $(".traffic-list");
             trafficListItem = $("<li/>").text("Geen trajecten om weer te geven...");
             trafficList.add(trafficListItem);
+            removeLayerFromMap();
         }
     });
-}
-
-function initMap(){
-    /*map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 51.038901, lng: 3.725215},
-          scrollwheel: false,
-          navigationControl: false,
-          mapTypeControl: false,
-          scaleControl: false,
-          mapTypeId: google.maps.MapTypeId.ROADMAP,
-          zoom: 15
-    });
-    initGUI();
-    */
 }
 
 function initGUI(){
@@ -94,11 +97,11 @@ function initGUI(){
 
 
 function setLiveMap(){
-    requestGeoJson();  
+    drawGeoJSON(geojsonLive);
 }
 
 function setAvgMap(){
-    //teken Avg data
+    drawGeoJSON(geojsonAvg);
 }
 
 function switchBtnModus(){
@@ -135,6 +138,46 @@ function setAvgModus(){
     switchBtnModus();
 }
 
+function formatDuration(data) {
+    if(data>0){
+        var date = new Date();
+        date.setTime(0);
+        date.setSeconds(data);
+        var min = dateFormat(date, "MM");
+        var sec = dateFormat(date, "ss");
+        var res = "";
+        res += min+"\"";
+        res += sec+"\'";
+        return res;
+    }else{
+        return "00:00";
+    }
+};
+
+function splitToArraySorted(obj, xdata, ydata){
+    var keys = [];
+    var k, i, len;
+    
+    for (k in obj) {
+        if (obj.hasOwnProperty(k)) {
+            keys.push(k);
+        }
+    }
+    
+    keys.sort(function(a,b) {
+        return b - a;
+    });
+    
+    len = keys.length;
+    
+    for (i = 0; i < len; i++) {
+        k = keys[i];
+        //alert(k + ':' + obj[k]);
+        xdata.push(k);
+        ydata.push(obj[k]);
+    }
+}
+
 function setLiveList(){
     trafficListBox = $("#traffic-list");
     trafficListBox.html("");
@@ -151,19 +194,17 @@ function setLiveList(){
     
     trafficList = $(".traffic-list");
     if(trafficData.length>0){
+        var rows = {};        
         for (var i = 0; i < trafficData.length; i++) {
-            var duration = {"min":0,"sec":0};
-            var delay = {"min":0,"sec":0};
-            var id, name, delay, trend, delayClass, delayTxt, durationTxt;
-            id = trafficData[i].id;
-            name = trafficData[i].name;
-            duration.min = Math.round((trafficData[i].currentDuration)/60);
-            duration.sec = (trafficData[i].currentDuration-duration.min);
-            durationTxt = duration.min+" min";
-            if(trafficData[i].optimalDuration >= 0){
-                delay.sec = trafficData[i].currentDuration - trafficData[i].optimalDuration;
-                delay.min = Math.round(delay.sec/60);
-                delayTxt = delay.min+" min";
+            var cDuration = trafficData[i].currentDuration;
+            var oDuration = trafficData[i].optimalDuration;
+            var delay = 0;
+            var id = trafficData[i].id;
+            var name = trafficData[i].name;
+            durationTxt = formatDuration(cDuration);
+            if(oDuration >= 0){
+                delay = cDuration - oDuration;
+                delayTxt = formatDuration(delay);
             }else{
                 delayTxt = "? min";
             }
@@ -174,7 +215,6 @@ function setLiveList(){
             }else{
                 trend = "";
             }
-            trend = "call_made";
             
             delayClass = "default";
             switch(trafficData[i].currentDelayLevel){
@@ -182,18 +222,40 @@ function setLiveList(){
                 case 1: delayClass = "fast"; break;
                 case 2: delayClass = "intermediate"; break;
                 case 3: delayClass = "slow"; break;
-                case 4: delayClass = "verslow"; break;
+                case 4: delayClass = "veryslow"; break;
+            }
+            
+            var delayButton = "";
+            console.log(delay);
+            if(delay > 0){
+                delayButton = $("<span/>").addClass("badge "+delayClass).text(delayTxt);
+            }else{
+                delay = 0;
             }
 
             trafficListItem = $("<li/>").attr("id","route"+id).append($("<table/>").addClass("highlight").append($("<thead/>")
                     .append($("<tr/>")
                     .append($("<td/>").text(name).attr("width","50%"))
                     .append($("<td/>").text(durationTxt).attr("width","20%").addClass("center"))
-                    .append($("<td/>").append($("<span/>").addClass("badge "+delayClass).text(delayTxt)).attr("width","20%").addClass("center"))
+                    .append($("<td/>").append(delayButton).attr("width","20%").addClass("center"))
                     .append($("<td/>").attr("width","10%").append($("<i/>").addClass("material-icons").text(trend)))
             )));
             trafficList.append(trafficListItem);
+            /*
+            rows[delay] = trafficListItem;            
+            console.log("delay = "+delay);
+             */
         }
+        /*
+         var xdata = [];
+        var ydata = [];
+        splitToArraySorted(rows, xdata, ydata);
+        for(i=0; i<ydata.length; i++){
+            trafficList.append(ydata[i]);
+            console.log("delay2 = "+xdata[i]);
+        }
+         */
+        
     }else{
         trafficListItem = $("<li/>").text("Geen trajecten om weer te geven...");
         trafficList.append(trafficListItem);
@@ -218,24 +280,21 @@ function setAvgList(){
     trafficList = $(".traffic-list");
     if(trafficData.length>0){
         for (var i = 0; i < trafficData.length; i++) {
-            var duration = {"min":0,"sec":0};
-            var delay = {"min":0,"sec":0};
-            var id, name, delay, trend, delayClass, delayTxt, durationTxt;
-            id = trafficData[i].id;
-            name = trafficData[i].name;
-            duration.min = Math.round((trafficData[i].avgDuration)/60);
-            duration.sec = (trafficData[i].avgDuration-duration.min);
-            durationTxt = duration.min+" min";
-            if(trafficData[i].optimalDuration >= 0){
-                delay.sec = trafficData[i].avgDuration - trafficData[i].optimalDuration;
-                delay.min = Math.round(delay.sec/60);
-                delayTxt = delay.min+" min";
+            var aDuration = trafficData[i].avgDuration;
+            var oDuration = trafficData[i].optimalDuration;
+            var delay = trafficData[i].delay;
+            var id = trafficData[i].id;
+            var name = trafficData[i].name;
+            durationTxt = formatDuration(aDuration);
+            if(oDuration >= 0){
+                delay = aDuration - oDuration;
+                delayTxt = formatDuration(delay);
             }else{
                 delayTxt = "? min";
             }
                         
             delayClass = "default";
-            switch(trafficData[i].currentDelayLevel){
+            switch(trafficData[i].avgDelayLevel){
                 case 0: delayClass = "veryfast"; break;
                 case 1: delayClass = "fast"; break;
                 case 2: delayClass = "intermediate"; break;
@@ -245,7 +304,7 @@ function setAvgList(){
 
             trafficListItem = $("<li/>").attr("id","route"+id).append($("<table/>").addClass("highlight").append($("<thead/>")
                     .append($("<tr/>")
-                    .append($("<td/>").text(name).attr("width","50%"))
+                    .append($("<td/>").text(name).attr("width","60%"))
                     .append($("<td/>").text(durationTxt).attr("width","20%").addClass("center"))
                     .append($("<td/>").append($("<span/>").addClass("badge "+delayClass).text(delayTxt)).attr("width","20%").addClass("center"))
             )));
@@ -267,14 +326,28 @@ function highlightRouteInList(routeid){
         scrollTop: $('#traffic-list #route'+routeid).offset().top
     }, 'slow');
 }
-    
-function setGeoJson(data){
-    
+
+function removeLayerFromMap(){
     if(layer != undefined){
         mymap.removeLayer(layer);
     }
+}
     
-    console.log(data);
+function setGeoJsonCurrent(data){
+
+    geojsonLive = data;
+    setModus(modus);
+}
+
+function setGeoJsonAvg(data){
+
+    geojsonAvg = data;
+    setModus(modus);
+
+}
+
+function drawGeoJSON(data){
+    removeLayerFromMap();
     
     layer = L.geoJson(data, {
         
@@ -287,34 +360,35 @@ function setGeoJson(data){
                 case 3: colorClass = "slow"; break;
                 case 4: colorClass = "veryslow"; break;
             }
-            var color = $("."+colorClass).first().css("background-color")
+            var color = $("."+colorClass).first().css("background-color");
+            console.log(feature.properties.id+" - "+color+" - ");
             return {color: color};
         },
         onEachFeature: function (feature, layer) {
             
             layer.on('click', function(e){
                 console.log(feature.properties);
-                $("#text").text("route " + feature.properties.description);
+                $("#text").text("route " + feature.properties.id);
                 
                 //functie voor aanroepen hilight in tabel
                 //click event that triggers the popup and centres it on the polygon
                 
                 var popup = L.popup()
                 .setLatLng(e.latlng)
-                .setContent("<h5>Route</h5> <p> ID = "+feature.properties.description+"</p>")
+                .setContent("<h5>Route</h5> <p> ID = "+feature.properties.id+"</p>")
                 .openOn(mymap);
         
-                highlightRouteInList(feature.properties.description);
+                highlightRouteInList(feature.properties.id);
                 
                 click = true;
         
         
             });
             layer.on('mouseover', function(){
-                //$("#text").text("route " + feature.properties.description);
+                //$("#text").text("route " + feature.properties.id);
                 //functie voor aanroepen hilight in tabel
                 click = false;
-                highlightRouteInList(feature.properties.description);
+                highlightRouteInList(feature.properties.id);
             });
             layer.on('mouseout', function(){
                 if(!click){
@@ -327,7 +401,6 @@ function setGeoJson(data){
 }
 
 
-
 function failedCall(data){
     Materialize.toast("Er is onmogelijk data op te halen", 4000, 'toast bottom error') // 4000 is the duration of the toast
 }
@@ -335,9 +408,15 @@ function failedCall(data){
 
 function requestGeoJson(){
     $.ajax({
-        url: urlGeoJSON,
+        url: urlGeoJSONcurrent,
         dataType: "json",
-        success: setGeoJson,
+        success: setGeoJsonCurrent,
+        error:failedCall
+    });
+    $.ajax({
+        url: urlGeoJSONavg,
+        dataType: "json",
+        success: setGeoJsonAvg,
         error:failedCall
     });
 }
@@ -352,10 +431,7 @@ $(document).ready(function() {
         accessToken: 'pk.eyJ1IjoidG9iaWFzdmRwIiwiYSI6ImNpbGpxcTFwaTAwYjF3NGx6bWZ2bGZkcG8ifQ.DTe2IBQLNc9zQa62kD-4_g'
     }).addTo(mymap);
     initGUI();
-    //setModus("live");
-    modus = "live";
-    refreshLiveData();
-    //requestGeoJson();
+    startLive();
 });
 
 

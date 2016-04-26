@@ -1,6 +1,6 @@
 
 
-/* global urlProviderComparer, Materialize, d3 */
+/* global urlProviderComparer, Materialize, d3, c3 */
 
 var dataURL;
 
@@ -18,27 +18,6 @@ function initAnalyse(url){
 
 
 
-function splitToArraySorted(obj, xdata, ydata){
-    var keys = [];
-    var k, i, len;
-    
-    for (k in obj) {
-        if (obj.hasOwnProperty(k)) {
-            keys.push(k);
-        }
-    }
-    
-    keys.sort();
-    
-    len = keys.length;
-    
-    for (i = 0; i < len; i++) {
-        k = keys[i];
-        //alert(k + ':' + obj[k]);
-        xdata.push(k);
-        ydata.push(obj[k]);
-    }
-}
 
 function formatDuration(data) {
         var date = new Date();
@@ -152,7 +131,7 @@ function viewAnalyseData(data){
     var colorMapping = {};
     var colors = ['#1565c0','#ffb300','#f44336','#7cb342','#26a69a'];
     for(var i=0; i<y.length; i++){
-        colors[y[i][0]] = colors[i];
+        colorMapping[y[i][0]] = colors[i];
     }
     
     parseToMinSec = function(data){

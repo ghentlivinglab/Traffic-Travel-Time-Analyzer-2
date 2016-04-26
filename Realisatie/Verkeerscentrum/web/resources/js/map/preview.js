@@ -4,15 +4,15 @@
 var map;
 var mymap;
 var layer;
-var urlGeoJSON;
+var urlGeoJSONcurrent;
 var geoJSON;
 
-$(".btnNextSlide").click(function(){
+$("a").click(function(){
     L.Util.requestAnimFrame(mymap.invalidateSize,mymap,!1,mymap._container);
 });
 
 function initGeoJSONURL(url){
-    urlGeoJSON = url;
+    urlGeoJSONcurrent = url;
 }
 
 function setMap(){
@@ -53,7 +53,7 @@ function showRoutePreview(routeID){
     var i=0;
     while(i<geoJSON.length){
         console.log(routeID);
-        if(geoJSON[i].properties.description == routeID){
+        if(geoJSON[i].properties.id == routeID){
             data = geoJSON[i];
             i=geoJSON.length;
         }
@@ -79,7 +79,7 @@ function showRoutePreview(routeID){
                 
                 var popup = L.popup()
                 .setLatLng(e.latlng)
-                .setContent("<h5>Route</h5> <p> ID = "+feature.properties.description+"</p>")
+                .setContent("<h5>Route</h5> <p> ID = "+feature.properties.id+"</p>")
                 .openOn(mymap);
                
         
@@ -98,7 +98,7 @@ function failedCall(data){
 
 function requestGeoJson(){
     $.ajax({
-        url: urlGeoJSON,
+        url: urlGeoJSONcurrent,
         dataType: "json",
         success: setGeoJson,
         error:failedCall

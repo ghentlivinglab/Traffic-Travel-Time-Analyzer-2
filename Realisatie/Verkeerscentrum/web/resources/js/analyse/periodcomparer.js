@@ -154,9 +154,8 @@ function viewAnalyseData(data){
     }
     // COLORS
     var colorMapping = {};
-    var colors = ['#1565c0','#ffb300','#f44336','#7cb342','#26a69a'];
     for(var i=0; i<y.length; i++){
-        colors[y[i][0]] = colors[i];
+        colorMapping[y[i][0]] = colors[i];
     }
     
     parseToMinSec = function(data){

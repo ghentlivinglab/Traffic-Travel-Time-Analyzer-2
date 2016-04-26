@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+    
+    
+    
+    <ui:composition template="../../templates/AnalysePage.xhtml">
+        
+         <ui:define name="analyseTitle">
+            <h:outputText value="#{RouteComparer.title}" />
+        </ui:define>
+        
+        <ui:define name="analyseSubTitle">
+            <h:outputText value="#{RouteComparer.subTitle}" />
+        </ui:define>
+        
+        <ui:define name="analyseContent"> 
+            
+            <div class="container">
+                
+                <div class="row">
+                    <div class="col m12 right-align">
+                        <div class="modusBtnGroup">
+                            <ul class="pagination">
+                                <li class="active">
+                                    <a href="#!" id="btnSwitchToGraph">Grafiek</a>
+                                </li>
+                                <li>
+                                    <a href="#!" id="btnSwitchToTable">Tabel</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>  
+                
+                <div class="analyseContent">
+                    <div id="chartTab">
+                        <div id="chart" class="center">
+                            <div class="preloader-wrapper big active">
+                                <div class="spinner-layer spinner-blue">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div><div class="gap-patch">
+                                        <div class="circle"></div>
+                                    </div><div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="spinner-layer spinner-red">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div><div class="gap-patch">
+                                        <div class="circle"></div>
+                                    </div><div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="spinner-layer spinner-yellow">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div><div class="gap-patch">
+                                        <div class="circle"></div>
+                                    </div><div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="spinner-layer spinner-green">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div><div class="gap-patch">
+                                        <div class="circle"></div>
+                                    </div><div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br /><br />
+                    </div>
+                    <div id="tableTab">
+                        Tabel
+                    </div>
+                    
+                    
+                </div>                                                        
+                
+                
+                <br /><br />
+                
+            </div>
+            
+            
+        </ui:define>
+        
+        <ui:define name="javascriptAnalyse"> 
+            <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/routecomparer.js" />
+            <script>
+                initAnalyse('#{RouteComparer.dataURL}');
+            </script>
+                
+        </ui:define>
+        
+    </ui:composition>
+    
+    
+    
+    
+</html>

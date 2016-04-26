@@ -30,6 +30,7 @@
                             <div class="initprocess">
                                 <input type="hidden" value="single" name="periodtype" />
                                 <ul class="inittabs">
+                                    
                                     <li id="inittab_singleperiod">
                                         <div class="row header">
                                             <div class="col s12">
@@ -48,40 +49,54 @@
                                         <div class="progress">
                                             <div class="determinate" style="width: 33%"></div>
                                         </div>
-                                        <div class="container">
+                                        <div class="container" id="formSinglePeriod">
                                             <div class="row">
-                                                <div class="col s7">
-                                                    <p>Hieronder kan u een periode selecteren.</p>
-                                                </div>
-                                                <div class="col s5">
+                                                
+                                                <div class="col s12">
                                                     <p class="right-align">
                                                         <a href="#!" class="btn disabled">Vorige</a>
-                                                        <a href="#!" class="btn btnNextSlide">Volgende</a>
+                                                        <a href="#!" class="btn btnValidateSinglePeriodForm">Volgende</a>
                                                     </p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col s12">
+                                                    <div class="card-panel grey lighten-5 z-depth-1">
+                                                        <div class="row valign-wrapper">
+                                                            <div class="col s1 blue-text">
+                                                                <i class="medium material-icons">info</i>
+                                                            </div>
+                                                            <div class="col s11">
+                                                                <h5 class="black-text description">
+                                                                    
+                                                                </h5>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col m6">
                                                     <section>
                                                         <h4>Begin</h4>
-                                                        <input type="text" class="datetimepicker" id="periodStart" />
-                                                        <input name="periodStart" type="hidden" />
+                                                        <input type="text" class="datetimepicker" id="periodStart" name="periodStartDummy" required="" />
+                                                        <input name="periodStart" type="hidden" required=""/>
                                                     </section> 
                                                     
                                                 </div>
                                                 <div class="col m6">
                                                     <section>
                                                         <h4>Einde</h4>
-                                                        <input type="text" class="datetimepicker" id="periodEnd" /> 
-                                                        <input name="periodEnd" type="hidden" />
+                                                        <input type="text" class="datetimepicker" id="periodEnd" name="periodEndDummy" required=""/> 
+                                                        <input name="periodEnd" type="hidden" required=""/>
                                                     </section>      
                                                     
                                                 </div>
                                             </div>
                                             
                                         </div>
-                                        
                                     </li>
+                                    
                                     <li id="inittab_multiperiod">
                                         <div class="row header">
                                             <div class="col s12">
@@ -103,13 +118,29 @@
                                         <div class="container">
                                             <div class="row">
                                                 <div class="col s7">
-                                                    <p>Hieronder kan u een periode selecteren.</p>
+                                                    <p class="description">Hieronder kan u een periode selecteren.</p>
                                                 </div>
                                                 <div class="col s5">
                                                     <p class="right-align">
                                                         <a href="#!" class="btn disabled">Vorige</a>
-                                                        <a href="#!" class="btn btnNextSlide">Volgende</a>
+                                                        <a href="#!" class="btn btnValidateMultiPeriodForm">Volgende</a>
                                                     </p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col s12">
+                                                    <div class="card-panel grey lighten-5 z-depth-1">
+                                                        <div class="row valign-wrapper">
+                                                            <div class="col s1 blue-text">
+                                                                <i class="medium material-icons">info</i>
+                                                            </div>
+                                                            <div class="col s11">
+                                                                <h5 class="black-text description">
+                                                                    
+                                                                </h5>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -193,18 +224,36 @@
                                         <div class="container">
                                             <div class="row">
                                                 <div class="col s7">
-                                                    <p>Hieronder kan u een of meerdere te analyseren trajecten selecteren.</p>
+                                                    <p class="description">Hieronder kan u een of meerdere te analyseren trajecten selecteren.</p>
                                                 </div>
                                                 <div class="col s5 right-align">
                                                     <p class="right-align">
                                                         <a href="#!" class="btn btnPrevSlide">Vorige</a>
-                                                        <a href="#!" class="btn btnNextSlide">Volgende</a>
+                                                        <a href="#!" class="btn btnValidateRouteForm">Volgende</a>
                                                     </p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col s12">
+                                                    <div class="card-panel grey lighten-5 z-depth-1">
+                                                        <div class="row valign-wrapper">
+                                                            <div class="col s1 blue-text">
+                                                                <i class="medium material-icons">info</i>
+                                                            </div>
+                                                            <div class="col s11">
+                                                                <h5 class="black-text description">
+                                                                    
+                                                                </h5>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col s6">
                                                     
+                                                    <a href="#!" id="btnSelectAllRoutes"> Selecteer alle trajecten </a>
+                                                    <br /><br />
                                                     <div class="multiselectsection">
                                                         <input type="hidden" value="single" name="routetype" />
                                                         <ul id="availableRoutesList" class="availableRoutesList">
@@ -250,13 +299,29 @@
                                         <div class="container">
                                             <div class="row">
                                                 <div class="col m7">
-                                                    <p>Hieronder kan u selecteren welke bronnen mogen deel uitmaken van de analyse.</p>
+                                                    <p class="description">Hieronder kan u selecteren welke bronnen mogen deel uitmaken van de analyse.</p>
                                                 </div>
                                                 <div class="col m5 right-align">
                                                     <p class="right-align">
                                                         <a href="#!" class="btn btnPrevSlide">Vorige</a>
-                                                        <button type="submit" href="#!" class="btn green">Analyseer</button>
+                                                        <button type="submit" href="#!" class="btn green btnValidateProviderForm">Analyseer</button>
                                                     </p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col s12">
+                                                    <div class="card-panel grey lighten-5 z-depth-1">
+                                                        <div class="row valign-wrapper">
+                                                            <div class="col s1 blue-text">
+                                                                <i class="medium material-icons">info</i>
+                                                            </div>
+                                                            <div class="col s11">
+                                                                <h5 class="black-text description">
+                                                                    
+                                                                </h5>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -311,13 +376,13 @@
                         </li>
                         <li>
                             <a href="#{requestScope.analyseRoutes}" id="btnCompareRoutes">
-                                <i class="material-icons">settings</i>
+                                <i class="material-icons">toc</i>
                                 Trajecten vergelijken
                             </a>
                         </li>
                         <li>
                             <a href="#{requestScope.analysePeriods}" id="btnComparePeriods">
-                                <i class="material-icons">settings</i>
+                                <i class="material-icons">track_changes</i>
                                 Perioden vergelijken
                             </a>
                         </li>
@@ -342,30 +407,32 @@
             
             <!-- Modal Structure -->
             <div id="modelAddNewPeriod" class="modal">
-                <div class="modal-content">
-                    <h4>Selecteer een periode</h4>
-                    <div class="row">
-                        <div class="col s3 pull-bottom valign-wrapper">
-                            <p class="valign">Begin:</p>
+                <form id="formAddNewPeriod">
+                    <div class="modal-content">
+                        <h4>Selecteer een periode</h4>
+                        <div class="row">
+                            <div class="col s3 pull-bottom valign-wrapper">
+                                <p class="valign">Begin:</p>
+                            </div>
+                            <div class="col s9">
+                                <input type="text" class="datepicker" id="txtNewPeriodStart" name="newPeriodStartDummy" required="" />
+                                <input name="txtNewPeriodStart" type="hidden" required=""/>
+                            </div>
                         </div>
-                        <div class="col s9">
-                            <input type="text" class="datepicker" id="txtNewPeriodStart" />
-                            <input name="txtNewPeriodStart" type="hidden" />
+                        <div class="row">
+                            <div class="col s3 pull-bottom valign-wrapper">
+                                <p class="valign">Einde:</p>
+                            </div>
+                            <div class="col s9">
+                                <input type="text" class="datepicker" id="txtNewPeriodEnd" name="newPeriodEndDummy" required="" />
+                                <input name="txtNewPeriodEnd" type="hidden" required=""/>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col s3 pull-bottom valign-wrapper">
-                            <p class="valign">Einde:</p>
-                        </div>
-                        <div class="col s9">
-                            <input type="text" class="datepicker" id="txtNewPeriodEnd" />
-                            <input name="txtNewPeriodEnd" type="hidden" />
-                        </div>
+                    <div class="modal-footer">
+                        <a href="#!" id="btnAddNewPeriod" class="modal-action waves-effect waves-green btn-flat green">Voeg toe</a>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <a href="#!" id="btnAddNewPeriod" class=" modal-action modal-close waves-effect waves-green btn-flat green">Voeg toe</a>
-                </div>
+                </form>
             </div>
             
         </ui:define>
@@ -376,12 +443,12 @@
             
             <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/index.js" />
             <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/components.js" />
-           
+            
             <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script> 
             <script type="text/javascript" src="#{requestScope.resourceURLjs}/map/preview.js" />
             
             <script>
-                initGeoJSONURL('#{urlDAO.geoJSONAllRoutes}');
+                initGeoJSONURL('#{urlDAO.geoJSONAllRoutesCurrent}');
             </script>
             
             

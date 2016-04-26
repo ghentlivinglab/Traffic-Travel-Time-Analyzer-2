@@ -28,14 +28,41 @@ function setRouteMultiplicity(multiplicity){
     switch(multiplicity){
         case "multi": 
             $("[name=routeId]").attr("type","checkbox");
-            $("[name=routetype]").attr("value","multi");            
+            $("[name=routetype]").attr("value","multi");    
+            $("#btnSelectAllRoutes").show();
             break;
         case "single": 
+            $("#btnSelectAllRoutes").hide();
             $("[name=routeId]").attr("type","radio");
             $("[name=routetype]").attr("value","single");    
             break;
     }
 }
+
+function selectAllRoutes(){
+    $('[name=routeId]').each(function() { //loop through each checkbox
+        this.checked = true;  //select all checkboxes with class "checkbox1"               
+    });
+    $('#btnSelectAllRoutes').text("Deselecteer alle trajecten");
+    $('#btnSelectAllRoutes').attr("data-checked","true");
+}
+
+function deSelectAllRoutes(){
+    $('[name=routeId]').each(function() { //loop through each checkbox
+        this.checked = false;  //select all checkboxes with class "checkbox1"               
+    });
+    $('#btnSelectAllRoutes').attr("data-checked","false");
+    $('#btnSelectAllRoutes').text("Selecteer alle trajecten");
+}
+
+$('#btnSelectAllRoutes').click(function(event) {  //on click 
+    if($(this).attr("data-checked") == null || $(this).attr("data-checked") == "false"){
+        selectAllRoutes();
+    }else{
+        deSelectAllRoutes();
+    }
+});
+
 
 function setPeriodMultiplicity(multiplicity){
     if(multiplicity === undefined) {
@@ -95,23 +122,47 @@ $('.btnRefreshAnalyse').click(function(e) {
     });
 });
   
-$("#btnAddNewPeriod").click(function(){
+function evaluateNewPeriodForm(){
     newPeriodStart = parseInt($("[name=txtNewPeriodStart]").val());
     newPeriodEnd = parseInt($("[name=txtNewPeriodEnd]").val());
     addPeriodToTable(newPeriodStart,newPeriodEnd);   
+};
+
+var form = $("#analyseInitForm");
+var formAddNewPeriod = $("#formAddNewPeriod");
+
+$("#btnAddNewPeriod").click(function(event){
+    var validator = formAddNewPeriod.validate({
+        errorClass: "invalid",
+        rules: {
+            newPeriodStartDummy: "required",
+            newPeriodEndDummy: "required",
+        },
+        messages: {
+            newPeriodStartDummy: "Please enter your firstname",
+            newPeriodEndDummy: "Please enter your lastname"
+        }
+    });
+    if(formAddNewPeriod.valid()){
+        evaluateNewPeriodForm();
+        $('#modelAddNewPeriod').closeModal();
+        validator.resetForm();
+    }
 });
 
 function addPeriodToTable(start, end){
-    btnEdit = $("<a />").attr("href","#!").addClass("btn-floating blue").append($("<i />").addClass("material-icons").text("create"));
-    btnRemove = $("<a />").attr("href","#!").addClass("btn-floating red").append($("<i />").addClass("material-icons").text("delete"));
+    //btnEdit = $("<a />").attr("href","#!").addClass("btn-floating blue").append($("<i />").addClass("material-icons").text("create"));
+    //btnRemove = $("<a />").attr("href","#!").addClass("btn-floating red").click(removeRow).append($("<i />").addClass("material-icons").text("delete"));
+    btnEdit = "";
+    btnRemove = "";
     newPeriodStart = start;
     newPeriodEnd = end;
     if(addedPeriods === 0 || addedPeriods === null) $("#newPeriodList tbody").html("");
     $("#newPeriodList tbody").append(
             $("<tr />").append(
-            $("<td />").text(dateFormat(new Date(newPeriodStart), "dd-mm-yyyy"))
+            $("<td />").text(dateFormat(new Date(newPeriodStart), "dd-mm-yyyy")).append($("<input />").attr("type","hidden").addClass("startTime").val(newPeriodStart))
             ).append(
-            $("<td />").text(dateFormat(new Date(newPeriodEnd), "dd-mm-yyyy"))
+            $("<td />").text(dateFormat(new Date(newPeriodEnd), "dd-mm-yyyy")).append($("<input />").attr("type","hidden").addClass("endTime").val(newPeriodStart))
             ).append(
             $("<td />").addClass("right-align").append(btnEdit).append(btnRemove)
             ));
@@ -128,6 +179,24 @@ function addPeriodToTable(start, end){
     $("[name=periodsStart]").val(oldPeriodStart+""+newPeriodStart);
     $("[name=periodsEnd]").val(oldPeriodEnd+""+newPeriodEnd);
 }
+
+removeRow = function(){
+   row = $(this).closest("tr");
+   //delete start in input
+   var old = $("[name=periodsStart]").val();
+   var to_remove_start = row.find(".startTime").first().val();
+   var to_remove_end = row.find(".endTime").first().val();
+   alert(to_remove_start);
+   alert(to_remove_end);
+   alert($("[name=periodsStart]").val().replaceAll(to_remove_start,""));
+   alert($("[name=periodsEnd]").val().replaceAll(to_remove_start,""));
+   
+   
+   //delete end in input
+   $("[name=periodsEnd]").val(oldPeriodEnd+""+newPeriodEnd);
+   row.remove();
+   console.log($(this).parent("tr"));
+};
 
 
 $("#btnSelectRoutes").click(function(){
