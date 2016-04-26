@@ -20,6 +20,7 @@ public class Log implements Serializable{
     public Log(Level l, String message, long date) {
         this.l = l;
         this.message = message;
+        this.date=date;
     }
 
     public Level getL() {
