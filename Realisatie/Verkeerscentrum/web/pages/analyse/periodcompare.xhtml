@@ -110,7 +110,13 @@
             <script>
                 initAnalyse('#{PeriodComparer.dataURL}');
             </script>
-            
+            <c:forEach items="#{PeriodComparer.periodNames}" var="entry">
+                <script>
+                    setPeriodName("#{entry.key}","#{entry.value}");
+                </script>
+            </c:forEach>
+                
+                
         </ui:define>
         
     </ui:composition>

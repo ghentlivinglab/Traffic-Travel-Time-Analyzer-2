@@ -7,10 +7,11 @@ var descriptions = [];
 $("#btnCompareSources").click(function(event){
     inittabs = ["singleperiod","route","providers"];
     descriptions = [
-        "Selecteer over welke periode de data moet worden uitgemiddeld",
-        "",
-        ""
+        "Selecteer over welke periode de data moet worden weergegeven",
+        "Selecteer een traject.",
+        "Selecteer welke bronnen je wil vergelijken met elkaar."
     ];
+    setTitle("Databronnen vergelijken");
     resetSlider();
     showSlider();
     setRouteMultiplicity();
@@ -25,9 +26,10 @@ $("#btnAvgTraffic").click(function(event){
     inittabs = ["singleperiod","route","providers"];
     descriptions = [
         "Selecteer over welke periode de data moet worden uitgemiddeld",
-        "",
-        ""
+        "Selecteer een traject",
+        "Selecteer de bronnen die mogen worden opgenomen in de vergelijking"
     ];
+    setTitle("Gemiddelde verkeerssituatie");
     resetSlider();
     showSlider();
     setRouteMultiplicity("multi");
@@ -42,9 +44,10 @@ $("#btnDelayWeekday").click(function(event){
     inittabs = ["singleperiod","route","providers"];
     descriptions = [
         "Selecteer over welke periode de data moet worden uitgemiddeld",
-        "",
-        ""
+        "Selecteer een traject",
+        "Selecteer de bronnen die mogen worden opgenomen in de vergelijking"
     ];
+    setTitle("Weekdagen vergelijken");
     resetSlider();
     showSlider();
     deSelectAllRoutes();
@@ -59,9 +62,10 @@ $("#btnRushHours").click(function(event){
     inittabs = ["singleperiod","route","providers"];
     descriptions = [
         "Selecteer over welke periode de data moet worden uitgemiddeld",
-        "",
-        ""
+        "Selecteer een traject",
+        "Selecteer de bronnen die mogen worden opgenomen in de vergelijking"
     ];
+    setTitle("Spitsuren");
     resetSlider();
     showSlider();
     deSelectAllRoutes();
@@ -76,9 +80,10 @@ $("#btnCompareRoutes").click(function(event){
     inittabs = ["singleperiod","route","providers"];
     descriptions = [
         "Selecteer over welke periode de data moet worden uitgemiddeld",
-        "",
-        ""
+        "Selecteer de trajecten die je met elkaar wil vergelijken",
+        "Selecteer de bronnen die mogen worden opgenomen in de vergelijking"
     ];
+    setTitle("Trajecten vergelijken");
     resetSlider();
     showSlider();
     deSelectAllRoutes();
@@ -92,10 +97,11 @@ $("#btnCompareRoutes").click(function(event){
 $("#btnComparePeriods").click(function(event){
     inittabs = ["multiperiod","route","providers"];
     descriptions = [
-        "Selecteer over welke periode de data moet worden uitgemiddeld",
-        "",
-        ""
+        "Selecteer welke perioden je wil vergelijken met elkaar",
+        "Selecteer een traject",
+        "Selecteer de bronnen die mogen worden opgenomen in de vergelijking"
     ];
+    setTitle("Perioden vergelijken");
     resetSlider();
     showSlider();
     deSelectAllRoutes();
@@ -110,6 +116,11 @@ $(".btnNextSlide").click(nextSlide);
 $(".btnPrevSlide").click(prevSlide);
   
     
+function setTitle(title){
+    $(".inittabs .title").text(title);
+} 
+
+
 function showTab(tabid){
     $(".inittabs li").hide();
     $("#inittab_"+inittabs[tabid]).addClass("active").show();
@@ -172,11 +183,8 @@ $(".btnValidateSinglePeriodForm").click(function(event){
             periodEndDummy: "required"
         },
         messages: {
-            periodStartDummy: "Please enter your firstname",
-            periodEndDummy: "Please enter your lastname"
-        },
-        onclick: function(el, evt){
-            alert("jaja");
+            periodStartDummy: "Selecteer het begin van de periode",
+            periodEndDummy: "Selecteer het einde van de periode"
         }
     });
     if(form.valid()){

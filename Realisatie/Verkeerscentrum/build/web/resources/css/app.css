@@ -2625,8 +2625,35 @@ form {
   .map #map {
     width: 100%;
     height: 100%; }
-    .map #map .mapSwitch {
+    .map #map .trafficColorScale {
+      background: green;
       z-index: 99999999;
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      color: black;
+      background: white;
+      height: 20px;
+      width: 30%;
+      border-radius: 10px;
+      cursor: pointer; }
+      .map #map .trafficColorScale ul {
+        margin: 0px; }
+        .map #map .trafficColorScale ul li {
+          width: 20%;
+          display: inline-block;
+          height: 20px;
+          opacity: 0.8; }
+          .map #map .trafficColorScale ul li:first-of-type {
+            border-radius: 10px 0px 0px 10px; }
+          .map #map .trafficColorScale ul li:last-of-type {
+            border-radius: 0px 10px 10px 0px; }
+          .map #map .trafficColorScale ul li a {
+            width: 100%;
+            height: 100%;
+            display: block; }
+    .map #map .mapSwitch {
+      z-index: 99999;
       position: absolute;
       right: 10px; }
       .map #map .mapSwitch a {

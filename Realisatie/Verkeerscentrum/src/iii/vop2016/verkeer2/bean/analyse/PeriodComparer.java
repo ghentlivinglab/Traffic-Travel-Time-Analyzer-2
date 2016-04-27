@@ -10,7 +10,9 @@ import iii.vop2016.verkeer2.bean.components.Route;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javafx.util.Pair;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -132,6 +134,20 @@ public class PeriodComparer extends AnalysePage implements ITableView, IGraphVie
         System.out.println("URL = "+surl);
                 
         return surl;
+    }
+    
+    public Map<String,String> getPeriodNames() {
+        Map<String,String> res = new HashMap<>();
+        for(int i=0; i<periods.size(); i++){
+            String date1 = new SimpleDateFormat("dd/MM/yyyy").format(periods.get(i).getKey());
+            String date2 = new SimpleDateFormat("dd/MM/yyyy").format(periods.get(i).getValue());
+            if(date1.equals(date2)){
+                res.put("period"+(i+1), date1);
+            }else{
+                res.put("period"+(i+1), date1 +" - "+ date2);
+            }
+        }
+        return res;
     }
     
     

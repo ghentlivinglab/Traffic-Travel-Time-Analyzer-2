@@ -3,6 +3,7 @@
 /* global urlProviderComparer, Materialize */
 
 var dataURL;
+var periodNames = {};
 
 function initAnalyse(url){
     dataURL = url;
@@ -14,6 +15,12 @@ function initAnalyse(url){
             Materialize.toast('Er kan geen nieuwe data worden opgehaald!', 4000, 'toast bottom error');
         }
     });
+}
+
+function setPeriodName(periodOld, periodNew){
+    periodNames[periodOld] = periodNew;
+    console.log(periodNames);
+    console.log(periodNames["period1"]);
 }
 
 
@@ -80,7 +87,7 @@ function viewAnalyseData(data){
         // Y - AX
         //
         var y2 = [];
-        y2[0] = route.data[i].period;
+        y2[0] = periodNames[route.data[i].period];
         for (var k=0; k<ydata.length; k++) {
             if(ydata[k] < 0){
                 y2[parseInt(k) + 1] = null;

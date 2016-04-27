@@ -316,34 +316,36 @@
             
             
             
+             
             <!-- Modal Structure -->
             <div id="modelAddNewPeriod" class="modal">
-                <div class="modal-content">
-                    <h4>Selecteer een periode</h4>
-                    <div class="row">
-                        <div class="col s3 pull-bottom valign-wrapper">
-                            <p class="valign">Begin:</p>
+                <form id="formAddNewPeriod">
+                    <div class="modal-content">
+                        <h4>Selecteer een periode</h4>
+                        <div class="row">
+                            <div class="col s3 pull-bottom valign-wrapper">
+                                <p class="valign">Begin:</p>
+                            </div>
+                            <div class="col s9">
+                                <input type="text" class="datepicker" id="txtNewPeriodStart" name="newPeriodStartDummy"  />
+                                <input name="txtNewPeriodStart" type="hidden" />
+                            </div>
                         </div>
-                        <div class="col s9">
-                            <input type="text" class="datepicker" id="txtNewPeriodStart" />
-                            <input name="txtNewPeriodStart" type="hidden" />
+                        <div class="row">
+                            <div class="col s3 pull-bottom valign-wrapper">
+                                <p class="valign">Einde:</p>
+                            </div>
+                            <div class="col s9">
+                                <input type="text" class="datepicker" id="txtNewPeriodEnd" name="newPeriodEndDummy" />
+                                <input name="txtNewPeriodEnd" type="hidden" />
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col s3 pull-bottom valign-wrapper">
-                            <p class="valign">Einde:</p>
-                        </div>
-                        <div class="col s9">
-                            <input type="text" class="datepicker" id="txtNewPeriodEnd" />
-                            <input name="txtNewPeriodEnd" type="hidden" />
-                        </div>
+                    <div class="modal-footer">
+                        <a href="#!" id="btnAddNewPeriod" class="modal-action waves-effect waves-green btn-flat green">Voeg toe</a>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <a href="#!" id="btnAddNewPeriod" class=" modal-action modal-close waves-effect waves-green btn-flat green">Voeg toe</a>
-                </div>
+                </form>
             </div>
-            
             
             
         </ui:define>

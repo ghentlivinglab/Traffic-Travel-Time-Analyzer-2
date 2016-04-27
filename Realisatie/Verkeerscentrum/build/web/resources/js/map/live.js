@@ -63,6 +63,15 @@ function initTimer(data){
     timerProgress = data.percentDone;
 }
 
+function getRoute(id){
+    var i=0;
+    while(i<trafficData.length){
+        if(trafficData[i].id == id)
+            return trafficData[i];
+        i++;
+    }
+}
+
 
 
 function refreshLiveData(){
@@ -93,6 +102,33 @@ function initGUI(){
     nav.append(liveTab).append(avgTab);
     mapSwitch = $("<div/>").addClass("mapSwitch").append(nav);
     $("#map").append(mapSwitch);
+    
+    
+    var scale = $("<ul />");
+    var scale0 = $("<li />").addClass("veryfast");
+    /*var btnColor = $("<a />");
+    btnColor.attr("href","#!");
+    btnColor.addClass("tooltipped");
+    btnColor.attr("data-position","top");
+    btnColor.attr("data-delay","50");
+    btnColor.attr("data-tooltip","I am tooltip");
+    scale0.append(btnColor);
+    */
+    var scale1 = $("<li />").addClass("fast");
+    var scale2 = $("<li />").addClass("intermediate");
+    var scale3 = $("<li />").addClass("slow");
+    var scale4 = $("<li />").addClass("veryslow");
+    scale.append(scale0);
+    scale.append(scale1);    
+    scale.append(scale2);    
+    scale.append(scale3);    
+    scale.append(scale4);
+    
+    
+    trafficColorSwitch = $("<div/>").addClass("trafficColorScale").append(scale);
+    $("#map").append(trafficColorSwitch);
+    
+    
 }
 
 
@@ -179,6 +215,28 @@ function splitToArraySorted(obj, xdata, ydata){
 }
 
 function setLiveList(){
+    
+    var data = {};
+    for(var i=0; i<trafficData.length; i++){
+        var cDuration = trafficData[i].currentDuration;
+        var oDuration = trafficData[i].optimalDuration;
+        var id = trafficData[i].id;
+        var delay = cDuration - oDuration;
+        if(oDuration >= 0 && delay > 0){
+            data[id] = delay;
+        }else{
+            data[id] = -1;
+        }
+    }
+    var sortable = [];
+    for (var routeid in data)
+          sortable.push([routeid, data[routeid]]);
+    sortable.sort(function(a, b) {return b[1] - a[1];});
+    var keys = [];
+    for(var i=0; i<sortable.length; i++){
+       keys.push(sortable[i][0]); 
+    }
+    
     trafficListBox = $("#traffic-list");
     trafficListBox.html("");
     
@@ -193,40 +251,40 @@ function setLiveList(){
     trafficListBox.append(header);
     
     trafficList = $(".traffic-list");
+    var trend;
+    var delayClass;
     if(trafficData.length>0){
-        var rows = {};        
-        for (var i = 0; i < trafficData.length; i++) {
-            var cDuration = trafficData[i].currentDuration;
-            var oDuration = trafficData[i].optimalDuration;
+        for (var i = 0; i < keys.length; i++) {
+            var route = getRoute(keys[i]);
+            var cDuration = route.currentDuration;
+            var oDuration = route.optimalDuration;
             var delay = 0;
-            var id = trafficData[i].id;
-            var name = trafficData[i].name;
+            var id = route.id;
+            var name = route.name;
             durationTxt = formatDuration(cDuration);
+            
             if(oDuration >= 0){
                 delay = cDuration - oDuration;
                 delayTxt = formatDuration(delay);
+                if(route.trend < 0){
+                    trend = "call_received";
+                }
+                if(route.trend > 0){
+                    trend = "call_made";
+                }
+                switch(route.currentDelayLevel){
+                    case 0: delayClass = "veryfast"; break;
+                    case 1: delayClass = "fast"; break;
+                    case 2: delayClass = "intermediate"; break;
+                    case 3: delayClass = "slow"; break;
+                    case 4: delayClass = "veryslow"; break;
+                }
             }else{
                 delayTxt = "? min";
-            }
-            if(trafficData[i].trend < 0){
-                trend = "call_received";
-            }else if(trafficData[i].trend > 0){
-                trend = "call_made";
-            }else{
-                trend = "";
-            }
-            
-            delayClass = "default";
-            switch(trafficData[i].currentDelayLevel){
-                case 0: delayClass = "veryfast"; break;
-                case 1: delayClass = "fast"; break;
-                case 2: delayClass = "intermediate"; break;
-                case 3: delayClass = "slow"; break;
-                case 4: delayClass = "veryslow"; break;
-            }
+                delayClass = "default";
+            }            
             
             var delayButton = "";
-            console.log(delay);
             if(delay > 0){
                 delayButton = $("<span/>").addClass("badge "+delayClass).text(delayTxt);
             }else{
@@ -241,20 +299,7 @@ function setLiveList(){
                     .append($("<td/>").attr("width","10%").append($("<i/>").addClass("material-icons").text(trend)))
             )));
             trafficList.append(trafficListItem);
-            /*
-            rows[delay] = trafficListItem;            
-            console.log("delay = "+delay);
-             */
         }
-        /*
-         var xdata = [];
-        var ydata = [];
-        splitToArraySorted(rows, xdata, ydata);
-        for(i=0; i<ydata.length; i++){
-            trafficList.append(ydata[i]);
-            console.log("delay2 = "+xdata[i]);
-        }
-         */
         
     }else{
         trafficListItem = $("<li/>").text("Geen trajecten om weer te geven...");
@@ -278,6 +323,9 @@ function setAvgList(){
     trafficListBox.append(header);
 
     trafficList = $(".traffic-list");
+    
+    var trend;
+    var delayClass = "default";
     if(trafficData.length>0){
         for (var i = 0; i < trafficData.length; i++) {
             var aDuration = trafficData[i].avgDuration;
@@ -292,8 +340,7 @@ function setAvgList(){
             }else{
                 delayTxt = "? min";
             }
-                        
-            delayClass = "default";
+            
             switch(trafficData[i].avgDelayLevel){
                 case 0: delayClass = "veryfast"; break;
                 case 1: delayClass = "fast"; break;
@@ -351,17 +398,20 @@ function drawGeoJSON(data){
     
     layer = L.geoJson(data, {
         
+        
         style: function (feature) {
+            //alert(feature.properties.currentDelayLevel);
             var colorClass = "default";
             switch(feature.properties.currentDelayLevel){
                 case 0: colorClass = "veryfast"; break;
+                case -1: colorClass = "veryfast"; break;
                 case 1: colorClass = "fast"; break;
                 case 2: colorClass = "intermediate"; break;
                 case 3: colorClass = "slow"; break;
                 case 4: colorClass = "veryslow"; break;
             }
-            var color = $("."+colorClass).first().css("background-color");
-            console.log(feature.properties.id+" - "+color+" - ");
+            var color = $(".trafficColorScale ."+colorClass).css("background-color");
+            //alert(color);
             return {color: color};
         },
         onEachFeature: function (feature, layer) {
