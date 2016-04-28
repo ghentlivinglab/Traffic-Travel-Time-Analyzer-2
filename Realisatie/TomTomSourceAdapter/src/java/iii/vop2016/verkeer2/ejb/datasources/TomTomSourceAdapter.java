@@ -15,6 +15,7 @@ import iii.vop2016.verkeer2.ejb.helper.URLException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
@@ -26,6 +27,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.net.ssl.HttpsURLConnection;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -96,7 +98,6 @@ public class TomTomSourceAdapter implements TomTomSourceAdapterRemote {
 
             int seconds = data.getInt("travelTimeInSeconds");
             int distance = data.getInt("lengthInMeters");
-            System.out.println(seconds + " " + distance);
             rd = new RouteData();
             rd.setProvider(getProviderName());
             rd.setDistance(distance);
@@ -109,6 +110,9 @@ public class TomTomSourceAdapter implements TomTomSourceAdapterRemote {
             //verschillende providers op 1 bepaalde timestamp kan vragen in je database
 
             //return null;
+            
+            //wacht een kleine periode om zeker geen overschrijding van aantal calls per seconde te bekomen:
+            Thread.sleep(300);
 
             /* 
         } catch (JSONException e) {
@@ -119,6 +123,8 @@ public class TomTomSourceAdapter implements TomTomSourceAdapterRemote {
             throw new URLException("Can't connect to URL for " + providerName + " adapter");
         } catch (JSONException | DataAccessException e) {
             throw new DataAccessException("Cannot access data from " + providerName + " adapter");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TomTomSourceAdapter.class.getName()).log(Level.SEVERE, null, ex);
         }
         return rd;
     }
@@ -127,7 +133,14 @@ public class TomTomSourceAdapter implements TomTomSourceAdapterRemote {
         BufferedReader reader = null;
         try {
             URL url = new URL(urlString);
-            reader = new BufferedReader(new InputStreamReader(url.openStream()));
+            HttpURLConnection con =  (HttpURLConnection) url.openConnection();
+
+            int response = con.getResponseCode();
+            if(response/100 != 2){
+                throw new URLException(providerName + " returned HTTP/"+response+" response. To many calls were made or the daily limit has been reached.");
+            }
+            
+            reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
             StringBuffer buffer = new StringBuffer();
             int read;
             char[] chars = new char[1024];

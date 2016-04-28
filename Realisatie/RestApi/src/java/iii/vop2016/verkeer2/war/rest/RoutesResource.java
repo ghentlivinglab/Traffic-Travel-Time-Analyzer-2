@@ -127,7 +127,7 @@ public class RoutesResource {
             IRoute r9 = initRoute("Martelaarslaan (R40) northbound",51.038575,3.735757,51.056459,3.694655,"Zuidparklaan","Drongensesteenweg");
             IRoute r10 = initRoute("Martelaarslaan (R40) southbound",51.055999,3.695036,51.038567,3.736090,"Drongensesteenweg","Zuidparklaan");
             
-            /*
+            
             IRoute r11 = initRoute("Blaisantvest (N430) eastbound",51.052567,3.699973,51.067425,3.727551,"Einde Were","Neuseplein");
             IRoute r12 = initRoute("Blaisantvest (N430) westbound",51.067500,3.727196,51.052629,3.699846,"Neuseplein","Einde Were");
             
@@ -163,7 +163,7 @@ public class RoutesResource {
             
             IRoute r33 = initRoute("Brugsevaart (N9) southbound",51.085364,3.663483,51.064294,3.702872,"R4","Gebroeders de Smetstraat");
             IRoute r34 = initRoute("Brugsevaart (N9) northbound",51.064261,3.702575,51.085364,3.663483,"Gebroeders de Smetstraat","R4");
-            */
+            
             
             
             return Response.status(Response.Status.OK).entity("Routes have been initialised").build();
