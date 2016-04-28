@@ -22,7 +22,6 @@ import javax.servlet.http.HttpSession;
 public class SessionBean implements Serializable{
 
     public HttpSession getSession() {
-        System.out.println(FacesContext.getCurrentInstance().getExternalContext());
         return (HttpSession) FacesContext.getCurrentInstance()
                 .getExternalContext().getSession(false);
     }

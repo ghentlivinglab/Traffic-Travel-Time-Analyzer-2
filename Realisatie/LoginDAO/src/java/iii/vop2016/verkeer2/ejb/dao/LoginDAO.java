@@ -51,9 +51,6 @@ public class LoginDAO implements LoginDAORemote {
 
     @Override
     public boolean validate(String user, String password) {
-        
-        beans.getLogger().log(Level.INFO, "vaiidate");
- 
         try {
             
             TypedQuery<AuthUser> query = em.createQuery("SELECT u FROM AuthUser AS u WHERE u.username = :username AND u.password = :password", AuthUser.class);

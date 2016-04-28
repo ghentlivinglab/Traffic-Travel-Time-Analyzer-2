@@ -5,15 +5,104 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     
-    <ui:composition template="./templates/HeaderBodySideRight.xhtml">
+    <ui:composition template="./templates/HeaderBody.xhtml">
         
-        <ui:define name="page"> Setings </ui:define>
+        <ui:define name="page"> Instellingen </ui:define>
         
         <ui:define name="content">
             
-            <div class="container">
-            <h1>Instellingen</h1>
-            </div>
+<div class="dashboard display-animation" style="margin: 0 auto; width: 1130px;">
+  <a class="tile tile-lg tile-pink ripple-effect" href="#">
+    <span class="content-wrapper">
+      <span class="tile-content">
+        <span class="tile-img" style="background-image: url(http://i39.tinypic.com/20r7ipz.jpg);"></span>
+        <span class="tile-holder tile-holder-sm">
+          <span class="title">Google Guidelines</span>
+        </span>
+      </span>      
+    </span>
+  </a>
+  <a class="tile tile-lg tile-sqr tile-purple ripple-effect" href="#">
+    <span class="content-wrapper">
+      <span class="tile-content">
+          <span class="tile-img"> <i class="large material-icons">directions_car</i></span>
+        <span class="tile-holder tile-holder-sm">
+          <span class="title">Material Design Reel</span>
+        </span>
+      </span>      
+    </span>
+  </a>
+  <a class="tile tile-lg tile-sqr tile-cyan ripple-effect" href="#">
+    <span class="content-wrapper">
+      <span class="tile-content">
+        <span class="tile-img" style="background-image: url(http://www.google.com/design/images/principles.png);"></span>
+        <span class="tile-holder tile-holder-sm">
+          <span class="title">Material Design <span class="caption">PDF</span></span>
+        </span>
+      </span>      
+    </span>
+  </a>
+  <a class="tile tile-lg tile-sqr tile-amber ripple-effect" href="#">
+    <span class="content-wrapper">
+      <span class="tile-content">
+        <span class="tile-img tile-img-bg" style="background-image: url(http://www.google.com/design/images/doodlearchive.png);"></span>
+        <span class="tile-holder tile-holder-sm">
+          <span class="title">Doodle Archive</span>
+        </span>
+      </span>      
+    </span>
+  </a>
+  <a class="tile tile-lg tile-light-blue ripple-effect" href="#">
+    <span class="content-wrapper">
+      <span class="tile-content">
+        <span class="tile-img tile-img-bg" style="background-image: url(http://www.google.com/design/images/googleplus.png);"></span>
+        <span class="tile-holder tile-holder-sm">
+          <span class="title">Google+</span>
+        </span>
+      </span>      
+    </span>
+  </a>
+  <a class="tile tile-lg tile-sqr tile-red ripple-effect" href="#">
+    <span class="content-wrapper">
+      <span class="tile-content">
+        <span class="tile-img" style="background-image: url(http://www.google.com/design/images/design-minutes.png);"></span>
+        <span class="tile-holder tile-holder-sm">
+          <span class="title">Design Minutes</span>
+        </span>
+      </span>      
+    </span>
+  </a>
+  <a class="tile tile-lg tile-sqr tile-indigo ripple-effect" href="#">
+    <span class="content-wrapper">
+      <span class="tile-content">
+        <span class="tile-img" style="background-image: url(http://www.google.com/design/images/cast.png);"></span>
+        <span class="tile-holder tile-holder-sm">
+          <span class="title">Google Cast UX</span>
+        </span>
+      </span>      
+    </span>
+  </a>
+  <a class="tile tile-lg tile-sqr tile-deep-orange ripple-effect" href="#">
+    <span class="content-wrapper">
+      <span class="tile-content">
+        <span class="tile-img" style="background-image: url(http://www.google.com/design/images/glass.png);"></span>
+        <span class="tile-holder tile-holder-sm">
+          <span class="title">Glass Design</span>
+        </span>
+      </span>      
+    </span>
+  </a>
+  <a class="tile tile-lg tile-light-green ripple-effect" href="#">
+    <span class="content-wrapper">
+      <span class="tile-content">
+        <span class="tile-img tile-img-bg" style="background-image: url(http://www.google.com/design/images/webdesigner.png);"></span>
+        <span class="tile-holder tile-holder-sm">
+          <span class="title">Google Web Designer</span>
+        </span>
+      </span>      
+    </span>
+  </a>
+</div>
             
         </ui:define>
         
@@ -28,7 +117,9 @@
         
         <ui:define name="javascript">
             
-                            
+                 
+            <script src="#{requestScope.resourceURLjs}/tiles.js" />
+             
             
         </ui:define>
         

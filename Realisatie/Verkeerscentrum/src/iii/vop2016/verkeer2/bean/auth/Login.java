@@ -27,7 +27,7 @@ import javax.naming.NamingException;
 import javax.servlet.http.HttpSession;
  
 @ManagedBean
-@SessionScoped
+@RequestScoped
 public class Login implements Serializable{
  
     private static final long serialVersionUID = 1094801825228386363L;
@@ -44,7 +44,6 @@ public class Login implements Serializable{
     private String url;
 
     public Login() {
-        System.out.println("Login.java Session started");
         //Initialize bean and its context
         try {
             ctx = new InitialContext();
@@ -57,10 +56,8 @@ public class Login implements Serializable{
     //must povide the setter method
     public void setSessionBean(SessionBean sessionBean) {
         this.sessionBean = sessionBean;
-        System.out.println("sessionBean setter");
-        url = sessionBean.getRequest().getParameter("url");
-        if(url == null) url = "/web";
-        System.out.println("username = "+sessionBean.getSession().getAttribute("username"));
+        url = (String) sessionBean.getSession().getAttribute("urlAfterLogin");
+        System.out.println("urlAfterLogin = " + url);
     }
     
     public String getPwd() {
@@ -85,7 +82,6 @@ public class Login implements Serializable{
  
     public void setUser(String user) {
         this.user = user;
-        System.out.println("user werd gezet "+user);
     }
  
     //validate login
@@ -94,14 +90,13 @@ public class Login implements Serializable{
         boolean valid = loginDAO.validate(user, pwd);
         if (valid) {
             sessionBean.getSession().setAttribute("username", user);
-            System.out.println("ingelogd als "+sessionBean.getSession().getAttribute("username"));
             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
             try {                
                 ec.redirect(url);
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
-            return "live";
+            return "index";
         } else {
             msg = "fout wachtwoord";
             FacesContext.getCurrentInstance().addMessage(
