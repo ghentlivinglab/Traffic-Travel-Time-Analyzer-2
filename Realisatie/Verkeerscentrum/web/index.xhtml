@@ -2,51 +2,186 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:pretty="http://ocpsoft.com/prettyfaces"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                    template="./templates/BodySideRight.xhtml">
-
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    
+    <ui:composition template="./templates/BodySideRight.xhtml">
+        
+        <ui:define name="page"> Instellingen </ui:define>
+        
         <ui:define name="content">
-            <div class="index pull-bottom">
-                <div class="banner" />
+                   
+            
+            
+            <div class="index">
+                <div class="banner">
+                    <div class="dashboard display-animation row">
+                        <div class="col s7 tile-wrapper">
+                            <a class="tile tile-pink tile-lg ripple-effect" href="/web/live"  style="background-image: url(http://i39.tinypic.com/20r7ipz.jpg);">
+                                <span class="content-wrapper">
+                                    <span class="tile-content">
+                                        <span class="tile-img"></span>
+                                        <span class="tile-holder tile-holder-sm">
+                                            <span class="title">Huidige situatie</span>
+                                        </span>
+                                    </span>      
+                                </span>
+                            </a>
+                        </div>
+                        <div class="col s5 tile-wrapper">
+                            <a class="tile tile-lg tile-purple ripple-effect" href="/web/settings">
+                                <span class="content-wrapper">
+                                    <span class="tile-content">
+                                        <span class="tile-img"> </span>
+                                        <span class="tile-holder tile-holder-sm">
+                                            <span class="title">Instellingen</span>
+                                        </span>
+                                    </span>      
+                                </span>
+                            </a>
+                        </div>
+                        <div class="col s3 tile-wrapper">
+                            <a class="tile tile-lg tile-cyan ripple-effect" href="#">
+                                <span class="content-wrapper">
+                                    <span class="tile-content">
+                                        <span class="tile-img"></span>
+                                        <span class="tile-holder tile-holder-sm">
+                                            <span class="title">Profiel <span class="caption">PDF</span></span>
+                                        </span>
+                                    </span>      
+                                </span>
+                            </a>
+                        </div>
+                        <div class="col s9 tile-wrapper">
+                            <a class="tile tile-lg tile-amber ripple-effect" href="/web/analyse">
+                                <span class="content-wrapper">
+                                    <span class="tile-content">
+                                        <span class="tile-img tile-img-bg"></span>
+                                        <span class="tile-holder tile-holder-sm">
+                                            <span class="title">Analyse</span>
+                                        </span>
+                                    </span>      
+                                </span>
+                            </a>
+                        </div>
+                        <div class="col s4 tile-wrapper">
+                            <a class="tile tile-lg tile-light-blue ripple-effect" href="#">
+                                <span class="content-wrapper">
+                                    <span class="tile-content">
+                                        <span class="tile-img tile-img-bg"></span>
+                                        <span class="tile-holder tile-holder-sm">
+                                            <span class="title" style="color:black">Live</span>
+                                        </span>
+                                    </span>      
+                                </span>
+                            </a>
+                        </div>
+                        <div class="col s4 tile-wrapper">
+                            <a class="tile tile-lg  tile-red ripple-effect" href="#">
+                                <span class="content-wrapper">
+                                    <span class="tile-content">
+                                        <span class="tile-img"></span>
+                                        <span class="tile-holder tile-holder-sm">
+                                            <span class="title">Design Minutes</span>
+                                        </span>
+                                    </span>      
+                                </span>
+                            </a>
+                        </div>
+                        <div class="col s4 tile-wrapper">
+                            <a class="tile tile-lg tile-sqr tile-indigo ripple-effect" href="#">
+                                <span class="content-wrapper">
+                                    <span class="tile-content">
+                                        <span class="tile-img"></span>
+                                        <span class="tile-holder tile-holder-sm">
+                                            <span class="title">Google Cast UX</span>
+                                        </span>
+                                    </span>      
+                                </span>
+                            </a>
+                        </div>
+                        <div class="col s6 tile-wrapper">
+                            <a class="tile tile-lg  tile-deep-orange ripple-effect" href="#">
+                                <span class="content-wrapper">
+                                    <span class="tile-content">
+                                        <span class="tile-img"></span>
+                                        <span class="tile-holder tile-holder-sm">
+                                            <span class="title">Glass Design</span>
+                                        </span>
+                                    </span>      
+                                </span>
+                            </a>
+                        </div>
+                        <div class="col s6 tile-wrapper">
+                            <a class="tile tile-lg  tile-light-green ripple-effect" href="#">
+                                <span class="content-wrapper">
+                                    <span class="tile-content">
+                                        <span class="tile-img tile-img-bg"></span>
+                                        <span class="tile-holder tile-holder-sm">
+                                            <span class="title">Google Web Designer</span>
+                                        </span>
+                                    </span>      
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
+            
         </ui:define>
+        
         
         <ui:define name="right">
             
-            <div class="sidebar pull-bottom">
-                <img src="resources/img/vcg.png" class="logo img-responsive" />
-                <div class="navigation">
-                    <ul>
-                        <li>
-                            <h:link outcome="pretty:live">
-                                <i class="material-icons">navigation</i>
-                                Live
-                            </h:link>
-                        </li>
-                        <li>
-                            <h:link outcome="pretty:analyse">
-                                <i class="material-icons">equalizer</i>
-                                Analyse
-                            </h:link>
-                        </li>
-                        <li>
-                            <h:link outcome="pretty:settings">
-                                <i class="material-icons">settings</i>
-                                Instellingen
-                            </h:link>
-                        </li>
-                        <li>
-                            <a href="http://docs.verkeerscentrumgent.apiary.io/" target="_blank">
-                                <i class="material-icons">settings</i>
-                                API
-                            </a>
-                        </li>
-                    </ul>
+            <div class="container index">
+                
+                <div class="sidebar">
+                    
+                    <img src="#{resourceURLimg}/vcg.png" class="logo img-responsive" /> 
+                    
+                    <p>Goeiemiddag Pieter</p>
+                    
+                    <p> Welkom op het dashboard van het verkeerscentrum Gent. 
+                        Deze applicatie werd ontwikkeld door studenten industrieel 
+                        ingenieur als bachelorproef. Indien u contact wil 
+                        opnemen met één van ons, kan dit steeds via onderstaande 
+                        e-mailadressen.</p>
+                    
+                    
                 </div>
+                
+                
             </div>
+            
+            
         </ui:define>
-
+        
+        
+        <ui:define name="javascript">
+            
+            
+            <script src="#{requestScope.resourceURLjs}/tiles.js" />
+            
+            <script>
+                // Initialize collapse button
+                $(".button-collapse").sideNav();
+                // Initialize collapsible (uncomment the line below if you use the dropdown variation)
+                //$('.collapsible').collapsible();
+            </script>
+            
+        </ui:define>
+        
+        
     </ui:composition>
+    
+    
+    
+    
+    
 </html>
+
+
+
+
+

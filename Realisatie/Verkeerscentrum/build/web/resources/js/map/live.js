@@ -12,6 +12,9 @@ var urlAllRoutes;
 var urlGeoJSONcurrent;
 var geojsonLive;
 var geojsonAvg;
+var coords;
+var decoratorGroup;
+var boolDrawDirection;
 
 
 function initTimerURL(url){
@@ -40,7 +43,7 @@ function startLive(){
                 Materialize.toast('Er kan geen data worden opgehaald over de timer op de server!', 4000, 'toast bottom error');
             }
         });
-        modus = "live";
+        setLiveModus();
         refreshLiveData();
     }else{
         Materialize.toast('Het systeem is niet klaar om te worden gestart!', 4000, 'toast bottom error');
@@ -82,7 +85,7 @@ function refreshLiveData(){
             Materialize.toast('De verkeerssituatie werd zonet geüpdatet', 4000, 'toast bottom success');
             trafficData = data;
             requestGeoJson();
-            setModus(modus);
+            drawList();
         },
         error: function(jqXHR, textStatus, errorThrown ){
             Materialize.toast('Er kan geen nieuwe data worden opgehaald!', 4000, 'toast bottom error');
@@ -95,8 +98,8 @@ function refreshLiveData(){
 }
 
 function initGUI(){
-    liveTab = $("<li/>").append($("<a/>").attr("href","#!").text("Live").click(setLiveModus).attr("id","btnSwitchToLive")).addClass("active");
-    avgTab = $("<li/>").append($("<a/>").attr("href","#!").text("Gemiddeld").click(setAvgModus).attr("id","btnSwitchToAvg"));
+    liveTab = $("<li/>").append($("<a/>").attr("href","#!").text("Live").click(setLiveModus).click(drawCurrentModus).attr("id","btnSwitchToLive")).addClass("active");
+    avgTab = $("<li/>").append($("<a/>").attr("href","#!").text("Gemiddeld").click(setAvgModus).click(drawCurrentModus).attr("id","btnSwitchToAvg"));
     
     nav = $("<ul/>").addClass("pagination");
     nav.append(liveTab).append(avgTab);
@@ -153,24 +156,13 @@ function switchBtnModus(){
 }
 
 
-function setModus(modus){
-    if(modus === "live")
-        setLiveModus();
-    if(modus === "avg")
-        setAvgModus();
-}
-
 function setLiveModus(){
     modus = "live";
-    setLiveMap();
-    setLiveList();
     switchBtnModus();
 }
 
 function setAvgModus(){
     modus = "avg";
-    setAvgMap();
-    setAvgList();
     switchBtnModus();
 }
 
@@ -208,10 +200,23 @@ function splitToArraySorted(obj, xdata, ydata){
     
     for (i = 0; i < len; i++) {
         k = keys[i];
-        //alert(k + ':' + obj[k]);
         xdata.push(k);
         ydata.push(obj[k]);
     }
+}
+
+function getDelayClass(delayLevel){
+    var delayClass = "default";
+    switch(delayLevel){
+        case 0: delayClass = "veryfast"; break;
+        case 1: delayClass = "fast"; break;
+        case 2: delayClass = "intermediate"; break;
+        case 3: delayClass = "slow"; break;
+        case 4: delayClass = "veryslow"; break;
+    }
+    if(delayLevel >= 4) delayClass = "veryslow";
+    if(delayLevel <= 0) delayClass = "veryfast";
+    return delayClass;
 }
 
 function setLiveList(){
@@ -272,13 +277,7 @@ function setLiveList(){
                 if(route.trend > 0){
                     trend = "call_made";
                 }
-                switch(route.currentDelayLevel){
-                    case 0: delayClass = "veryfast"; break;
-                    case 1: delayClass = "fast"; break;
-                    case 2: delayClass = "intermediate"; break;
-                    case 3: delayClass = "slow"; break;
-                    case 4: delayClass = "veryslow"; break;
-                }
+                delayClass = getDelayClass(route.currentDelayLevel);
             }else{
                 delayTxt = "? min";
                 delayClass = "default";
@@ -291,7 +290,7 @@ function setLiveList(){
                 delay = 0;
             }
 
-            trafficListItem = $("<li/>").attr("id","route"+id).append($("<table/>").addClass("highlight").append($("<thead/>")
+            trafficListItem = $("<li/>").mouseenter(routeListItemMouseEnter).mouseleave(routeListItemMouseLeave).attr("id","route"+id).append($("<table/>").addClass("highlight").append($("<thead/>")
                     .append($("<tr/>")
                     .append($("<td/>").text(name).attr("width","50%"))
                     .append($("<td/>").text(durationTxt).attr("width","20%").addClass("center"))
@@ -328,11 +327,12 @@ function setAvgList(){
     var delayClass = "default";
     if(trafficData.length>0){
         for (var i = 0; i < trafficData.length; i++) {
-            var aDuration = trafficData[i].avgDuration;
-            var oDuration = trafficData[i].optimalDuration;
-            var delay = trafficData[i].delay;
-            var id = trafficData[i].id;
-            var name = trafficData[i].name;
+            var route = trafficData[i];
+            var aDuration = route.avgDuration;
+            var oDuration = route.optimalDuration;
+            var id = route.id;
+            var name = route.name;
+            var delay;
             durationTxt = formatDuration(aDuration);
             if(oDuration >= 0){
                 delay = aDuration - oDuration;
@@ -340,15 +340,8 @@ function setAvgList(){
             }else{
                 delayTxt = "? min";
             }
+            delayClass = getDelayClass(route.currentDelayLevel);
             
-            switch(trafficData[i].avgDelayLevel){
-                case 0: delayClass = "veryfast"; break;
-                case 1: delayClass = "fast"; break;
-                case 2: delayClass = "intermediate"; break;
-                case 3: delayClass = "slow"; break;
-                case 4: delayClass = "verslow"; break;
-            }
-
             trafficListItem = $("<li/>").attr("id","route"+id).append($("<table/>").addClass("highlight").append($("<thead/>")
                     .append($("<tr/>")
                     .append($("<td/>").text(name).attr("width","60%"))
@@ -363,8 +356,6 @@ function setAvgList(){
     }
     Materialize.showStaggeredList('.traffic-list');
 }
-
-
     
 function highlightRouteInList(routeid){
     $("#traffic-list ul li").removeClass("active");
@@ -374,52 +365,57 @@ function highlightRouteInList(routeid){
     }, 'slow');
 }
 
+function highlightRouteOnMap(routeid){
+    //remove layer
+    //draw layer with route in other color and thick
+    drawMap();
+}
+
+function routeListItemMouseEnter(){
+    $(this).addClass("active");
+    highlightRouteOnMap(1);
+}
+
+function routeListItemMouseLeave(){
+    $(this).removeClass("active");
+    drawMap();
+}
+
 function removeLayerFromMap(){
     if(layer != undefined){
+        console.log("removeLayerFromMap");
         mymap.removeLayer(layer);
+        decoratorGroup.clearLayers();
     }
 }
     
 function setGeoJsonCurrent(data){
-
     geojsonLive = data;
-    setModus(modus);
+    if(modus == "live") drawMap();
 }
 
 function setGeoJsonAvg(data){
-
     geojsonAvg = data;
-    setModus(modus);
-
+    if(modus == "avg") drawMap();
 }
 
 function drawGeoJSON(data){
     removeLayerFromMap();
     
+    console.log("drawGeoJSON");
+    
+    console.log(data);
+    
+    coords = [];
     layer = L.geoJson(data, {
-        
-        
         style: function (feature) {
-            //alert(feature.properties.currentDelayLevel);
-            var colorClass = "default";
-            switch(feature.properties.currentDelayLevel){
-                case 0: colorClass = "veryfast"; break;
-                case -1: colorClass = "veryfast"; break;
-                case 1: colorClass = "fast"; break;
-                case 2: colorClass = "intermediate"; break;
-                case 3: colorClass = "slow"; break;
-                case 4: colorClass = "veryslow"; break;
-            }
+            var colorClass = getDelayClass(feature.properties.currentDelayLevel);
             var color = $(".trafficColorScale ."+colorClass).css("background-color");
-            //alert(color);
             return {color: color};
         },
         onEachFeature: function (feature, layer) {
             
-            layer.on('click', function(e){
-                console.log(feature.properties);
-                $("#text").text("route " + feature.properties.id);
-                
+            layer.on('click', function(e){                
                 //functie voor aanroepen hilight in tabel
                 //click event that triggers the popup and centres it on the polygon
                 
@@ -431,11 +427,8 @@ function drawGeoJSON(data){
                 highlightRouteInList(feature.properties.id);
                 
                 click = true;
-        
-        
             });
             layer.on('mouseover', function(){
-                //$("#text").text("route " + feature.properties.id);
                 //functie voor aanroepen hilight in tabel
                 click = false;
                 highlightRouteInList(feature.properties.id);
@@ -446,8 +439,33 @@ function drawGeoJSON(data){
                 }
                 click = false;
             });
+            
+            coords.push(feature.geometry.coordinates);
         }
     }).addTo(mymap);    
+    
+    //invert coord
+    var temp = 0;
+    for (var i = 0; i < coords.length; i++) {
+        for (var j = 0; j < coords[i].length; j++) {
+            temp = coords[i][j][0];
+            coords[i][j][0] = coords[i][j][1];
+            coords[i][j][1] = temp;
+        }
+    }
+
+    for (var i = 0; i < coords.length; i++) {
+        var dec = L.polylineDecorator(coords[i], {
+            patterns: [
+                // defines a pattern of 10px-wide dashes, repeated every 20px on the line
+                {offset: 0, repeat: 80, symbol: L.Symbol.arrowHead({pixelSize: 8,headAngle: 30,pathOptions: {color: "black"}})}
+            ]
+        });
+        if(boolDrawDirection){
+            decoratorGroup.addLayer(dec);
+        }
+    }
+    console.log("einde draw geo json");
 }
 
 
@@ -471,6 +489,28 @@ function requestGeoJson(){
     });
 }
 
+function drawCurrentModus(){
+    drawList();
+    drawMap();
+}
+
+function drawMap(){
+    if(modus == "live"){
+        setLiveMap();    
+    }
+    if(modus == "avg"){
+        setAvgMap();    
+    }
+}
+
+function drawList(){
+    if(modus == "live"){
+        setLiveList();
+    }
+    if(modus == "avg"){
+        setAvgList();
+    }
+}
 
 $(document).ready(function() {
     mymap = L.map('map').setView([51.096434, 3.744511], 11);
@@ -480,6 +520,19 @@ $(document).ready(function() {
         id: 'tobiasvdp.ac4aa6b2',
         accessToken: 'pk.eyJ1IjoidG9iaWFzdmRwIiwiYSI6ImNpbGpxcTFwaTAwYjF3NGx6bWZ2bGZkcG8ifQ.DTe2IBQLNc9zQa62kD-4_g'
     }).addTo(mymap);
+    
+    decoratorGroup = L.layerGroup();
+    decoratorGroup.addTo(mymap);
+    
+    mymap.on('zoomend', function(event){
+        if(event.target._zoom >= 14){
+            boolDrawDirection = true
+        }else{
+            boolDrawDirection = false;
+        }
+        drawMap();
+    });
+    
     initGUI();
     startLive();
 });
