@@ -5,6 +5,7 @@
  */
 package iii.vop2016.verkeer2.ejb.helper;
 
+import iii.vop2016.verkeer2.ejb.dao.IAPIKeyDAO;
 import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import iii.vop2016.verkeer2.ejb.dao.ILoginDAO;
 import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
@@ -290,6 +291,21 @@ public class BeanFactory {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.LoginDAO, ctx, Logger.getGlobal());
             if (obj instanceof ILoginDAO) {
                 return (ILoginDAO) obj;
+            }
+        }
+        return null;
+    }
+    
+    public IAPIKeyDAO getAPIKeyDAO() throws ResourceFileMissingException {
+        if (sctx != null) {
+            Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.APIKeyDAO, sctx, Logger.getGlobal());
+            if (obj instanceof IAPIKeyDAO) {
+                return (IAPIKeyDAO) obj;
+            }
+        } else {
+            Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.APIKeyDAO, ctx, Logger.getGlobal());
+            if (obj instanceof IAPIKeyDAO) {
+                return (IAPIKeyDAO) obj;
             }
         }
         return null;

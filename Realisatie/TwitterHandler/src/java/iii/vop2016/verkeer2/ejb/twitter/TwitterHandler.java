@@ -131,33 +131,39 @@ public class TwitterHandler implements ThresholdHandlerLocal,ThresholdHandlerRem
         BufferedImage img = getImageForRoute(route, prop);
         if (img != null) {
 
-            String imageID = uploadImgToTwitter(img, prop);
-
-            String message = "";
-            if (difference > 0) {
-                message = prop.getProperty("twittermessageup", "");
-            } else {
-                message = prop.getProperty("twittermessagedown", "");
+            try {
+                String imageID = uploadImgToTwitter(img, prop);
+                
+                String message = "";
+                if (difference > 0) {
+                    message = prop.getProperty("twittermessageup", "");
+                } else {
+                    message = prop.getProperty("twittermessagedown", "");
+                }
+                
+                if (message.equals("")) {
+                    return;
+                }
+                String lvl = prop.getProperty("trafficlevel" + level, "");
+                message = message.replace("LEVEL", lvl).replace("ROUTE", route.getName()).replace("DELAYMIN", delay / 60 + "").replace("DELAYSEC", delay % 60 + "");
+                
+                Thread.sleep(1000);
+                
+                postToTwitter(message, imageID, prop);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(TwitterHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            if (message.equals("")) {
-                return;
-            }
-            String lvl = prop.getProperty("trafficlevel" + level,"");
-            message = message.replace("LEVEL", lvl).replace("ROUTE", route.getName()).replace("DELAYMIN", delay / 60 + "").replace("DELAYSEC", delay % 60 + "");
-
-            postToTwitter(message, imageID, prop);
         }
     }
 
     private static void setAuthorizationHeader(HttpsURLConnection con, String consumerkey, String nonce, String signature, String signatureMathode, String unixTimestamp, String token, String version) {
-        con.setRequestProperty("Authorization",BuildAuthorizationHeader(consumerkey,nonce,signature,signatureMathode,unixTimestamp,token,version));
+        con.setRequestProperty("Authorization", BuildAuthorizationHeader(consumerkey, nonce, signature, signatureMathode, unixTimestamp, token, version));
     }
 
     private static void setAuthorizationHeader(HttpPost con, String consumerkey, String nonce, String signature, String signatureMathode, String unixTimestamp, String token, String version) {
-        con.setHeader("Authorization", BuildAuthorizationHeader(consumerkey,nonce,signature,signatureMathode,unixTimestamp,token,version));
+        con.setHeader("Authorization", BuildAuthorizationHeader(consumerkey, nonce, signature, signatureMathode, unixTimestamp, token, version));
     }
-    
+
     private static String BuildAuthorizationHeader(String consumerkey, String nonce, String signature, String signatureMathode, String unixTimestamp, String token, String version) {
         StringBuilder auth = new StringBuilder();
         auth.append("OAuth oauth_consumer_key=\"");
@@ -198,9 +204,9 @@ public class TwitterHandler implements ThresholdHandlerLocal,ThresholdHandlerRem
             Map<String, String> param = new TreeMap<>();
             param.put("status", status);
 
-            if (imageID != null) {
+            /*if (imageID != null) {
                 param.put("media_ids", imageID);
-            }
+            }*/
 
             param.put("oauth_consumer_key", consumerkey);
             param.put("oauth_nonce", nonce);
@@ -227,9 +233,9 @@ public class TwitterHandler implements ThresholdHandlerLocal,ThresholdHandlerRem
             DataOutputStream wr = new DataOutputStream(con.getOutputStream());
             wr.writeBytes(("status=" + Encoder.percentEncode(status)));
 
-            if (imageID != null) {
+            /*if (imageID != null) {
                 wr.writeBytes("&media_ids=" + Encoder.percentEncode(imageID));
-            }
+            }*/
 
             wr.close();
 
@@ -247,7 +253,16 @@ public class TwitterHandler implements ThresholdHandlerLocal,ThresholdHandlerRem
                 rd.close();
                 beans.getLogger().log(Level.FINER, "Posted to twitter: " + status);
             } else {
-                beans.getLogger().log(Level.SEVERE, "Unable to post to twitter: responsecode " + responseCode);
+                beans.getLogger().log(Level.SEVERE, "Unable to post to twitter: responsecode " + responseCode + " :" + con.getResponseMessage());
+                InputStream is = con.getInputStream();
+                BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = rd.readLine()) != null) {
+                    response.append(line);
+                    response.append('\n');
+                }
+                rd.close();
             }
             count++;
             if (count > 10000) {
@@ -546,6 +561,16 @@ public class TwitterHandler implements ThresholdHandlerLocal,ThresholdHandlerRem
         //get response
         int responseCode = con.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_ACCEPTED || responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+            InputStream is = con.getInputStream();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = rd.readLine()) != null) {
+                response.append(line);
+                response.append('\n');
+            }
+            rd.close();
+
             return true;
         }
         return false;

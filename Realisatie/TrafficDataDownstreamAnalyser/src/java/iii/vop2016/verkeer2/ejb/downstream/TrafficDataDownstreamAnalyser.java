@@ -77,15 +77,17 @@ public class TrafficDataDownstreamAnalyser implements TrafficDataDownstreamAnaly
     public void endSession(List<IRouteData> data, List<IRoute> routes) {
         ILogger logger = beans.getLogger();
         logger.log(Level.FINER, "Ending analysis session.");
+        
         IDataProvider dataProvider = beans.getDataProvider();
         IThresholdManager threshold = beans.getThresholdManager();
 
         Map<Long, List<IRouteData>> mapping = MapDataToRoutes(data);
+        
 
         for (IRoute route : routes) {
             List<IRouteData> routeData = mapping.get(route.getId());
-            if (routeData != null) {
-                int opt = dataProvider.getOptimalDuration(route, null);
+            if (routeData != null && routeData.size() != 0) {
+                int opt = dataProvider.getOptimalDuration(route, new ArrayList<String>());
                 int mean = dataProvider.getMeanDurationFromRouteData(routeData);
                 if (opt != -1 && mean != -1) {
                     int delay = mean - opt;
@@ -100,7 +102,6 @@ public class TrafficDataDownstreamAnalyser implements TrafficDataDownstreamAnaly
 
     private Map<Long, List<IRouteData>> MapDataToRoutes(List<IRouteData> routeData) {
         Map<Long, List<IRouteData>> ret = new HashMap<>();
-
         for (IRouteData r : routeData) {
             List<IRouteData> data = ret.get(r.getRouteId());
             if (data == null) {

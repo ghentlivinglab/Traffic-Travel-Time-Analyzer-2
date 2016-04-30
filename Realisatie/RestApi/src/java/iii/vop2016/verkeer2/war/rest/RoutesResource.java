@@ -213,7 +213,7 @@ public class RoutesResource {
     }
     
     @POST
-    @Path("news")
+    @Path("new")
     @Consumes({MediaType.APPLICATION_JSON})
     public Response addRoute(JSONObject route){
         try{
