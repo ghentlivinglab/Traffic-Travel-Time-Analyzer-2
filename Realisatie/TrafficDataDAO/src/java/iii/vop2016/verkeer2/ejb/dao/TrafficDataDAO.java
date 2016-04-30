@@ -32,7 +32,7 @@ import javax.persistence.Query;
  */
 @Singleton
 @Startup
-public class TrafficDataDAO implements TrafficDataDAORemote {
+public class TrafficDataDAO implements TrafficDataDAORemote,TrafficDataDAOLocal {
 
     @PersistenceContext(name = "TrafficDataDBPU")
     EntityManager em;

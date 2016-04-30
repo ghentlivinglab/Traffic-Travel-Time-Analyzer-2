@@ -11,6 +11,7 @@ import iii.vop2016.verkeer2.ejb.components.Threshold;
 import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
+import iii.vop2016.verkeer2.ejb.logger.ILogger;
 import iii.vop2016.verkeer2.ejb.logger.LoggerRemote;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ import javax.naming.NamingException;
  * @author Tobias
  */
 @Singleton
-public class ThresholdManager implements ThresholdManagerRemote {
+public class ThresholdManager implements ThresholdManagerRemote,ThresholdManagerLocal {
 
     @Resource
     protected SessionContext ctxs;
@@ -107,7 +108,7 @@ public class ThresholdManager implements ThresholdManagerRemote {
     //this function return the difference in level sinds the last check
     @Override
     public int EvalThresholdLevel(IRoute route, int delay) {
-        LoggerRemote logger = beans.getLogger();
+        ILogger logger = beans.getLogger();
 
         int currentLevel = getThresholdLevel(route, delay);
         int prevLevel = prevThresholdLevel.get(route);
@@ -147,7 +148,7 @@ public class ThresholdManager implements ThresholdManagerRemote {
     public void addDefaultThresholds(IRoute route) {
         IGeneralDAO dao = beans.getGeneralDAO();
         Properties prop = getProperties();
-        LoggerRemote logger = beans.getLogger();
+        ILogger logger = beans.getLogger();
 
         String defaults = prop.getProperty("defaultThresholdLevels", "120,240,480,1200");
         String[] arr = defaults.split(",");

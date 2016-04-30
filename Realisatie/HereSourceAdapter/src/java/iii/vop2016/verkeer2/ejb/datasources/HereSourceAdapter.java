@@ -5,7 +5,6 @@
  */
 package iii.vop2016.verkeer2.ejb.datasources;
 
-import iii.vop2016.verkeer2.ejb.datasources.HereSourceAdapterRemote;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
@@ -16,13 +15,10 @@ import iii.vop2016.verkeer2.ejb.helper.URLException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -38,7 +34,7 @@ import org.json.JSONObject;
  * @author Simon
  */
 @Singleton
-public class HereSourceAdapter implements HereSourceAdapterRemote {
+public class HereSourceAdapter implements SourceAdapterLocal,SourceAdapterRemote {
 
     private String appId;
     private String appCode;

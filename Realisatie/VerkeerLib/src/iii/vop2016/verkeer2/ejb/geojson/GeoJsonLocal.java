@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package iii.vop2016.verkeer2.ejb.logger;
+package iii.vop2016.verkeer2.ejb.geojson;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
 /**
  *
  * @author tobia
  */
-@Remote
-public interface LoggerRemote extends ILogger {
-
+@Local
+public interface GeoJsonLocal extends IGeoJson{
+    
 }

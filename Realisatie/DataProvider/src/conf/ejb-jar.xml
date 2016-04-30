@@ -9,6 +9,7 @@
         <session>
             <ejb-name>DataProvider</ejb-name>
             <remote>iii.vop2016.verkeer2.ejb.dataprovider.DataProviderRemote</remote>
+            <local>iii.vop2016.verkeer2.ejb.dataprovider.DataProviderLocal</local>
             <ejb-class>iii.vop2016.verkeer2.ejb.dataprovider.DataProvider</ejb-class>
             <session-type>Singleton</session-type>
         </session>

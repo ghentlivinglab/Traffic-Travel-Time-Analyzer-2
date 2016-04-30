@@ -9,6 +9,7 @@
         <session>
             <ejb-name>TrafficDataDAO</ejb-name>
             <remote>iii.vop2016.verkeer2.ejb.dao.TrafficDataDAORemote</remote>
+            <local>iii.vop2016.verkeer2.ejb.dao.TrafficDataDAOLocal</local>
             <ejb-class>iii.vop2016.verkeer2.ejb.dao.TrafficDataDAO</ejb-class>
             <session-type>Singleton</session-type>
         </session>

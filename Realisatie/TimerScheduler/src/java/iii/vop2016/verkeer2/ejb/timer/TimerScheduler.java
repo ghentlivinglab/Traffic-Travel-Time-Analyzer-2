@@ -45,7 +45,7 @@ import org.apache.commons.net.ntp.TimeStamp;
  */
 @Singleton
 @Startup
-public class TimerScheduler implements TimerSchedulerRemote {
+public class TimerScheduler implements TimerSchedulerRemote,TimerSchedulerLocal {
 
     @Resource
     protected SessionContext ctxs;
@@ -105,6 +105,9 @@ public class TimerScheduler implements TimerSchedulerRemote {
         ticks = 0;
         t = ctxs.getTimerService().createIntervalTimer(1000, 60000, new TimerConfig());
         isRunning = true;
+        
+        prop.setProperty("19-00", "30");
+        HelperFunctions.SavePropertyFile(prop, Logger.getGlobal());
     }
 
     private Properties getProperties() {

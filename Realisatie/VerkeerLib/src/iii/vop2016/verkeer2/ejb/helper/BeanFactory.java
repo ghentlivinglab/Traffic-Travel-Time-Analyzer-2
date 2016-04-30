@@ -20,7 +20,8 @@ import iii.vop2016.verkeer2.ejb.datadownloader.ITrafficDataDownloader;
 import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyser;
 import iii.vop2016.verkeer2.ejb.geojson.GeoJsonRemote;
 import iii.vop2016.verkeer2.ejb.dataprovider.IDataProvider;
-import iii.vop2016.verkeer2.ejb.logger.LoggerRemote;
+import iii.vop2016.verkeer2.ejb.geojson.IGeoJson;
+import iii.vop2016.verkeer2.ejb.logger.ILogger;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdHandler;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdManager;
 import java.util.Map;
@@ -76,16 +77,16 @@ public class BeanFactory {
         this.sctx = sctx;
     }
 
-    public LoggerRemote getLogger() throws ResourceFileMissingException {
+    public ILogger getLogger() throws ResourceFileMissingException {
         if (sctx != null) {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.Logger, sctx, Logger.getGlobal());
-            if (obj instanceof LoggerRemote) {
-                return (LoggerRemote) obj;
+            if (obj instanceof ILogger) {
+                return (ILogger) obj;
             }
         } else {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.Logger, ctx, Logger.getGlobal());
-            if (obj instanceof LoggerRemote) {
-                return (LoggerRemote) obj;
+            if (obj instanceof ILogger) {
+                return (ILogger) obj;
             }
         }
         return null;
@@ -106,16 +107,16 @@ public class BeanFactory {
         return null;
     }
 
-    public GeoJsonRemote getGeoJsonProvider() throws ResourceFileMissingException {
+    public IGeoJson getGeoJsonProvider() throws ResourceFileMissingException {
         if (sctx != null) {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.GeoJsonProvider, sctx, Logger.getGlobal());
-            if (obj instanceof GeoJsonRemote) {
-                return (GeoJsonRemote) obj;
+            if (obj instanceof IGeoJson) {
+                return (IGeoJson) obj;
             }
         } else {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.GeoJsonProvider, ctx, Logger.getGlobal());
-            if (obj instanceof GeoJsonRemote) {
-                return (GeoJsonRemote) obj;
+            if (obj instanceof IGeoJson) {
+                return (IGeoJson) obj;
             }
         }
         return null;

@@ -5,6 +5,11 @@
  */
 package iii.vop2016.verkeer2.ejb.helper;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +25,7 @@ import javax.naming.NamingException;
 public class HelperFunctions {
 
     protected static Pattern timeFormat = Pattern.compile("([0-9]{2})-([0-9]{2})");
-    
+
     /**
      * Retrieve a properties file located in the JNDI resources. (Heavy
      * operation)
@@ -45,6 +50,34 @@ public class HelperFunctions {
             logger.log(Level.WARNING, "Property file REFERENCE missing (" + lookup + ")");
         }
         return new Properties();
+    }
+
+    public static boolean SavePropertyFile(Properties prop, Logger logger) {
+        String location = prop.getProperty("propertyLocation", "");
+        if (!location.equals("")) {
+            try {
+                File f = new File(location);
+                if (f.exists()) {
+                    OutputStream out = new FileOutputStream(f);
+                    prop.remove("propertyLocation");
+                    prop.store(out, "Last modified:");
+                    prop.setProperty("propertyLocation", location);
+                    return true;
+                }
+            } catch (FileNotFoundException ex) {
+                logger.log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                logger.log(Level.SEVERE, null, ex);
+            }
+        }
+        return false;
+    }
+    
+    
+    public static boolean SavePropertyFile(String lookup, InitialContext ctx, String key, String value , Logger logger) {
+        Properties prop = RetrievePropertyFile(lookup, ctx, logger);
+        prop.setProperty(key, value);
+        return SavePropertyFile(prop, logger);
     }
 
     /**

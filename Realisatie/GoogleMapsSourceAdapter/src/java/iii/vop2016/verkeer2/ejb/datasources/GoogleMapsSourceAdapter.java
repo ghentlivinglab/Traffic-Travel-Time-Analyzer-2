@@ -5,7 +5,6 @@
  */
 package iii.vop2016.verkeer2.ejb.datasources;
 
-import iii.vop2016.verkeer2.ejb.datasources.GoogleMapsSourceAdapterRemote;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
@@ -35,7 +34,7 @@ import org.json.JSONObject;
  * @author tobia
  */
 @Singleton
-public class GoogleMapsSourceAdapter implements GoogleMapsSourceAdapterRemote {
+public class GoogleMapsSourceAdapter implements  SourceAdapterLocal,SourceAdapterRemote {
 
     //This final variables may be better in resourcefile?
     //Free key for the Google API, connected to the project. Limited usage.

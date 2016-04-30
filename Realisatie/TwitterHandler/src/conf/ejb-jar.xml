@@ -8,7 +8,8 @@
     <enterprise-beans>
         <session>
             <ejb-name>TwitterHandler</ejb-name>
-            <remote>iii.vop2016.verkeer2.ejb.threshold.IThresholdHandler</remote>
+            <remote>iii.vop2016.verkeer2.ejb.threshold.ThresholdHandlerRemote</remote>
+            <local>iii.vop2016.verkeer2.ejb.threshold.ThresholdHandlerLocal</local>
             <ejb-class>iii.vop2016.verkeer2.ejb.twitter.TwitterHandler</ejb-class>
             <session-type>Singleton</session-type>
         </session>

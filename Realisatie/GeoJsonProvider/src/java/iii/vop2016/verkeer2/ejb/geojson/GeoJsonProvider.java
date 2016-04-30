@@ -47,7 +47,7 @@ import org.json.JSONObject;
  * @author Tobias
  */
 @Singleton
-public class GeoJsonProvider implements GeoJsonRemote {
+public class GeoJsonProvider implements GeoJsonRemote,GeoJsonLocal {
 
     @Resource
     protected SessionContext ctxs;

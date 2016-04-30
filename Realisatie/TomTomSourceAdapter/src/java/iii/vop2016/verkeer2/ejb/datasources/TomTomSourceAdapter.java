@@ -37,7 +37,7 @@ import org.json.JSONObject;
  * @author Simon
  */
 @Singleton
-public class TomTomSourceAdapter implements TomTomSourceAdapterRemote {
+public class TomTomSourceAdapter implements  SourceAdapterLocal,SourceAdapterRemote {
 
     private String key;
     private static final String providerName = "TomTom";

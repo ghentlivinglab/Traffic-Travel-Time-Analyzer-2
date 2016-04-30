@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package iii.vop2016.verkeer2.ejb.datasources;
+package iii.vop2016.verkeer2.ejb.datadownloader;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
 /**
  *
- * @author Simon
+ * @author tobia
  */
-@Remote
-public interface HereSourceAdapterRemote extends ISourceAdapter{
+@Local
+public interface TrafficDataDownloaderLocal extends ITrafficDataDownloader{
     
 }

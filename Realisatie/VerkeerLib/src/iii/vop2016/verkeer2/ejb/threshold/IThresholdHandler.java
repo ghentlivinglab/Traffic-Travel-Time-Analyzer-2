@@ -6,13 +6,11 @@
 package iii.vop2016.verkeer2.ejb.threshold;
 
 import iii.vop2016.verkeer2.ejb.components.IRoute;
-import javax.ejb.Remote;
 
 /**
  *
  * @author Tobias
  */
-@Remote
 public interface IThresholdHandler {
     void notify(IRoute route, long routeId,int level,int delayTriggerLevel,int difference,int delay);
 }

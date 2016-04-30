@@ -10,6 +10,7 @@ import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import iii.vop2016.verkeer2.ejb.dataprovider.IDataProvider;
 import iii.vop2016.verkeer2.ejb.geojson.GeoJsonRemote;
+import iii.vop2016.verkeer2.ejb.geojson.IGeoJson;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import java.util.HashMap;
 import java.util.List;
@@ -69,7 +70,7 @@ public class GeojsonResource {
             return "";
         }
 
-        GeoJsonRemote provider = beans.getGeoJsonProvider();
+        IGeoJson provider = beans.getGeoJsonProvider();
         IDataProvider dataProvider = beans.getDataProvider();
         if (dataProvider != null && provider != null) {
             List<IGeoLocation> list = provider.getRoutePlotGeoLocations(route);
@@ -105,7 +106,7 @@ public class GeojsonResource {
         Map<IRoute, List<IGeoLocation>> map = new HashMap<>();
         Map<IRoute, Integer> delaylevels = new HashMap<>();
 
-        GeoJsonRemote provider = beans.getGeoJsonProvider();
+        IGeoJson provider = beans.getGeoJsonProvider();
         for (IRoute route : routes) {
             List<IGeoLocation> list = provider.getRoutePlotGeoLocations(route);
             map.put(route, list);
@@ -125,7 +126,7 @@ public class GeojsonResource {
             return "";
         }
 
-        GeoJsonRemote provider = beans.getGeoJsonProvider();
+        IGeoJson provider = beans.getGeoJsonProvider();
         IDataProvider dataProvider = beans.getDataProvider();
         if (dataProvider != null && provider != null) {
             List<IGeoLocation> list = provider.getRoutePlotGeoLocations(route);
@@ -161,7 +162,7 @@ public class GeojsonResource {
         Map<IRoute, List<IGeoLocation>> map = new HashMap<>();
         Map<IRoute, Integer> delaylevels = new HashMap<>();
 
-        GeoJsonRemote provider = beans.getGeoJsonProvider();
+        IGeoJson provider = beans.getGeoJsonProvider();
         for (IRoute route : routes) {
             List<IGeoLocation> list = provider.getRoutePlotGeoLocations(route);
             map.put(route, list);

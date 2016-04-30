@@ -34,7 +34,7 @@ import org.jsoup.nodes.Element;
  * @author Simon
  */
 @Singleton
-public class CoyoteSourceAdapter implements CoyoteSourceAdapterRemote {
+public class CoyoteSourceAdapter implements SourceAdapterLocal,SourceAdapterRemote {
 
     private static final String providerName = "Coyote";
     private static String login;

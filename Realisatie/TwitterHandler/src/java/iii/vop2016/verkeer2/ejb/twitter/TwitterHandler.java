@@ -8,9 +8,12 @@ package iii.vop2016.verkeer2.ejb.twitter;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.geojson.GeoJsonRemote;
+import iii.vop2016.verkeer2.ejb.geojson.IGeoJson;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdHandler;
+import iii.vop2016.verkeer2.ejb.threshold.ThresholdHandlerLocal;
+import iii.vop2016.verkeer2.ejb.threshold.ThresholdHandlerRemote;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -61,7 +64,7 @@ import org.apache.http.impl.client.HttpClients;
  * @author Tobias
  */
 @Singleton
-public class TwitterHandler implements IThresholdHandler {
+public class TwitterHandler implements ThresholdHandlerLocal,ThresholdHandlerRemote {
 
     private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 
@@ -271,7 +274,7 @@ public class TwitterHandler implements IThresholdHandler {
         String u = prop.getProperty("imageRetrievalUrl", "");
         if (!u.equals("")) {
             try {
-                GeoJsonRemote geoBean = beans.getGeoJsonProvider();
+                IGeoJson geoBean = beans.getGeoJsonProvider();
                 if (geoBean != null) {
                     List<IGeoLocation> geos = geoBean.getRoutePlotGeoLocations(route);
                     if (geos != null) {

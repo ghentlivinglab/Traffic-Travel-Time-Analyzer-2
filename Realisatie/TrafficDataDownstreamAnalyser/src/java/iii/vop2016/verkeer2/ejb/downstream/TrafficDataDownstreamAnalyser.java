@@ -10,6 +10,7 @@ import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.dataprovider.IDataProvider;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
+import iii.vop2016.verkeer2.ejb.logger.ILogger;
 import iii.vop2016.verkeer2.ejb.logger.LoggerRemote;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdManager;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ import javax.naming.NamingException;
  * @author tobia
  */
 @Singleton
-public class TrafficDataDownstreamAnalyser implements TrafficDataDownstreamAnalyserRemote {
+public class TrafficDataDownstreamAnalyser implements TrafficDataDownstreamAnalyserRemote,TrafficDataDownstreamAnalyserLocal {
 
     @Resource
     private SessionContext sctx;
@@ -68,14 +69,14 @@ public class TrafficDataDownstreamAnalyser implements TrafficDataDownstreamAnaly
 
     @Override
     public void startSession() {
-        LoggerRemote logger = beans.getLogger();
+        ILogger logger = beans.getLogger();
         logger.log(Level.FINER, "Starting data scrub session.");
     }
 
     @Override
     public void endSession(List<IRouteData> data, List<IRoute> routes) {
-        LoggerRemote logger = beans.getLogger();
-         logger.log(Level.FINER, "Ending analysis session.");
+        ILogger logger = beans.getLogger();
+        logger.log(Level.FINER, "Ending analysis session.");
         IDataProvider dataProvider = beans.getDataProvider();
         IThresholdManager threshold = beans.getThresholdManager();
 

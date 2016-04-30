@@ -34,7 +34,7 @@ import javax.naming.NamingException;
  */
 @Startup
 @Singleton
-public class Logger implements LoggerRemote {
+public class Logger implements LoggerRemote,LoggerLocal {
 
     protected java.util.logging.Logger l;
     protected List<Log> history;

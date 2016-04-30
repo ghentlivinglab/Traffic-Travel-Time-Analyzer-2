@@ -35,7 +35,7 @@ import javax.persistence.Query;
  * @author Tobias
  */
 @Singleton
-public class GeneralDAO implements GeneralDAORemote {
+public class GeneralDAO implements GeneralDAORemote,GeneralDAOLocal {
 
     @PersistenceContext(name = "GeneralDBPU")
     EntityManager em;

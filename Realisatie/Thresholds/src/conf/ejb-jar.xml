@@ -9,6 +9,7 @@
         <session>
             <ejb-name>ThresholdManager</ejb-name>
             <remote>iii.vop2016.verkeer2.ejb.threshold.ThresholdManagerRemote</remote>
+            <local>iii.vop2016.verkeer2.ejb.threshold.ThresholdManagerLocal</local>
             <ejb-class>iii.vop2016.verkeer2.ejb.threshold.ThresholdManager</ejb-class>
             <session-type>Singleton</session-type>
         </session>
