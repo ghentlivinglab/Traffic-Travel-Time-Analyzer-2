@@ -6,6 +6,7 @@
         <url-pattern>/v2/loggings</url-pattern>
         <url-pattern>/v2/routes/init</url-pattern>
         <url-pattern>/v2/routes/new</url-pattern>
+        <url-pattern>/v2/routes/remove/*</url-pattern>
     </filter-mapping>
     <session-config>
         <session-timeout>

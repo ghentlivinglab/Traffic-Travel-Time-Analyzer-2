@@ -67,6 +67,7 @@ public class APIKeyDAO implements APIKeyDAORemote {
         APIKey key = new APIKey();
         key.setActive(0);
         key.setKeyString(new String(result));
+        em.persist(key);
         beans.getLogger().log(Level.INFO, "Random key generated");
         return key;
     }
