@@ -10,5 +10,5 @@ package iii.vop2016.verkeer2.ejb.helper;
  * @author Tobias
  */
 public enum BeanSelector {
-    Logger,downstreamAnalyser,dataManager,generalDAO,trafficDataDAO,Timer,GeoJsonProvider,DataProvider,ThresholdManager,LoginDAO
+    Logger,downstreamAnalyser,dataManager,generalDAO,trafficDataDAO,Timer,GeoJsonProvider,DataProvider,ThresholdManager,LoginDAO,APIKeyDAO
 }

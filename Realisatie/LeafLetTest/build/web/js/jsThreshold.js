@@ -13,12 +13,19 @@ function send() {
 
     sendJson = [{"id": "5", "level": 1, "delayTrigger": 120, "routeId": "2", "handlers": ["twitter"]}];
 
+    var aj_url = "http://verkeer-2.bp.tiwi.be/api/v2/thresholds";
+    var aj_json = JSON.stringify(sendJson);
+    
+    aj_url = $("#url").val();
+    aj_json = $("#json").val();
+    
+
     $.ajax({
         type: "POST",
-        url: "http://verkeer-2.bp.tiwi.be/api/v2/thresholds",
+        url: aj_url,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        data: JSON.stringify(sendJson),
+        data: aj_json,
         success: successCall,
         error: failedCall
     });

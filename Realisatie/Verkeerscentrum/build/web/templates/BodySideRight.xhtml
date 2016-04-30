@@ -20,7 +20,7 @@
         <link rel="icon" href="#{requestScope.resourceURLimg}/favicon.ico" type="image/x-icon" />
 
         
-        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+        <link rel="stylesheet" href="#{requestScope.resourceURLcss}/leaflet.css" />
         <link type="text/css" rel="stylesheet" href="#{requestScope.resourceURLcss}/c3.min.css"  media="screen,projection" />
         <link type="text/css" rel="stylesheet" href="#{requestScope.resourceURLcss}/materialize.css"  media="screen,projection" />
         <link type="text/css" rel="stylesheet" href="#{requestScope.resourceURLcss}/app.css"  media="screen,projection" />
@@ -46,8 +46,8 @@
         
 
        
-        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-        <script type="text/javascript" src="#{requestScope.resourceURLjs}/materialize.min.js"></script>
+        <script type="text/javascript" src="#{requestScope.resourceURLjs}/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="#{requestScope.resourceURLjs}/materialize/materialize.min.js"></script>
         
         <script type="text/javascript" src="#{requestScope.resourceURLjs}/global.js" />
         
@@ -56,6 +56,9 @@
         
         <script type="text/javascript" src="#{requestScope.resourceURLjs}/date.format.js" />
 
+        
+        <ui:insert name="javascript"></ui:insert>
+        
         
     </h:body>
 

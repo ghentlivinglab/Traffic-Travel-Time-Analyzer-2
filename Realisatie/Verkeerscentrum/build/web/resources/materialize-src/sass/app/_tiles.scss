@@ -21,26 +21,6 @@ and open the template in the editor.
     box-sizing: border-box;
 }
 
-/* -- Base style -------------------------------------- */
-html {
-  position: relative;
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
-}
-
-body {
-  font-family: 'RobotoDraft', 'Roboto', 'Helvetica Neue, Helvetica, Arial', sans-serif;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 14px;
-  line-height: 1.4;
-  color: #212121;
-  background-color: #f5f5f5;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
 
 /* -- Google typography ------------------------------- */
 .title {
@@ -137,14 +117,14 @@ body {
   width: 100%;
   padding: 5px;
   margin: 0;
-}
-.dashboard > * {
-  display: block;
-  float: left;
-  margin: 5px;
+  padding-right: 20px;
 }
 
 /* -- Tiles ------------------------------------------- */
+.tile-wrapper{
+    padding: 5px !important;
+}
+
 .tile {
   color: #212121;
   overflow: hidden;
@@ -155,6 +135,10 @@ body {
   -webkit-transition: all 0.15s ease-in-out;
   -o-transition: all 0.15s ease-in-out;
   transition: all 0.15s ease-in-out;
+  width: 100%;
+  display: block;
+  float: left;
+  margin: 5px;
 }
 .tile:hover,
 .tile:active,
@@ -1139,7 +1123,8 @@ body {
 }
 /*-- Tiles size --------------------------------------- */
 .tile {
-  width: 270px;
+  //width: 270px;
+  width: 100%;
   height: 130px;
 }
 .tile .content-wrapper .tile-content {
@@ -1150,7 +1135,7 @@ body {
   height: 86.66666667px;
 }
 .tile .content-wrapper .tile-content .tile-img-bg {
-  width: 270px;
+  //width: 270px;
   height: 130px;
   margin-left: -10px;
   margin-top: -10px;
@@ -1171,7 +1156,7 @@ body {
   width: 130px;
 }
 .tile-lg {
-  width: 550px;
+  //width: 550px;
   height: 270px;
 }
 .tile-lg .content-wrapper .tile-content {
@@ -1182,13 +1167,13 @@ body {
   height: 180px;
 }
 .tile-lg .content-wrapper .tile-content .tile-img-bg {
-  width: 550px;
+  //width: 550px;
   height: 270px;
   margin-left: -20px;
   margin-top: -20px;
 }
 .tile-lg .content-wrapper .tile-content .tile-img-sm {
-  width: 135px;
+  //width: 135px;
   height: 90px;
 }
 .tile-lg .content-wrapper .tile-content .tile-img-sm,

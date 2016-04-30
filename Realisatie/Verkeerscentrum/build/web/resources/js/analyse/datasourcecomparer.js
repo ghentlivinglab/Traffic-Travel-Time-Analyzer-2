@@ -16,7 +16,27 @@ function initAnalyse(url){
     });
 }
 
-
+function splitToArraySorted(obj, xdata, ydata){
+    var keys = [];
+    var k, i, len;
+    
+    for (k in obj) {
+        if (obj.hasOwnProperty(k)) {
+            keys.push(k);
+        }
+    }
+    
+    keys.sort();
+    
+    len = keys.length;
+    
+    for (i = 0; i < len; i++) {
+        k = keys[i];
+        //alert(k + ':' + obj[k]);
+        xdata.push(k);
+        ydata.push(obj[k]);
+    }
+}
 
 
 function formatDuration(data) {

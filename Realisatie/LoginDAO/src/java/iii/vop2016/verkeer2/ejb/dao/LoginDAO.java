@@ -5,6 +5,7 @@
  */
 package iii.vop2016.verkeer2.ejb.dao;
 
+import iii.vop2016.verkeer2.bean.auth.AuthHelpers;
 import iii.vop2016.verkeer2.bean.auth.AuthUser;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import java.sql.PreparedStatement;
@@ -55,7 +56,8 @@ public class LoginDAO implements LoginDAORemote {
             
             TypedQuery<AuthUser> query = em.createQuery("SELECT u FROM AuthUser AS u WHERE u.username = :username AND u.password = :password", AuthUser.class);
             query.setParameter("username", user);
-            query.setParameter("password", password);
+            query.setParameter("password", AuthHelpers.getMD5(password));
+            System.out.println(AuthHelpers.getMD5(password));
             List<AuthUser> users = query.getResultList();
             
             if(users.size()>0){
