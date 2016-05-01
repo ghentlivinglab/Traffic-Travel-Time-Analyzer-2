@@ -230,6 +230,21 @@ public class RoutesResource {
         }
     }
 
+    @POST
+    @Path("remove/{id}")
+    public Response removeRoutes(@PathParam("id") String sid) {
+        try {
+            List<IRoute> routes = getRoutes(sid);
+            for (IRoute r : routes) {
+                beans.getGeneralDAO().removeRoute(r);
+            }
+            return Response.status(Response.Status.OK).entity("Route has been removed").build();
+        } catch (Exception ex) {
+            Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("An error has occured").build();
+        }
+    }
+
     @GET
     @Path("all")
     @Produces("application/json")
