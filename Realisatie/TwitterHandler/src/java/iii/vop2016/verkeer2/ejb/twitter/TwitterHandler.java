@@ -41,6 +41,9 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.ejb.AccessTimeout;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.SessionContext;
 import javax.ejb.Singleton;
 import javax.imageio.ImageIO;
@@ -64,6 +67,8 @@ import org.apache.http.impl.client.HttpClients;
  * @author Tobias
  */
 @Singleton
+@Lock(LockType.WRITE)
+@AccessTimeout(value=120000)
 public class TwitterHandler implements ThresholdHandlerLocal,ThresholdHandlerRemote {
 
     private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";

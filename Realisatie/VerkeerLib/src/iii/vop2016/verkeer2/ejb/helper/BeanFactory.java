@@ -34,7 +34,7 @@ import java.util.Map;
 public class BeanFactory {
 
     private static final String JNDILOOKUP_BEANFILE = "resources/properties/Beans";
-    private static final String JNDILOOKUP_SOURCEADAPORTSFILE = "resources/properties/SourceAdaptors";
+    private static final String JNDILOOKUP_SOURCEADAPORTSFILE = "resources/properties/SourceAdapters";
     private static final String JNDILOOKUP_THRESHOLDHANDLERSFILE = "resources/properties/ThresholdHandlers";
 
     private static BeanFactory instance;
@@ -235,7 +235,7 @@ public class BeanFactory {
         for (Object val : getBeanProperties().values()) {
             if (val instanceof String) {
                 String value = (String) val;
-                if (value.endsWith(bean)) {
+                if (value.contains(bean)) {
                     return true;
                 }
             }

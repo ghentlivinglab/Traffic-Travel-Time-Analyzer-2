@@ -22,4 +22,6 @@ public interface ILogger {
     void exiting(String sourceClass, String sourceMethod, Object result);
 
     List<Log> getLogs(int amount, int offset, Level filter1, String containing);
+    
+    void setLevel(Level l);
 }

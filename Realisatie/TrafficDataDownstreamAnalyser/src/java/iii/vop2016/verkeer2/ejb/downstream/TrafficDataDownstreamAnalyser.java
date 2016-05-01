@@ -22,6 +22,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.ejb.AccessTimeout;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.SessionContext;
 import javax.ejb.Singleton;
 import javax.naming.InitialContext;
@@ -32,6 +35,8 @@ import javax.naming.NamingException;
  * @author tobia
  */
 @Singleton
+@Lock(LockType.WRITE)
+@AccessTimeout(value=60000)
 public class TrafficDataDownstreamAnalyser implements TrafficDataDownstreamAnalyserRemote,TrafficDataDownstreamAnalyserLocal {
 
     @Resource
@@ -86,7 +91,7 @@ public class TrafficDataDownstreamAnalyser implements TrafficDataDownstreamAnaly
 
         for (IRoute route : routes) {
             List<IRouteData> routeData = mapping.get(route.getId());
-            if (routeData != null && routeData.size() != 0) {
+            if (routeData != null && !routeData.isEmpty()) {
                 int opt = dataProvider.getOptimalDuration(route, new ArrayList<String>());
                 int mean = dataProvider.getMeanDurationFromRouteData(routeData);
                 if (opt != -1 && mean != -1) {

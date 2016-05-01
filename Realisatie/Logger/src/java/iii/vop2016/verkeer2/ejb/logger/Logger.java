@@ -8,11 +8,8 @@ package iii.vop2016.verkeer2.ejb.logger;
 import iii.vop2016.verkeer2.ejb.components.Log;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
-import iii.vop2016.verkeer2.ejb.timer.ITimer;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -22,6 +19,9 @@ import java.util.logging.Level;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
+import javax.ejb.AccessTimeout;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.SessionContext;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
@@ -34,6 +34,8 @@ import javax.naming.NamingException;
  */
 @Startup
 @Singleton
+@Lock(LockType.WRITE)
+@AccessTimeout(value=60000)
 public class Logger implements LoggerRemote,LoggerLocal {
 
     protected java.util.logging.Logger l;
@@ -70,6 +72,7 @@ public class Logger implements LoggerRemote,LoggerLocal {
             if (!(file.endsWith("/") || file.endsWith("\\"))) {
                 file += "/";
             }
+            file = file.replace("\\", "/");
             file += prop.getProperty("filename", "");
 
             if (!file.equals("")) {
@@ -147,5 +150,10 @@ public class Logger implements LoggerRemote,LoggerLocal {
         }
 
         return ret;
+    }
+
+    @Override
+    public void setLevel(Level l) {
+        this.l.setLevel(l);
     }
 }

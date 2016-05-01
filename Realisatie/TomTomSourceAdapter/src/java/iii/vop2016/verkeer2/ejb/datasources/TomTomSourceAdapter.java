@@ -112,7 +112,7 @@ public class TomTomSourceAdapter implements  SourceAdapterLocal,SourceAdapterRem
             //return null;
             
             //wacht een kleine periode om zeker geen overschrijding van aantal calls per seconde te bekomen:
-            Thread.sleep(300);
+            Thread.sleep(500);
 
             /* 
         } catch (JSONException e) {

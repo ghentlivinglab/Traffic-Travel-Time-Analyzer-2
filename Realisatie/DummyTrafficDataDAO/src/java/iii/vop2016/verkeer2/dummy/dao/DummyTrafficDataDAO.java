@@ -259,4 +259,9 @@ public class DummyTrafficDataDAO implements TrafficDataDAORemote {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public List<IRouteData> getRawData(IRoute route, Date time1, Date time2, List<String> adapter, int page) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

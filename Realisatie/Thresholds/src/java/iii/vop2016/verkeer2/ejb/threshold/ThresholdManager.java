@@ -23,6 +23,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.ejb.AccessTimeout;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.SessionContext;
 import javax.ejb.Singleton;
 import javax.naming.InitialContext;
@@ -33,6 +36,8 @@ import javax.naming.NamingException;
  * @author Tobias
  */
 @Singleton
+@Lock(LockType.WRITE)
+@AccessTimeout(value=120000)
 public class ThresholdManager implements ThresholdManagerRemote,ThresholdManagerLocal {
 
     @Resource

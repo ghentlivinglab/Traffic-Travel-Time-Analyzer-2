@@ -22,6 +22,7 @@ public class Request {
     private int limitResult;
     private long groupbyTimeFrames;
     private boolean dataless;
+    private int skipResults;
 
     public Request(boolean ascending, int limitResult) {
         this.ascending = ascending;
@@ -29,6 +30,7 @@ public class Request {
         this.param = new Parameter[1];
         this.groupbyTimeFrames = -1;
         this.dataless = false;
+        this.skipResults = 0;
     }
 
     public void setDataless(boolean dataless) {
@@ -138,10 +140,24 @@ public class Request {
         if (limitResult != 0) {
             q.setMaxResults(limitResult);
         }
+        
+        if(skipResults != 0){
+            q.setFirstResult(skipResults*limitResult);
+        }
         return q;
     }
 
     void setGroupBy(long groupbyTimeFrames) {
         this.groupbyTimeFrames = groupbyTimeFrames;
     }
+
+    public int getSkipResults() {
+        return skipResults;
+    }
+
+    public void setSkipResults(int skipResults) {
+        this.skipResults = skipResults;
+    }
+    
+    
 }

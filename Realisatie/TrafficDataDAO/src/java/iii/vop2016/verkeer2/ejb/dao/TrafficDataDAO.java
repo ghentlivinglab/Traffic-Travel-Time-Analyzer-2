@@ -34,7 +34,7 @@ import javax.persistence.Query;
 @Startup
 public class TrafficDataDAO implements TrafficDataDAORemote,TrafficDataDAOLocal {
 
-    @PersistenceContext(name = "TrafficDataDBPU")
+    @PersistenceContext(name = "TrafficDBPU")
     EntityManager em;
     @Resource
     private SessionContext sctx;
@@ -405,6 +405,39 @@ public class TrafficDataDAO implements TrafficDataDAORemote,TrafficDataDAOLocal 
 
         } catch (Exception e) {
             beans.getLogger().log(Level.SEVERE, "Could not retrieve agregated data for: " + route.getName() + " (" + startList.toString() + " - " + endList.toString() + ").");
+        } finally {
+
+        }
+        return data;
+    }
+
+    @Override
+    public List<IRouteData> getRawData(IRoute route, Date time1, Date time2, List<String> adapter, int page) {
+        List<IRouteData> data = new ArrayList<>();
+        try {
+            long[] range = blocklist.getIdRange(time1, time2);
+            if (range[0] == -1 || range[1] == -1) {
+                throw new NoResultException("Could not retrieve id segment from blocklist");
+            }
+
+            int i = 0;
+            Request r = new Request(true, 1000);
+            r.addParam(i++, new Parameter("id", range[0], range[1], Operation.between));
+            r.addParam(i++, new Parameter("routeId", route.getId(), Operation.eq));
+            if (adapter != null && !adapter.isEmpty()) {
+                Parameter p = new Parameter("provider", adapter, Operation.eq);
+                r.addParam(i++, p);
+            }
+            r.addParam(i++, new Parameter("timestamp", time1, time2, Operation.between));
+            
+            r.setSkipResults(page);
+
+            List<IRouteData> routesEntities = r.PrepareQuery(em).getResultList();
+            for (IRouteData rdata : routesEntities) {
+                data.add(new RouteData(rdata));
+            }
+        } catch (Exception e) {
+            beans.getLogger().log(Level.SEVERE, "Could not retrieve raw data for: " + route.getName() + " (" + time1 + " - " + time2 + ").");
         } finally {
 
         }

@@ -7,10 +7,8 @@ package iii.vop2016.verkeer2.ejb.dao;
 
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
-import iii.vop2016.verkeer2.ejb.datasources.ISourceAdapter;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -21,6 +19,8 @@ public interface ITrafficDataDAO {
     public IRouteData addData(IRouteData data);
 
     public List<IRouteData> addData(List<IRouteData> data);
+    
+    public List<IRouteData> getRawData(IRoute route, Date time1, Date time2, List<String> adapter, int page);
 
     public List<IRouteData> getData(IRoute route, Date time1, Date time2, List<String> adapter);
 
