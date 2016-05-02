@@ -1267,4 +1267,17 @@ public class DataProvider implements DataProviderRemote,DataProviderLocal {
         return precisionDistance;
     }
 
+    @Override
+    public void invalidateBuffers() {
+        this.avgDuration.clear();
+        this.avgSpeed.clear();
+        this.dataBuffer.clear();
+        this.dataByDay.clear();
+        this.dataVelocityBuffer.clear();
+        this.distance.clear();
+        this.optimalDuration.clear();
+        this.optimalSpeed.clear();
+        this.velocityByDay.clear();
+    }
+
 }

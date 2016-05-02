@@ -5,6 +5,7 @@
  */
 package iii.vop2016.verkeer2.ejb.timer;
 
+import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import java.text.SimpleDateFormat;
@@ -27,7 +28,9 @@ import javax.ejb.TimerConfig;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import iii.vop2016.verkeer2.ejb.datadownloader.ITrafficDataDownloader;
+import iii.vop2016.verkeer2.ejb.dataprovider.IDataProvider;
 import iii.vop2016.verkeer2.ejb.helper.NoInternetConnectionException;
+import iii.vop2016.verkeer2.ejb.logger.ILogger;
 import iii.vop2016.verkeer2.ejb.properties.IProperties;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -176,7 +179,17 @@ public class TimerScheduler implements TimerSchedulerRemote, TimerSchedulerLocal
 
             interval = i;
             ticks = 1;
-            beans.getLogger().log(Level.INFO, "Interval for Timer set to " + interval);
+            
+            ILogger logger = beans.getLogger();
+            ITrafficDataDAO dao = beans.getTrafficDataDAO();
+            IDataProvider dataProv = beans.getDataProvider();
+            
+            logger.log(Level.INFO, "Interval for Timer set to " + interval);
+            
+            
+            dao.updateBlockList();
+            dataProv.invalidateBuffers();
+            logger.log(Level.INFO, "Buffers cleared and Blocklist for lookup rebuild");
         }
 
     }

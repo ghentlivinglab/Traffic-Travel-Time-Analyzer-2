@@ -33,6 +33,8 @@ public interface ITrafficDataDAO {
     public IRouteData getDataByID(long id);
 
     void fillDummyData(long i);
+    
+    void updateBlockList();
 
     public List<IRouteData> getData(IRoute route, List<Date> startList, List<Date> endList, List<String> adapter);
 

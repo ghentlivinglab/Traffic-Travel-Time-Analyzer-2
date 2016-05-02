@@ -16,6 +16,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.SessionContext;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
@@ -32,7 +34,8 @@ import javax.persistence.Query;
  */
 @Singleton
 @Startup
-public class TrafficDataDAO implements TrafficDataDAORemote,TrafficDataDAOLocal {
+@Lock(LockType.WRITE)
+public class TrafficDataDAO implements TrafficDataDAORemote, TrafficDataDAOLocal {
 
     @PersistenceContext(name = "TrafficDBPU")
     EntityManager em;
@@ -267,7 +270,7 @@ public class TrafficDataDAO implements TrafficDataDAORemote,TrafficDataDAOLocal 
             for (IRouteData rdata : routesEntities) {
                 data.add(new RouteData(rdata));
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             beans.getLogger().log(Level.SEVERE, "Could not retrieve raw data for: " + route.getName() + " (" + startList.toString() + " - " + endList.toString() + ").");
         }
         return data;
@@ -429,7 +432,7 @@ public class TrafficDataDAO implements TrafficDataDAORemote,TrafficDataDAOLocal 
                 r.addParam(i++, p);
             }
             r.addParam(i++, new Parameter("timestamp", time1, time2, Operation.between));
-            
+
             r.setSkipResults(page);
 
             List<IRouteData> routesEntities = r.PrepareQuery(em).getResultList();
@@ -442,5 +445,15 @@ public class TrafficDataDAO implements TrafficDataDAORemote,TrafficDataDAOLocal 
 
         }
         return data;
+    }
+
+    @Override
+    public void updateBlockList() {
+        Query q = em.createQuery("SELECT COUNT(r) FROM RouteDataEntity r");
+        Object obj = q.getSingleResult();
+        if (obj != null && obj instanceof Long && this.blocklist != null) {
+            long size = (long) obj;
+            this.blocklist.update(size, this);
+        }
     }
 }
