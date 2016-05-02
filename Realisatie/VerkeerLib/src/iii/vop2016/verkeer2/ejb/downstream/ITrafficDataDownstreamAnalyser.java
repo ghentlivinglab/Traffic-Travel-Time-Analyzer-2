@@ -17,8 +17,8 @@ import java.util.List;
 public interface ITrafficDataDownstreamAnalyser {
     String getProjectName();
     
-    public IRouteData addData(IRouteData data);
-    public List<IRouteData> addData(List<IRouteData> data);
+    public IRouteData addData(IRouteData data, List<IRoute> routes);
+    public List<IRouteData> addData(List<IRouteData> data, List<IRoute> routes);
     
     public void startSession();
     public void endSession(List<IRouteData> data, List<IRoute> routes);

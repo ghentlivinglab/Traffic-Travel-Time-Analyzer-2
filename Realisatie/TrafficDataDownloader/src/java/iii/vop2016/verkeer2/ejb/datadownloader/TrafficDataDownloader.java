@@ -86,7 +86,7 @@ public class TrafficDataDownloader implements TrafficDataDownloaderRemote,Traffi
                     for (IRouteData r : data) {
                         r.setTimestamp(timestamp);
                     }
-                    allData.addAll(analyzer.addData(data));
+                    allData.addAll(analyzer.addData(data,routes));
                 }
             }
             analyzer.endSession(allData, routes);
