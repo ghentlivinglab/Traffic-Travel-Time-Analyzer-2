@@ -9,9 +9,11 @@ import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.RouteData;
+import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.DataAccessException;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import iii.vop2016.verkeer2.ejb.helper.URLException;
+import iii.vop2016.verkeer2.ejb.properties.IProperties;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -34,7 +36,7 @@ import org.json.JSONObject;
  * @author Simon
  */
 @Singleton
-public class HereSourceAdapter implements SourceAdapterLocal,SourceAdapterRemote {
+public class HereSourceAdapter implements SourceAdapterLocal, SourceAdapterRemote {
 
     private String appId;
     private String appCode;
@@ -51,6 +53,11 @@ public class HereSourceAdapter implements SourceAdapterLocal,SourceAdapterRemote
             Logger.getLogger(HereSourceAdapter.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        IProperties p = BeanFactory.getInstance(ctx, null).getPropertiesCollection();
+        if (p != null) {
+            p.registerProperty(JNDILOOKUP_PROPERTYFILE);
+        }
+
         Logger.getLogger("logger").log(Level.INFO, providerName + "SourceAdapter has been initialized.");
     }
 
@@ -62,11 +69,11 @@ public class HereSourceAdapter implements SourceAdapterLocal,SourceAdapterRemote
     public IRouteData parse(IRoute route) throws URLException, DataAccessException {
 
         RouteData rd = null;
-        
+
         Properties prop = getProperties();
         appId = prop.getProperty("HereID");
         appCode = prop.getProperty("HereCode");
-        
+
         try {
 
             //json.org.* moet geimporteerd worden

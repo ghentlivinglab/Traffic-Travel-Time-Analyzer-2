@@ -23,6 +23,7 @@ import iii.vop2016.verkeer2.ejb.geojson.GeoJsonRemote;
 import iii.vop2016.verkeer2.ejb.dataprovider.IDataProvider;
 import iii.vop2016.verkeer2.ejb.geojson.IGeoJson;
 import iii.vop2016.verkeer2.ejb.logger.ILogger;
+import iii.vop2016.verkeer2.ejb.properties.IProperties;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdHandler;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdManager;
 import java.util.Map;
@@ -78,6 +79,22 @@ public class BeanFactory {
         this.sctx = sctx;
     }
 
+    
+    public IProperties getPropertiesCollection() throws ResourceFileMissingException {
+        if (sctx != null) {
+            Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.Properties, sctx, Logger.getGlobal());
+            if (obj instanceof IProperties) {
+                return (IProperties) obj;
+            }
+        } else {
+            Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.Properties, ctx, Logger.getGlobal());
+            if (obj instanceof IProperties) {
+                return (IProperties) obj;
+            }
+        }
+        return null;
+    }
+    
     public ILogger getLogger() throws ResourceFileMissingException {
         if (sctx != null) {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.Logger, sctx, Logger.getGlobal());

@@ -40,6 +40,9 @@ import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyser;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Set;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.MediaType;
@@ -293,8 +296,8 @@ public class RoutesResource {
 
         JSONArray res = JSONRoutes(routes);
         for (int i = 0; i < res.length(); i++) {
-            res.getJSONObject(i).put("rawdata", JSONRawData(routes.get(i),page));
-
+            JSONArray arr = new JSONArray(JSONRawData(routes.get(i),page).build().toString());
+            res.getJSONObject(i).put("rawdata", arr);
         }
         return Response.ok().entity(res.toString()).build();
     }
@@ -828,7 +831,7 @@ public class RoutesResource {
         }
     }
 
-    private String JSONRawData(IRoute route, int page) {
+    private JsonArrayBuilder JSONRawData(IRoute route, int page) {
         List<IRouteData> res = null;
 
         if (startTime != null && endTime != null) {
@@ -841,19 +844,19 @@ public class RoutesResource {
             res = beans.getTrafficDataDAO().getRawData(route, new Date(0), new Date(), providers, page);
         }
         
-        JSONArray list = new JSONArray();
+        JsonArrayBuilder list = Json.createArrayBuilder();
         for (IRouteData s : res) {
-            JSONObject o = new JSONObject();
-            o.put("Timestamp", s.getTimestamp());
-            o.put("Distance", s.getDistance());
-            o.put("Duration", s.getDuration());
-            o.put("Id", s.getId());
-            o.put("Provider", s.getProvider());
-            o.put("RouteId", s.getRouteId());
-            list.put(o);
+            JsonObjectBuilder o = Json.createObjectBuilder();
+            o.add("Timestamp", s.getTimestamp().toString());
+            o.add("Distance", s.getDistance());
+            o.add("Duration", s.getDuration());
+            o.add("Id", s.getId());
+            o.add("Provider", s.getProvider());
+            o.add("RouteId", s.getRouteId());
+            list.add(o);
         }
         
-        return list.toString();
+        return list;
     }
 
 }

@@ -9,9 +9,11 @@ import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.RouteData;
+import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.DataAccessException;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import iii.vop2016.verkeer2.ejb.helper.URLException;
+import iii.vop2016.verkeer2.ejb.properties.IProperties;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -34,7 +36,7 @@ import org.json.JSONObject;
  * @author tobia
  */
 @Singleton
-public class GoogleMapsSourceAdapter implements  SourceAdapterLocal,SourceAdapterRemote {
+public class GoogleMapsSourceAdapter implements SourceAdapterLocal, SourceAdapterRemote {
 
     //This final variables may be better in resourcefile?
     //Free key for the Google API, connected to the project. Limited usage.
@@ -53,6 +55,11 @@ public class GoogleMapsSourceAdapter implements  SourceAdapterLocal,SourceAdapte
             ctx = new InitialContext();
         } catch (NamingException ex) {
             Logger.getLogger(GoogleMapsSourceAdapter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        IProperties p = BeanFactory.getInstance(ctx, null).getPropertiesCollection();
+        if (p != null) {
+            p.registerProperty(JNDILOOKUP_PROPERTYFILE);
         }
 
         Logger.getLogger("logger").log(Level.INFO, providerName + "SourceAdapter has been initialized.");

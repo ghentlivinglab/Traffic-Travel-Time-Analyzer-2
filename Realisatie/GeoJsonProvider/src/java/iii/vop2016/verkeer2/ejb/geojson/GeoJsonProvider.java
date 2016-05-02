@@ -12,6 +12,7 @@ import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import iii.vop2016.verkeer2.ejb.helper.InvalidCoordinateException;
+import iii.vop2016.verkeer2.ejb.properties.IProperties;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,6 +67,11 @@ public class GeoJsonProvider implements GeoJsonRemote, GeoJsonLocal {
         }
 
         beans = BeanFactory.getInstance(ctx, ctxs);
+
+        IProperties propCol = beans.getPropertiesCollection();
+        if (propCol != null) {
+            propCol.registerProperty(JNDILOOKUP_PROPERTYFILE);
+        }
 
         fillProperties();
 

@@ -13,6 +13,7 @@ import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import iii.vop2016.verkeer2.ejb.logger.ILogger;
 import iii.vop2016.verkeer2.ejb.logger.LoggerRemote;
+import iii.vop2016.verkeer2.ejb.properties.IProperties;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,8 +38,8 @@ import javax.naming.NamingException;
  */
 @Singleton
 @Lock(LockType.WRITE)
-@AccessTimeout(value=120000)
-public class ThresholdManager implements ThresholdManagerRemote,ThresholdManagerLocal {
+@AccessTimeout(value = 120000)
+public class ThresholdManager implements ThresholdManagerRemote, ThresholdManagerLocal {
 
     @Resource
     protected SessionContext ctxs;
@@ -57,6 +58,11 @@ public class ThresholdManager implements ThresholdManagerRemote,ThresholdManager
             Logger.getLogger(ThresholdManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         beans = BeanFactory.getInstance(ctx, ctxs);
+
+        IProperties propCol = beans.getPropertiesCollection();
+        if (propCol != null) {
+            propCol.registerProperty(JNDILOOKUP_PROPERTYFILE);
+        }
 
         thresholdMap = beans.getGeneralDAO().getThresholds();
         if (thresholdMap == null) {
@@ -197,7 +203,7 @@ public class ThresholdManager implements ThresholdManagerRemote,ThresholdManager
                 } else {
                     dao.updateThreshold(th);
                 }
-                if(!InsertIntoMap(th)){
+                if (!InsertIntoMap(th)) {
                     success = false;
                 }
             }

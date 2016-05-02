@@ -8,9 +8,11 @@ package iii.vop2016.verkeer2.ejb.datasources;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.RouteData;
+import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.DataAccessException;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import iii.vop2016.verkeer2.ejb.helper.URLException;
+import iii.vop2016.verkeer2.ejb.properties.IProperties;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Properties;
@@ -53,6 +55,11 @@ public class CoyoteSourceAdapter implements SourceAdapterLocal,SourceAdapterRemo
             ctx = new InitialContext();
         } catch (NamingException ex) {
             Logger.getLogger(CoyoteSourceAdapter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        IProperties p = BeanFactory.getInstance(ctx, null).getPropertiesCollection();
+        if(p != null){
+            p.registerProperty(JNDILOOKUP_PROPERTYFILE);
         }
 
         Logger.getLogger("logger").log(Level.INFO, providerName + "SourceAdapter has been initialized.");

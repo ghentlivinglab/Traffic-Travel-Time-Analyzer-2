@@ -13,6 +13,7 @@ import iii.vop2016.verkeer2.ejb.dao.AggregationContainer;
 import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
+import iii.vop2016.verkeer2.ejb.properties.IProperties;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,6 +66,11 @@ public class DataProvider implements DataProviderRemote,DataProviderLocal {
             Logger.getLogger(DataProvider.class.getName()).log(Level.SEVERE, null, ex);
         }
         beans = BeanFactory.getInstance(ctx, ctxs);
+        
+        IProperties propCol = beans.getPropertiesCollection();
+        if(propCol != null){
+            propCol.registerProperty(JNDILOOKUP_PROPERTYFILE);
+        }
 
         beans.getLogger().log(Level.INFO, "DataProvider has been initialized.");
     }

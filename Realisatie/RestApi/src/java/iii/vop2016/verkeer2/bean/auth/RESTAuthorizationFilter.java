@@ -49,7 +49,7 @@ public class RESTAuthorizationFilter implements Filter {
         String keyString = reqt.getParameter("key");
         if (keyString == null) {
             resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Provide activated key.");
-        } else if (beans.getAPIKeyDAO().validate(keyString)) {
+        } else if (beans.getAPIKeyDAO() == null || beans.getAPIKeyDAO().validate(keyString)) {
             chain.doFilter(request, response);
         } else {
             resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Provide activated key.");

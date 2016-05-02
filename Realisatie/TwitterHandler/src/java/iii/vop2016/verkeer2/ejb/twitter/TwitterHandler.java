@@ -11,6 +11,7 @@ import iii.vop2016.verkeer2.ejb.geojson.GeoJsonRemote;
 import iii.vop2016.verkeer2.ejb.geojson.IGeoJson;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
+import iii.vop2016.verkeer2.ejb.properties.IProperties;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdHandler;
 import iii.vop2016.verkeer2.ejb.threshold.ThresholdHandlerLocal;
 import iii.vop2016.verkeer2.ejb.threshold.ThresholdHandlerRemote;
@@ -68,8 +69,8 @@ import org.apache.http.impl.client.HttpClients;
  */
 @Singleton
 @Lock(LockType.WRITE)
-@AccessTimeout(value=120000)
-public class TwitterHandler implements ThresholdHandlerLocal,ThresholdHandlerRemote {
+@AccessTimeout(value = 120000)
+public class TwitterHandler implements ThresholdHandlerLocal, ThresholdHandlerRemote {
 
     private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 
@@ -123,6 +124,11 @@ public class TwitterHandler implements ThresholdHandlerLocal,ThresholdHandlerRem
             Logger.getLogger(TwitterHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
         beans = BeanFactory.getInstance(ctx, sctx);
+
+        IProperties propCol = beans.getPropertiesCollection();
+        if (propCol != null) {
+            propCol.registerProperty(JNDILOOKUP_PROPERTYFILE);
+        }
     }
 
     private Properties getProperties() {
@@ -138,22 +144,22 @@ public class TwitterHandler implements ThresholdHandlerLocal,ThresholdHandlerRem
 
             try {
                 String imageID = uploadImgToTwitter(img, prop);
-                
+
                 String message = "";
                 if (difference > 0) {
                     message = prop.getProperty("twittermessageup", "");
                 } else {
                     message = prop.getProperty("twittermessagedown", "");
                 }
-                
+
                 if (message.equals("")) {
                     return;
                 }
                 String lvl = prop.getProperty("trafficlevel" + level, "");
                 message = message.replace("LEVEL", lvl).replace("ROUTE", route.getName()).replace("DELAYMIN", delay / 60 + "").replace("DELAYSEC", delay % 60 + "");
-                
+
                 Thread.sleep(1000);
-                
+
                 postToTwitter(message, imageID, prop);
             } catch (InterruptedException ex) {
                 Logger.getLogger(TwitterHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -212,7 +218,6 @@ public class TwitterHandler implements ThresholdHandlerLocal,ThresholdHandlerRem
             /*if (imageID != null) {
                 param.put("media_ids", imageID);
             }*/
-
             param.put("oauth_consumer_key", consumerkey);
             param.put("oauth_nonce", nonce);
             param.put("oauth_signature_method", signatureMathode);
@@ -241,7 +246,6 @@ public class TwitterHandler implements ThresholdHandlerLocal,ThresholdHandlerRem
             /*if (imageID != null) {
                 wr.writeBytes("&media_ids=" + Encoder.percentEncode(imageID));
             }*/
-
             wr.close();
 
             //get response

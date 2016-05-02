@@ -8,6 +8,7 @@ package iii.vop2016.verkeer2.ejb.logger;
 import iii.vop2016.verkeer2.ejb.components.Log;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
+import iii.vop2016.verkeer2.ejb.properties.IProperties;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,8 +36,8 @@ import javax.naming.NamingException;
 @Startup
 @Singleton
 @Lock(LockType.WRITE)
-@AccessTimeout(value=60000)
-public class Logger implements LoggerRemote,LoggerLocal {
+@AccessTimeout(value = 60000)
+public class Logger implements LoggerRemote, LoggerLocal {
 
     protected java.util.logging.Logger l;
     protected List<Log> history;
@@ -63,6 +64,12 @@ public class Logger implements LoggerRemote,LoggerLocal {
             java.util.logging.Logger.getLogger(Logger.class.getName()).log(Level.SEVERE, null, ex);
         }
         beans = BeanFactory.getInstance(ctx, null);
+
+        IProperties propCol = beans.getPropertiesCollection();
+        if (propCol != null) {
+            propCol.registerProperty(JNDILOOKUP_PROPERTYFILE);
+        }
+
         Properties prop = getProperties();
 
         history = new ArrayList<>();
