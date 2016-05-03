@@ -17,7 +17,7 @@
                 <div class="banner">
                     <div class="dashboard display-animation row">
                         <div class="col s7 tile-wrapper">
-                            <a class="tile tile-pink tile-lg ripple-effect" href="/web/live"  style="background-image: url(http://i39.tinypic.com/20r7ipz.jpg);">
+                            <h:link outcome="pretty:live" class="tile tile-pink tile-lg ripple-effect"  style="background-image: url(http://i39.tinypic.com/20r7ipz.jpg);">
                                 <span class="content-wrapper">
                                     <span class="tile-content">
                                         <span class="tile-img"></span>
@@ -26,10 +26,10 @@
                                         </span>
                                     </span>      
                                 </span>
-                            </a>
+                            </h:link>
                         </div>
                         <div class="col s5 tile-wrapper">
-                            <a class="tile tile-lg tile-purple ripple-effect" href="/web/settings">
+                            <h:link outcome="pretty:settings" class="tile tile-purple tile-lg ripple-effect">
                                 <span class="content-wrapper">
                                     <span class="tile-content">
                                         <span class="tile-img"> </span>
@@ -38,7 +38,7 @@
                                         </span>
                                     </span>      
                                 </span>
-                            </a>
+                            </h:link>
                         </div>
                         <div class="col s3 tile-wrapper">
                             <a class="tile tile-lg tile-cyan ripple-effect" href="#">
@@ -53,7 +53,7 @@
                             </a>
                         </div>
                         <div class="col s9 tile-wrapper">
-                            <a class="tile tile-lg tile-amber ripple-effect" href="/web/analyse">
+                            <h:link outcome="pretty:analyse" class="tile tile-amber tile-lg ripple-effect">
                                 <span class="content-wrapper">
                                     <span class="tile-content">
                                         <span class="tile-img tile-img-bg"></span>
@@ -62,7 +62,7 @@
                                         </span>
                                     </span>      
                                 </span>
-                            </a>
+                            </h:link>
                         </div>
                         <div class="col s4 tile-wrapper">
                             <a class="tile tile-lg tile-light-blue ripple-effect" href="#">
@@ -70,7 +70,7 @@
                                     <span class="tile-content">
                                         <span class="tile-img tile-img-bg"></span>
                                         <span class="tile-holder tile-holder-sm">
-                                            <span class="title" style="color:black">Live</span>
+                                            <span class="title">Live</span>
                                         </span>
                                     </span>      
                                 </span>
@@ -89,7 +89,7 @@
                             </a>
                         </div>
                         <div class="col s4 tile-wrapper">
-                            <a class="tile tile-lg tile-sqr tile-indigo ripple-effect" href="#">
+                            <a class="tile tile-lg tile-indigo ripple-effect" href="#">
                                 <span class="content-wrapper">
                                     <span class="tile-content">
                                         <span class="tile-img"></span>
@@ -140,7 +140,7 @@
                     
                     <img src="#{resourceURLimg}/vcg.png" class="logo img-responsive" /> 
                     
-                    <p>Goeiemiddag Pieter</p>
+                    <p>Hallo #{login.user}</p>
                     
                     <p> Welkom op het dashboard van het verkeerscentrum Gent. 
                         Deze applicatie werd ontwikkeld door studenten industrieel 

@@ -6,12 +6,19 @@
 package iii.vop2016.verkeer2.bean.helpers;
 
 import static iii.vop2016.verkeer2.bean.helpers.UrlDAO.prop;
+import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
+import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -76,4 +83,35 @@ public class JSONMethods {
         }
         return response.toString();
     }
+    
+    
+    public static void setObjectFromURL(String surl, JSONObject obj, Properties prop){
+        
+        try{
+            String urlParameters  = obj.toString();
+            byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
+            int    postDataLength = postData.length;
+            URL    url            = new URL( surl );
+            HttpURLConnection conn= (HttpURLConnection) url.openConnection();
+            conn.setDoOutput( true );
+            conn.setInstanceFollowRedirects( false );
+            conn.setRequestMethod( "POST" );
+            conn.setRequestProperty( "Content-Type", "application/json");
+            conn.setRequestProperty( "charset", "utf-8");
+            conn.setRequestProperty( "Content-Length", Integer.toString( postDataLength ));
+            conn.setUseCaches( false );
+            try( DataOutputStream wr = new DataOutputStream( conn.getOutputStream())) {
+                wr.write( postData );
+            } catch (IOException ex) {
+                Logger.getLogger(JSONMethods.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }   catch (MalformedURLException ex) {
+            Logger.getLogger(JSONMethods.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ProtocolException ex) {
+            Logger.getLogger(JSONMethods.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(JSONMethods.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }

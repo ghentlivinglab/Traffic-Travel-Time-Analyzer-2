@@ -17,7 +17,9 @@
         <li><h:commandLink action="#{login.logout}" value="Uitloggen" /></li>
     </ul>
     <nav>
-        <span class="brand-logo center hide-on-med-and-down"><ui:insert name="page">Dashboard</ui:insert></span>
+        <span class="brand-logo center hide-on-med-and-down">
+            <ui:insert name="page">Dashboard</ui:insert>
+        </span>
         <h:link outcome="pretty:index" styleClass="brand-logo">
             <img src="#{requestScope.resourceURLimg}/logo.png" />
         </h:link>

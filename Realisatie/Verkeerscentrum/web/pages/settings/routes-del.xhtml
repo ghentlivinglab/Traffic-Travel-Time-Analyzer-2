@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+    
+    
+    
+    <ui:composition template="../../templates/HeaderBody.xhtml">
+        
+        
+        
+        <ui:define name="content"> 
+            
+            
+            <div class="settings">
+                
+                <div class="page">
+                    
+                    
+                    <header class="header">
+                        <div class="container">
+                            <div class="row">                                            
+                            <div class="col m11 valign-wrapper">
+                                <h3 class="valign">
+                                    Trajecten beheren
+                                </h3> 
+                                <span>
+                                    
+                                </span>
+                            </div>
+                            <div class="col m1">
+                                <h:link outcome="pretty:analyse" class="white-text">
+                                    <i class="material-icons">reorder</i>
+                                </h:link>
+                            </div>
+                            
+                        </div>  
+                        </div>
+                        
+                    </header>
+                    
+                    <div class="content">
+                        
+                        <div class="container">
+                             <br /><br />
+                        <div class="card-panel grey lighten-5 z-depth-1">
+                            <div class="row valign-wrapper">
+                                <div class="col s1 yellow-text">
+                                    <i class="medium material-icons">warning</i>
+                                </div>
+                                <div class="col s11">
+                                    <h5 class="black-text description">
+                                        Bent u zeker dat u de route met naam <b>"<h:outputText value="#{routeSettings.route.name}" />"</b> wil verwijderen?
+                                    </h5>
+                                    <br /><br />
+                                </div>
+                            </div>
+                        </div>
+                             <br /><br />
+                             <h:form>
+                                    <h:commandLink action="#{delRouteBean.submit}" class="waves-effect waves-light btn right red">
+                                       Verwijder
+                                    </h:commandLink>
+                                </h:form>
+                                <h:link outcome="pretty:settings-routes" class="btn right">Nee</h:link>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+            </div>
+        </ui:define>
+        
+        <ui:define name="javascript"> 
+           <!--  <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/avgtraffic.js" /> -->
+            
+        </ui:define>
+        
+    </ui:composition>
+    
+    
+    
+    
+</html>

@@ -6,7 +6,7 @@
 package iii.vop2016.verkeer2.bean.analyse;
 
 import iii.vop2016.verkeer2.bean.components.DataProvider;
-import iii.vop2016.verkeer2.bean.components.Route;
+import iii.vop2016.verkeer2.ejb.components.IRoute;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,7 +24,7 @@ import javax.faces.bean.RequestScoped;
 public class RouteComparer extends AnalysePage implements ITableView, IGraphView {
 
    
-    private List<Route> routes = null;
+    private List<IRoute> routes = null;
     private Pair<Date,Date> period = null;
     private List<DataProvider> dataproviders = null;
 
@@ -68,7 +68,7 @@ public class RouteComparer extends AnalysePage implements ITableView, IGraphView
         this.routes = routeDAO.getSelectedRoutes();
     }
     
-    public List<Route> getRoutes() {
+    public List<IRoute> getRoutes() {
         return this.routes;
     }
 
@@ -89,7 +89,7 @@ public class RouteComparer extends AnalysePage implements ITableView, IGraphView
         if(routes != null || routes.size()==0){
             StringBuilder routesURL = new StringBuilder();
             if(this.routes.size() > 0){
-                for(Route route : this.routes){
+                for(IRoute route : this.routes){
                     routesURL.append(route.getId()).append(",");
                 }
                 routesURL.delete(routesURL.length()-1, routesURL.length());

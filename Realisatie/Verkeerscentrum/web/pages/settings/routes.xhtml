@@ -11,6 +11,7 @@
     
     <ui:composition template="../../templates/HeaderBody.xhtml">
         
+        <ui:define name="page"> Instellingen </ui:define>
         
         
         <ui:define name="content"> 
@@ -24,21 +25,21 @@
                     <header class="header">
                         <div class="container">
                             <div class="row">                                            
-                            <div class="col m11 valign-wrapper">
-                                <h3 class="valign">
-                                    Trajecten beheren
-                                </h3> 
-                                <span>
-                                    
-                                </span>
-                            </div>
-                            <div class="col m1">
-                                <h:link outcome="pretty:analyse" class="white-text">
-                                    <i class="material-icons">reorder</i>
-                                </h:link>
-                            </div>
-                            
-                        </div>  
+                                <div class="col m11 valign-wrapper">
+                                    <h3 class="valign">
+                                        Trajecten beheren
+                                    </h3> 
+                                    <span>
+                                        
+                                    </span>
+                                </div>
+                                <div class="col m1">
+                                    <h:link outcome="pretty:settings-routes-new" class="btn-floating btn-large waves-effect waves-light yellow">
+                                        <i class="material-icons">add</i>
+                                    </h:link>
+                                </div>
+                                
+                            </div>  
                         </div>
                         
                     </header>
@@ -46,7 +47,96 @@
                     <div class="content">
                         
                         <div class="container">
-                            Content
+                            <br /><br />
+                            
+                            <h:form>
+                                <h:dataTable value="#{routeSettings.allRoutes}" var="route"
+                                             styleClass="order-table striped"
+                                             headerClass="orange"
+                                             rowClasses=""
+                                             columnClasses="left-align,left-align,right-align"
+                                             >
+                                    
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <!-- <h:commandLink action="#{order.sortByOrderNo}"> -->
+                                                ID
+                                            <!-- </h:commandLink> -->
+                                        </f:facet>
+                                        #{route.id}
+                                    </h:column>
+                                    
+                                    <h:column>
+                                        <f:facet name="header">
+                                            
+                                            Naam traject
+                                            
+                                        </f:facet>
+                                        <h:link outcome="pretty:settings-routes-details">
+                                            <f:param name="id" value="#{route.id}" />
+                                            #{route.name}
+                                        </h:link>
+                                    </h:column>
+                                    
+                                    
+                                    <h:column>
+                                        <f:facet name="header"></f:facet>
+                                        <h:link outcome="pretty:settings-routes-edit">
+                                            <f:param name="id" value="#{route.id}" />
+                                            <i class="material-icons">mode_edit</i>
+                                        </h:link>
+                                        <h:link outcome="pretty:settings-routes-details">
+                                            <f:param name="id" value="#{route.id}" />
+                                             <i class="material-icons">assessment</i>
+                                        </h:link>
+                                        <h:link outcome="pretty:settings-routes-del">
+                                            <f:param name="id" value="#{route.id}" />
+                                            <i class="material-icons">close</i>
+                                        </h:link>
+                                    </h:column>
+                                    
+                                </h:dataTable>
+                            </h:form>
+                            
+                            <br /><br />
+                            
+                            <!--
+                            <div class="row">
+                                <div class="card-panel grey lighten-5" style="padding: 0px; padding-left: 20px;">
+                                    <div class="row valign-wrapper">
+                                        <div class="col s1">
+                                            <div class="valign-wrapper center" style="height: 75px; width: 75px; background-color:blue; border-radius: 50%">
+                                                <h4 class="valign center" style="width: 100%; color: white;">
+                                                    <h:outputText value="#{route.id}"/>
+                                                </h4>
+                                            </div>
+                                            
+                                           
+                                            
+                                        </div>
+                                        <div class="col s7">
+                                            <div class="row">
+                                                <h4> <a href="/web/settings/routes/detail/1"> <h:outputText value="#{route.name}"/> </a> </h4>
+                                                <h5> <h:outputText value="#{route.startLocation.name}"/> - <h:outputText value="#{route.endLocation.name}"/> </h5>
+                                                 <a href="#!" id="btnEdit" class=" modal-action modal-close waves-effect waves-green btn-flat green" style="color: white">Wijzigen</a>
+                                            </div>
+                                        </div>
+                                        <div class="col s4">
+                                            <div class="right-align">
+                                                <a href="#!" id="btnInfoMap" class="waves-effect waves-blue btn-flat blue" style="color: white; width: 225px; text-align: center">Kaartweergave</a>
+                                                <a href="#!" id="btnEditThresholds" class="waves-effect waves-green btn-flat green" style="color: white; width: 225px; text-align: center; padding-bottom: 4px">Wijzig thresholds</a>
+                                                <a href="#!" id="btnEditWaypoints" class="waves-effect waves-green btn-flat green" style="color: white; width: 225px; text-align: center">Wijzig waypoints</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            -->
+                            
+                            
+                            
+                            
                         </div>
                         
                         

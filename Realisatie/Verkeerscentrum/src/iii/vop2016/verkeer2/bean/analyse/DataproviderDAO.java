@@ -7,7 +7,6 @@ package iii.vop2016.verkeer2.bean.analyse;
 
 import static iii.vop2016.verkeer2.bean.analyse.RouteDAO.prop;
 import iii.vop2016.verkeer2.bean.components.DataProvider;
-import iii.vop2016.verkeer2.bean.components.Route;
 import iii.vop2016.verkeer2.bean.helpers.JSONMethods;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import java.util.ArrayList;

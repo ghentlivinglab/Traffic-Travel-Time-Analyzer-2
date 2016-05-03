@@ -59,11 +59,35 @@
 		<view-id value="/faces/pages/analyse/periodcompare.xhtml" />
 	</url-mapping>
         
-        <url-mapping id="analyse-routes">
-		<pattern value="/analyse/routes" />
-		<view-id value="/faces/pages/analyse/routecompare.xhtml" />
+        <url-mapping id="settings-routes">
+		<pattern value="/settings/routes" />
+		<view-id value="/faces/pages/settings/routes.xhtml" />
 	</url-mapping>
         
+        <url-mapping id="settings-routes-new">
+		<pattern value="/settings/routes/new" />
+		<view-id value="/faces/pages/settings/routes-new.xhtml" />
+	</url-mapping>
+        
+        <url-mapping id="settings-routes-edit">
+		<pattern value="/settings/routes/edit/#{id : routeSettings.id}" />
+		<view-id value="/faces/pages/settings/routes-edit.xhtml" />
+	</url-mapping>
+        
+        <!--  -->
+        
+        <url-mapping id="settings-routes-del">
+		<pattern value="/settings/routes/del/#{id : routeSettings.id}" />
+		<view-id value="/faces/pages/settings/routes-del.xhtml" />
+	</url-mapping>
+        
+        <url-mapping id="settings-routes-details">
+		<pattern value="/settings/routes/detail/#{id : routeSettings.id}" />
+		<view-id value="/faces/pages/settings/routes-details.xhtml" />
+	</url-mapping>
+        
+       
+       
                 
         <url-mapping id="settings">
 		<pattern value="/settings" />

@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+    
+    
+    
+    <ui:composition template="../../templates/HeaderBody.xhtml">
+        
+        
+        
+        <ui:define name="content"> 
+            
+            <div class="settings">
+                
+                <div class="page">
+                    
+                    
+                    <header class="header">
+                        <div class="container">
+                            <div class="row">                                            
+                                <div class="col m11 valign-wrapper">
+                                    <h3 class="valign">
+                                        Traject wijzigen
+                                    </h3> 
+                                    <span>
+                                        
+                                    </span>
+                                </div>
+                                <div class="col m1">
+                                    <h:link outcome="pretty:settings-routes" class="white-text">
+                                        <i class="material-icons">replay</i>
+                                    </h:link>
+                                </div>
+                                
+                            </div>  
+                        </div>
+                        
+                    </header>
+                    
+                    <div class="content">
+                        
+                        <div class="container">
+                            <br />
+                            <h:form>
+                                <h:messages showSummary="true" />
+                                <ul class="collection with-header">
+                                    <li class="collection-header"><h4>Algemeen</h4></li>
+                                    <li class="collection-item">
+                                        <div class="row">
+                                            <div class="col s3 pull-bottom valign-wrapper">
+                                                <p class="valign">Naam:</p>
+                                            </div>
+                                            <div class="col s9">
+                                                <h:inputText value="#{editRouteBean.route.name}" required="true"
+                                                             requiredMessage="Gelieve een naam in te vullen">
+                                                </h:inputText>
+                                            </div>
+                                        </div>
+                                        
+                                    </li>
+                                    
+                                    <li class="collection-item"><h4>Thresholds</h4></li>
+                                    <li class="collection-item">
+                                        
+                                        <br />
+                                        <br />
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th width="2%"></th>
+                                                    <th width="10%" data-field="id" class="center">Level</th>
+                                                    <th width="" data-field="name">Vanaf # seconden vertraging</th>
+                                                </tr>
+                                            </thead>
+                                            
+                                            <tbody>
+                                                <tr>
+                                                    <td class="veryfast"></td>
+                                                    <td class="center"><h:outputText value="1" /></td>
+                                                    <td><h:inputText  a:type="number" value="0" required="true"
+                                                                      requiredMessage="Mobile Name is mandatory" disabled="true"></h:inputText></td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                    <td class="fast"></td>
+                                                    <td class="center"><h:outputText value="#{editRouteBean.thresholds.get(0).level+1}" /></td>
+                                                    <td><h:inputText a:type="number" value="#{editRouteBean.thresholds.get(0).delayTriggerLevel}" required="true"
+                                                                     requiredMessage="Mobile Name is mandatory"></h:inputText></td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                    <td class="intermediate"></td>
+                                                    <td class="center"><h:outputText value="#{editRouteBean.thresholds.get(1).level+1}" /></td>
+                                                    <td><h:inputText a:type="number" value="#{editRouteBean.thresholds.get(1).delayTriggerLevel}" required="true"
+                                                                     requiredMessage="Mobile Name is mandatory"></h:inputText></td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                    <td class="slow"></td>
+                                                    <td class="center"><h:outputText value="#{editRouteBean.thresholds.get(2).level+1}" /></td>
+                                                    <td>
+                                                        <h:inputText a:type="number" value="#{editRouteBean.thresholds.get(2).delayTriggerLevel}" required="true"
+                                                                     requiredMessage="Mobile Name is mandatory"></h:inputText>
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                    <td class="veryslow"></td>
+                                                    <td class="center"><h:outputText value="#{editRouteBean.thresholds.get(3).level+1}" /></td>
+                                                    <td>
+                                                        <h:inputText  a:type="number" value="#{editRouteBean.thresholds.get(3).delayTriggerLevel}" required="true"
+                                                                      requiredMessage="Mobile Name is mandatory"></h:inputText>
+                                                    </td>
+                                                    
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        
+                                        
+                                    </li>
+                                    
+                                </ul>
+                                
+                                
+                                
+                                <br />
+                                <br />
+                                <h:commandButton action="#{editRouteBean.submit}" value="Toevoegen" class="btn btn-large btn-fullwidth green"></h:commandButton>
+                                
+                            </h:form>
+                            
+                            <br /><br /><br />
+                            
+                            
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+                
+            </div>
+        </ui:define>
+        
+        <ui:define name="javascript"> 
+           <!--  <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/avgtraffic.js" /> -->
+            
+        </ui:define>
+        
+    </ui:composition>
+    
+    
+    
+    
+</html>

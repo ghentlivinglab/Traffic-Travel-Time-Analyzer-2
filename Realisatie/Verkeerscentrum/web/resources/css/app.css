@@ -2331,6 +2331,9 @@ main {
 form {
   height: 100%; }
 
+.btn-fullwidth {
+  width: 100% !important; }
+
 .pull-bottom {
   height: 100%;
   padding: 0;
@@ -2701,6 +2704,8 @@ ul.list {
   height: 100%;
   background-color: #eeeeee;
   background-size: cover; }
+  .index .banner.banner1 {
+    background-image: url("../img/homepage.jpg"); }
 .index .sidebar img.logo {
   padding-top: 20px; }
 .index header, .index main, .index footer {

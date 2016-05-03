@@ -4,8 +4,10 @@
         width: 100%;
         height: 100%;
         background-color: color("grey","lighten-3");
-        //background-image: url("../img/homepage.jpg");
         background-size: cover;
+        &.banner1{
+            background-image: url("../img/homepage.jpg");
+        }
     }
     
     .sidebar{

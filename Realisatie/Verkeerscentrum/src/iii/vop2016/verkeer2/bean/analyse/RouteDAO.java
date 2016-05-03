@@ -7,8 +7,9 @@ package iii.vop2016.verkeer2.bean.analyse;
 
 import static iii.vop2016.verkeer2.bean.analyse.AnalysePage.JNDILOOKUP_PROPERTYFILE;
 import iii.vop2016.verkeer2.bean.components.DataProvider;
-import iii.vop2016.verkeer2.bean.components.Route;
 import iii.vop2016.verkeer2.bean.helpers.JSONMethods;
+import iii.vop2016.verkeer2.ejb.components.IRoute;
+import iii.vop2016.verkeer2.ejb.components.Route;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,8 +40,8 @@ import org.json.JSONObject;
 @RequestScoped
 public class RouteDAO {
     
-    protected List<Route> availableRoutes;
-    protected List<Route> selectedRoutes;
+    protected List<IRoute> availableRoutes;
+    protected List<IRoute> selectedRoutes;
     protected boolean multiRoutes;
     
     protected static Properties prop;
@@ -48,11 +49,11 @@ public class RouteDAO {
    
     protected static final String JNDILOOKUP_PROPERTYFILE = "resources/properties/WebSettings";
     
-    public List<Route> getSelectedRoutes() {
+    public List<IRoute> getSelectedRoutes() {
         return selectedRoutes;
     }
     
-    public List<Route> getAvailableRoutes() {
+    public List<IRoute> getAvailableRoutes() {
         return availableRoutes;
     }
     
@@ -107,14 +108,16 @@ public class RouteDAO {
         return HelperFunctions.RetrievePropertyFile(JNDILOOKUP_PROPERTYFILE, ctx, Logger.getGlobal());
     }
     
-    public Route JSONtoRoute(JSONObject obj){
+    public IRoute JSONtoRoute(JSONObject obj){
         long id = (long)obj.getInt("id");
         String name = obj.getString("name");
-        Route route = new Route(id, name);
+        IRoute route = new Route();
+        route.setId(id);
+        route.setName(name);
         return route;
     }
     
-    private Route getRoute(long id) {
+    private IRoute getRoute(long id) {
         int i=0;
         while(i < availableRoutes.size()){
             if(availableRoutes.get(i).getId()==id){

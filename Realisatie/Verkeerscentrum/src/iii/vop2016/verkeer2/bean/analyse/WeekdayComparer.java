@@ -6,7 +6,7 @@
 package iii.vop2016.verkeer2.bean.analyse;
 
 import iii.vop2016.verkeer2.bean.components.DataProvider;
-import iii.vop2016.verkeer2.bean.components.Route;
+import iii.vop2016.verkeer2.ejb.components.IRoute;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,7 +24,7 @@ import javax.faces.bean.RequestScoped;
 public class WeekdayComparer extends AnalysePage implements ITableView, IGraphView {
 
    
-    private Route route = null;
+    private IRoute route = null;
     private Pair<Date,Date> period = null;
     private List<DataProvider> dataproviders = null;
 
@@ -68,7 +68,7 @@ public class WeekdayComparer extends AnalysePage implements ITableView, IGraphVi
         this.route = routeDAO.getSelectedRoutes().get(0);
     }
     
-    public Route getRoute() {
+    public IRoute getRoute() {
         return route;
     }
 

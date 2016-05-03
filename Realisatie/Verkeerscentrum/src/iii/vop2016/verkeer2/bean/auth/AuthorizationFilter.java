@@ -40,7 +40,9 @@ public class AuthorizationFilter implements Filter {
             HttpServletResponse resp = (HttpServletResponse) response;
             HttpSession ses = reqt.getSession(false);
             
-            String reqURI = reqt.getRequestURL() + "?" + reqt.getQueryString();
+            String reqURI = reqt.getRequestURL().toString();
+            if(reqt.getQueryString() != null)
+                reqURI += "?" + reqt.getQueryString();
             
             //System.out.println(ses);
             if (reqURI.indexOf("/login") >= 0
