@@ -8,9 +8,13 @@ package iii.vop2016.verkeer2.ejb.twitter;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.geojson.GeoJsonRemote;
+import iii.vop2016.verkeer2.ejb.geojson.IGeoJson;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
+import iii.vop2016.verkeer2.ejb.properties.IProperties;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdHandler;
+import iii.vop2016.verkeer2.ejb.threshold.ThresholdHandlerLocal;
+import iii.vop2016.verkeer2.ejb.threshold.ThresholdHandlerRemote;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -38,6 +42,9 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.ejb.AccessTimeout;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.SessionContext;
 import javax.ejb.Singleton;
 import javax.imageio.ImageIO;
@@ -61,7 +68,9 @@ import org.apache.http.impl.client.HttpClients;
  * @author Tobias
  */
 @Singleton
-public class TwitterHandler implements IThresholdHandler {
+@Lock(LockType.WRITE)
+@AccessTimeout(value = 120000)
+public class TwitterHandler implements ThresholdHandlerLocal, ThresholdHandlerRemote {
 
     private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 
@@ -115,6 +124,11 @@ public class TwitterHandler implements IThresholdHandler {
             Logger.getLogger(TwitterHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
         beans = BeanFactory.getInstance(ctx, sctx);
+
+        IProperties propCol = beans.getPropertiesCollection();
+        if (propCol != null) {
+            propCol.registerProperty(JNDILOOKUP_PROPERTYFILE);
+        }
     }
 
     private Properties getProperties() {
@@ -128,33 +142,39 @@ public class TwitterHandler implements IThresholdHandler {
         BufferedImage img = getImageForRoute(route, prop);
         if (img != null) {
 
-            String imageID = uploadImgToTwitter(img, prop);
+            try {
+                String imageID = uploadImgToTwitter(img, prop);
 
-            String message = "";
-            if (difference > 0) {
-                message = prop.getProperty("twittermessageup", "");
-            } else {
-                message = prop.getProperty("twittermessagedown", "");
+                String message = "";
+                if (difference > 0) {
+                    message = prop.getProperty("twittermessageup", "");
+                } else {
+                    message = prop.getProperty("twittermessagedown", "");
+                }
+
+                if (message.equals("")) {
+                    return;
+                }
+                String lvl = prop.getProperty("trafficlevel" + level, "");
+                message = message.replace("LEVEL", lvl).replace("ROUTE", route.getName()).replace("DELAYMIN", delay / 60 + "").replace("DELAYSEC", delay % 60 + "");
+
+                Thread.sleep(1000);
+
+                postToTwitter(message, imageID, prop);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(TwitterHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            if (message.equals("")) {
-                return;
-            }
-            String lvl = prop.getProperty("trafficlevel" + level,"");
-            message = message.replace("LEVEL", lvl).replace("ROUTE", route.getName()).replace("DELAYMIN", delay / 60 + "").replace("DELAYSEC", delay % 60 + "");
-
-            postToTwitter(message, imageID, prop);
         }
     }
 
     private static void setAuthorizationHeader(HttpsURLConnection con, String consumerkey, String nonce, String signature, String signatureMathode, String unixTimestamp, String token, String version) {
-        con.setRequestProperty("Authorization",BuildAuthorizationHeader(consumerkey,nonce,signature,signatureMathode,unixTimestamp,token,version));
+        con.setRequestProperty("Authorization", BuildAuthorizationHeader(consumerkey, nonce, signature, signatureMathode, unixTimestamp, token, version));
     }
 
     private static void setAuthorizationHeader(HttpPost con, String consumerkey, String nonce, String signature, String signatureMathode, String unixTimestamp, String token, String version) {
-        con.setHeader("Authorization", BuildAuthorizationHeader(consumerkey,nonce,signature,signatureMathode,unixTimestamp,token,version));
+        con.setHeader("Authorization", BuildAuthorizationHeader(consumerkey, nonce, signature, signatureMathode, unixTimestamp, token, version));
     }
-    
+
     private static String BuildAuthorizationHeader(String consumerkey, String nonce, String signature, String signatureMathode, String unixTimestamp, String token, String version) {
         StringBuilder auth = new StringBuilder();
         auth.append("OAuth oauth_consumer_key=\"");
@@ -195,10 +215,9 @@ public class TwitterHandler implements IThresholdHandler {
             Map<String, String> param = new TreeMap<>();
             param.put("status", status);
 
-            if (imageID != null) {
+            /*if (imageID != null) {
                 param.put("media_ids", imageID);
-            }
-
+            }*/
             param.put("oauth_consumer_key", consumerkey);
             param.put("oauth_nonce", nonce);
             param.put("oauth_signature_method", signatureMathode);
@@ -224,10 +243,9 @@ public class TwitterHandler implements IThresholdHandler {
             DataOutputStream wr = new DataOutputStream(con.getOutputStream());
             wr.writeBytes(("status=" + Encoder.percentEncode(status)));
 
-            if (imageID != null) {
+            /*if (imageID != null) {
                 wr.writeBytes("&media_ids=" + Encoder.percentEncode(imageID));
-            }
-
+            }*/
             wr.close();
 
             //get response
@@ -244,7 +262,16 @@ public class TwitterHandler implements IThresholdHandler {
                 rd.close();
                 beans.getLogger().log(Level.FINER, "Posted to twitter: " + status);
             } else {
-                beans.getLogger().log(Level.SEVERE, "Unable to post to twitter: responsecode " + responseCode);
+                beans.getLogger().log(Level.SEVERE, "Unable to post to twitter: responsecode " + responseCode + " :" + con.getResponseMessage());
+                InputStream is = con.getInputStream();
+                BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = rd.readLine()) != null) {
+                    response.append(line);
+                    response.append('\n');
+                }
+                rd.close();
             }
             count++;
             if (count > 10000) {
@@ -271,7 +298,7 @@ public class TwitterHandler implements IThresholdHandler {
         String u = prop.getProperty("imageRetrievalUrl", "");
         if (!u.equals("")) {
             try {
-                GeoJsonRemote geoBean = beans.getGeoJsonProvider();
+                IGeoJson geoBean = beans.getGeoJsonProvider();
                 if (geoBean != null) {
                     List<IGeoLocation> geos = geoBean.getRoutePlotGeoLocations(route);
                     if (geos != null) {
@@ -543,6 +570,16 @@ public class TwitterHandler implements IThresholdHandler {
         //get response
         int responseCode = con.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_ACCEPTED || responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+            InputStream is = con.getInputStream();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = rd.readLine()) != null) {
+                response.append(line);
+                response.append('\n');
+            }
+            rd.close();
+
             return true;
         }
         return false;

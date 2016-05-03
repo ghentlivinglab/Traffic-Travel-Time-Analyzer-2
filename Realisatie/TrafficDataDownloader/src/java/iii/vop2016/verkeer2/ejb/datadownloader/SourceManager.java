@@ -12,6 +12,7 @@ import iii.vop2016.verkeer2.ejb.datadownloader.ISourceManager;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.DataAccessException;
 import iii.vop2016.verkeer2.ejb.helper.URLException;
+import iii.vop2016.verkeer2.ejb.logger.ILogger;
 import iii.vop2016.verkeer2.ejb.logger.LoggerRemote;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +60,7 @@ public class SourceManager implements ISourceManager {
     public List<IRouteData> parse(final IRoute route) {
 
         List<ISourceAdapter> adapters = beanFactory.getSourceAdaptors();
-        LoggerRemote logger = beanFactory.getLogger();
+        ILogger logger = beanFactory.getLogger();
         List<IRouteData> result = new ArrayList<>();
 
         List<Future<IRouteData>> futures = new ArrayList<>();

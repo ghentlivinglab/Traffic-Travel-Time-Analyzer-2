@@ -33,25 +33,20 @@ import static org.junit.Assert.*;
  */
 public class GeoJsonProviderTest {
 
-
     public GeoJsonProviderTest() {
     }
 
     static GeoJsonProvider instance;
-    
+
     @BeforeClass
     public static void setUpClass() {
         System.out.println("Setup");
-        try {
-            instance = new GeoJsonProvider();
-            instance.properties = new Properties();
-            instance.properties.load(new FileInputStream("C:/Users/Tobias/Documents/verkeer-2/Realisatie/GeoJsonProvider.properties"));
-            instance.init();
-        } catch (IOException ex) {
-            Logger.getLogger(GeoJsonProviderTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+        instance = new GeoJsonProvider();
+        instance.init();
+
         System.out.println("Setup done");
-        
+
     }
 
     @AfterClass
@@ -77,31 +72,30 @@ public class GeoJsonProviderTest {
         IRoute r = CreateTestRoute();
         List<IGeoLocation> list = instance.getRoutePlotGeoLocations(r);
 
-        assertEquals(84,list.size());
+        assertEquals(84, list.size());
     }
 
     @Test
-    public void testGetGeoJson() throws Exception{
+    public void testGetGeoJson() throws Exception {
         System.out.println("getGeoJson");
         IRoute r = CreateTestRoute();
         IRoute r2 = CreateTestRoute2();
 
-        
         List<IGeoLocation> list = instance.getRoutePlotGeoLocations(r);
         List<IGeoLocation> list2 = instance.getRoutePlotGeoLocations(r2);
-        
-        Map<IRoute,List<IGeoLocation>> map = new HashMap<>();
+
+        Map<IRoute, List<IGeoLocation>> map = new HashMap<>();
         map.put(r, list);
         map.put(r2, list2);
-        
-        Map<IRoute,Integer> del = new HashMap<>();
+
+        Map<IRoute, Integer> del = new HashMap<>();
         del.put(r, 0);
         del.put(r2, 1);
-        
-        String json = instance.getGeoJson(map,del);
+
+        String json = instance.getGeoJson(map, del);
         System.out.println("dq");
     }
-    
+
     private IRoute CreateTestRoute() {
         try {
             IRoute r = new Route("R4 Zelzate");
@@ -119,8 +113,8 @@ public class GeoJsonProviderTest {
         }
         return null;
     }
-    
-        private IRoute CreateTestRoute2() {
+
+    private IRoute CreateTestRoute2() {
         try {
             IRoute r = new Route("R4 Zelzate andere");
 
@@ -138,7 +132,5 @@ public class GeoJsonProviderTest {
         }
         return null;
     }
-    
-    
 
 }

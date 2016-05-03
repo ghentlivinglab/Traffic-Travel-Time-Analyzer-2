@@ -5,10 +5,6 @@
  */
 package iii.vop2016.verkeer2.ejb.geojson;
 
-import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
-import iii.vop2016.verkeer2.ejb.components.IRoute;
-import java.util.List;
-import java.util.Map;
 import javax.ejb.Remote;
 
 /**
@@ -16,8 +12,6 @@ import javax.ejb.Remote;
  * @author tobia
  */
 @Remote
-public interface GeoJsonRemote {
-    
-    List<IGeoLocation> getRoutePlotGeoLocations(IRoute route);
-    String getGeoJson(Map<IRoute,List<IGeoLocation>> list,Map<IRoute,Integer> delayLevels);
+public interface GeoJsonRemote extends IGeoJson{
+
 }

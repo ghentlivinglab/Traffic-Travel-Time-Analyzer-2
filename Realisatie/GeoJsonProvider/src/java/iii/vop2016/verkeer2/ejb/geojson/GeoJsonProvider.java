@@ -12,6 +12,7 @@ import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import iii.vop2016.verkeer2.ejb.helper.InvalidCoordinateException;
+import iii.vop2016.verkeer2.ejb.properties.IProperties;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,7 +48,7 @@ import org.json.JSONObject;
  * @author Tobias
  */
 @Singleton
-public class GeoJsonProvider implements GeoJsonRemote {
+public class GeoJsonProvider implements GeoJsonRemote, GeoJsonLocal {
 
     @Resource
     protected SessionContext ctxs;
@@ -55,7 +56,6 @@ public class GeoJsonProvider implements GeoJsonRemote {
     protected BeanFactory beans;
 
     protected static final String JNDILOOKUP_PROPERTYFILE = "resources/properties/GeoJsonProvider";
-    protected Properties properties;
     protected Map<String, String> extraProperties;
 
     @PostConstruct
@@ -66,32 +66,37 @@ public class GeoJsonProvider implements GeoJsonRemote {
             Logger.getLogger(GeoJsonProvider.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        if (properties == null) {
-            properties = HelperFunctions.RetrievePropertyFile(JNDILOOKUP_PROPERTYFILE, ctx, Logger.getLogger("logger"));
-        }
-        
         beans = BeanFactory.getInstance(ctx, ctxs);
 
+        IProperties propCol = beans.getPropertiesCollection();
+        if (propCol != null) {
+            propCol.registerProperty(JNDILOOKUP_PROPERTYFILE);
+        }
+
         fillProperties();
-        
+
         beans.getLogger().log(Level.INFO, "GeoJsonProvider has been initialized.");
+    }
+
+    private Properties getProperties() {
+        return HelperFunctions.RetrievePropertyFile(JNDILOOKUP_PROPERTYFILE, ctx, Logger.getLogger("logger"));
     }
 
     @Override
     public List<IGeoLocation> getRoutePlotGeoLocations(IRoute route) {
         IGeneralDAO dao = beans.getGeneralDAO();
         List<IGeoLocation> locations = dao.getRouteMappingGeolocations(route);
-        
-        if(locations == null || locations.size() == 0){
+
+        if (locations == null || locations.size() == 0) {
             locations = getRoutePlotGeoLocationsFromWeb(route);
             dao.setRouteMappingGeolocations(route, locations);
         }
-        
+
         return locations;
     }
-    
+
     private List<IGeoLocation> getRoutePlotGeoLocationsFromWeb(IRoute route) {
-    try {
+        try {
             String connectionString = getUrl();
 
             Map<String, String> routeProperties = getPropertiesFromRoute(route);
@@ -107,7 +112,7 @@ public class GeoJsonProvider implements GeoJsonRemote {
             List<IGeoLocation> locations = DecodeGeoJson(geojson);
 
             beans.getLogger().log(Level.FINE, "GeoJson routes retrieved from web for route " + route.getName() + ".");
-            
+
             return locations;
 
         } catch (MalformedURLException ex) {
@@ -121,24 +126,25 @@ public class GeoJsonProvider implements GeoJsonRemote {
     }
 
     @Override
-    public String getGeoJson(Map<IRoute,List<IGeoLocation>> list, Map<IRoute,Integer> delays) {
-        if(list.size() == 1){
-            Map.Entry<IRoute,List<IGeoLocation>> vals = list.entrySet().iterator().next();
-            return getGeoJsonFeature(vals.getValue(),vals.getKey(), delays.get(vals.getKey())).build().toString();
+    public String getGeoJson(Map<IRoute, List<IGeoLocation>> list, Map<IRoute, Integer> delays) {
+        if (list.size() == 1) {
+            Map.Entry<IRoute, List<IGeoLocation>> vals = list.entrySet().iterator().next();
+            return getGeoJsonFeature(vals.getValue(), vals.getKey(), delays.get(vals.getKey())).build().toString();
         }
-        
+
         JsonArrayBuilder arr = Json.createArrayBuilder();
-        for(Map.Entry<IRoute,List<IGeoLocation>> val : list.entrySet()){
-            arr.add(getGeoJsonFeature(val.getValue(),val.getKey(),delays.get(val.getKey())));
+        for (Map.Entry<IRoute, List<IGeoLocation>> val : list.entrySet()) {
+            arr.add(getGeoJsonFeature(val.getValue(), val.getKey(), delays.get(val.getKey())));
         }
         return arr.build().toString();
     }
 
     private String getUrl() {
-        return properties.getProperty("url");
+        return getProperties().getProperty("url");
     }
 
     private void fillProperties() {
+        Properties properties = getProperties();
         extraProperties = new HashMap<>();
         String parser = properties.getProperty("properties");
         if (parser != null && (!parser.equals(""))) {
@@ -264,7 +270,7 @@ public class GeoJsonProvider implements GeoJsonRemote {
         JsonObjectBuilder b = Json.createObjectBuilder();
         b.add("type", "Feature");
         b.add("geometry", getGeoJsonGeometry(l));
-        b.add("properties", getGeoJsonProperties(l, route,delayLevel));
+        b.add("properties", getGeoJsonProperties(l, route, delayLevel));
 
         return b;
     }
@@ -286,7 +292,7 @@ public class GeoJsonProvider implements GeoJsonRemote {
     private JsonArrayBuilder getGeoJsonLineString(List<IGeoLocation> l) {
         JsonArrayBuilder array = Json.createArrayBuilder();
         if (l.size() > 1) {
-            for (IGeoLocation geoloc: l) {
+            for (IGeoLocation geoloc : l) {
                 JsonArrayBuilder geoloc_array = Json.createArrayBuilder();
                 geoloc_array.add(geoloc.getLongitude());
                 geoloc_array.add(geoloc.getLatitude());

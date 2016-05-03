@@ -5,6 +5,7 @@
  */
 package iii.vop2016.verkeer2.ejb.timer;
 
+import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import java.text.SimpleDateFormat;
@@ -27,7 +28,10 @@ import javax.ejb.TimerConfig;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import iii.vop2016.verkeer2.ejb.datadownloader.ITrafficDataDownloader;
+import iii.vop2016.verkeer2.ejb.dataprovider.IDataProvider;
 import iii.vop2016.verkeer2.ejb.helper.NoInternetConnectionException;
+import iii.vop2016.verkeer2.ejb.logger.ILogger;
+import iii.vop2016.verkeer2.ejb.properties.IProperties;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.text.NumberFormat;
@@ -45,7 +49,7 @@ import org.apache.commons.net.ntp.TimeStamp;
  */
 @Singleton
 @Startup
-public class TimerScheduler implements TimerSchedulerRemote {
+public class TimerScheduler implements TimerSchedulerRemote, TimerSchedulerLocal {
 
     @Resource
     protected SessionContext ctxs;
@@ -84,6 +88,11 @@ public class TimerScheduler implements TimerSchedulerRemote {
         }
         beans = BeanFactory.getInstance(ctx, ctxs);
 
+        IProperties propCol = beans.getPropertiesCollection();
+        if (propCol != null) {
+            propCol.registerProperty(JNDILOOKUP_PROPERTYFILE);
+        }
+
         beans.getLogger().log(Level.INFO, "TimerScheduler has been initialized.");
 
         Properties prop = getProperties();
@@ -94,7 +103,7 @@ public class TimerScheduler implements TimerSchedulerRemote {
         try {
             time = getCurrentTime(prop);
         } catch (NoInternetConnectionException ex) {
-             beans.getLogger().log(Level.WARNING, "No internet connection");
+            beans.getLogger().log(Level.WARNING, "No internet connection");
             time = this.currentTime;
         }
         int currentTime = getIndexedCurrentTime(time);
@@ -105,6 +114,9 @@ public class TimerScheduler implements TimerSchedulerRemote {
         ticks = 0;
         t = ctxs.getTimerService().createIntervalTimer(1000, 60000, new TimerConfig());
         isRunning = true;
+
+        prop.setProperty("19-00", "30");
+        HelperFunctions.SavePropertyFile(prop, Logger.getGlobal());
     }
 
     private Properties getProperties() {
@@ -167,7 +179,17 @@ public class TimerScheduler implements TimerSchedulerRemote {
 
             interval = i;
             ticks = 1;
-            beans.getLogger().log(Level.INFO, "Interval for Timer set to " + interval);
+            
+            ILogger logger = beans.getLogger();
+            ITrafficDataDAO dao = beans.getTrafficDataDAO();
+            IDataProvider dataProv = beans.getDataProvider();
+            
+            logger.log(Level.INFO, "Interval for Timer set to " + interval);
+            
+            
+            dao.updateBlockList();
+            dataProv.invalidateBuffers();
+            logger.log(Level.INFO, "Buffers cleared and Blocklist for lookup rebuild");
         }
 
     }

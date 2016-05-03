@@ -11,7 +11,9 @@ import iii.vop2016.verkeer2.ejb.components.Threshold;
 import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
+import iii.vop2016.verkeer2.ejb.logger.ILogger;
 import iii.vop2016.verkeer2.ejb.logger.LoggerRemote;
+import iii.vop2016.verkeer2.ejb.properties.IProperties;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +24,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.ejb.AccessTimeout;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.SessionContext;
 import javax.ejb.Singleton;
 import javax.naming.InitialContext;
@@ -32,7 +37,9 @@ import javax.naming.NamingException;
  * @author Tobias
  */
 @Singleton
-public class ThresholdManager implements ThresholdManagerRemote {
+@Lock(LockType.WRITE)
+@AccessTimeout(value = 120000)
+public class ThresholdManager implements ThresholdManagerRemote, ThresholdManagerLocal {
 
     @Resource
     protected SessionContext ctxs;
@@ -51,6 +58,11 @@ public class ThresholdManager implements ThresholdManagerRemote {
             Logger.getLogger(ThresholdManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         beans = BeanFactory.getInstance(ctx, ctxs);
+
+        IProperties propCol = beans.getPropertiesCollection();
+        if (propCol != null) {
+            propCol.registerProperty(JNDILOOKUP_PROPERTYFILE);
+        }
 
         thresholdMap = beans.getGeneralDAO().getThresholds();
         if (thresholdMap == null) {
@@ -107,7 +119,7 @@ public class ThresholdManager implements ThresholdManagerRemote {
     //this function return the difference in level sinds the last check
     @Override
     public int EvalThresholdLevel(IRoute route, int delay) {
-        LoggerRemote logger = beans.getLogger();
+        ILogger logger = beans.getLogger();
 
         int currentLevel = getThresholdLevel(route, delay);
         int prevLevel = prevThresholdLevel.get(route);
@@ -147,7 +159,7 @@ public class ThresholdManager implements ThresholdManagerRemote {
     public void addDefaultThresholds(IRoute route) {
         IGeneralDAO dao = beans.getGeneralDAO();
         Properties prop = getProperties();
-        LoggerRemote logger = beans.getLogger();
+        ILogger logger = beans.getLogger();
 
         String defaults = prop.getProperty("defaultThresholdLevels", "120,240,480,1200");
         String[] arr = defaults.split(",");
@@ -191,7 +203,7 @@ public class ThresholdManager implements ThresholdManagerRemote {
                 } else {
                     dao.updateThreshold(th);
                 }
-                if(!InsertIntoMap(th)){
+                if (!InsertIntoMap(th)) {
                     success = false;
                 }
             }

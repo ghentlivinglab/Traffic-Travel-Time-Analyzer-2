@@ -9,6 +9,7 @@
         <session>
             <ejb-name>TrafficDataDownloader</ejb-name>
             <remote>iii.vop2016.verkeer2.ejb.datadownloader.TrafficDataDownloaderRemote</remote>
+            <local>iii.vop2016.verkeer2.ejb.datadownloader.TrafficDataDownloaderLocal</local>
             <ejb-class>iii.vop2016.verkeer2.ejb.datadownloader.TrafficDataDownloader</ejb-class>
             <session-type>Singleton</session-type>
         </session>

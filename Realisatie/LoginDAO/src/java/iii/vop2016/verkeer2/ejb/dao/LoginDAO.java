@@ -24,7 +24,7 @@ import javax.persistence.TypedQuery;
 
 
 @Singleton
-public class LoginDAO implements LoginDAORemote {
+public class LoginDAO implements LoginDAORemote,LoginDAOLocal {
 
     @PersistenceContext(name = "GeneralDBPU")
     EntityManager em;

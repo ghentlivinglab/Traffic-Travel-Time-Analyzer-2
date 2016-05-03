@@ -189,4 +189,43 @@ public class BlockList {
 
     }
 
+    void update(long size, TrafficDataDAO aThis) {
+        //redo last Block
+        try {
+            long highest = 0;
+            for (Map.Entry<Long, BlockList> entry : this.sublist.entrySet()) {
+                if (entry.getKey() > highest) {
+                    highest = entry.getKey();
+                }
+            }
+
+            long subsize = blockSize;
+            BlockList l = new BlockList(subsize, dao, this, highest);
+            if (l.valid) {
+                this.sublist.put((long) highest, l);
+            }
+
+        } catch (Exception e) {
+
+        }
+
+        //detect new blocks
+        try {
+            this.size = size;
+            int i = 0;
+
+            //generate new blocks if required
+            for (i = 1; i < size; i += blockSize) {
+                long subsize = blockSize;
+                if (i >= this.sublist.size()) {
+                    BlockList l = new BlockList(subsize, dao, this, i);
+                    if (l.valid) {
+                        this.sublist.put((long) i, l);
+                    }
+                }
+            }
+        } catch (Exception e) {
+
+        }
+    }
 }

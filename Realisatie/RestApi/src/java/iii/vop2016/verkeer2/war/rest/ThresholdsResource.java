@@ -6,7 +6,9 @@
 package iii.vop2016.verkeer2.war.rest;
 
 import iii.vop2016.verkeer2.ejb.components.IRoute;
+import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.IThreshold;
+import iii.vop2016.verkeer2.ejb.components.RouteData;
 import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdHandler;
@@ -168,12 +170,32 @@ public class ThresholdsResource {
     @Path("test")
     @Produces(MediaType.APPLICATION_JSON)
     public String getTest() {
-        IRoute r = beans.getGeneralDAO().getRoute(1);
-        List<String> list = beans.getThresholdHandlers();
-        List<IThresholdHandler> handlers = beans.getThresholdHandlers(list);
-        for (IThresholdHandler handler : handlers) {
-            handler.notify(r, r.getId(), 1, 0, 1, (60 * 3) + 15);
-        }
+        IRoute r = beans.getGeneralDAO().getRoute(2);
+        
+        List<IRoute> routes = new ArrayList<>();
+        routes.add(r);
+        
+        List<IRouteData> data = new ArrayList<>();
+        RouteData routedata = new RouteData();
+        routedata.setDistance(1000);
+        routedata.setDuration(253);
+        routedata.setId(100);
+        routedata.setProvider("Here");
+        routedata.setRouteId(r.getId());
+        data.add(routedata);
+        
+        beans.getTrafficDataDownstreamAnalyser().endSession(data, routes);
+        
+        data = new ArrayList<>();
+        routedata = new RouteData();
+        routedata.setDistance(1000);
+        routedata.setDuration(253 + 130);
+        routedata.setId(100);
+        routedata.setProvider("Here");
+        routedata.setRouteId(r.getId());
+        data.add(routedata);
+        
+        beans.getTrafficDataDownstreamAnalyser().endSession(data, routes);
 
         return "{\"status\":\"ok\"}";
     }

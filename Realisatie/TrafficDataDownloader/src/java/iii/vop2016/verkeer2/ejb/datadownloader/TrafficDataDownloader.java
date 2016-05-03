@@ -9,6 +9,7 @@ import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyser;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
+import iii.vop2016.verkeer2.ejb.logger.ILogger;
 import iii.vop2016.verkeer2.ejb.logger.LoggerRemote;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdManager;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import javax.naming.NamingException;
  * @author Mike Brants
  */
 @Singleton
-public class TrafficDataDownloader implements TrafficDataDownloaderRemote {
+public class TrafficDataDownloader implements TrafficDataDownloaderRemote,TrafficDataDownloaderLocal {
 
     @Resource
     private SessionContext ctxs;
@@ -66,7 +67,7 @@ public class TrafficDataDownloader implements TrafficDataDownloaderRemote {
     @Override
     public void downloadNewData(Date timestamp) {
         //Ophalen van alle routes
-        LoggerRemote logger = beanFactory.getLogger();
+        ILogger logger = beanFactory.getLogger();
         
         logger.log(Level.FINER, "Started data scrubbing");
 
@@ -85,7 +86,7 @@ public class TrafficDataDownloader implements TrafficDataDownloaderRemote {
                     for (IRouteData r : data) {
                         r.setTimestamp(timestamp);
                     }
-                    allData.addAll(analyzer.addData(data));
+                    allData.addAll(analyzer.addData(data,routes));
                 }
             }
             analyzer.endSession(allData, routes);

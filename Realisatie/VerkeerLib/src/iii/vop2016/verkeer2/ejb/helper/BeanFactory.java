@@ -5,6 +5,7 @@
  */
 package iii.vop2016.verkeer2.ejb.helper;
 
+import iii.vop2016.verkeer2.ejb.dao.IAPIKeyDAO;
 import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import iii.vop2016.verkeer2.ejb.dao.ILoginDAO;
 import iii.vop2016.verkeer2.ejb.dao.ITrafficDataDAO;
@@ -20,7 +21,9 @@ import iii.vop2016.verkeer2.ejb.datadownloader.ITrafficDataDownloader;
 import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyser;
 import iii.vop2016.verkeer2.ejb.geojson.GeoJsonRemote;
 import iii.vop2016.verkeer2.ejb.dataprovider.IDataProvider;
-import iii.vop2016.verkeer2.ejb.logger.LoggerRemote;
+import iii.vop2016.verkeer2.ejb.geojson.IGeoJson;
+import iii.vop2016.verkeer2.ejb.logger.ILogger;
+import iii.vop2016.verkeer2.ejb.properties.IProperties;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdHandler;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdManager;
 import java.util.Map;
@@ -32,7 +35,7 @@ import java.util.Map;
 public class BeanFactory {
 
     private static final String JNDILOOKUP_BEANFILE = "resources/properties/Beans";
-    private static final String JNDILOOKUP_SOURCEADAPORTSFILE = "resources/properties/SourceAdaptors";
+    private static final String JNDILOOKUP_SOURCEADAPORTSFILE = "resources/properties/SourceAdapters";
     private static final String JNDILOOKUP_THRESHOLDHANDLERSFILE = "resources/properties/ThresholdHandlers";
 
     private static BeanFactory instance;
@@ -76,16 +79,32 @@ public class BeanFactory {
         this.sctx = sctx;
     }
 
-    public LoggerRemote getLogger() throws ResourceFileMissingException {
+    
+    public IProperties getPropertiesCollection() throws ResourceFileMissingException {
+        if (sctx != null) {
+            Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.Properties, sctx, Logger.getGlobal());
+            if (obj instanceof IProperties) {
+                return (IProperties) obj;
+            }
+        } else {
+            Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.Properties, ctx, Logger.getGlobal());
+            if (obj instanceof IProperties) {
+                return (IProperties) obj;
+            }
+        }
+        return null;
+    }
+    
+    public ILogger getLogger() throws ResourceFileMissingException {
         if (sctx != null) {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.Logger, sctx, Logger.getGlobal());
-            if (obj instanceof LoggerRemote) {
-                return (LoggerRemote) obj;
+            if (obj instanceof ILogger) {
+                return (ILogger) obj;
             }
         } else {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.Logger, ctx, Logger.getGlobal());
-            if (obj instanceof LoggerRemote) {
-                return (LoggerRemote) obj;
+            if (obj instanceof ILogger) {
+                return (ILogger) obj;
             }
         }
         return null;
@@ -106,16 +125,16 @@ public class BeanFactory {
         return null;
     }
 
-    public GeoJsonRemote getGeoJsonProvider() throws ResourceFileMissingException {
+    public IGeoJson getGeoJsonProvider() throws ResourceFileMissingException {
         if (sctx != null) {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.GeoJsonProvider, sctx, Logger.getGlobal());
-            if (obj instanceof GeoJsonRemote) {
-                return (GeoJsonRemote) obj;
+            if (obj instanceof IGeoJson) {
+                return (IGeoJson) obj;
             }
         } else {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.GeoJsonProvider, ctx, Logger.getGlobal());
-            if (obj instanceof GeoJsonRemote) {
-                return (GeoJsonRemote) obj;
+            if (obj instanceof IGeoJson) {
+                return (IGeoJson) obj;
             }
         }
         return null;
@@ -233,7 +252,7 @@ public class BeanFactory {
         for (Object val : getBeanProperties().values()) {
             if (val instanceof String) {
                 String value = (String) val;
-                if (value.endsWith(bean)) {
+                if (value.contains(bean)) {
                     return true;
                 }
             }
@@ -289,6 +308,21 @@ public class BeanFactory {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.LoginDAO, ctx, Logger.getGlobal());
             if (obj instanceof ILoginDAO) {
                 return (ILoginDAO) obj;
+            }
+        }
+        return null;
+    }
+    
+    public IAPIKeyDAO getAPIKeyDAO() throws ResourceFileMissingException {
+        if (sctx != null) {
+            Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.APIKeyDAO, sctx, Logger.getGlobal());
+            if (obj instanceof IAPIKeyDAO) {
+                return (IAPIKeyDAO) obj;
+            }
+        } else {
+            Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.APIKeyDAO, ctx, Logger.getGlobal());
+            if (obj instanceof IAPIKeyDAO) {
+                return (IAPIKeyDAO) obj;
             }
         }
         return null;

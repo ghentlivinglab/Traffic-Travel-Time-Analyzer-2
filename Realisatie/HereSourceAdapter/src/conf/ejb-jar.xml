@@ -8,7 +8,8 @@
     <enterprise-beans>
         <session>
             <ejb-name>HereSourceAdapter</ejb-name>
-            <remote>iii.vop2016.verkeer2.ejb.datasources.HereSourceAdapterRemote</remote>
+            <remote>iii.vop2016.verkeer2.ejb.datasources.SourceAdapterRemote</remote>
+            <local>iii.vop2016.verkeer2.ejb.datasources.SourceAdapterLocal</local>
             <ejb-class>iii.vop2016.verkeer2.ejb.datasources.HereSourceAdapter</ejb-class>
             <session-type>Singleton</session-type>
         </session>

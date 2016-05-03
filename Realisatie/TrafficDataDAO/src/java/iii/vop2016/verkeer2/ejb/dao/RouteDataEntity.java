@@ -5,9 +5,7 @@
  */
 package iii.vop2016.verkeer2.ejb.dao;
 
-import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
-import iii.vop2016.verkeer2.ejb.components.Route;
 import iii.vop2016.verkeer2.ejb.components.RouteData;
 import java.util.Date;
 import javax.persistence.Access;
@@ -19,7 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 /**
  *

@@ -9,9 +9,11 @@ import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.RouteData;
+import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.DataAccessException;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import iii.vop2016.verkeer2.ejb.helper.URLException;
+import iii.vop2016.verkeer2.ejb.properties.IProperties;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -37,7 +39,7 @@ import org.json.JSONObject;
  * @author Simon
  */
 @Singleton
-public class TomTomSourceAdapter implements TomTomSourceAdapterRemote {
+public class TomTomSourceAdapter implements SourceAdapterLocal, SourceAdapterRemote {
 
     private String key;
     private static final String providerName = "TomTom";
@@ -51,6 +53,11 @@ public class TomTomSourceAdapter implements TomTomSourceAdapterRemote {
             ctx = new InitialContext();
         } catch (NamingException ex) {
             Logger.getLogger(TomTomSourceAdapter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        IProperties p = BeanFactory.getInstance(ctx, null).getPropertiesCollection();
+        if (p != null) {
+            p.registerProperty(JNDILOOKUP_PROPERTYFILE);
         }
 
         Logger.getLogger("logger").log(Level.INFO, providerName + "SourceAdapter has been initialized.");
@@ -110,9 +117,8 @@ public class TomTomSourceAdapter implements TomTomSourceAdapterRemote {
             //verschillende providers op 1 bepaalde timestamp kan vragen in je database
 
             //return null;
-            
             //wacht een kleine periode om zeker geen overschrijding van aantal calls per seconde te bekomen:
-            Thread.sleep(300);
+            Thread.sleep(500);
 
             /* 
         } catch (JSONException e) {
@@ -133,13 +139,13 @@ public class TomTomSourceAdapter implements TomTomSourceAdapterRemote {
         BufferedReader reader = null;
         try {
             URL url = new URL(urlString);
-            HttpURLConnection con =  (HttpURLConnection) url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
             int response = con.getResponseCode();
-            if(response/100 != 2){
-                throw new URLException(providerName + " returned HTTP/"+response+" response. To many calls were made or the daily limit has been reached.");
+            if (response / 100 != 2) {
+                throw new URLException(providerName + " returned HTTP/" + response + " response. To many calls were made or the daily limit has been reached.");
             }
-            
+
             reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
             StringBuffer buffer = new StringBuffer();
             int read;

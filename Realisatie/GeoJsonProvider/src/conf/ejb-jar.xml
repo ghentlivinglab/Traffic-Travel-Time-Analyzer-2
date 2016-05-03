@@ -9,6 +9,7 @@
         <session>
             <ejb-name>GeoJsonProvider</ejb-name>
             <remote>iii.vop2016.verkeer2.ejb.geojson.GeoJsonRemote</remote>
+            <local>iii.vop2016.verkeer2.ejb.geojson.GeoJsonLocal</local>
             <ejb-class>iii.vop2016.verkeer2.ejb.geojson.GeoJsonProvider</ejb-class>
             <session-type>Singleton</session-type>
         </session>

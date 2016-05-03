@@ -9,6 +9,7 @@
         <session>
             <ejb-name>TrafficDataDownstreamAnalyser</ejb-name>
             <remote>iii.vop2016.verkeer2.ejb.downstream.TrafficDataDownstreamAnalyserRemote</remote>
+            <local>iii.vop2016.verkeer2.ejb.downstream.TrafficDataDownstreamAnalyserLocal</local>
             <ejb-class>iii.vop2016.verkeer2.ejb.downstream.TrafficDataDownstreamAnalyser</ejb-class>
             <session-type>Singleton</session-type>
         </session>

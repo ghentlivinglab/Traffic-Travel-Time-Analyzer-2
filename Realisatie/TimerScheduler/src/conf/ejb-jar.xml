@@ -9,6 +9,7 @@
         <session>
             <ejb-name>TimerScheduler</ejb-name>
             <remote>iii.vop2016.verkeer2.ejb.timer.TimerSchedulerRemote</remote>
+            <local>iii.vop2016.verkeer2.ejb.timer.TimerSchedulerLocal</local>
             <ejb-class>iii.vop2016.verkeer2.ejb.timer.TimerScheduler</ejb-class>
             <session-type>Singleton</session-type>
         </session>

@@ -9,6 +9,7 @@
         <session>
             <ejb-name>Logger</ejb-name>
             <remote>iii.vop2016.verkeer2.ejb.logger.LoggerRemote</remote>
+            <local>iii.vop2016.verkeer2.ejb.logger.LoggerLocal</local>
             <ejb-class>iii.vop2016.verkeer2.ejb.logger.Logger</ejb-class>
             <session-type>Singleton</session-type>
         </session>

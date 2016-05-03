@@ -9,6 +9,7 @@
         <session>
             <ejb-name>GeneralDAO</ejb-name>
             <remote>iii.vop2016.verkeer2.ejb.dao.GeneralDAORemote</remote>
+            <local>iii.vop2016.verkeer2.ejb.dao.GeneralDAOLocal</local>
             <ejb-class>iii.vop2016.verkeer2.ejb.dao.GeneralDAO</ejb-class>
             <session-type>Singleton</session-type>
         </session>

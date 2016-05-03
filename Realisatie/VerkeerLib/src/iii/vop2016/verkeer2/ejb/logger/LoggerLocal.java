@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package iii.vop2016.verkeer2.ejb.startup;
+package iii.vop2016.verkeer2.ejb.logger;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
 /**
  *
  * @author tobia
  */
-@Remote
-public interface StartupServiceRemote {
+@Local
+public interface LoggerLocal extends ILogger{
     
 }

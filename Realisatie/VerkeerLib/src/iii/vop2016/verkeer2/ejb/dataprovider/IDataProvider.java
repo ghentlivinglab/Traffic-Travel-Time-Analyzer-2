@@ -103,5 +103,6 @@ public interface IDataProvider {
     int getMeanDurationFromRouteData(List<IRouteData> routeData);
 
     void invalidateCurrentData();
+    void invalidateBuffers();
 
 }
