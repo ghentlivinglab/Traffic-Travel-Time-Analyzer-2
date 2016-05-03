@@ -23,7 +23,7 @@ public class DummySourceAdapter implements DummySourceAdapterRemote {
     IRoute route;
 
     @Override
-    public IRouteData parse(IRoute route) throws URLException, DataAccessException {
+    public IRouteData parse(IRoute route, String sessionID) throws URLException, DataAccessException {
         if (this.route == null) {
             this.route = route;
         }

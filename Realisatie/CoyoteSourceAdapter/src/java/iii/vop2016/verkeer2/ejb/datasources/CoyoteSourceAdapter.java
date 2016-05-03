@@ -36,18 +36,20 @@ import org.jsoup.nodes.Element;
  * @author Simon
  */
 @Singleton
-public class CoyoteSourceAdapter implements SourceAdapterLocal,SourceAdapterRemote {
+public class CoyoteSourceAdapter implements SourceAdapterLocal, SourceAdapterRemote {
 
     private static final String providerName = "Coyote";
     private static String login;
     private static String password;
 
+    private String sessionId = "";
     private static long lastDownload = 0;
     private static long timeDifference = 240000; // 4 min = 4*60*1000
     private static JSONObject downloadedJSON = null;
 
     private InitialContext ctx;
     protected static final String JNDILOOKUP_PROPERTYFILE = "resources/properties/SourceAdaptersKeys";
+    protected static final String JNDILOOKUP_PROPERTYFILE2 = "resources/properties/CoyoteMapping";
 
     @PostConstruct
     public void init() {
@@ -56,10 +58,11 @@ public class CoyoteSourceAdapter implements SourceAdapterLocal,SourceAdapterRemo
         } catch (NamingException ex) {
             Logger.getLogger(CoyoteSourceAdapter.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         IProperties p = BeanFactory.getInstance(ctx, null).getPropertiesCollection();
-        if(p != null){
+        if (p != null) {
             p.registerProperty(JNDILOOKUP_PROPERTYFILE);
+            p.registerProperty(JNDILOOKUP_PROPERTYFILE2);
         }
 
         Logger.getLogger("logger").log(Level.INFO, providerName + "SourceAdapter has been initialized.");
@@ -69,8 +72,12 @@ public class CoyoteSourceAdapter implements SourceAdapterLocal,SourceAdapterRemo
         return HelperFunctions.RetrievePropertyFile(JNDILOOKUP_PROPERTYFILE, ctx, Logger.getGlobal());
     }
 
+    private Properties getMapping() {
+        return HelperFunctions.RetrievePropertyFile(JNDILOOKUP_PROPERTYFILE2, ctx, Logger.getGlobal());
+    }
+
     @Override
-    public IRouteData parse(IRoute route) throws URLException, DataAccessException {
+    public IRouteData parse(IRoute route, String sessionId) throws URLException, DataAccessException {
         Properties prop = getProperties();
         login = prop.getProperty("CoyoteUsername");
         password = prop.getProperty("CoyotePassword");
@@ -86,9 +93,10 @@ public class CoyoteSourceAdapter implements SourceAdapterLocal,SourceAdapterRemo
         //ik kijk na of er al een keer gedownload is
         //of of de huidige timeStamp minstens 4 minuten groter is dan lastDownload
         //anders gaat hij elke keer het volledige JSON-object ophalen wat ook mag maar dit is beter denk ik
-        if (lastDownload == 0 || (currentLong - timeDifference) > lastDownload) {
+        if(!this.sessionId.equals(sessionId)){
             try {
                 download();
+                this.sessionId = sessionId;
             } catch (Exception e) {
                 throw new URLException("Can't connect to URL for " + providerName + " adapter");
             }
@@ -97,23 +105,18 @@ public class CoyoteSourceAdapter implements SourceAdapterLocal,SourceAdapterRemo
         rd = new RouteData();
         String routeName = route.getName();
 
-        //hoofdletter Northbound/northbound
-        int indexBegin = routeName.indexOf('(');
-        int indexEind = routeName.indexOf(')');
-
-        if (indexEind != -1 && indexEind != (routeName.length()-1)) {
-            routeName = routeName.substring(0, indexEind + 1) + " " + routeName.substring(indexEind + 2, indexEind + 3).toUpperCase() + routeName.substring(indexEind + 3);
-        } else if (indexBegin != -1) {
-            routeName = routeName.substring(0, indexBegin + 1) + routeName.substring(indexBegin + 1, indexBegin + 2).toUpperCase() + routeName.substring(indexBegin + 2);
+        //get mapped name for coyote
+        Properties mapping = getMapping();
+        if (mapping != null) {
+            routeName = routeName.replace(" ", "_");
+            routeName  = mapping.getProperty(routeName, routeName);
+            routeName = routeName.replace("_", " ");
         }
-        
-        String geoStart = route.getStartLocation().getName();
-        String geoEnd = route.getEndLocation().getName();
 
         //System.out.println(routeName + " - " + geoStart + " - " + geoEnd);
         try {
 
-            JSONObject traject = downloadedJSON.getJSONObject(routeName + " - " + geoStart + " - " + geoEnd);
+            JSONObject traject = downloadedJSON.getJSONObject(routeName);
 
             seconds = traject.getBigDecimal("real_time").intValue();
             //System.out.println(seconds);

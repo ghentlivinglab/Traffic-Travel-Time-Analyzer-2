@@ -15,6 +15,7 @@ import iii.vop2016.verkeer2.ejb.threshold.IThresholdManager;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -70,6 +71,9 @@ public class TrafficDataDownloader implements TrafficDataDownloaderRemote,Traffi
         ILogger logger = beanFactory.getLogger();
         
         logger.log(Level.FINER, "Started data scrubbing");
+        
+        UUID id = UUID.randomUUID();
+        String sessionID = id.toString();
 
         List<IRoute> routes = beanFactory.getGeneralDAO().getRoutes();
         ITrafficDataDownstreamAnalyser analyzer = beanFactory.getTrafficDataDownstreamAnalyser();
@@ -79,7 +83,7 @@ public class TrafficDataDownloader implements TrafficDataDownloaderRemote,Traffi
             for (IRoute route : routes) {
 
                 //opvragen van de data
-                List<IRouteData> data = sourceManager.parse(route);
+                List<IRouteData> data = sourceManager.parse(route,sessionID);
 
                 //opslaan van de verkregen data
                 if (data != null && data.size() != 0) {

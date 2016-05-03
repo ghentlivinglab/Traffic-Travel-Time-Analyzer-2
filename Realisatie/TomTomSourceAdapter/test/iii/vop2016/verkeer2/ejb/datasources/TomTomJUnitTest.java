@@ -37,7 +37,7 @@ public class TomTomJUnitTest {
             h.init();
 
             try {
-                h.parse(r);
+                h.parse(r,"test");
             } catch (URLException ex) {
                 Logger.getLogger(TomTomJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Throwable ex) {

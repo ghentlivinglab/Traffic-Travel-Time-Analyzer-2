@@ -66,7 +66,7 @@ public class HereSourceAdapter implements SourceAdapterLocal, SourceAdapterRemot
     }
 
     @Override
-    public IRouteData parse(IRoute route) throws URLException, DataAccessException {
+    public IRouteData parse(IRoute route, String sessionID) throws URLException, DataAccessException {
 
         RouteData rd = null;
 

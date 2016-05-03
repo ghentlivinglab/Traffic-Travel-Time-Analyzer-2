@@ -57,7 +57,7 @@ public class SourceManager implements ISourceManager {
     }
 
     @Override
-    public List<IRouteData> parse(final IRoute route) {
+    public List<IRouteData> parse(final IRoute route,final String sessionID) {
 
         List<ISourceAdapter> adapters = beanFactory.getSourceAdaptors();
         ILogger logger = beanFactory.getLogger();
@@ -69,7 +69,7 @@ public class SourceManager implements ISourceManager {
             futures.add(executor.submit(new Callable() {
                 @Override
                 public IRouteData call() throws URLException, DataAccessException {
-                    return adapter.parse(route);
+                    return adapter.parse(route,sessionID);
                 }
             }));
         }

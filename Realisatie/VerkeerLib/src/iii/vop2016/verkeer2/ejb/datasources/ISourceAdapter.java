@@ -17,7 +17,7 @@ import java.util.concurrent.Future;
  */
 public interface ISourceAdapter {
     
-    public IRouteData parse(IRoute route) throws URLException,DataAccessException; 
+    public IRouteData parse(IRoute route, String sessionID) throws URLException,DataAccessException; 
     public String getProviderName(); 
     
 }

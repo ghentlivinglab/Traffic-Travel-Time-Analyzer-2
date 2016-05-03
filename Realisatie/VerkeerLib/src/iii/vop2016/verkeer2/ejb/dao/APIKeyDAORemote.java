@@ -5,10 +5,13 @@
  */
 package iii.vop2016.verkeer2.ejb.dao;
 
+import javax.ejb.Remote;
+
 /**
  *
  * @author Gebruiker
  */
+@Remote
 public interface APIKeyDAORemote extends IAPIKeyDAO {
     
 }

@@ -68,7 +68,7 @@ public class TomTomSourceAdapter implements SourceAdapterLocal, SourceAdapterRem
     }
 
     @Override
-    public IRouteData parse(IRoute route) throws URLException, DataAccessException {
+    public IRouteData parse(IRoute route, String sessionID) throws URLException, DataAccessException {
 
         RouteData rd = null;
 

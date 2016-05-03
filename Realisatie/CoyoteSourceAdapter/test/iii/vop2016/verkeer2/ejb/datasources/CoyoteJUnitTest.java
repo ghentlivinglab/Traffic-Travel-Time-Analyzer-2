@@ -38,7 +38,7 @@ public class CoyoteJUnitTest {
             c.init();
 
             try {
-                c.parse(r);
+                c.parse(r,"test");
             } catch (URLException ex) {
                 Logger.getLogger(CoyoteJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Throwable ex) {

@@ -70,7 +70,7 @@ public class GoogleMapsSourceAdapter implements SourceAdapterLocal, SourceAdapte
     }
 
     @Override
-    public IRouteData parse(IRoute route) throws URLException, DataAccessException {
+    public IRouteData parse(IRoute route, String sessionID) throws URLException, DataAccessException {
 
         Properties prop = getProperties();
         key = prop.getProperty("GoogleMaps");

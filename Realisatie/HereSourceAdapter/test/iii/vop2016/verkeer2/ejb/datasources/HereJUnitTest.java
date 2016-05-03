@@ -39,7 +39,7 @@ public class HereJUnitTest {
             h.init();
 
             try {
-                h.parse(r);
+                h.parse(r,"test");
             } catch (URLException ex) {
                 Logger.getLogger(HereJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Throwable ex) {
