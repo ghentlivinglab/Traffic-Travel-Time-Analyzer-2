@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+        version="3.2"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/ejb-jar_3_2.xsd">
+<description>Api key dao</description>
+    <display-name>APIKeyDAO</display-name>
+    <enterprise-beans>
+        <session>
+            <ejb-name>APIKeyDAO</ejb-name>
+            <remote>iii.vop2016.verkeer2.ejb.dao.APIKeyDAORemote</remote>
+            <local>iii.vop2016.verkeer2.ejb.dao.APIKeyDAOLocal</local>
+            <ejb-class>iii.vop2016.verkeer2.ejb.dao.APIKeyDAO</ejb-class>
+            <session-type>Singleton</session-type>
+        </session>
+    </enterprise-beans>
+</ejb-jar>

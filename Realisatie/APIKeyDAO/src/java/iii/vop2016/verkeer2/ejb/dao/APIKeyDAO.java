@@ -27,7 +27,7 @@ import javax.persistence.TypedQuery;
  * @author Gebruiker
  */
 @Singleton
-public class APIKeyDAO implements APIKeyDAORemote {
+public class APIKeyDAO implements APIKeyDAORemote,APIKeyDAOLocal {
     
     @PersistenceContext(name = "GeneralDBPU")
     EntityManager em;
