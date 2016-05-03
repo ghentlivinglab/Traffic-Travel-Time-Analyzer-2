@@ -97,10 +97,16 @@ public class CoyoteSourceAdapter implements SourceAdapterLocal,SourceAdapterRemo
         rd = new RouteData();
         String routeName = route.getName();
 
-        //hoofdletter Northbound/northbound of Southbound/
-        int index = routeName.indexOf(')');
-        routeName = routeName.substring(0, index + 1) + " " + routeName.substring(index + 2, index + 3).toUpperCase() + routeName.substring(index + 3);
+        //hoofdletter Northbound/northbound
+        int indexBegin = routeName.indexOf('(');
+        int indexEind = routeName.indexOf(')');
 
+        if (indexEind != -1 && indexEind != (routeName.length()-1)) {
+            routeName = routeName.substring(0, indexEind + 1) + " " + routeName.substring(indexEind + 2, indexEind + 3).toUpperCase() + routeName.substring(indexEind + 3);
+        } else if (indexBegin != -1) {
+            routeName = routeName.substring(0, indexBegin + 1) + routeName.substring(indexBegin + 1, indexBegin + 2).toUpperCase() + routeName.substring(indexBegin + 2);
+        }
+        
         String geoStart = route.getStartLocation().getName();
         String geoEnd = route.getEndLocation().getName();
 
