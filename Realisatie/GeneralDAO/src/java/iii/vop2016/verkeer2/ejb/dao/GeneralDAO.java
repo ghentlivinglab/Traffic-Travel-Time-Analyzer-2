@@ -13,6 +13,7 @@ import iii.vop2016.verkeer2.ejb.components.IThreshold;
 import iii.vop2016.verkeer2.ejb.components.Route;
 import iii.vop2016.verkeer2.ejb.components.Threshold;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,6 +23,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.SessionContext;
 import javax.ejb.Singleton;
 import javax.naming.InitialContext;
@@ -35,7 +38,8 @@ import javax.persistence.Query;
  * @author Tobias
  */
 @Singleton
-public class GeneralDAO implements GeneralDAORemote,GeneralDAOLocal {
+@Lock(LockType.WRITE)
+public class GeneralDAO implements GeneralDAORemote, GeneralDAOLocal {
 
     @PersistenceContext(name = "GeneralDBPU")
     EntityManager em;
@@ -91,6 +95,7 @@ public class GeneralDAO implements GeneralDAORemote,GeneralDAOLocal {
             List<IRoute> routes = q.getResultList();
             if (routes.size() >= 1) {
                 route = routes.get(0);
+                em.detach(route);
                 route = new Route(route);
             }
         } catch (Exception e) {
@@ -111,6 +116,7 @@ public class GeneralDAO implements GeneralDAORemote,GeneralDAOLocal {
             List<IRoute> routes = q.getResultList();
             if (routes.size() >= 1) {
                 route = routes.get(0);
+                em.detach(route);
                 route = new Route(route);
             }
         } catch (Exception e) {
@@ -283,15 +289,77 @@ public class GeneralDAO implements GeneralDAORemote,GeneralDAOLocal {
             if (resultList.size() != 1) {
                 throw new ArrayIndexOutOfBoundsException(resultList.size() + " doesnt equal 1");
             }
-            
+
             ThresholdEntity result = resultList.get(0);
-            
+
             result.setDelayTriggerLevel(th.getDelayTriggerLevel());
             result.setLevel(th.getLevel());
             result.setObservers(th.getObservers());
             result.setRouteId(th.getRouteId());
         } catch (Exception e) {
+            throw new RuntimeException("Unable to update threshold. " + e.getMessage());
+        }
+    }
 
+    @Override
+    public void updateRoute(IRoute route) {
+        try {
+            Query q = em.createQuery("SELECT r FROM RouteEntity r WHERE r.id = :id");
+            q.setParameter("id", route.getId());
+            List<IRoute> resultList = q.getResultList();
+
+            if (resultList.size() != 1) {
+                throw new ArrayIndexOutOfBoundsException(resultList.size() + " doesnt equal 1");
+            }
+
+            IRoute result = resultList.get(0);
+
+            result.setName(route.getName());
+
+            //remove not existing geo's:
+            List<IGeoLocation> toRemove = new ArrayList<>();
+            for (IGeoLocation rgeo : result.getGeolocations()) {
+                boolean found = false;
+                for (IGeoLocation geo : route.getGeolocations()) {
+                    if (Double.compare(rgeo.getLatitude(), geo.getLatitude()) == 0 && Double.compare(rgeo.getLongitude(), geo.getLongitude()) == 0) {
+                        found = true;
+                    }
+                }
+                if (found == false) {
+                    toRemove.add(rgeo);
+                    Query qgeo = em.createQuery("DELETE FROM GeoLocationEntity g WHERE g.id = :id");
+                    qgeo.setParameter("id", rgeo.getId());
+                    qgeo.executeUpdate();
+                }
+            }
+            result.getGeolocations().removeAll(toRemove);
+
+            //detect new geolocations and modify order of others
+            for (IGeoLocation geo : route.getGeolocations()) {
+                boolean found = false;
+                for (IGeoLocation rgeo : result.getGeolocations()) {
+                    if (Double.compare(rgeo.getLatitude(), geo.getLatitude()) == 0 && Double.compare(rgeo.getLongitude(), geo.getLongitude()) == 0) {
+                        found = true;
+                        if (rgeo.getSortRank() != geo.getSortRank() || (!rgeo.getName().equals(geo.getName()))) {
+                            Query qgeo = em.createQuery("UPDATE GeoLocationEntity AS g SET g.name = :name, g.sortRank = :sortrank WHERE g.id = :id");
+                            qgeo.setParameter("name", geo.getName());
+                            qgeo.setParameter("sortrank", geo.getSortRank());
+                            qgeo.setParameter("id", geo.getId());
+                            qgeo.executeUpdate();
+                        }
+                    }
+                }
+                if (found == false) {
+                    GeoLocationEntity newGeo = new GeoLocationEntity(geo);
+
+                    //bypass geolocation ranking system
+                    int sortRank = newGeo.getSortRank();
+                    result.addGeolocation(newGeo);
+                    newGeo.setSortRank(sortRank);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to update threshold. " + e.getMessage());
         }
     }
 }

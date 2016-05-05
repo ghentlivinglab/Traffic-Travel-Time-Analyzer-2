@@ -32,5 +32,7 @@ public interface IRoute extends Serializable {
     public void removeGeoLocation(IGeoLocation location);
     
     //data wordt niet opvraagbaar via deze klasse (later misschien nog eens over nadenken)
+
+    public void removeGeolocation(int i);
     
 }
