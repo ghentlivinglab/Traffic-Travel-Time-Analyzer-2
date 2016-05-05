@@ -30,8 +30,6 @@ public class PeriodDAO {
     private boolean multiPeriods;
 
     
-   
-    
     /**
      * Creates a new instance of PeriodDAO
      */
@@ -42,26 +40,29 @@ public class PeriodDAO {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();        
         Map<String, String[]> parameterMap = request.getParameterMap();
             
-        // PERIOD
+       
         String[] periodStart = parameterMap.get("periodStart");
         String[] periodEnd = parameterMap.get("periodEnd");
         String[] periodsStart = parameterMap.get("periodsStart");
         String[] periodsEnd = parameterMap.get("periodsEnd");       
-        
-        if(periodStart != null && periodEnd != null 
-                && periodStart.length>0 && periodEnd.length>0
+     
+         // PERIOD
+        if(periodStart != null && periodEnd != null){
+            if(periodStart.length>0 && periodEnd.length>0
                 && !periodStart[0].equals("") && !periodEnd[0].equals("")){
-            try{
-                period = new Pair<>(new Date(Long.parseLong(periodStart[0])),new Date(Long.parseLong(periodEnd[0])));
-            }catch(Exception ex){
-                System.out.println(ex);
-            }            
+                try{
+                    period = new Pair<>(new Date(Long.parseLong(periodStart[0])),new Date(Long.parseLong(periodEnd[0])));
+                }catch(Exception ex){
+                    System.out.println(ex);
+                }            
+            }else{
+                period = null;
+            }
         }
         
         // PERIODECOMPARER
-        
         if(periodsStart != null && periodsEnd != null 
-                && periodsStart.length>0 && periodsEnd.length>0
+                && periodsStart.length>0 && periodsEnd.length>0 
                 && !periodsStart[0].equals("") && !periodsEnd[0].equals("")){
             String[] partsBegin = periodsStart[0].split(" ");
             String[] partsEnd = periodsEnd[0].split(" ");

@@ -74,8 +74,6 @@
 		<view-id value="/faces/pages/settings/routes-edit.xhtml" />
 	</url-mapping>
         
-        <!--  -->
-        
         <url-mapping id="settings-routes-del">
 		<pattern value="/settings/routes/del/#{id : routeSettings.id}" />
 		<view-id value="/faces/pages/settings/routes-del.xhtml" />
@@ -86,6 +84,17 @@
 		<view-id value="/faces/pages/settings/routes-details.xhtml" />
 	</url-mapping>
         
+        <url-mapping id="settings-live">
+		<pattern value="/settings/routes/edit/#{id : routeSettings.id}" />
+		<view-id value="/faces/pages/settings/routes-edit.xhtml" />
+	</url-mapping>
+        
+        <url-mapping id="settings-profile">
+		<pattern value="/settings/routes/edit/#{id : routeSettings.id}" />
+		<view-id value="/faces/pages/settings/routes-edit.xhtml" />
+	</url-mapping>
+        
+       
        
        
                 

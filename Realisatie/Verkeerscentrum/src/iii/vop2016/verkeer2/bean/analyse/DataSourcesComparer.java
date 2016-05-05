@@ -102,7 +102,7 @@ public class DataSourcesComparer extends AnalysePage implements ITableView, IGra
         //
         // PROVIDERS
         //
-        if(dataproviders != null || dataproviders.size()==0){
+        if(dataproviders != null && dataproviders.size()>0){
             StringBuilder providersURLS = new StringBuilder();
             if(this.dataproviders.size() > 0){
                 providersURLS.append("providers=");

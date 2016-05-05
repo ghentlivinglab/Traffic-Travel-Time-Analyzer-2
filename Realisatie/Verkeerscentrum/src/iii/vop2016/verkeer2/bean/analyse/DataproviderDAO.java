@@ -58,6 +58,8 @@ public class DataproviderDAO {
                 availableProviders.add(new DataProvider(providers.getString(i)));
             }
 
+            
+
             HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();        
             Map<String, String[]> parameterMap = request.getParameterMap();
             String[] providersArray = parameterMap.get("provider");

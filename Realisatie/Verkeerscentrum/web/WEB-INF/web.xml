@@ -36,10 +36,12 @@
         <url-pattern>/</url-pattern>
         
         <url-pattern>/faces/live.xhtml</url-pattern>
-        <url-pattern>/faces/pages/analyse/*</url-pattern>
-        <url-pattern>/faces/pages/settings/*</url-pattern>
-        <url-pattern>/faces/pages/settings/settings.xhtml</url-pattern>
         <url-pattern>/faces/index.xhtml</url-pattern>
+        <url-pattern>/faces/settings.xhtml</url-pattern>
+        <url-pattern>/faces/analyse.xhtml</url-pattern>
+        
+        <url-pattern>/faces/pages/analyse*</url-pattern>
+        <url-pattern>/faces/pages/settings*</url-pattern>        
     </filter-mapping>
     
 
