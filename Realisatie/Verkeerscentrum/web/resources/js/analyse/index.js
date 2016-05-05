@@ -3,14 +3,16 @@
 var tab = 0;
 var inittabs = [];
 var descriptions = [];
+var periodValidationRequired = true;
 
 $("#btnCompareSources").click(function(event){
     inittabs = ["singleperiod","route","providers"];
     descriptions = [
-        "Selecteer over welke periode de data moet worden weergegeven",
+        "Selecteer over welke periode de data moet worden weergegeven.",
         "Selecteer een traject.",
         "Selecteer welke bronnen je wil vergelijken met elkaar."
     ];
+    periodValidationRequired = true;
     setTitle("Databronnen vergelijken");
     resetSlider();
     showSlider();
@@ -25,10 +27,11 @@ $("#btnCompareSources").click(function(event){
 $("#btnAvgTraffic").click(function(event){
     inittabs = ["singleperiod","route","providers"];
     descriptions = [
-        "Selecteer over welke periode de data moet worden uitgemiddeld",
+        "OPTIONEEL: Selecteer over welke periode de data moet worden uitgemiddeld. ",
         "Selecteer een traject",
         "Selecteer de bronnen die mogen worden opgenomen in de vergelijking"
     ];
+    periodValidationRequired = false;
     setTitle("Gemiddelde verkeerssituatie");
     resetSlider();
     showSlider();
@@ -43,10 +46,11 @@ $("#btnAvgTraffic").click(function(event){
 $("#btnDelayWeekday").click(function(event){
     inittabs = ["singleperiod","route","providers"];
     descriptions = [
-        "Selecteer over welke periode de data moet worden uitgemiddeld",
+        "OPTIONEEL: Selecteer over welke periode de data moet worden uitgemiddeld",
         "Selecteer een traject",
         "Selecteer de bronnen die mogen worden opgenomen in de vergelijking"
     ];
+    periodValidationRequired = false;
     setTitle("Weekdagen vergelijken");
     resetSlider();
     showSlider();
@@ -61,10 +65,11 @@ $("#btnDelayWeekday").click(function(event){
 $("#btnRushHours").click(function(event){
     inittabs = ["singleperiod","route","providers"];
     descriptions = [
-        "Selecteer over welke periode de data moet worden uitgemiddeld",
+        "OPTIONEEL: Selecteer over welke periode de data moet worden uitgemiddeld",
         "Selecteer een traject",
         "Selecteer de bronnen die mogen worden opgenomen in de vergelijking"
     ];
+    periodValidationRequired = false;
     setTitle("Spitsuren");
     resetSlider();
     showSlider();
@@ -79,10 +84,11 @@ $("#btnRushHours").click(function(event){
 $("#btnCompareRoutes").click(function(event){
     inittabs = ["singleperiod","route","providers"];
     descriptions = [
-        "Selecteer over welke periode de data moet worden uitgemiddeld",
+        "OPTIONEEL: Selecteer over welke periode de data moet worden uitgemiddeld",
         "Selecteer de trajecten die je met elkaar wil vergelijken",
         "Selecteer de bronnen die mogen worden opgenomen in de vergelijking"
     ];
+    periodValidationRequired = false;
     setTitle("Trajecten vergelijken");
     resetSlider();
     showSlider();
@@ -101,6 +107,7 @@ $("#btnComparePeriods").click(function(event){
         "Selecteer een traject",
         "Selecteer de bronnen die mogen worden opgenomen in de vergelijking"
     ];
+    periodValidationRequired = true;
     setTitle("Perioden vergelijken");
     resetSlider();
     showSlider();
@@ -176,18 +183,22 @@ var formAddNewPeriod = $("#formAddNewPeriod");
 
 
 $(".btnValidateSinglePeriodForm").click(function(event){
-    form.validate({
-        errorClass: "invalid",
-        rules: {
-            periodStartDummy: "required",
-            periodEndDummy: "required"
-        },
-        messages: {
-            periodStartDummy: "Selecteer het begin van de periode",
-            periodEndDummy: "Selecteer het einde van de periode"
+    if(periodValidationRequired){
+        form.validate({
+            errorClass: "invalid",
+            rules: {
+                periodStartDummy: "required",
+                periodEndDummy: "required"
+            },
+            messages: {
+                periodStartDummy: "Selecteer het begin van de periode",
+                periodEndDummy: "Selecteer het einde van de periode"
+            }
+        });
+        if(form.valid()){
+            nextSlide();
         }
-    });
-    if(form.valid()){
+    }else{
         nextSlide();
     }
 });

@@ -96,13 +96,14 @@ public class AvgTraffic extends AnalysePage implements ITableView, IGraphView {
         //
         // PERIODS
         //
-        if(period.getKey() != null){
-            urlParts.add("start="+period.getKey().getTime());
+        if(period != null){
+            if(period.getKey() != null){
+                urlParts.add("start="+period.getKey().getTime());
+            }
+            if(period.getValue() != null){
+                urlParts.add("end="+period.getValue().getTime());
+            }
         }
-        if(period.getValue() != null){
-            urlParts.add("end="+period.getValue().getTime());
-        }
-        
         //
         // PROVIDERS
         //

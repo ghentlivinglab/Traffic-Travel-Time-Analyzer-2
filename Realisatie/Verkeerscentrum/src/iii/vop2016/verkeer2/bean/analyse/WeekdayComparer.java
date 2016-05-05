@@ -91,13 +91,14 @@ public class WeekdayComparer extends AnalysePage implements ITableView, IGraphVi
         //
         // PERIODS
         //
-        if(period.getKey() != null){
-            urlParts.add("start="+period.getKey().getTime());
+        if(period != null){
+            if(period.getKey() != null){
+                urlParts.add("start="+period.getKey().getTime());
+            }
+            if(period.getValue() != null){
+                urlParts.add("end="+period.getValue().getTime());
+            }
         }
-        if(period.getValue() != null){
-            urlParts.add("end="+period.getValue().getTime());
-        }
-        
         //
         // PROVIDERS
         //
