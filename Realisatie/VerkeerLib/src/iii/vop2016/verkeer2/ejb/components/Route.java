@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  *
@@ -104,11 +105,14 @@ public class Route implements IRoute {
 
     @Override
     public void addGeolocation(IGeoLocation location, int i) {
-        for (int j = i; j < geolocations.size(); j++) {
-            geolocations.get(j).setSortRank(geolocations.get(j).getSortRank() + 1);
+        for (IGeoLocation loc : geolocations) {
+            if (loc.getSortRank() >= i) {
+                loc.setSortRank(loc.getSortRank() + 1);
+            }
         }
-        geolocations.add(i, location);
-        location.setSortRank(i + 1);
+        location.setSortRank(i);
+        geolocations.add(location);
+
     }
 
     @Override
@@ -147,6 +151,25 @@ public class Route implements IRoute {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void removeGeolocation(final int sortRank) {
+        geolocations.removeIf(new Predicate<IGeoLocation>() {
+            @Override
+            public boolean test(IGeoLocation t) {
+                if (t.getSortRank() == sortRank) {
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        for (IGeoLocation geo : geolocations) {
+            if(geo.getSortRank() > sortRank){
+                geo.setSortRank(geo.getSortRank()-1);
+            }
+        }
     }
 
 }
