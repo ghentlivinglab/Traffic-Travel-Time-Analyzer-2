@@ -179,14 +179,16 @@ public class TimerScheduler implements TimerSchedulerRemote, TimerSchedulerLocal
 
             interval = i;
             ticks = 1;
-            
+
+            ILogger logger = beans.getLogger();
+            logger.log(Level.INFO, "Interval for Timer set to " + interval);
+
+        }
+
+        if (isClearBuffersTriggered(currentTime, prop)) {
             ILogger logger = beans.getLogger();
             ITrafficDataDAO dao = beans.getTrafficDataDAO();
             IDataProvider dataProv = beans.getDataProvider();
-            
-            logger.log(Level.INFO, "Interval for Timer set to " + interval);
-            
-            
             dao.updateBlockList();
             dataProv.invalidateBuffers();
             logger.log(Level.INFO, "Buffers cleared and Blocklist for lookup rebuild");
@@ -358,5 +360,30 @@ public class TimerScheduler implements TimerSchedulerRemote, TimerSchedulerLocal
     @Override
     public int getPercentDoneToNextInterval() {
         return ((ticks - 1) * 100) / interval;
+    }
+
+    private boolean isClearBuffersTriggered(int currentTime, Properties prop) {
+        String buf = prop.getProperty("bufferclear", "");
+        if (buf.equals("")) {
+            return false;
+        }
+
+        String[] arr = buf.split(",");
+        if (arr == null || arr.length == 0) {
+            return false;
+        }
+
+        //parse string to int and compare to currentTime
+        for (int i = 0; i < arr.length; i++) {
+            Matcher m = timeFormat.matcher(arr[i]);
+            if (m.matches()) {
+                int time = Integer.parseInt(m.group(1) + m.group(2));
+                if(time == currentTime)
+                    return true;
+            }
+        }
+        
+        return false;
+
     }
 }

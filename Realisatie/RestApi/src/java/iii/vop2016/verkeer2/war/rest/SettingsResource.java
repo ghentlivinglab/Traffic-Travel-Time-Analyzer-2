@@ -11,6 +11,7 @@ import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import iii.vop2016.verkeer2.ejb.properties.IProperties;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdManager;
 import java.io.StringReader;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -89,13 +90,28 @@ public class SettingsResource {
     }
 
     @GET
+    @Path("buffers/clear")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response clearBuffers() {
+        try {
+            beans.getDataProvider().invalidateBuffers();
+            beans.getTrafficDataDAO().updateBlockList();
+            
+            JsonObjectBuilder b = Json.createObjectBuilder();
+            b.add("status", "done");
+            return Response.status(Response.Status.OK).entity(b.build().toString()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+
+    @GET
     @Path("properties")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSettings() {
         IProperties propCol = beans.getPropertiesCollection();
         List<String> propStr = propCol.getProperties();
 
-        
         JsonArrayBuilder arr = Json.createArrayBuilder();
 
         for (String jndi : propStr) {
@@ -107,7 +123,7 @@ public class SettingsResource {
             for (Map.Entry<Object, Object> entry : prop.entrySet()) {
                 if (entry.getKey() instanceof String) {
                     if (!((String) entry.getKey()).equals("propertyLocation")) {
-                        col.add((String) entry.getKey(), (String)entry.getValue());
+                        col.add((String) entry.getKey(), (String) entry.getValue());
                     }
                 }
             }
