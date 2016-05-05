@@ -7,6 +7,7 @@ package iii.vop2016.verkeer2.war.rest;
 
 import iii.vop2016.verkeer2.ejb.components.Log;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
+import iii.vop2016.verkeer2.ejb.helper.VerkeerLibToJson;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +26,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 
 /**
@@ -79,15 +81,16 @@ public class LoggingsResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getLogs() {
+    public Response getLogs() {
         setParameters();
         JSONArray result = new JSONArray();
         List<Log> logs = beans.getLogger().getLogs(amount, offset, filter, containing);
+        
+        JSONArray arr = new JSONArray();
         for(Log log: logs){
-            String logOutput= log.getL().toString()+ "\t"+log.getMessage()+"\t"+ new Date(log.getDate());
-            result.put(logOutput);
+            VerkeerLibToJson.toJson(log);
         }
-        return result.toString();
+        return Response.ok().entity(arr.toString()).build();
     }
     
     private void setParameters(){
@@ -124,10 +127,6 @@ public class LoggingsResource {
         else{
             this.containing="";
         }
-    }
-
-    private String Date(long date) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

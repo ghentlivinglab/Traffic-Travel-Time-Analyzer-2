@@ -165,39 +165,4 @@ public class ThresholdsResource {
 
         return arr.build().toString();
     }
-
-    @GET
-    @Path("test")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getTest() {
-        IRoute r = beans.getGeneralDAO().getRoute(2);
-        
-        List<IRoute> routes = new ArrayList<>();
-        routes.add(r);
-        
-        List<IRouteData> data = new ArrayList<>();
-        RouteData routedata = new RouteData();
-        routedata.setDistance(1000);
-        routedata.setDuration(253);
-        routedata.setId(100);
-        routedata.setProvider("Here");
-        routedata.setRouteId(r.getId());
-        data.add(routedata);
-        
-        beans.getTrafficDataDownstreamAnalyser().endSession(data, routes);
-        
-        data = new ArrayList<>();
-        routedata = new RouteData();
-        routedata.setDistance(1000);
-        routedata.setDuration(253 + 130);
-        routedata.setId(100);
-        routedata.setProvider("Here");
-        routedata.setRouteId(r.getId());
-        data.add(routedata);
-        
-        beans.getTrafficDataDownstreamAnalyser().endSession(data, routes);
-
-        return "{\"status\":\"ok\"}";
-    }
-
 }
