@@ -15,6 +15,7 @@ import iii.vop2016.verkeer2.ejb.logger.ILogger;
 import iii.vop2016.verkeer2.ejb.logger.LoggerRemote;
 import iii.vop2016.verkeer2.ejb.properties.IProperties;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -186,7 +187,24 @@ public class ThresholdManager implements ThresholdManagerRemote, ThresholdManage
     @Override
     public List<IThreshold> getThresholds(IRoute r) {
         if (thresholdMap.containsKey(r)) {
-            return thresholdMap.get(r);
+            List<IThreshold> ths = thresholdMap.get(r);
+            ths.sort(new Comparator<IThreshold>() {
+                @Override
+                public int compare(IThreshold o1, IThreshold o2) {
+                    if(o1 == null && o2 == null){
+                        return 0;
+                    }
+                    if (o1 == null) {
+                        return -1;
+                    }
+                    if (o2 == null) {
+                        return 1;
+                    }
+
+                    return Integer.compare(o1.getLevel(),o2.getLevel());
+                }
+            });
+            return ths;
         } else {
             return new ArrayList<>();
         }
