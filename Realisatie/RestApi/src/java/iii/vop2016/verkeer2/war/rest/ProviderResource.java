@@ -31,6 +31,7 @@ import javax.ws.rs.PUT;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 
 /**
@@ -49,7 +50,6 @@ public class ProviderResource {
     //private SessionContext sctx;
     private InitialContext ctx;
     private static BeanFactory beans;
-    
 
     /**
      * Creates a new instance of ProviderResource
@@ -57,7 +57,6 @@ public class ProviderResource {
     public ProviderResource() {
     }
 
-    
     @PostConstruct
     private void init() {
         try {
@@ -69,22 +68,27 @@ public class ProviderResource {
     }
 
     /**
-     * Retrieves representation of an instance of iii.vop2016.verkeer2.war.rest.ProviderResource
+     * Retrieves representation of an instance of
+     * iii.vop2016.verkeer2.war.rest.ProviderResource
+     *
      * @return an instance of java.lang.String
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getJson() {
-        Set<String> providers = new HashSet<>();
-        for(ISourceAdapter adapter : beans.getSourceAdaptors()){
-            providers.add(adapter.getProviderName());
+    public Response getJson() {
+        try {
+            Set<String> providers = new HashSet<>();
+            for (ISourceAdapter adapter : beans.getSourceAdaptors()) {
+                providers.add(adapter.getProviderName());
+            }
+            JSONArray result = new JSONArray();
+            for (String s : providers) {
+                result.put(s);
+            }
+            return Response.status(Response.Status.OK).entity(result.toString(1)).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
-        JSONArray result = new JSONArray();
-        for(String s : providers){
-            result.put(s);
-        }
-        return result.toString(1);
     }
-
 
 }

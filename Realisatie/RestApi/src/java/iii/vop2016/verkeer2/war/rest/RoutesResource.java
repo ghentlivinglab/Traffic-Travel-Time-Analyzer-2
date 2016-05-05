@@ -234,7 +234,7 @@ public class RoutesResource {
     }
 
     @POST
-    @Path("remove/{id}")
+    @Path("{id}/remove")
     public Response removeRoutes(@PathParam("id") String sid) {
         try {
             List<IRoute> routes = getRoutes(sid);
@@ -248,26 +248,63 @@ public class RoutesResource {
         }
     }
 
+    @POST
+    @Path("{id}/update")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response updateRoute(JSONObject jroute, @PathParam("id") String sid) {
+        try {
+            List<IRoute> routes = getRoutes(sid);
+            for (IRoute r : routes) {
+                r.setName(jroute.getString("name"));
+                JSONArray geolocations = jroute.getJSONArray("geolocations");
+                List<IGeoLocation> geolist = new ArrayList<>();
+                for (int i = 0; i < geolocations.length(); i++) {
+                    IGeoLocation geolocation = new GeoLocation(geolocations.getJSONObject(i).getDouble("latitude"), geolocations.getJSONObject(i).getDouble("longitude"));
+                    geolocation.setName(geolocations.getJSONObject(i).getString("name"));
+                    geolist.add(geolocation);
+                }
+                r.setGeolocations(geolist);
+                beans.getGeneralDAO().updateRoute(r);
+            }
+            return Response.status(Response.Status.OK).entity("Route has been updated").build();
+        } catch (Exception ex) {
+            Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("An error has occured").build();
+        }
+    }
+
     @GET
     @Path("all")
     @Produces("application/json")
-    public String getAllRoutesData() {
-        //Parameters
-        setBasicParameters();
+    public Response getAllRoutesData() {
+        try {
+            //Parameters
+            setBasicParameters();
 
-        List<IRoute> routes = getRoutes("all");
-        return JSONRoutes(routes).toString();
+            List<IRoute> routes = getRoutes("all");
+            return Response.status(Response.Status.OK).entity(JSONRoutes(routes).toString()).build();
+        } catch (NumberFormatException e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+        }
     }
 
     @GET
     @Path("{id}")
     @Produces("application/json")
-    public String getRoutesData(@PathParam("id") String sid) {
-        setBasicParameters();
+    public Response getRoutesData(@PathParam("id") String sid) {
+        try {
+            setBasicParameters();
 
-        List<IRoute> routes = getRoutes(sid);
+            List<IRoute> routes = getRoutes(sid);
 
-        return JSONRoutes(routes).toString();
+            return Response.status(Response.Status.OK).entity(JSONRoutes(routes).toString()).build();
+        } catch (NumberFormatException e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+        }
     }
 
     @GET
@@ -281,100 +318,130 @@ public class RoutesResource {
     @Path("{id}/raw")
     @Produces("application/json")
     public Response getRoutesDataRaw(@PathParam("id") String sid) {
-        setBasicParameters();
-        String pageStr = context.getQueryParameters().getFirst("page");
-        int page = 0;
-        if (pageStr != null && (!pageStr.equals(""))) {
-            try {
-                page = Integer.parseInt(pageStr);
-            } catch (NumberFormatException e) {
-                return Response.status(Response.Status.BAD_REQUEST).build();
+        try {
+            setBasicParameters();
+            String pageStr = context.getQueryParameters().getFirst("page");
+            int page = 0;
+            if (pageStr != null && (!pageStr.equals(""))) {
+                try {
+                    page = Integer.parseInt(pageStr);
+                } catch (NumberFormatException e) {
+                    return Response.status(Response.Status.BAD_REQUEST).build();
+                }
             }
-        }
 
-        List<IRoute> routes = getRoutes(sid);
+            List<IRoute> routes = getRoutes(sid);
 
-        JSONArray res = JSONRoutes(routes);
-        for (int i = 0; i < res.length(); i++) {
-            JSONArray arr = new JSONArray(JSONRawData(routes.get(i),page).build().toString());
-            res.getJSONObject(i).put("rawdata", arr);
+            JSONArray res = JSONRoutes(routes);
+            for (int i = 0; i < res.length(); i++) {
+                JSONArray arr = new JSONArray(JSONRawData(routes.get(i), page).build().toString());
+                res.getJSONObject(i).put("rawdata", arr);
+            }
+            return Response.ok().entity(res.toString()).build();
+        } catch (NumberFormatException e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
-        return Response.ok().entity(res.toString()).build();
     }
 
     @GET
     @Path("{id}/days")
     @Produces("application/json")
-    public String getDayData(@PathParam("id") String sid) {
-        setAnalysisParameters();
+    public Response getDayData(@PathParam("id") String sid) {
+        try {
+            setAnalysisParameters();
 
-        List<IRoute> routes = getRoutes(sid);
+            List<IRoute> routes = getRoutes(sid);
 
-        JSONArray result = JSONRoutes(routes);
-        for (int i = 0; i < result.length(); i++) {
-            result.getJSONObject(i).put("data", JSONDaysData(routes.get(i)));
+            JSONArray result = JSONRoutes(routes);
+            for (int i = 0; i < result.length(); i++) {
+                result.getJSONObject(i).put("data", JSONDaysData(routes.get(i)));
 
+            }
+
+            return Response.status(Response.Status.OK).entity(result.toString()).build();
+        } catch (NumberFormatException e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
-
-        return result.toString();
     }
 
     @GET
     @Path("{id}/rushhours")
     @Produces("application/json")
-    public String getRushhourData(@PathParam("id") String sid) {
-        setAnalysisParameters();
+    public Response getRushhourData(@PathParam("id") String sid) {
+        try {
+            setAnalysisParameters();
 
-        List<IRoute> routes = getRoutes(sid);
+            List<IRoute> routes = getRoutes(sid);
 
-        JSONArray result = JSONRoutes(routes);
-        for (int i = 0; i < result.length(); i++) {
-            result.getJSONObject(i).put("data", JSONRushhourData(routes.get(i)));
+            JSONArray result = JSONRoutes(routes);
+            for (int i = 0; i < result.length(); i++) {
+                result.getJSONObject(i).put("data", JSONRushhourData(routes.get(i)));
+            }
+
+            return Response.status(Response.Status.OK).entity(result.toString()).build();
+        } catch (NumberFormatException e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
-
-        return result.toString();
     }
 
     @GET
     @Path("{id}/periodDifference/{startTimes}/{endTimes}")
     @Produces("application/json")
-    public String getPeriodData(@PathParam("id") String sid, @PathParam("startTimes") String startTimes, @PathParam("endTimes") String endTimes) {
-        setBasicParameters();
+    public Response getPeriodData(@PathParam("id") String sid, @PathParam("startTimes") String startTimes, @PathParam("endTimes") String endTimes) {
+        try {
+            setBasicParameters();
 
-        setStartTimes(startTimes);
-        setEndTimes(endTimes);
+            setStartTimes(startTimes);
+            setEndTimes(endTimes);
 
-        setPrecision();
+            setPrecision();
 
-        List<IRoute> routes = getRoutes(sid);
+            List<IRoute> routes = getRoutes(sid);
 
-        JSONArray result = JSONRoutes(routes);
-        for (int i = 0; i < result.length(); i++) {
-            result.getJSONObject(i).put("data", JSONPeriodsData(routes.get(i)));
+            JSONArray result = JSONRoutes(routes);
+            for (int i = 0; i < result.length(); i++) {
+                result.getJSONObject(i).put("data", JSONPeriodsData(routes.get(i)));
+            }
+            return Response.status(Response.Status.OK).entity(result.toString()).build();
+        } catch (NumberFormatException e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
-        return result.toString();
     }
 
     @GET
     @Path("{id}/providerDifference")
     @Produces("application/json")
-    public String getProviderData(@PathParam("id") String sid) {
-        setAnalysisParameters();
+    public Response getProviderData(@PathParam("id") String sid) {
+        try {
+            setAnalysisParameters();
 
-        setPrecision();
+            setPrecision();
 
-        List<IRoute> routes = getRoutes(sid);
+            List<IRoute> routes = getRoutes(sid);
 
-        JSONArray result = JSONRoutes(routes);
-        for (int i = 0; i < result.length(); i++) {
-            result.getJSONObject(i).put("data", JSONProvidersData(routes.get(i)));
+            JSONArray result = JSONRoutes(routes);
+            for (int i = 0; i < result.length(); i++) {
+                result.getJSONObject(i).put("data", JSONProvidersData(routes.get(i)));
+            }
+
+            return Response.status(Response.Status.OK).entity(result.toString()).build();
+        } catch (NumberFormatException e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
-
-        return result.toString();
     }
 
     //convertIDs
-    private List<IRoute> getRoutes(String ids) {
+    private List<IRoute> getRoutes(String ids) throws NumberFormatException {
         List<IRoute> result = new ArrayList<>();
         if (ids.equals("all")) {
             result = beans.getGeneralDAO().getRoutes();
@@ -387,6 +454,7 @@ public class RoutesResource {
                     idslist.add(Long.parseLong(s, 10));
                 } catch (NumberFormatException e) {
                     Logger.getGlobal().log(Level.WARNING, s + " could not be converted to Long");
+                    throw e;
                 }
             }
             result = beans.getGeneralDAO().getRoutes(idslist);
@@ -674,7 +742,7 @@ public class RoutesResource {
     }
 
     //SET PARAMETERS
-    private void setAnalysisParameters() {
+    private void setAnalysisParameters() throws NumberFormatException {
         setBasicParameters();
         String start = context.getQueryParameters().getFirst("start");
         String end = context.getQueryParameters().getFirst("end");
@@ -687,7 +755,7 @@ public class RoutesResource {
         }
     }
 
-    private void setBasicParameters() {
+    private void setBasicParameters() throws NumberFormatException {
         setProviders();
         String avgStart = context.getQueryParameters().getFirst("avgstart");
         String avgEnd = context.getQueryParameters().getFirst("avgend");
@@ -710,37 +778,41 @@ public class RoutesResource {
 
     }
 
-    private void setAVGStartTime(String startTime) {
+    private void setAVGStartTime(String startTime) throws NumberFormatException {
         try {
             this.avgStartTime = new Date(Long.parseLong(startTime, 10));
         } catch (NumberFormatException e) {
             Logger.getGlobal().log(Level.WARNING, startTime + " could not be converted to Long");
+            throw e;
         }
     }
 
-    private void setAVGEndTime(String endTime) {
+    private void setAVGEndTime(String endTime) throws NumberFormatException {
         try {
             this.avgEndTime = new Date(Long.parseLong(endTime, 10));
 
         } catch (NumberFormatException e) {
             Logger.getGlobal().log(Level.WARNING, endTime + " could not be converted to Long");
+            throw e;
         }
     }
 
-    private void setOptimalStartTime(String startTime) {
+    private void setOptimalStartTime(String startTime) throws NumberFormatException {
         try {
             this.optimalStartTime = new Date(Long.parseLong(startTime, 10));
         } catch (NumberFormatException e) {
             Logger.getGlobal().log(Level.WARNING, startTime + " could not be converted to Long");
+            throw e;
         }
     }
 
-    private void setOptimalEndTime(String endTime) {
+    private void setOptimalEndTime(String endTime) throws NumberFormatException {
         try {
             this.optimalEndTime = new Date(Long.parseLong(endTime, 10));
 
         } catch (NumberFormatException e) {
             Logger.getGlobal().log(Level.WARNING, endTime + " could not be converted to Long");
+            throw e;
         }
     }
 
@@ -766,7 +838,7 @@ public class RoutesResource {
         providers = new ArrayList<>();
     }
 
-    private void setPrecision() {
+    private void setPrecision() throws NumberFormatException {
         String precision = context.getQueryParameters().getFirst("precision");
         if (precision != null) {
             this.precision = Integer.parseInt(precision);
@@ -775,23 +847,25 @@ public class RoutesResource {
         }
     }
 
-    private void setStartTime(String startTime) {
+    private void setStartTime(String startTime) throws NumberFormatException {
         try {
             this.startTime = new Date(Long.parseLong(startTime, 10));
         } catch (NumberFormatException e) {
             Logger.getGlobal().log(Level.WARNING, startTime + " could not be converted to Long");
+            throw e;
         }
     }
 
-    private void setEndTime(String endTime) {
+    private void setEndTime(String endTime) throws NumberFormatException {
         try {
             this.endTime = new Date(Long.parseLong(endTime, 10));
         } catch (NumberFormatException e) {
             Logger.getGlobal().log(Level.WARNING, endTime + " could not be converted to Long");
+            throw e;
         }
     }
 
-    private void setStartTimes(String startTimes) {
+    private void setStartTimes(String startTimes) throws NumberFormatException {
 
         this.startTimes = new ArrayList<>();
         String[] parts = startTimes.split(",");
@@ -807,11 +881,12 @@ public class RoutesResource {
                 this.startTimes.add(start);
             } catch (NumberFormatException e) {
                 Logger.getGlobal().log(Level.WARNING, s + " could not be converted to Long");
+                throw e;
             }
         }
     }
 
-    private void setEndTimes(String endTimes) {
+    private void setEndTimes(String endTimes) throws NumberFormatException {
 
         this.endTimes = new ArrayList<>();
         String[] parts = endTimes.split(",");
@@ -827,6 +902,7 @@ public class RoutesResource {
                 this.endTimes.add(end);
             } catch (NumberFormatException e) {
                 Logger.getGlobal().log(Level.WARNING, s + " could not be converted to Long");
+                throw e;
             }
         }
     }
@@ -843,7 +919,7 @@ public class RoutesResource {
         } else {
             res = beans.getTrafficDataDAO().getRawData(route, new Date(0), new Date(), providers, page);
         }
-        
+
         JsonArrayBuilder list = Json.createArrayBuilder();
         for (IRouteData s : res) {
             JsonObjectBuilder o = Json.createObjectBuilder();
@@ -855,7 +931,7 @@ public class RoutesResource {
             o.add("RouteId", s.getRouteId());
             list.add(o);
         }
-        
+
         return list;
     }
 

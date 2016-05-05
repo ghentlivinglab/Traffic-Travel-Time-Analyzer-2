@@ -21,8 +21,9 @@ import javax.ws.rs.PUT;
 import javax.enterprise.context.RequestScoped;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import  javax.ws.rs.POST;
+import javax.ws.rs.POST;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import org.json.JSONObject;
 
 /**
@@ -36,7 +37,7 @@ public class TimersResource {
 
     @Context
     private UriInfo context;
-    
+
     private InitialContext ctx;
     private static BeanFactory beans;
 
@@ -45,7 +46,7 @@ public class TimersResource {
      */
     public TimersResource() {
     }
-    
+
     @PostConstruct
     private void init() {
         try {
@@ -57,39 +58,53 @@ public class TimersResource {
     }
 
     /**
-     * Retrieves representation of an instance of iii.vop2016.verkeer2.war.rest.TimersResource
+     * Retrieves representation of an instance of
+     * iii.vop2016.verkeer2.war.rest.TimersResource
+     *
      * @return an instance of java.lang.String
      */
     @GET
     @Path("newdata")
     @Produces("application/json")
-    public String getTimerData() {
-        JSONObject result = new JSONObject();
-        result.put("time",beans.getTimer().getCurrentTime());
-        result.put("active", beans.getTimer().isTimerRunning());
-        result.put("interval", beans.getTimer().getCurrentInterval());
-        result.put("percentDone", beans.getTimer().getPercentDoneToNextInterval());
-        return result.toString();
+    public Response getTimerData() {
+        try {
+            JSONObject result = new JSONObject();
+            result.put("time", beans.getTimer().getCurrentTime());
+            result.put("active", beans.getTimer().isTimerRunning());
+            result.put("interval", beans.getTimer().getCurrentInterval());
+            result.put("percentDone", beans.getTimer().getPercentDoneToNextInterval());
+            return Response.status(Response.Status.OK).entity(result.toString()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+        }
     }
-    
+
     @GET
     @Path("newdata/start")
     @Produces("application/json")
-    public String startTimer(){
-        beans.getTimer().StartTimer();
-        JSONObject result = new JSONObject();
-        result.put("status", "OK");
-        return result.toString();
+    public Response startTimer() {
+        try {
+            beans.getTimer().StartTimer();
+            JSONObject result = new JSONObject();
+            result.put("status", "OK");
+            return Response.status(Response.Status.OK).entity(result.toString()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+        }
     }
-    
+
     @GET
     @Path("newdata/stop")
     @Produces("application/json")
-    public String stopTimer(){
-        beans.getTimer().StopTimer();
-        JSONObject result = new JSONObject();
-        result.put("status", "OK");
-        return result.toString();
+    public Response stopTimer() {
+        try {
+            beans.getTimer().StopTimer();
+            JSONObject result = new JSONObject();
+            result.put("status", "OK");
+            return Response.status(Response.Status.OK).entity(result.toString()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+        }
     }
-   
+
 }

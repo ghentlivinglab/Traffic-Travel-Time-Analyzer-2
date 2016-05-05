@@ -28,6 +28,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Response;
 import javax.xml.ws.WebServiceContext;
 
 /**
@@ -63,112 +64,128 @@ public class GeojsonResource {
     @GET
     @Path("{routeId}/current")
     @Produces("application/json")
-    public String getGeoJson(@PathParam("routeId") String routeString) {
-        long routeId = Long.parseLong(routeString);
-        IRoute route = beans.getGeneralDAO().getRoute(routeId);
-        if (route == null) {
-            return "";
+    public Response getGeoJson(@PathParam("routeId") String routeString) {
+        try {
+            long routeId = Long.parseLong(routeString);
+            IRoute route = beans.getGeneralDAO().getRoute(routeId);
+            if (route == null) {
+                return Response.status(Response.Status.OK).entity("").build();
+            }
+
+            IGeoJson provider = beans.getGeoJsonProvider();
+            IDataProvider dataProvider = beans.getDataProvider();
+            if (dataProvider != null && provider != null) {
+                List<IGeoLocation> list = provider.getRoutePlotGeoLocations(route);
+
+                Map<IRoute, List<IGeoLocation>> map = new HashMap<>();
+                map.put(route, list);
+
+                Map<IRoute, Integer> delaylevels = new HashMap<>();
+                delaylevels.put(route, dataProvider.getCurrentDelayLevel(route, null));
+
+                return Response.status(Response.Status.OK).entity(provider.getGeoJson(map, delaylevels)).build();
+            }
+            return Response.status(Response.Status.OK).entity("").build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
-
-        IGeoJson provider = beans.getGeoJsonProvider();
-        IDataProvider dataProvider = beans.getDataProvider();
-        if (dataProvider != null && provider != null) {
-            List<IGeoLocation> list = provider.getRoutePlotGeoLocations(route);
-
-            Map<IRoute, List<IGeoLocation>> map = new HashMap<>();
-            map.put(route, list);
-
-            Map<IRoute, Integer> delaylevels = new HashMap<>();
-            delaylevels.put(route, dataProvider.getCurrentDelayLevel(route, null));
-
-            return provider.getGeoJson(map, delaylevels);
-        }
-        return "";
     }
 
     @GET
     @Path("all/current")
     @Produces("application/json")
-    public String getGeoJson() {
-        IGeneralDAO dao = beans.getGeneralDAO();
-        IDataProvider dataProvider = beans.getDataProvider();
+    public Response getGeoJson() {
+        try {
+            IGeneralDAO dao = beans.getGeneralDAO();
+            IDataProvider dataProvider = beans.getDataProvider();
 
-        if (dao == null || dataProvider == null) {
-            return "";
+            if (dao == null || dataProvider == null) {
+                return Response.status(Response.Status.OK).entity("").build();
+            }
+
+            List<IRoute> routes = beans.getGeneralDAO().getRoutes();
+
+            if (routes == null) {
+                return Response.status(Response.Status.OK).entity("").build();
+            }
+
+            Map<IRoute, List<IGeoLocation>> map = new HashMap<>();
+            Map<IRoute, Integer> delaylevels = new HashMap<>();
+
+            IGeoJson provider = beans.getGeoJsonProvider();
+            for (IRoute route : routes) {
+                List<IGeoLocation> list = provider.getRoutePlotGeoLocations(route);
+                map.put(route, list);
+                delaylevels.put(route, dataProvider.getCurrentDelayLevel(route, null));
+            }
+
+            return Response.status(Response.Status.OK).entity(provider.getGeoJson(map, delaylevels)).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
-
-        List<IRoute> routes = beans.getGeneralDAO().getRoutes();
-
-        if (routes == null) {
-            return "";
-        }
-
-        Map<IRoute, List<IGeoLocation>> map = new HashMap<>();
-        Map<IRoute, Integer> delaylevels = new HashMap<>();
-
-        IGeoJson provider = beans.getGeoJsonProvider();
-        for (IRoute route : routes) {
-            List<IGeoLocation> list = provider.getRoutePlotGeoLocations(route);
-            map.put(route, list);
-            delaylevels.put(route, dataProvider.getCurrentDelayLevel(route, null));
-        }
-
-        return provider.getGeoJson(map,delaylevels);
     }
-    
+
     @GET
     @Path("{routeId}/avg")
     @Produces("application/json")
-    public String getAvgGeoJson(@PathParam("routeId") String routeString) {
-        long routeId = Long.parseLong(routeString);
-        IRoute route = beans.getGeneralDAO().getRoute(routeId);
-        if (route == null) {
-            return "";
+    public Response getAvgGeoJson(@PathParam("routeId") String routeString) {
+        try {
+            long routeId = Long.parseLong(routeString);
+            IRoute route = beans.getGeneralDAO().getRoute(routeId);
+            if (route == null) {
+                return Response.status(Response.Status.OK).entity("").build();
+            }
+
+            IGeoJson provider = beans.getGeoJsonProvider();
+            IDataProvider dataProvider = beans.getDataProvider();
+            if (dataProvider != null && provider != null) {
+                List<IGeoLocation> list = provider.getRoutePlotGeoLocations(route);
+
+                Map<IRoute, List<IGeoLocation>> map = new HashMap<>();
+                map.put(route, list);
+
+                Map<IRoute, Integer> delaylevels = new HashMap<>();
+                delaylevels.put(route, dataProvider.getAvgDelayLevel(route, null));
+
+                return Response.status(Response.Status.OK).entity(provider.getGeoJson(map, delaylevels)).build();
+            }
+            return Response.status(Response.Status.OK).entity("").build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
-
-        IGeoJson provider = beans.getGeoJsonProvider();
-        IDataProvider dataProvider = beans.getDataProvider();
-        if (dataProvider != null && provider != null) {
-            List<IGeoLocation> list = provider.getRoutePlotGeoLocations(route);
-
-            Map<IRoute, List<IGeoLocation>> map = new HashMap<>();
-            map.put(route, list);
-
-            Map<IRoute, Integer> delaylevels = new HashMap<>();
-            delaylevels.put(route, dataProvider.getAvgDelayLevel(route, null));
-
-            return provider.getGeoJson(map, delaylevels);
-        }
-        return "";
     }
 
     @GET
     @Path("all/avg")
     @Produces("application/json")
-    public String getAvgGeoJson() {
-        IGeneralDAO dao = beans.getGeneralDAO();
-        IDataProvider dataProvider = beans.getDataProvider();
+    public Response getAvgGeoJson() {
+        try {
+            IGeneralDAO dao = beans.getGeneralDAO();
+            IDataProvider dataProvider = beans.getDataProvider();
 
-        if (dao == null || dataProvider == null) {
-            return "";
+            if (dao == null || dataProvider == null) {
+                return Response.status(Response.Status.OK).entity("").build();
+            }
+
+            List<IRoute> routes = beans.getGeneralDAO().getRoutes();
+
+            if (routes == null) {
+                return Response.status(Response.Status.OK).entity("").build();
+            }
+
+            Map<IRoute, List<IGeoLocation>> map = new HashMap<>();
+            Map<IRoute, Integer> delaylevels = new HashMap<>();
+
+            IGeoJson provider = beans.getGeoJsonProvider();
+            for (IRoute route : routes) {
+                List<IGeoLocation> list = provider.getRoutePlotGeoLocations(route);
+                map.put(route, list);
+                delaylevels.put(route, dataProvider.getAvgDelayLevel(route, null));
+            }
+
+            return Response.status(Response.Status.OK).entity(provider.getGeoJson(map, delaylevels)).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
-
-        List<IRoute> routes = beans.getGeneralDAO().getRoutes();
-
-        if (routes == null) {
-            return "";
-        }
-
-        Map<IRoute, List<IGeoLocation>> map = new HashMap<>();
-        Map<IRoute, Integer> delaylevels = new HashMap<>();
-
-        IGeoJson provider = beans.getGeoJsonProvider();
-        for (IRoute route : routes) {
-            List<IGeoLocation> list = provider.getRoutePlotGeoLocations(route);
-            map.put(route, list);
-            delaylevels.put(route, dataProvider.getAvgDelayLevel(route, null));
-        }
-
-        return provider.getGeoJson(map,delaylevels);
     }
 }
