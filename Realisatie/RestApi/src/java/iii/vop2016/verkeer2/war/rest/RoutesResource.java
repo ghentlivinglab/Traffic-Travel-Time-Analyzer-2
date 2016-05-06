@@ -5,6 +5,7 @@
  */
 package iii.vop2016.verkeer2.war.rest;
 
+import com.sun.xml.rpc.processor.schema.UnimplementedFeatureException;
 import iii.vop2016.verkeer2.ejb.components.GeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
@@ -37,6 +38,7 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import iii.vop2016.verkeer2.ejb.downstream.ITrafficDataDownstreamAnalyser;
+import iii.vop2016.verkeer2.ejb.helper.VerkeerLibToJson;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Set;
@@ -218,23 +220,23 @@ public class RoutesResource {
     @POST
     @Path("new")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response addRoute(JSONObject route) {
+    public Response addRoute(String body) {
         if (!helper.validateAPIKey(context, beans)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         } else {
             try {
-                String name = route.getString("name");
+                JSONObject obj = new JSONObject(body);
+                IRoute r = VerkeerLibToJson.fromJson(obj, new Route());
 
-                double startlat = route.getDouble("startlatitude");
-                double startlong = route.getDouble("startlongitude");
-                String startname = route.getString("startname");
+                r = beans.getGeneralDAO().addRoute(r);
+                if (r.getId() != 0) {
+                    beans.getThresholdManager().addDefaultThresholds(r);
+                }
 
-                double endlat = route.getDouble("endlatitude");
-                double endlong = route.getDouble("endlongitude");
-                String endname = route.getString("endname");
-
-                IRoute r = initRoute(name, startlat, startlong, endlat, endlong, startname, endname);
-                return Response.status(Response.Status.OK).entity("Routes have been initialised").build();
+                JSONObject o = new JSONObject();
+                o.put("status", "ok");
+                o.put("message", "Route has been created");
+                return Response.status(Response.Status.OK).entity(o.toString()).build();
             } catch (Exception ex) {
                 Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
                 return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("An error has occured").build();
@@ -244,7 +246,8 @@ public class RoutesResource {
 
     @POST
     @Path("{id}/remove")
-    public Response removeRoutes(@PathParam("id") String sid) {
+    public Response removeRoutes(@PathParam("id") String sid
+    ) {
         if (!helper.validateAPIKey(context, beans)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         } else {
@@ -253,7 +256,10 @@ public class RoutesResource {
                 for (IRoute r : routes) {
                     beans.getGeneralDAO().removeRoute(r);
                 }
-                return Response.status(Response.Status.OK).entity("Route has been removed").build();
+                JSONObject o = new JSONObject();
+                o.put("status", "ok");
+                o.put("message", "Route has been removed");
+                return Response.status(Response.Status.OK).entity(o.toString()).build();
             } catch (Exception ex) {
                 Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
                 return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("An error has occured").build();
@@ -264,26 +270,27 @@ public class RoutesResource {
     @POST
     @Path("{id}/update")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response updateRoute(JSONObject jroute,
-            @PathParam("id") String sid) {
+    public Response updateRoute(String body,
+            @PathParam("id") String sid
+    ) {
         if (!helper.validateAPIKey(context, beans)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         } else {
             try {
+                JSONObject jroute = new JSONObject(body);
                 List<IRoute> routes = getRoutes(sid);
-                for (IRoute r : routes) {
-                    r.setName(jroute.getString("name"));
-                    JSONArray geolocations = jroute.getJSONArray("geolocations");
-                    List<IGeoLocation> geolist = new ArrayList<>();
-                    for (int i = 0; i < geolocations.length(); i++) {
-                        IGeoLocation geolocation = new GeoLocation(geolocations.getJSONObject(i).getDouble("latitude"), geolocations.getJSONObject(i).getDouble("longitude"));
-                        geolocation.setName(geolocations.getJSONObject(i).getString("name"));
-                        geolist.add(geolocation);
-                    }
-                    r.setGeolocations(geolist);
-                    beans.getGeneralDAO().updateRoute(r);
+
+                if (routes.size() > 1) {
+                    throw new UnimplementedFeatureException("Only one id is allowed at a time");
                 }
-                return Response.status(Response.Status.OK).entity("Route has been updated").build();
+                for (IRoute r : routes) {
+                    beans.getGeneralDAO().updateRoute(VerkeerLibToJson.fromJson(jroute, new Route()));
+                }
+
+                JSONObject o = new JSONObject();
+                o.put("status", "ok");
+                o.put("message", "Route has been updated");
+                return Response.status(Response.Status.OK).entity(o.toString()).build();
             } catch (Exception ex) {
                 Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
                 return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("An error has occured").build();
@@ -336,7 +343,8 @@ public class RoutesResource {
     @GET
     @Path("{id}/raw")
     @Produces("application/json")
-    public Response getRoutesDataRaw(@PathParam("id") String sid) {
+    public Response getRoutesDataRaw(@PathParam("id") String sid
+    ) {
         if (!helper.validateAPIKey(context, beans)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         } else {
@@ -518,11 +526,7 @@ public class RoutesResource {
     }
 
     private JSONObject JSONRoute(IRoute route) {
-        JSONObject obj = new JSONObject();
-        obj.put("id", route.getId());
-        obj.put("name", route.getName());
-        List<IGeoLocation> geolocs = route.getGeolocations();
-        obj.put("geolocations", transformGeoLocations(geolocs));
+        JSONObject obj = VerkeerLibToJson.toJson(route);
 
         obj.put("currentDuration", beans.getDataProvider().getCurrentDuration(route, providers));
         obj.put("currentVelocity", beans.getDataProvider().getCurrentVelocity(route, providers));

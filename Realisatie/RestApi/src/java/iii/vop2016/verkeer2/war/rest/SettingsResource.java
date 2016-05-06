@@ -75,23 +75,27 @@ public class SettingsResource {
         helper = new Helper();
     }
 
-    /*
     @GET
+    @Path("keys/generate")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getAPIKey() {
-        JsonObjectBuilder result = Json.createObjectBuilder();
-        String keyString = beans.getAPIKeyDAO().getKey();
-        //String keyString = "rootkeytest";
-        //String keyString = "keynotactive";
-        result.add("key", keyString);
-        if (beans.getAPIKeyDAO().validate(keyString)) {
-            result.add("klopt", "ja");
+    public Response getAPIKey() {
+        if (!helper.validateAPIKey(context, beans)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
         } else {
-            result.add("klopt", "nee");
+            JsonObjectBuilder result = Json.createObjectBuilder();
+            String keyString = beans.getAPIKeyDAO().getKey();
+            //String keyString = "rootkeytest";
+            //String keyString = "keynotactive";
+            result.add("key", keyString);
+            if (beans.getAPIKeyDAO().validate(keyString)) {
+                result.add("klopt", "ja");
+            } else {
+                result.add("klopt", "nee");
+            }
+            return Response.ok().entity(result.build().toString()).build();
         }
-        return result.build().toString();
     }
-     */
+
     @GET
     @Path("buffers/clear")
     @Produces(MediaType.APPLICATION_JSON)
@@ -154,7 +158,8 @@ public class SettingsResource {
     @Path("properties")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response setSettings(String body) {
+    public Response setSettings(String body
+    ) {
         if (!helper.validateAPIKey(context, beans)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         } else {

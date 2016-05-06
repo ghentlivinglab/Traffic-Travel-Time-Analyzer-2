@@ -27,6 +27,7 @@ public interface IGeneralDAO{
     
     public List<IGeoLocation> getRouteMappingGeolocations(IRoute route);
     public List<IGeoLocation> setRouteMappingGeolocations(IRoute route, List<IGeoLocation> geolocs);
+    public void removeRouteMappingGeolocations(IRoute r);
     
     public Map<IRoute,List<IThreshold>> getThresholds();
     public IThreshold addThreshold(IThreshold threshold);

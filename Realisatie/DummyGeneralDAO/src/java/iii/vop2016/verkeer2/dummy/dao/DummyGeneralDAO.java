@@ -129,4 +129,9 @@ public class DummyGeneralDAO implements GeneralDAORemote {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public void removeRouteMappingGeolocations(IRoute r) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

@@ -143,10 +143,7 @@ public class GeneralDAO implements GeneralDAORemote, GeneralDAOLocal {
 
     @Override
     public void removeRoute(IRoute route) {
-        if (route instanceof RouteEntity) {
-            route = em.merge(route);
-            em.remove(route);
-        } else if (route.getId() != 0) {
+        if (route.getId() != 0) {
             for (IGeoLocation loc : route.getGeolocations()) {
                 Query q = em.createQuery("Delete FROM GeoLocationEntity r WHERE r.id = :name");
                 q.setParameter("name", loc.getId());
@@ -155,6 +152,8 @@ public class GeneralDAO implements GeneralDAORemote, GeneralDAOLocal {
             Query q = em.createQuery("Delete FROM RouteEntity r WHERE r.id = :name");
             q.setParameter("name", route.getId());
             q.executeUpdate();
+            
+            removeRouteMappingGeolocations(route);
         }
     }
 
@@ -315,7 +314,8 @@ public class GeneralDAO implements GeneralDAORemote, GeneralDAOLocal {
             IRoute result = resultList.get(0);
 
             result.setName(route.getName());
-
+            boolean GeosChanged = false;
+            
             //remove not existing geo's:
             List<IGeoLocation> toRemove = new ArrayList<>();
             for (IGeoLocation rgeo : result.getGeolocations()) {
@@ -330,6 +330,7 @@ public class GeneralDAO implements GeneralDAORemote, GeneralDAOLocal {
                     Query qgeo = em.createQuery("DELETE FROM GeoLocationEntity g WHERE g.id = :id");
                     qgeo.setParameter("id", rgeo.getId());
                     qgeo.executeUpdate();
+                    GeosChanged = true;
                 }
             }
             result.getGeolocations().removeAll(toRemove);
@@ -346,6 +347,7 @@ public class GeneralDAO implements GeneralDAORemote, GeneralDAOLocal {
                             qgeo.setParameter("sortrank", geo.getSortRank());
                             qgeo.setParameter("id", geo.getId());
                             qgeo.executeUpdate();
+                            GeosChanged = true;
                         }
                     }
                 }
@@ -356,10 +358,22 @@ public class GeneralDAO implements GeneralDAORemote, GeneralDAOLocal {
                     int sortRank = newGeo.getSortRank();
                     result.addGeolocation(newGeo);
                     newGeo.setSortRank(sortRank);
+                    GeosChanged = true;
                 }
+            }
+            
+            if(GeosChanged){
+                removeRouteMappingGeolocations(route);
             }
         } catch (Exception e) {
             throw new RuntimeException("Unable to update threshold. " + e.getMessage());
         }
+    }
+
+    @Override
+    public void removeRouteMappingGeolocations(IRoute r) {
+        Query q = em.createQuery("DELETE FROM GeoLocationMappingEntity g WHERE g.name = :id");
+        q.setParameter("id", r.getId()+"");
+        q.executeUpdate();
     }
 }

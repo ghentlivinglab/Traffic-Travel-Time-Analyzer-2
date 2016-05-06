@@ -40,7 +40,7 @@ public class APIKeyDAO implements APIKeyDAORemote, APIKeyDAOLocal {
     static char[] charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz".toCharArray();
 
     public APIKeyDAO() {
-        System.out.println("APIKeyDAO aangemaakt");
+       
     }
 
     @PostConstruct
@@ -53,6 +53,14 @@ public class APIKeyDAO implements APIKeyDAORemote, APIKeyDAOLocal {
 
         beans = BeanFactory.getInstance(ctx, sctx);
         beans.getLogger().log(Level.INFO, "APIKeyDAO has been initialized.");
+        
+        int res = em.createQuery("SELECT COUNT(r) FROM APIKey r").getFirstResult();
+        if(res == 0){
+            APIKey key = new APIKey();
+            key.setKeyString("verkeer2MasterKey");
+            key.setActive(1);
+            em.persist(key);
+        }
 
     }
 
