@@ -43,6 +43,7 @@ public class LoggingsResource {
 
     private InitialContext ctx;
     private static BeanFactory beans;
+    private Helper helper;
 
     int amount;
     int offset;
@@ -65,6 +66,7 @@ public class LoggingsResource {
             Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         beans = BeanFactory.getInstance(ctx, null);
+        helper = new Helper();
         levelMap = new HashMap<String, Level>();
         levelMap.put("severe", Level.SEVERE);
         levelMap.put("warning", Level.WARNING);
@@ -84,20 +86,24 @@ public class LoggingsResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getLogs() {
-        try {
-            setParameters();
-            JSONArray result = new JSONArray();
-            List<Log> logs = beans.getLogger().getLogs(amount, offset, filter, containing);
+        if (!helper.validateAPIKey(context, beans)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        } else {
+            try {
+                setParameters();
+                JSONArray result = new JSONArray();
+                List<Log> logs = beans.getLogger().getLogs(amount, offset, filter, containing);
 
-            JSONArray arr = new JSONArray();
-            for (Log log : logs) {
-                VerkeerLibToJson.toJson(log);
+                JSONArray arr = new JSONArray();
+                for (Log log : logs) {
+                    VerkeerLibToJson.toJson(log);
+                }
+                return Response.ok().entity(arr.toString()).build();
+            } catch (NumberFormatException e) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            } catch (Exception e) {
+                return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
             }
-            return Response.ok().entity(arr.toString()).build();
-        } catch (NumberFormatException e) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
     }
 

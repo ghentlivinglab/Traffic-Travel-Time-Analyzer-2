@@ -56,6 +56,7 @@ public class SettingsResource {
 
     private InitialContext ctx;
     private static BeanFactory beans;
+    private Helper helper;
 
     /**
      * Creates a new instance of SettingsResource
@@ -71,6 +72,7 @@ public class SettingsResource {
             Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         beans = BeanFactory.getInstance(ctx, null);
+        helper = new Helper();
     }
 
     /*
@@ -94,15 +96,19 @@ public class SettingsResource {
     @Path("buffers/clear")
     @Produces(MediaType.APPLICATION_JSON)
     public Response clearBuffers() {
-        try {
-            beans.getDataProvider().invalidateBuffers();
-            beans.getTrafficDataDAO().updateBlockList();
+        if (!helper.validateAPIKey(context, beans)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        } else {
+            try {
+                beans.getDataProvider().invalidateBuffers();
+                beans.getTrafficDataDAO().updateBlockList();
 
-            JsonObjectBuilder b = Json.createObjectBuilder();
-            b.add("status", "done");
-            return Response.status(Response.Status.OK).entity(b.build().toString()).build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+                JsonObjectBuilder b = Json.createObjectBuilder();
+                b.add("status", "done");
+                return Response.status(Response.Status.OK).entity(b.build().toString()).build();
+            } catch (Exception e) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
         }
     }
 
@@ -110,33 +116,37 @@ public class SettingsResource {
     @Path("properties")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSettings() {
-        try {
-            IProperties propCol = beans.getPropertiesCollection();
-            List<String> propStr = propCol.getProperties();
+        if (!helper.validateAPIKey(context, beans)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        } else {
+            try {
+                IProperties propCol = beans.getPropertiesCollection();
+                List<String> propStr = propCol.getProperties();
 
-            JsonArrayBuilder arr = Json.createArrayBuilder();
+                JsonArrayBuilder arr = Json.createArrayBuilder();
 
-            for (String jndi : propStr) {
-                JsonObjectBuilder o = Json.createObjectBuilder();
-                o.add("jndi", jndi);
+                for (String jndi : propStr) {
+                    JsonObjectBuilder o = Json.createObjectBuilder();
+                    o.add("jndi", jndi);
 
-                JsonObjectBuilder col = Json.createObjectBuilder();
-                Properties prop = HelperFunctions.RetrievePropertyFile(jndi, ctx, Logger.getGlobal());
-                for (Map.Entry<Object, Object> entry : prop.entrySet()) {
-                    if (entry.getKey() instanceof String) {
-                        if (!((String) entry.getKey()).equals("propertyLocation")) {
-                            col.add((String) entry.getKey(), (String) entry.getValue());
+                    JsonObjectBuilder col = Json.createObjectBuilder();
+                    Properties prop = HelperFunctions.RetrievePropertyFile(jndi, ctx, Logger.getGlobal());
+                    for (Map.Entry<Object, Object> entry : prop.entrySet()) {
+                        if (entry.getKey() instanceof String) {
+                            if (!((String) entry.getKey()).equals("propertyLocation")) {
+                                col.add((String) entry.getKey(), (String) entry.getValue());
+                            }
                         }
                     }
+                    o.add("content", col);
+
+                    arr.add(o);
                 }
-                o.add("content", col);
 
-                arr.add(o);
+                return Response.ok().entity(arr.build().toString()).build();
+            } catch (Exception e) {
+                return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
             }
-
-            return Response.ok().entity(arr.build().toString()).build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
     }
 
@@ -145,33 +155,37 @@ public class SettingsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response setSettings(String body) {
-        try {
-            if (body == null || body.equals("")) {
-                return Response.status(Response.Status.BAD_REQUEST).build();
-            }
-
-            JsonReader reader = Json.createReader(new StringReader(body));
-            JsonStructure obj = reader.read();
-            if (obj.getValueType() == JsonValue.ValueType.ARRAY) {
-                JsonArray arr = (JsonArray) obj;
-                for (JsonValue val : arr) {
-                    if (val.getValueType() == JsonValue.ValueType.OBJECT) {
-                        if (!readAndApplyPropertiesFromJson((JsonObject) val)) {
-                            return Response.status(Response.Status.BAD_REQUEST).build();
-                        }
-                    }
-                }
-            } else if (obj.getValueType() == JsonValue.ValueType.OBJECT) {
-                if (!readAndApplyPropertiesFromJson((JsonObject) obj)) {
+        if (!helper.validateAPIKey(context, beans)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        } else {
+            try {
+                if (body == null || body.equals("")) {
                     return Response.status(Response.Status.BAD_REQUEST).build();
                 }
-            }
 
-            JsonObjectBuilder o = Json.createObjectBuilder();
-            o.add("Status", "Ok");
-            return Response.status(Response.Status.ACCEPTED).entity(o.build().toString()).build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+                JsonReader reader = Json.createReader(new StringReader(body));
+                JsonStructure obj = reader.read();
+                if (obj.getValueType() == JsonValue.ValueType.ARRAY) {
+                    JsonArray arr = (JsonArray) obj;
+                    for (JsonValue val : arr) {
+                        if (val.getValueType() == JsonValue.ValueType.OBJECT) {
+                            if (!readAndApplyPropertiesFromJson((JsonObject) val)) {
+                                return Response.status(Response.Status.BAD_REQUEST).build();
+                            }
+                        }
+                    }
+                } else if (obj.getValueType() == JsonValue.ValueType.OBJECT) {
+                    if (!readAndApplyPropertiesFromJson((JsonObject) obj)) {
+                        return Response.status(Response.Status.BAD_REQUEST).build();
+                    }
+                }
+
+                JsonObjectBuilder o = Json.createObjectBuilder();
+                o.add("Status", "Ok");
+                return Response.status(Response.Status.ACCEPTED).entity(o.build().toString()).build();
+            } catch (Exception e) {
+                return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+            }
         }
     }
 

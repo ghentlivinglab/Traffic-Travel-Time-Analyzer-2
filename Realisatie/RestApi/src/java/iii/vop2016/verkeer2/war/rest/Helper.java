@@ -22,6 +22,7 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
+import javax.ws.rs.core.UriInfo;
 import org.json.JSONString;
 
 /**
@@ -29,6 +30,17 @@ import org.json.JSONString;
  * @author tobia
  */
 public class Helper {
+
+    protected boolean validateAPIKey(UriInfo context, BeanFactory beans) {
+        String keyString = context.getQueryParameters().getFirst("key");
+        if (keyString == null) {
+            return false;
+        } else if (beans.getAPIKeyDAO() == null || beans.getAPIKeyDAO().validate(keyString)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     protected static List<IRoute> getRoutes(String ids, IGeneralDAO dao) {
         List<IRoute> result = new ArrayList<>();
@@ -106,15 +118,15 @@ public class Helper {
             int level = jsonObject.getInt("level");
             int delayTrigger = jsonObject.getInt("delayTrigger");
             long routeId = Long.parseLong(jsonObject.getString("routeId"));
-            
+
             List<String> handlers = new ArrayList<>();
             JsonArray arr = jsonObject.getJsonArray("handlers");
-            for(JsonValue o : arr){
-                if(o.getValueType() == JsonValue.ValueType.STRING){
+            for (JsonValue o : arr) {
+                if (o.getValueType() == JsonValue.ValueType.STRING) {
                     handlers.add(o.toString().replace("\"", ""));
                 }
             }
-            
+
             //fill data into new threshold obj
             r.setId(id);
             r.setDelayTriggerLevel(delayTrigger);
