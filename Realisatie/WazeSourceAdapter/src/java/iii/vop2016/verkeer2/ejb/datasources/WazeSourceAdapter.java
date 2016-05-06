@@ -109,17 +109,19 @@ public class WazeSourceAdapter implements SourceAdapterRemote, SourceAdapterLoca
         Connection.Response loginForm = Jsoup.connect(url)
                 .method(Connection.Method.GET)
                 .execute();
+        
+        //this command fails. but does log the user in... ironic right?
+        try {
 
-        /*Document document0 = Jsoup.connect(" https://www.waze.com/login/create")
-                .cookies(loginForm.cookies())
-                .data("{\"reply\":{\"error\":0,\"message\":\"VerkeerGent\",\"user_id\":132039670,\"rank\":0,\"full_name\":\"\",\"login\":true}}")
-                .post();
-
-        Document document = Jsoup.connect(url)
-                .data("username", login)
-                .data("password", password)
-                .cookies(loginForm.cookies())
-                .post();*/
+            Document document = Jsoup.connect(url)
+                    .data("username", login)
+                    .data("password", password)
+                    .cookies(loginForm.cookies())
+                    .post();
+        } catch (Exception e) {
+            
+        }
+        
         Document document2 = Jsoup.connect(jsonUrl)
                 .method(Connection.Method.GET)
                 .cookies(loginForm.cookies())
