@@ -55,6 +55,7 @@ public class BeanFactory {
         if (prop == null) {
             throw new ResourceFileMissingException(JNDILOOKUP_BEANFILE);
         }
+        prop.remove("propertyLocation");
         return prop;
     }
 
@@ -63,6 +64,7 @@ public class BeanFactory {
         if (prop == null) {
             throw new ResourceFileMissingException(JNDILOOKUP_BEANFILE);
         }
+        prop.remove("propertyLocation");
         return prop;
     }
 
@@ -71,6 +73,7 @@ public class BeanFactory {
         if (prop == null) {
             throw new ResourceFileMissingException(JNDILOOKUP_SOURCEADAPORTSFILE);
         }
+        prop.remove("propertyLocation");
         return prop;
     }
 
