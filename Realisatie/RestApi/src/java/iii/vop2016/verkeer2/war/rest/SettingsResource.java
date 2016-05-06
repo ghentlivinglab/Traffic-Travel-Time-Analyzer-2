@@ -41,6 +41,7 @@ import javax.naming.NamingException;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.json.JSONObject;
 
 /**
  * REST Web Service
@@ -93,6 +94,28 @@ public class SettingsResource {
                 result.add("klopt", "nee");
             }
             return Response.ok().entity(result.build().toString()).build();
+        }
+    }
+
+    @POST
+    @Path("keys/invalidate")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response invalidateAPIKey(String body) {
+        if (!helper.validateAPIKey(context, beans)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        } else {
+            try {
+                JSONObject o = new JSONObject(body);
+                String key = o.getString("key");
+
+                beans.getAPIKeyDAO().deactivateKey(key);
+                
+                JsonObjectBuilder b = Json.createObjectBuilder();
+                b.add("status", "done");
+                return Response.status(Response.Status.OK).entity(b.build().toString()).build();
+            } catch (Exception e) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
         }
     }
 
