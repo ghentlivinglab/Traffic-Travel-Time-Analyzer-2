@@ -142,7 +142,7 @@ public class TomTomSourceAdapter implements SourceAdapterLocal, SourceAdapterRem
         } catch (JSONException | DataAccessException e) {
             throw new DataAccessException("Cannot access data from " + providerName + " adapter");
         } catch (InterruptedException ex) {
-            Logger.getLogger(TomTomSourceAdapter.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
         return rd;
     }

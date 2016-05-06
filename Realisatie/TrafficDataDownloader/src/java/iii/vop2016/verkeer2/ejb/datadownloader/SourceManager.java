@@ -88,9 +88,8 @@ public class SourceManager implements ISourceManager {
                         toRemove.add(future);
                         logger.log(Level.FINEST, "Parsed data for " + data.getProvider() + " " + data.toString());
                     } catch (Exception ex) {
-                        ex.getCause().printStackTrace();
                         toRemove.add(future);
-                        logger.log(Level.WARNING, "Failed to parse data for " + ex.toString());
+                        logger.log(Level.WARNING, "Failed to parse data for " + ex.getMessage());
                     }
 
                 }

@@ -72,9 +72,8 @@ public class HelperFunctions {
         }
         return false;
     }
-    
-    
-    public static boolean SavePropertyFile(String lookup, InitialContext ctx, String key, String value , Logger logger) {
+
+    public static boolean SavePropertyFile(String lookup, InitialContext ctx, String key, String value, Logger logger) {
         Properties prop = RetrievePropertyFile(lookup, ctx, logger);
         prop.setProperty(key, value);
         return SavePropertyFile(prop, logger);
@@ -102,8 +101,13 @@ public class HelperFunctions {
 
         Object obj = ctx.lookup(jndi);
         if (obj == null) {
-            logger.log(Level.SEVERE, "BEAN not found (" + jndi + ")");
-            return null;
+            if (jndi.contains("!")) {
+                obj = ctx.lookup(jndi.split("!")[0]);
+            }
+            if (obj == null) {
+                logger.log(Level.SEVERE, "BEAN not found (" + jndi + ")");
+                return null;
+            }
         }
 
         return obj;
@@ -130,12 +134,17 @@ public class HelperFunctions {
             return null;
         }
         try {
+
             Object obj = ctx.lookup(jndi);
             if (obj == null) {
-                logger.log(Level.SEVERE, "BEAN not found (" + jndi + ")");
-                return null;
+                if (jndi.contains("!")) {
+                    obj = ctx.lookup(jndi.split("!")[0]);
+                }
+                if (obj == null) {
+                    logger.log(Level.SEVERE, "BEAN not found (" + jndi + ")");
+                    return null;
+                }
             }
-
             return obj;
         } catch (NamingException ex) {
             logger.log(Level.SEVERE, "BEAN not found (" + jndi + ")");
@@ -159,8 +168,13 @@ public class HelperFunctions {
 
         Object obj = ctx.lookup(jndi);
         if (obj == null) {
-            logger.log(Level.SEVERE, "BEAN not found (" + jndi + ")");
-            return null;
+            if (jndi.contains("!")) {
+                obj = ctx.lookup(jndi.split("!")[0]);
+            }
+            if (obj == null) {
+                logger.log(Level.SEVERE, "BEAN not found (" + jndi + ")");
+                return null;
+            }
         }
 
         return obj;
@@ -183,10 +197,14 @@ public class HelperFunctions {
         Object obj = null;
         try {
             obj = ctx.lookup(jndi);
-
             if (obj == null) {
-                logger.log(Level.SEVERE, "BEAN not found (" + jndi + ")");
-                return null;
+                if (jndi.contains("!")) {
+                    obj = ctx.lookup(jndi.split("!")[0]);
+                }
+                if (obj == null) {
+                    logger.log(Level.SEVERE, "BEAN not found (" + jndi + ")");
+                    return null;
+                }
             }
         } catch (NamingException ex) {
             logger.log(Level.SEVERE, "BEAN not found (" + jndi + ")");
