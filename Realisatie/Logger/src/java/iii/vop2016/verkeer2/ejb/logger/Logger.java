@@ -40,6 +40,7 @@ import javax.naming.NamingException;
 public class Logger implements LoggerRemote, LoggerLocal {
 
     protected java.util.logging.Logger l;
+    protected FileHandler h;
     protected List<Log> history;
     protected static final String JNDILOOKUP_PROPERTYFILE = "resources/properties/Logger";
 
@@ -73,28 +74,12 @@ public class Logger implements LoggerRemote, LoggerLocal {
         Properties prop = getProperties();
 
         history = new ArrayList<>();
-        try {
-            FileHandler h;
-            String file = prop.getProperty("filelocation", "");
-            if (!(file.endsWith("/") || file.endsWith("\\"))) {
-                file += "/";
-            }
-            file = file.replace("\\", "/");
-            file += prop.getProperty("filename", "");
-
-            if (!file.equals("")) {
-                h = new FileHandler(file, true);
-                l = java.util.logging.Logger.getLogger("logger");
-                l.addHandler(h);
-                l.setLevel(Level.FINEST);
-
-                l.log(Level.INFO, "Started Logging at " + new Date());
-            }
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(Logger.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            java.util.logging.Logger.getLogger(Logger.class.getName()).log(Level.SEVERE, null, ex);
+        l = java.util.logging.Logger.getLogger("logger");
+        l.setLevel(Level.FINEST);
+        if (Boolean.parseBoolean(prop.getProperty("isactive", "false"))) {
+            attachFileHandler();
         }
+
     }
 
     @PreDestroy
@@ -108,6 +93,27 @@ public class Logger implements LoggerRemote, LoggerLocal {
                 }
             }
         }
+    }
+
+    private void attachFileHandler() {
+        try {
+            Properties prop = getProperties();
+            String file = prop.getProperty("filelocation", "");
+            if (!(file.endsWith("/") || file.endsWith("\\"))) {
+                file += "/";
+            }
+            file = file.replace("\\", "/");
+            file += prop.getProperty("filename", "");
+            if (!file.equals("/")) {
+                h = new FileHandler(file, true);
+                l.addHandler(h);
+            }
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(Logger.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            java.util.logging.Logger.getLogger(Logger.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     @Override
