@@ -42,6 +42,7 @@ import org.json.JSONObject;
 public class TomTomSourceAdapter implements SourceAdapterLocal, SourceAdapterRemote {
 
     private String key;
+    private int counter = 1;
     private static final String providerName = "TomTom";
 
     private InitialContext ctx;
@@ -73,7 +74,18 @@ public class TomTomSourceAdapter implements SourceAdapterLocal, SourceAdapterRem
         RouteData rd = null;
 
         Properties prop = getProperties();
-        key = prop.getProperty("TomTom");
+        if (Boolean.parseBoolean(prop.getProperty("TomTomCheat", "false"))) {
+            key = prop.getProperty("TomTom" + counter, "");
+            counter++;
+
+            if (key.equals("")) {
+                counter = 1;
+                key = prop.getProperty("TomTom" + counter, "");
+                counter++;
+            }
+        } else {
+            key = prop.getProperty("TomTom");
+        }
 
         try {
 

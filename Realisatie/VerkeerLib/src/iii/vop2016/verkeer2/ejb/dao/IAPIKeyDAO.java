@@ -14,7 +14,7 @@ import iii.vop2016.verkeer2.bean.APIKey.APIKey;
 public interface IAPIKeyDAO {
     
     public boolean validate(String key);
-    public APIKey insertNewRandomKey();
+    public void deactivateKey (String key);
     public String getKey();
     
 }
