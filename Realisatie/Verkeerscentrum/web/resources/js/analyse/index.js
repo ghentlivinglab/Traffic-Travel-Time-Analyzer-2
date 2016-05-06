@@ -8,11 +8,12 @@ var periodValidationRequired = true;
 $("#btnCompareSources").click(function(event){
     inittabs = ["singleperiod","route","providers"];
     descriptions = [
-        "Selecteer over welke periode de data moet worden weergegeven.",
+        "OPTIONEEL: Selecteer over welke periode de data moet worden weergegeven.",
         "Selecteer een traject.",
         "Selecteer welke bronnen je wil vergelijken met elkaar."
     ];
-    periodValidationRequired = true;
+    periodValidationRequired = false;
+    setPeriodType("datetime");
     setTitle("Databronnen vergelijken");
     resetSlider();
     showSlider();
@@ -32,6 +33,7 @@ $("#btnAvgTraffic").click(function(event){
         "Selecteer de bronnen die mogen worden opgenomen in de vergelijking"
     ];
     periodValidationRequired = false;
+    setPeriodType("datetime");
     setTitle("Gemiddelde verkeerssituatie");
     resetSlider();
     showSlider();
@@ -46,11 +48,12 @@ $("#btnAvgTraffic").click(function(event){
 $("#btnDelayWeekday").click(function(event){
     inittabs = ["singleperiod","route","providers"];
     descriptions = [
-        "OPTIONEEL: Selecteer over welke periode de data moet worden uitgemiddeld",
+        "OPTIONEEL: Selecteer over welke periode de data moet worden weergeven",
         "Selecteer een traject",
         "Selecteer de bronnen die mogen worden opgenomen in de vergelijking"
     ];
     periodValidationRequired = false;
+    setPeriodType("date");
     setTitle("Weekdagen vergelijken");
     resetSlider();
     showSlider();
@@ -70,6 +73,7 @@ $("#btnRushHours").click(function(event){
         "Selecteer de bronnen die mogen worden opgenomen in de vergelijking"
     ];
     periodValidationRequired = false;
+    setPeriodType("date");
     setTitle("Spitsuren");
     resetSlider();
     showSlider();
@@ -89,6 +93,7 @@ $("#btnCompareRoutes").click(function(event){
         "Selecteer de bronnen die mogen worden opgenomen in de vergelijking"
     ];
     periodValidationRequired = false;
+    setPeriodType("datetime");
     setTitle("Trajecten vergelijken");
     resetSlider();
     showSlider();
@@ -108,6 +113,7 @@ $("#btnComparePeriods").click(function(event){
         "Selecteer de bronnen die mogen worden opgenomen in de vergelijking"
     ];
     periodValidationRequired = true;
+    setPeriodType("date");
     setTitle("Perioden vergelijken");
     resetSlider();
     showSlider();
@@ -123,6 +129,25 @@ $(".btnNextSlide").click(nextSlide);
 $(".btnPrevSlide").click(prevSlide);
   
     
+function setPeriodType(type){
+    console.log(type);
+    $("[name=periodStartDummy]").remove();
+    $("[name=periodEndDummy]").remove();
+    if(type == "datetime"){
+        var datepickerinputStart = $("<input />").attr("type","text").addClass("datetimepicker").attr("id","periodStart").attr("name","periodStartDummy");
+        $("[name=periodStart]").parent().append(datepickerinputStart);
+        var datepickerinputStart = $("<input />").attr("type","text").addClass("datetimepicker").attr("id","periodEnd").attr("name","periodEndDummy");
+        $("[name=periodEnd]").parent().append(datepickerinputStart);
+    }
+    if(type == "date"){
+        var datepickerinputStart = $("<input />").attr("type","text").addClass("datepicker").attr("id","periodStart").attr("name","periodStartDummy");
+        $("[name=periodStart]").parent().append(datepickerinputStart);
+        var datepickerinputStart = $("<input />").attr("type","text").addClass("datepicker").attr("id","periodEnd").attr("name","periodEndDummy");
+        $("[name=periodEnd]").parent().append(datepickerinputStart);    
+    }
+    setPeriodPicker();
+}
+
 function setTitle(title){
     $(".inittabs .title").text(title);
 } 

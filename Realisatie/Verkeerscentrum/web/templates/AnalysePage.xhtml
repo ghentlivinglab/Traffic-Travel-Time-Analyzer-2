@@ -35,7 +35,7 @@
                                                     <i class="material-icons">keyboard_backspace</i>
                                                 </h:link>
                                             </div>
-                                            <div class="col s10 title"><span> Databronnen vergelijken </span></div>
+                                            <div class="col s10 title"><span> Opties </span></div>
                                             <div class="col s1 btn_back">
                                                 <a href="#!" id="btnResetSidebar">
                                                     <!---  class="btnRefreshAnalyse" -->
@@ -213,16 +213,13 @@
                                             <div class="collapsible-header"><i class="material-icons">filter_drama</i>Precisie</div>
                                             <div class="collapsible-body">
                                                 
-                                                
-                                                Pricicie
-                                                
-                                                
-                                                
-                                                
-                                                
-                                                
-                                                
-                                                
+                                                <div class="container">
+                                                    <br />
+                                                    <p>Hoeveel punten wilt je weergeven?</p>
+                                                    <p class="range-field">
+                                                        <input type="range" id="test5" min="100" max="10000" step="50" name="precision" value="#{precisionDAO.precision}" />
+                                                    </p>
+                                                </div>
                                             </div>
                                         </li>
                                     </ul>

@@ -3012,31 +3012,6 @@ and open the template in the editor.
     Author     : Mike
 */
 /* -- import Roboto Font ------------------------------ */
-/* -- box model --------------------------------------- */
-*,
-*:after,
-*:before {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box; }
-
-/* -- Google typography ------------------------------- */
-.title {
-  font-size: 20px;
-  font-weight: 300;
-  line-height: 1.1;
-  color: #212121;
-  text-transform: inherit;
-  letter-spacing: inherit; }
-
-.caption {
-  font-size: 12px;
-  font-weight: 300;
-  line-height: 1.1;
-  color: #bdbdbd;
-  text-transform: inherit;
-  letter-spacing: inherit; }
-
 /* -- Ripple-effect ----------------------------------- */
 .ripple-effect {
   position: relative;

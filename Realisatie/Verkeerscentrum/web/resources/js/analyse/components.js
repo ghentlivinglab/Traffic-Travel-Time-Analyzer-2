@@ -79,33 +79,36 @@ function setPeriodMultiplicity(multiplicity){
 }
 
 
-$(".datetimepicker").bootstrapMaterialDatePicker({ 
-    format : 'DD MMMM YYYY - HH:mm',
-    lang: 'nl',
-    weekStart : 1
-}).on('change', function(e, date){
-    if($(this).attr('id')){
-        var hiddenName = $(this).attr('id'); 
-        $("[name="+hiddenName+"]").val(new Date(date).getTime());
-    }
-});
-  
-$(".datepicker").bootstrapMaterialDatePicker({ 
-    format : 'DD MMMM YYYY',
-    time: false,
-    lang: 'nl',
-    weekStart : 1
-}).on('change', function(e, date){
-    if($(this).attr('id')){
-        var hiddenName = $(this).attr('id'); 
-        var date = new Date(date);
-        date.setMinutes(0);
-        date.setHours(0);
-        date.setSeconds(0);
-        date.setMilliseconds(0);
-        $("[name="+hiddenName+"]").val(date.getTime());
-    }
-});
+function setPeriodPicker(){
+    $(".datetimepicker").bootstrapMaterialDatePicker({ 
+        format : 'DD MMMM YYYY - HH:mm',
+        lang: 'nl',
+        weekStart : 1
+    }).on('change', function(e, date){
+        if($(this).attr('id')){
+            var hiddenName = $(this).attr('id'); 
+            $("[name="+hiddenName+"]").val(new Date(date).getTime());
+        }
+    });
+
+    $(".datepicker").bootstrapMaterialDatePicker({ 
+        format : 'DD MMMM YYYY',
+        time: false,
+        lang: 'nl',
+        weekStart : 1
+    }).on('change', function(e, date){
+        if($(this).attr('id')){
+            var hiddenName = $(this).attr('id'); 
+            var date = new Date(date);
+            date.setMinutes(0);
+            date.setHours(0);
+            date.setSeconds(0);
+            date.setMilliseconds(0);
+            $("[name="+hiddenName+"]").val(date.getTime());
+        }
+    });
+}
+
   
   
 $("#availableRoutesList label").mouseover(showRoutePreview)
