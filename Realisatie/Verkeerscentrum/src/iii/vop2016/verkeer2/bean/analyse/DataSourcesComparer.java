@@ -45,10 +45,15 @@ public class DataSourcesComparer extends AnalysePage implements ITableView, IGra
    
     @Override
     public String getSubTitle() {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM YYYY (HH:mm)");
-        String format1 = formatter.format(period.getKey());
-        String format2 = formatter.format(period.getValue());
-        return "Periode: "+format1+" - "+format2;
+        if(period != null){
+            SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM YYYY (HH:mm)");
+            String format1 = formatter.format(period.getKey());
+            String format2 = formatter.format(period.getValue());
+            return "Periode: "+format1+" - "+format2;
+        }else{
+            return "";
+        }
+        
     }
     
     @Override
@@ -92,12 +97,15 @@ public class DataSourcesComparer extends AnalysePage implements ITableView, IGra
         //
         // PERIODS
         //
-        if(period.getKey() != null){
-            urlParts.add("start="+period.getKey().getTime());
+        if(period != null){
+            if(period.getKey() != null){
+                urlParts.add("start="+period.getKey().getTime());
+            }
+            if(period.getValue() != null){
+                urlParts.add("end="+period.getValue().getTime());
+            }
         }
-        if(period.getValue() != null){
-            urlParts.add("end="+period.getValue().getTime());
-        }
+        
         
         //
         // PROVIDERS

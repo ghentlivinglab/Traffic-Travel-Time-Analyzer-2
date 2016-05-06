@@ -99,6 +99,7 @@ public class PeriodComparer extends AnalysePage implements ITableView, IGraphVie
             }
         }
         
+       
         //
         // FILTERS
         //
@@ -122,6 +123,11 @@ public class PeriodComparer extends AnalysePage implements ITableView, IGraphVie
                 url.append("&").append(urlParts.get(i));
             }
         }
+        
+         //
+        // PRECISION
+        //
+        urlParts.add("precision="+getPrecisionDAO().getPrecision());
         
                 
         String surl = url.toString();

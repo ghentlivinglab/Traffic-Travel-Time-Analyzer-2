@@ -104,6 +104,7 @@ public class AvgTraffic extends AnalysePage implements ITableView, IGraphView {
                 urlParts.add("end="+period.getValue().getTime());
             }
         }
+        
         //
         // PROVIDERS
         //
@@ -118,6 +119,12 @@ public class AvgTraffic extends AnalysePage implements ITableView, IGraphView {
                 urlParts.add(providersURLS.toString());
             }
         }
+        
+        //
+        // PRECISION
+        //
+        urlParts.add("precision="+getPrecisionDAO().getPrecision());
+        
         
         
         if(urlParts.size()>0){

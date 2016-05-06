@@ -34,6 +34,9 @@ abstract class AnalysePage {
     private PeriodDAO periodDAO;
     @ManagedProperty(value="#{dataproviderDAO}")
     private DataproviderDAO dataproviderDAO;
+    @ManagedProperty(value="#{precisionDAO}")
+    private PrecisionDAO precisionDAO;
+    
     
     protected Properties prop;
 
@@ -82,6 +85,15 @@ abstract class AnalysePage {
     public DataproviderDAO getDataproviderDAO() {
         return dataproviderDAO;
     }
+
+    public PrecisionDAO getPrecisionDAO() {
+        return precisionDAO;
+    }
+
+    public void setPrecisionDAO(PrecisionDAO precisionDAO) {
+        this.precisionDAO = precisionDAO;
+    }
+    
     
     
     
