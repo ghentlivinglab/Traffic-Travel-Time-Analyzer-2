@@ -32,7 +32,7 @@ public class WeekdayComparer extends AnalysePage implements ITableView, IGraphVi
     public WeekdayComparer() {
         super();
     }
-
+    
     @Override
     public String getTitle() {
         if(route == null){
@@ -44,10 +44,14 @@ public class WeekdayComparer extends AnalysePage implements ITableView, IGraphVi
    
     @Override
     public String getSubTitle() {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM YYYY (HH:mm)");
-        String format1 = formatter.format(period.getKey());
-        String format2 = formatter.format(period.getValue());
-        return "Periode: "+format1+" - "+format2;
+        if(period != null){
+            SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM YYYY (HH:mm)");
+            String format1 = formatter.format(period.getKey());
+            String format2 = formatter.format(period.getValue());
+            return "Periode: "+format1+" - "+format2;
+        }else{
+            return null;
+        }
     }
     
     @Override
@@ -55,7 +59,7 @@ public class WeekdayComparer extends AnalysePage implements ITableView, IGraphVi
         super.setPeriodDAO(periodDAO);
         this.period = periodDAO.getPeriod();
     }
-
+    
     @Override
     public void setDataproviderDAO(DataproviderDAO dataproviderDAO) {
         super.setDataproviderDAO(dataproviderDAO);
@@ -114,6 +118,11 @@ public class WeekdayComparer extends AnalysePage implements ITableView, IGraphVi
             }
         }
         
+        //
+        // PRECISION
+        //
+        urlParts.add("precision="+getPrecisionDAO().getPrecision());
+        
         
         if(urlParts.size()>0){
             url.append("?").append(urlParts.get(0));
@@ -129,7 +138,5 @@ public class WeekdayComparer extends AnalysePage implements ITableView, IGraphVi
         System.out.println(surl);
         
         return surl;
-    }
-    
-    
+    }    
 }

@@ -91,12 +91,12 @@ public class LoggingsResource {
         } else {
             try {
                 setParameters();
-                JSONArray result = new JSONArray();
+                
                 List<Log> logs = beans.getLogger().getLogs(amount, offset, filter, containing);
 
                 JSONArray arr = new JSONArray();
                 for (Log log : logs) {
-                    VerkeerLibToJson.toJson(log);
+                    arr.put(VerkeerLibToJson.toJson(log));
                 }
                 return Response.ok().entity(arr.toString()).build();
             } catch (NumberFormatException e) {

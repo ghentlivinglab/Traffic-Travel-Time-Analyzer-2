@@ -45,10 +45,14 @@ public class Rushhours extends AnalysePage implements ITableView, IGraphView {
    
     @Override
     public String getSubTitle() {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM YYYY (HH:mm)");
-        String format1 = formatter.format(period.getKey());
-        String format2 = formatter.format(period.getValue());
-        return "Periode: "+format1+" - "+format2;
+        if(period != null){
+            SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM YYYY (HH:mm)");
+            String format1 = formatter.format(period.getKey());
+            String format2 = formatter.format(period.getValue());
+            return "Periode: "+format1+" - "+format2;
+        }else{
+            return "";
+        }
     }
     
     @Override
@@ -115,6 +119,12 @@ public class Rushhours extends AnalysePage implements ITableView, IGraphView {
                 urlParts.add(providersURLS.toString());
             }
         }
+        
+        //
+        // PRECISION
+        //
+        urlParts.add("precision="+getPrecisionDAO().getPrecision());
+        
         
         
         if(urlParts.size()>0){

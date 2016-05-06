@@ -26,7 +26,8 @@
         <param-value>true</param-value>
     </context-param>
 
-   
+       
+
     <filter-mapping>
         <filter-name>AuthFilter</filter-name>
         <url-pattern>/live</url-pattern>
@@ -43,7 +44,6 @@
         <url-pattern>/faces/pages/analyse*</url-pattern>
         <url-pattern>/faces/pages/settings*</url-pattern>        
     </filter-mapping>
-    
 
         <error-page>
 		<error-code>404</error-code>
