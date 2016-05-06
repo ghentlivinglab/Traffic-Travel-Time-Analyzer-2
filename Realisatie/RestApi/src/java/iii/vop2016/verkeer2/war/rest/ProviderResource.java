@@ -62,7 +62,7 @@ public class ProviderResource {
         try {
             ctx = new InitialContext();
         } catch (NamingException ex) {
-            Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProviderResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         beans = BeanFactory.getInstance(ctx, null);
     }
@@ -87,6 +87,7 @@ public class ProviderResource {
             }
             return Response.status(Response.Status.OK).entity(result.toString(1)).build();
         } catch (Exception e) {
+            Logger.getLogger(ProviderResource.class.getName()).log(Level.SEVERE, null, e);
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
     }
