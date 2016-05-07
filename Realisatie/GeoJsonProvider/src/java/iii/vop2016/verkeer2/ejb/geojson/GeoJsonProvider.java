@@ -179,7 +179,10 @@ public class GeoJsonProvider implements GeoJsonRemote, GeoJsonLocal {
         if (route.getGeolocations().size() > 2) {
             String waypoints = "";
             for (int i = 1; i < (route.getGeolocations().size() - 1); i++) {
-
+                if(!waypoints.equals("|")){
+                    
+                }
+                waypoints += FormatGeoLocation(route.getGeolocations().get(i));
             }
             map.put("waypoints", waypoints);
         }
