@@ -364,7 +364,7 @@ public class RoutesResource {
 
                 JSONArray res = JSONRoutes(routes);
                 for (int i = 0; i < res.length(); i++) {
-                    JSONArray arr = new JSONArray(JSONRawData(routes.get(i), page).build().toString());
+                    JSONArray arr = JSONRawData(routes.get(i), page);
                     res.getJSONObject(i).put("rawdata", arr);
                 }
                 return Response.ok().entity(res.toString()).build();
@@ -940,7 +940,7 @@ public class RoutesResource {
         }
     }
 
-    private JsonArrayBuilder JSONRawData(IRoute route, int page) {
+    private JSONArray JSONRawData(IRoute route, int page) {
         List<IRouteData> res = null;
 
         if (startTime != null && endTime != null) {
@@ -953,16 +953,10 @@ public class RoutesResource {
             res = beans.getTrafficDataDAO().getRawData(route, new Date(0), new Date(), providers, page);
         }
 
-        JsonArrayBuilder list = Json.createArrayBuilder();
+        JSONArray list = new JSONArray();
         for (IRouteData s : res) {
-            JsonObjectBuilder o = Json.createObjectBuilder();
-            o.add("Timestamp", s.getTimestamp().toString());
-            o.add("Distance", s.getDistance());
-            o.add("Duration", s.getDuration());
-            o.add("Id", s.getId());
-            o.add("Provider", s.getProvider());
-            o.add("RouteId", s.getRouteId());
-            list.add(o);
+            JSONObject o = VerkeerLibToJson.toJson(s);
+            list.put(o);
         }
 
         return list;
