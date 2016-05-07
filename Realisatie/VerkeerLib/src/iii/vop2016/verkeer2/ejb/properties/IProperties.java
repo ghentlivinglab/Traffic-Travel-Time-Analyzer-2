@@ -14,4 +14,6 @@ import java.util.List;
 public interface IProperties {
     void registerProperty(String jndiName);
     List<String> getProperties();
+    List<String> getDefaultProviders();
+    void setDefaultProviders(List<String> def);
 }
