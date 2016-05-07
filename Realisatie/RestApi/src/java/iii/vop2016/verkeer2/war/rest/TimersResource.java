@@ -40,6 +40,7 @@ public class TimersResource {
 
     private InitialContext ctx;
     private static BeanFactory beans;
+    private Helper helper;
 
     /**
      * Creates a new instance of TimersResource
@@ -55,6 +56,7 @@ public class TimersResource {
             Logger.getLogger(RoutesResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         beans = BeanFactory.getInstance(ctx, null);
+        helper=new Helper();
     }
 
     /**
@@ -83,13 +85,17 @@ public class TimersResource {
     @Path("newdata/start")
     @Produces("application/json")
     public Response startTimer() {
-        try {
-            beans.getTimer().StartTimer();
-            JSONObject result = new JSONObject();
-            result.put("status", "OK");
-            return Response.status(Response.Status.OK).entity(result.toString()).build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+        if (!helper.validateAPIKey(context, beans)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        } else {
+            try {
+                beans.getTimer().StartTimer();
+                JSONObject result = new JSONObject();
+                result.put("status", "OK");
+                return Response.status(Response.Status.OK).entity(result.toString()).build();
+            } catch (Exception e) {
+                return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+            }
         }
     }
 
@@ -97,6 +103,9 @@ public class TimersResource {
     @Path("newdata/stop")
     @Produces("application/json")
     public Response stopTimer() {
+        if (!helper.validateAPIKey(context, beans)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        } else {
         try {
             beans.getTimer().StopTimer();
             JSONObject result = new JSONObject();
@@ -104,6 +113,7 @@ public class TimersResource {
             return Response.status(Response.Status.OK).entity(result.toString()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+        }
         }
     }
 
