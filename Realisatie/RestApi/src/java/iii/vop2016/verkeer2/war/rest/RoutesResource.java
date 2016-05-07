@@ -349,7 +349,7 @@ public class RoutesResource {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         } else {
             try {
-                setBasicParameters();
+                setAnalysisParameters();
                 String pageStr = context.getQueryParameters().getFirst("page");
                 int page = 0;
                 if (pageStr != null && (!pageStr.equals(""))) {
