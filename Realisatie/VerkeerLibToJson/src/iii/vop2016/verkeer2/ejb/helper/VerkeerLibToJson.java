@@ -19,7 +19,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -301,18 +303,43 @@ public class VerkeerLibToJson {
         return o;
     }
 
-    public static Map<IRoute,List<IThreshold>> fromJson(JSONObject o, IRoute r, IThreshold h) {
-        Map<IRoute,List<IThreshold>> map = new HashMap<>();
+    public static Map<IRoute, List<IThreshold>> fromJson(JSONObject o, IRoute r, IThreshold h) {
+        Map<IRoute, List<IThreshold>> map = new HashMap<>();
         IRoute route = VerkeerLibToJson.fromJson(o, r);
-        JSONArray arr =  o.getJSONArray("thresholds");
+        JSONArray arr = o.getJSONArray("thresholds");
         List<IThreshold> ths = new ArrayList<>();
-        for(Object th : arr){
-            IThreshold newth = VerkeerLibToJson.fromJson((JSONObject)th, h);
+        for (Object th : arr) {
+            IThreshold newth = VerkeerLibToJson.fromJson((JSONObject) th, h);
             newth.setRoute(route);
             ths.add(newth);
         }
-        
+
         map.put(route, ths);
         return map;
+    }
+
+    public static JSONObject toJson(Properties prop, String jndi) {
+        JSONObject o = new JSONObject();
+        o.put("jndi", jndi);
+
+        JSONObject col = new JSONObject();
+        for (Map.Entry<Object, Object> entry : prop.entrySet()) {
+            if (entry.getKey() instanceof String) {
+                if (!((String) entry.getKey()).equals("propertyLocation")) {
+                    col.put((String) entry.getKey(), (String) entry.getValue());
+                }
+            }
+        }
+        o.put("content", col);
+        return o;
+    }
+
+    public static Properties fromJson(JSONObject o, Properties p) {
+        JSONObject obj = o.getJSONObject("content");
+        Properties prop = new Properties();
+        for(String key : obj.keySet()){
+            prop.put(key, obj.getString(key));
+        }
+        return prop;
     }
 }

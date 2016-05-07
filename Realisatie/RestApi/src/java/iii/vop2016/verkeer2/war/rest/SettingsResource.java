@@ -5,14 +5,11 @@
  */
 package iii.vop2016.verkeer2.war.rest;
 
-import iii.vop2016.verkeer2.ejb.components.IThreshold;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
+import iii.vop2016.verkeer2.ejb.helper.VerkeerLibToJson;
 import iii.vop2016.verkeer2.ejb.properties.IProperties;
-import iii.vop2016.verkeer2.ejb.threshold.IThresholdManager;
 import java.io.StringReader;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -25,15 +22,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PUT;
 import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
-import javax.json.JsonString;
 import javax.json.JsonStructure;
 import javax.json.JsonValue;
 import javax.naming.InitialContext;
@@ -41,6 +33,7 @@ import javax.naming.NamingException;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -150,29 +143,16 @@ public class SettingsResource {
                 IProperties propCol = beans.getPropertiesCollection();
                 List<String> propStr = propCol.getProperties();
 
-                JsonArrayBuilder arr = Json.createArrayBuilder();
-
+                JSONArray arr = new JSONArray();
                 for (String jndi : propStr) {
-                    JsonObjectBuilder o = Json.createObjectBuilder();
-                    o.add("jndi", jndi);
-
-                    JsonObjectBuilder col = Json.createObjectBuilder();
                     Properties prop = HelperFunctions.RetrievePropertyFile(jndi, ctx, Logger.getGlobal());
-                    for (Map.Entry<Object, Object> entry : prop.entrySet()) {
-                        if (entry.getKey() instanceof String) {
-                            if (!((String) entry.getKey()).equals("propertyLocation")) {
-                                col.add((String) entry.getKey(), (String) entry.getValue());
-                            }
-                        }
-                    }
-                    o.add("content", col);
-
-                    arr.add(o);
+                    JSONObject o = VerkeerLibToJson.toJson(prop, jndi);
+                    arr.put(o);
                 }
 
-                return Response.ok().entity(arr.build().toString()).build();
+                return Response.ok().entity(arr.toString()).build();
             } catch (Exception e) {
-                return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+                return Response.status(Response.Status.BAD_REQUEST).build();
             }
         }
     }
@@ -181,8 +161,7 @@ public class SettingsResource {
     @Path("properties")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response setSettings(String body
-    ) {
+    public Response setSettings(String body) {
         if (!helper.validateAPIKey(context, beans)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         } else {
@@ -194,55 +173,40 @@ public class SettingsResource {
                 JsonReader reader = Json.createReader(new StringReader(body));
                 JsonStructure obj = reader.read();
                 if (obj.getValueType() == JsonValue.ValueType.ARRAY) {
-                    JsonArray arr = (JsonArray) obj;
-                    for (JsonValue val : arr) {
-                        if (val.getValueType() == JsonValue.ValueType.OBJECT) {
-                            if (!readAndApplyPropertiesFromJson((JsonObject) val)) {
-                                return Response.status(Response.Status.BAD_REQUEST).build();
-                            }
-                        }
+                    JSONArray arr = VerkeerLibToJson.parseJsonAsArray(body);
+                    for (Object p : arr) {
+                        String jndi = ((JSONObject) p).getString("jndi");
+                        Properties prop = VerkeerLibToJson.fromJson((JSONObject) p, new Properties());
+                        applyPropertiesFromJson(prop, jndi);
                     }
                 } else if (obj.getValueType() == JsonValue.ValueType.OBJECT) {
-                    if (!readAndApplyPropertiesFromJson((JsonObject) obj)) {
-                        return Response.status(Response.Status.BAD_REQUEST).build();
-                    }
+                    JSONObject o = VerkeerLibToJson.parseJsonAsObject(body);
+                    String jndi = o.getString("jndi");
+                    Properties prop = VerkeerLibToJson.fromJson(o, new Properties());
+                    applyPropertiesFromJson(prop, jndi);
                 }
 
                 JsonObjectBuilder o = Json.createObjectBuilder();
                 o.add("Status", "Ok");
                 return Response.status(Response.Status.ACCEPTED).entity(o.build().toString()).build();
             } catch (Exception e) {
-                return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+                return Response.status(Response.Status.BAD_REQUEST).build();
             }
         }
     }
 
-    private boolean readAndApplyPropertiesFromJson(JsonObject jsonObject) {
-        if (jsonObject.containsKey("jndi") && jsonObject.containsKey("content")) {
-            String jndi = jsonObject.getString("jndi");
-            JsonObject obj = jsonObject.getJsonObject("content");
+    private boolean applyPropertiesFromJson(Properties newprop, String jndi) {
 
-            if (jndi != null && obj != null) {
-                Properties prop = HelperFunctions.RetrievePropertyFile(jndi, ctx, Logger.getGlobal());
-                if (prop != null) {
-                    //fill property file with new data
-                    for (String o : obj.keySet()) {
-                        Object valO = obj.get(o);
-                        Object currentValue = prop.getProperty(o, "");
-                        if (valO instanceof JsonString) {
-                            String val = ((JsonString) valO).getString();
-                            if (!currentValue.equals("")) {
-                                prop.put(o, val);
-                            }
-                        }
-                    }
-
-                    //persist property file
-                    HelperFunctions.SavePropertyFile(prop, Logger.getGlobal());
-
-                    return true;
-                }
+        Properties prop = HelperFunctions.RetrievePropertyFile(jndi, ctx, Logger.getGlobal());
+        if (prop != null) {
+            //fill property file with new data
+            for (Map.Entry<Object, Object> entry : newprop.entrySet()) {
+                prop.setProperty((String) entry.getKey(), (String) entry.getValue());
             }
+            //persist property file
+            HelperFunctions.SavePropertyFile(prop, Logger.getGlobal());
+
+            return true;
         }
 
         return false;
