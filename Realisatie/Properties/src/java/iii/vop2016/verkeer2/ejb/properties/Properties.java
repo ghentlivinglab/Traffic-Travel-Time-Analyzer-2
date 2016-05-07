@@ -33,7 +33,6 @@ public class Properties implements PropertiesRemote, PropertiesLocal {
     @Resource
     protected SessionContext ctxs;
 
-    private List<String> defaultHandlers;
     private List<String> jndi;
 
     protected InitialContext ctx;
@@ -51,32 +50,13 @@ public class Properties implements PropertiesRemote, PropertiesLocal {
         beans = BeanFactory.getInstance(ctx, ctxs);
 
         jndi = new ArrayList<>();
-        defaultHandlers = new ArrayList<>();
-
         jndi.add(JNDILOOKUP_PROPERTYFILE);
 
-        java.util.Properties prop = getProjectProperties();
-        String defaultProv = prop.getProperty("defaultProviders", "");
-        if (!defaultProv.equals("")) {
-            String[] arr = defaultProv.split(",");
-            for (String a : arr) {
-                defaultHandlers.add(a);
-            }
-        }
     }
 
     @PreDestroy
     private void destruct() {
-        java.util.Properties prop = getProjectProperties();
-        StringBuilder s = new StringBuilder();
-        for (int i = 0; i < defaultHandlers.size(); i++) {
-            if (s.length() != 0) {
-                s.append(",");
-            }
-            s.append(defaultHandlers.get(i));
-        }
-        prop.put("defaultProviders", s.toString());
-        HelperFunctions.SavePropertyFile(prop, Logger.getGlobal());
+
     }
 
     private java.util.Properties getProjectProperties() {
@@ -97,18 +77,37 @@ public class Properties implements PropertiesRemote, PropertiesLocal {
 
     @Override
     public List<String> getDefaultProviders() {
-        if (defaultHandlers.isEmpty()) {
+        java.util.Properties prop = getProjectProperties();
+        String defaultProv = prop.getProperty("defaultProviders", "");
+        if (!defaultProv.equals("")) {
+            List<String> defaultHandlers = new ArrayList<>();
+            String[] arr = defaultProv.split(",");
+            for (String a : arr) {
+                defaultHandlers.add(a);
+            }
+            return defaultHandlers;
+        } else {
+            List<String> defaultHandlers = new ArrayList<>();
             List<ISourceAdapter> adas = beans.getSourceAdaptors();
             for (ISourceAdapter ada : adas) {
                 defaultHandlers.add(ada.getProviderName());
             }
+            return defaultHandlers;
         }
-        return defaultHandlers;
     }
 
     @Override
     public void setDefaultProviders(List<String> def) {
-        this.defaultHandlers = def;
+        java.util.Properties prop = getProjectProperties();
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < def.size(); i++) {
+            if (s.length() != 0) {
+                s.append(",");
+            }
+            s.append(def.get(i));
+        }
+        prop.put("defaultProviders", s.toString());
+        HelperFunctions.SavePropertyFile(prop, Logger.getGlobal());
     }
 
 }

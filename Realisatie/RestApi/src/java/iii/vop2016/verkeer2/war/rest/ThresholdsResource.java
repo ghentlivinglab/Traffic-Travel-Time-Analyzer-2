@@ -8,14 +8,19 @@ package iii.vop2016.verkeer2.war.rest;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IRouteData;
 import iii.vop2016.verkeer2.ejb.components.IThreshold;
+import iii.vop2016.verkeer2.ejb.components.Route;
 import iii.vop2016.verkeer2.ejb.components.RouteData;
+import iii.vop2016.verkeer2.ejb.components.Threshold;
 import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
+import iii.vop2016.verkeer2.ejb.helper.ParserException;
+import iii.vop2016.verkeer2.ejb.helper.VerkeerLibToJson;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdHandler;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdManager;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -41,6 +46,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * REST Web Service
@@ -79,6 +86,15 @@ public class ThresholdsResource {
     }
 
     @POST
+    @Path("[id]/update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response modifyThresholdsWithId(String body) {
+        return modifyThresholds(body);
+    }
+
+    @POST
+    @Path("update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response modifyThresholds(String body) {
@@ -88,27 +104,27 @@ public class ThresholdsResource {
             }
 
             List<IThreshold> list = new ArrayList<>();
-
-            JsonReader reader = Json.createReader(new StringReader(body));
-            JsonStructure obj = reader.read();
-            if (obj.getValueType() == JsonValue.ValueType.ARRAY) {
-                JsonArray arr = (JsonArray) obj;
-                for (JsonValue val : arr) {
-                    if (val.getValueType() == JsonValue.ValueType.OBJECT) {
-                        IThreshold th = Helper.ReadThreshold((JsonObject) val);
-                        if (th == null) {
-                            return Response.status(Response.Status.BAD_REQUEST).build();
-                        } else {
-                            list.add(th);
-                        }
-                    }
+            List<JSONObject> listOfObjects = new ArrayList<>();
+            try {
+                JSONArray arr = VerkeerLibToJson.parseJsonAsArray(body);
+                for(Object o:arr){
+                    listOfObjects.add((JSONObject) o);
                 }
-            } else if (obj.getValueType() == JsonValue.ValueType.OBJECT) {
-                IThreshold th = Helper.ReadThreshold((JsonObject) obj);
-                if (th == null) {
+            } catch (ParserException e) {
+                try{
+                    JSONObject o = VerkeerLibToJson.parseJsonAsObject(body);
+                    listOfObjects.add(o);
+                }catch(ParserException e1){
                     return Response.status(Response.Status.BAD_REQUEST).build();
-                } else {
-                    list.add(th);
+                }
+            }
+            
+            for(JSONObject o : listOfObjects){
+                Map<IRoute, List<IThreshold>> m = VerkeerLibToJson.fromJson(o,new Route(), new Threshold());
+                for(Map.Entry<IRoute, List<IThreshold>> entry : m.entrySet()){
+                    for(IThreshold th:entry.getValue()){
+                        list.add(th);
+                    }
                 }
             }
 
@@ -119,7 +135,7 @@ public class ThresholdsResource {
                 return Response.status(Response.Status.BAD_REQUEST).build();
             }
         } catch (Exception e) {
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 
@@ -133,28 +149,17 @@ public class ThresholdsResource {
 
             List<IRoute> routes = Helper.getRoutes(sid, dao);
 
-            JsonArrayBuilder arrAll = Json.createArrayBuilder();
-
-            for (IRoute route : routes) {
-                List<IThreshold> thList = man.getThresholds(route);
-
-                JsonObjectBuilder objRoute = Json.createObjectBuilder();
-
-                JsonArrayBuilder arr = Json.createArrayBuilder();
-                for (IThreshold threshold : thList) {
-                    arr.add(Helper.BuildJsonThreshold(threshold));
-                }
-                objRoute.add("thresholds", arr);
-
-                objRoute.add("route", Helper.BuildJsonRoute(route, beans.getDataProvider()));
-
-                arrAll.add(objRoute);
-            }
-
             if (routes.size() == 1) {
-                return Response.status(Response.Status.OK).entity(arrAll.build().getJsonObject(0).toString()).build();
+                IRoute route = routes.get(0);
+                List<IThreshold> thList = man.getThresholds(route);
+                return Response.status(Response.Status.OK).entity(VerkeerLibToJson.toJson(route, thList).toString()).build();
             } else {
-                return Response.status(Response.Status.OK).entity(arrAll.build().toString()).build();
+                JSONArray arr = new JSONArray();
+                for (IRoute route : routes) {
+                    List<IThreshold> thList = man.getThresholds(route);
+                    arr.put(VerkeerLibToJson.toJson(route, thList));
+                }
+                return Response.status(Response.Status.OK).entity(arr.toString()).build();
             }
         } catch (Exception e) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();

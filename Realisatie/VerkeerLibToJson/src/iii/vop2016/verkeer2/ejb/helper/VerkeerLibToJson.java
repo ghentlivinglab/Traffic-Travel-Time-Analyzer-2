@@ -16,7 +16,9 @@ import iii.vop2016.verkeer2.ejb.components.IThreshold;
 import iii.vop2016.verkeer2.ejb.components.Log;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -286,5 +288,31 @@ public class VerkeerLibToJson {
         } catch (Exception e) {
             throw new ParserException();
         }
+    }
+
+    public static JSONObject toJson(IRoute route, List<IThreshold> ths) {
+        JSONObject o = VerkeerLibToJson.toJson(route);
+        JSONArray arr = new JSONArray();
+        for (IThreshold threshold : ths) {
+            arr.put(VerkeerLibToJson.toJson(threshold));
+        }
+        o.put("thresholds", arr);
+
+        return o;
+    }
+
+    public static Map<IRoute,List<IThreshold>> fromJson(JSONObject o, IRoute r, IThreshold h) {
+        Map<IRoute,List<IThreshold>> map = new HashMap<>();
+        IRoute route = VerkeerLibToJson.fromJson(o, r);
+        JSONArray arr =  o.getJSONArray("thresholds");
+        List<IThreshold> ths = new ArrayList<>();
+        for(Object th : arr){
+            IThreshold newth = VerkeerLibToJson.fromJson((JSONObject)th, h);
+            newth.setRoute(route);
+            ths.add(newth);
+        }
+        
+        map.put(route, ths);
+        return map;
     }
 }

@@ -356,6 +356,7 @@ public class GeneralDAO implements GeneralDAORemote, GeneralDAOLocal {
 
                     //bypass geolocation ranking system
                     int sortRank = newGeo.getSortRank();
+                    newGeo.setId(0);
                     result.addGeolocation(newGeo);
                     newGeo.setSortRank(sortRank);
                     GeosChanged = true;

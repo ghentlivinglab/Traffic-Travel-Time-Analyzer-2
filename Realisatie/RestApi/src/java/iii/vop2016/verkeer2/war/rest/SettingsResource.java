@@ -109,7 +109,7 @@ public class SettingsResource {
                 String key = o.getString("key");
 
                 beans.getAPIKeyDAO().deactivateKey(key);
-                
+
                 JsonObjectBuilder b = Json.createObjectBuilder();
                 b.add("status", "done");
                 return Response.status(Response.Status.OK).entity(b.build().toString()).build();
