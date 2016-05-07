@@ -236,14 +236,16 @@ public class VerkeerLibToJson {
             o.put("routeId", obj.getRouteId());
 
             JSONArray arr = new JSONArray();
-            for (String s : obj.getObservers()) {
-                arr.put(s);
+            if (obj.getObservers() != null) {
+                for (String s : obj.getObservers()) {
+                    arr.put(s);
+                }
             }
             o.put("handlers", arr);
 
             return o;
         } catch (Exception e) {
-
+            Logger.getLogger(VerkeerLibToJson.class.getName()).log(Level.SEVERE, null, e);
         }
 
         return new JSONObject();
@@ -337,7 +339,7 @@ public class VerkeerLibToJson {
     public static Properties fromJson(JSONObject o, Properties p) {
         JSONObject obj = o.getJSONObject("content");
         Properties prop = new Properties();
-        for(String key : obj.keySet()){
+        for (String key : obj.keySet()) {
             prop.put(key, obj.getString(key));
         }
         return prop;
