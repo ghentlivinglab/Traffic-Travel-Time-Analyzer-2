@@ -166,7 +166,7 @@ public class RoutesResource {
                 IRoute r29 = initRoute("Brusselsesteenweg (N9) westbound", 51.010225, 3.791267, 51.041526, 3.740892, "R4", "Scheldekaai");
                 IRoute r30 = initRoute("Brusselsesteenweg (N9) eastbound", 51.041526, 3.740892, 51.010200, 3.790972, "Scheldekaai", "R4");
 
-                IRoute r31 = initRoute("Oudenaardsesteenweg (N60) northbound", 50.980166, 3.667916, 51.010200, 3.726065, "E17", "R40");
+                IRoute r31 = initRoute("Oudenaardsesteenweg (N60) northbound", 50.980166, 3.667916, 51.038432, 3.726065, "E17", "R40");
                 IRoute r32 = initRoute("Oudenaardsesteenweg (N60) southbound", 51.038648, 3.724860, 50.982372, 3.670051, "R40", "E17");
 
                 IRoute r33 = initRoute("Brugsevaart (N9) southbound", 51.085364, 3.663483, 51.064294, 3.702872, "R4", "Gebroeders de Smetstraat");
