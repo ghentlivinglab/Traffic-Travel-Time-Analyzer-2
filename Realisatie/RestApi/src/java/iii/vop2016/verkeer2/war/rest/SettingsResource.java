@@ -5,6 +5,7 @@
  */
 package iii.vop2016.verkeer2.war.rest;
 
+import iii.vop2016.verkeer2.bean.APIKey.APIKey;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import iii.vop2016.verkeer2.ejb.helper.VerkeerLibToJson;
@@ -76,17 +77,11 @@ public class SettingsResource {
         if (!helper.validateAPIKey(context, beans)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         } else {
-            JsonObjectBuilder result = Json.createObjectBuilder();
-            String keyString = beans.getAPIKeyDAO().getKey();
-            //String keyString = "rootkeytest";
-            //String keyString = "keynotactive";
-            result.add("key", keyString);
-            if (beans.getAPIKeyDAO().validate(keyString)) {
-                result.add("klopt", "ja");
-            } else {
-                result.add("klopt", "nee");
+            APIKey keyString = beans.getAPIKeyDAO().getKey();
+            if (!beans.getAPIKeyDAO().validate(keyString.getKeyString())) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
             }
-            return Response.ok().entity(result.build().toString()).build();
+            return Response.ok().entity(VerkeerLibToJson.toJson(keyString).toString()).build();
         }
     }
 
@@ -98,14 +93,35 @@ public class SettingsResource {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         } else {
             try {
-                JSONObject o = new JSONObject(body);
-                String key = o.getString("key");
-
-                beans.getAPIKeyDAO().deactivateKey(key);
+                JSONObject o = VerkeerLibToJson.parseJsonAsObject(body);
+                APIKey key = VerkeerLibToJson.fromJson(o, new APIKey());
+                beans.getAPIKeyDAO().deactivateKey(key.getKeyString());
 
                 JsonObjectBuilder b = Json.createObjectBuilder();
                 b.add("status", "done");
                 return Response.status(Response.Status.OK).entity(b.build().toString()).build();
+            } catch (Exception e) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+        }
+    }
+
+    @GET
+    @Path("keys")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAPIKeys() {
+        if (!helper.validateAPIKey(context, beans)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        } else {
+            try {
+                JSONArray arr = new JSONArray();
+
+                List<APIKey> keys = beans.getAPIKeyDAO().getAllKeys();
+                for (APIKey key : keys) {
+                    JSONObject o = VerkeerLibToJson.toJson(key);
+                    arr.put(o);
+                }
+                return Response.status(Response.Status.OK).entity(arr.toString()).build();
             } catch (Exception e) {
                 return Response.status(Response.Status.BAD_REQUEST).build();
             }

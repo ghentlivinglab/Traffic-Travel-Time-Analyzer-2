@@ -6,6 +6,7 @@
 package iii.vop2016.verkeer2.ejb.dao;
 
 import iii.vop2016.verkeer2.bean.APIKey.APIKey;
+import java.util.List;
 
 /**
  *
@@ -15,6 +16,7 @@ public interface IAPIKeyDAO {
     
     public boolean validate(String key);
     public void deactivateKey (String key);
-    public String getKey();
+    public APIKey getKey();
+    public List<APIKey> getAllKeys();
     
 }

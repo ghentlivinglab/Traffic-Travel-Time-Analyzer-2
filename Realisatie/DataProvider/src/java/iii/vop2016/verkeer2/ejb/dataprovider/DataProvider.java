@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -809,13 +810,14 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
 
         GregorianCalendar startHour = new GregorianCalendar(0, 0, 0, 6, 0, 0);
         GregorianCalendar endHour = new GregorianCalendar(0, 0, 0, 2, 0);
+        int perMinutes = 15;
         List<List<List<Date>>> list = generateListsForDayOfWeek(start, end, startHour, endHour, true);
 
         for (Weekdays day : days) {
             int weekday = day.ordinal();
-            List<Long> data = dao.getAggregateData(route, providers, list.get(0).get(weekday), list.get(1).get(weekday), 3600, true, new AggregationContainer(Aggregation.none, "timestamp"), new AggregationContainer(Aggregation.sum, "duration * distance"), new AggregationContainer(Aggregation.sum, "distance"));
+            List<Long> data = dao.getAggregateData(route, providers, list.get(0).get(weekday), list.get(1).get(weekday), perMinutes * 60, true, new AggregationContainer(Aggregation.none, "timestamp"), new AggregationContainer(Aggregation.sum, "duration * distance"), new AggregationContainer(Aggregation.sum, "distance"));
 
-            ret.put(day, MapDataByDay(data));
+            ret.put(day, MapDataByDay(data, perMinutes));
         }
 
         if (ret == null) {
@@ -839,13 +841,14 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
 
         GregorianCalendar startHour = new GregorianCalendar(0, 0, 0, 6, 0, 0);
         GregorianCalendar endHour = new GregorianCalendar(0, 0, 0, 2, 0);
+        int perMinutes = 15;
         List<List<List<Date>>> list = generateListsForDayOfWeek(start, end, startHour, endHour, true);
 
         for (Weekdays day : days) {
             int weekday = day.ordinal();
-            List<Long> data = dao.getAggregateData(route, providers, list.get(0).get(weekday), list.get(1).get(weekday), 3600, true, new AggregationContainer(Aggregation.none, "timestamp"), new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
+            List<Long> data = dao.getAggregateData(route, providers, list.get(0).get(weekday), list.get(1).get(weekday), perMinutes * 15, true, new AggregationContainer(Aggregation.none, "timestamp"), new AggregationContainer(Aggregation.sum, "distance * distance / duration "), new AggregationContainer(Aggregation.sum, "distance"));
 
-            ret.put(day, MapDataByDay(data));
+            ret.put(day, MapDataByDay(data, perMinutes));
         }
 
         if (ret == null) {
@@ -856,12 +859,86 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
         return ret;
     }
 
-    private List<Integer> MapDataByDay(List<Long> data) {
+    private List<Integer> MapDataByDay(List<Long> data, int increaseMinutes) {
         int index = 0;
 
+        Map<Date, List<Integer>> d = new TreeMap<>();
+        Map<Date, List<Integer>> d2 = new TreeMap<>();
         Calendar cal = new GregorianCalendar();
-        List<Integer> arr = new ArrayList<>();
-        for (int i = 6; i != 3; i = (i + 1) % 24) {
+        cal.set(0, 0, 0, 6, 0, 0);
+        while (cal.get(GregorianCalendar.HOUR_OF_DAY) != 0) {
+            d.put(cal.getTime(), new ArrayList<Integer>());
+            cal.add(GregorianCalendar.MINUTE, increaseMinutes);
+        }
+        cal = new GregorianCalendar();
+        cal.set(0, 0, 0, 0, 0, 0);
+        while (cal.get(GregorianCalendar.HOUR_OF_DAY) != 2) {
+            d2.put(cal.getTime(), new ArrayList<Integer>());
+            cal.add(GregorianCalendar.MINUTE, increaseMinutes);
+        }
+        d2.put(cal.getTime(), new ArrayList<Integer>());
+
+        long dateDiff = (increaseMinutes * (long) 60 * 1000) / 2;
+        while (index < data.size()) {
+            Long da = data.get(index++);
+            Long exp = data.get(index++);
+            Long div = data.get(index++);
+
+            //strip date, keep hours and minutes
+            cal.setTime(new Date(da));
+            cal.set(0, 0, 0, cal.get(GregorianCalendar.HOUR_OF_DAY), cal.get(GregorianCalendar.MINUTE), 0);
+            Date date = cal.getTime();
+
+            int res = -1;
+            if (div != 0) {
+                res = Math.toIntExact(exp / div);
+            }
+
+            if (res != -1) {
+                for (Map.Entry<Date, List<Integer>> entry : d.entrySet()) {
+                    Date thisDate = entry.getKey();
+                    if (Math.abs(thisDate.getTime() - date.getTime()) <= dateDiff) {
+                        entry.getValue().add(res);
+                    }
+                }
+                for (Map.Entry<Date, List<Integer>> entry : d2.entrySet()) {
+                    Date thisDate = entry.getKey();
+                    if (Math.abs(thisDate.getTime() - date.getTime()) <= dateDiff) {
+                        entry.getValue().add(res);
+                    }
+                }
+            }
+        }
+
+        List<Integer> ret = new ArrayList<>(d.size() + d2.size());
+        for (Map.Entry<Date, List<Integer>> entry : d.entrySet()) {
+            int result = 0;
+            List<Integer> list = entry.getValue();
+            if (list.size() > 0) {
+                for (Integer x : list) {
+                    result += x;
+                }
+                result = result / list.size();
+                ret.add(result);
+            } else {
+                ret.add(-1);
+            }
+        }
+        for (Map.Entry<Date, List<Integer>> entry : d2.entrySet()) {
+            int result = 0;
+            List<Integer> list = entry.getValue();
+            if (list.size() > 0) {
+                for (Integer x : list) {
+                    result += x;
+                }
+                result = result / list.size();
+                ret.add(result);
+            } else {
+                ret.add(-1);
+            }
+        }
+
+        /*for (int i = 6; i != 3; i = (i + 1) % 24) {
             arr.add(-1);
         }
 
@@ -881,9 +958,8 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
             } else if (hour <= 2 && hour >= 0) {
                 arr.set(hour + 18, res);
             }
-        }
-
-        return arr;
+        }*/
+        return ret;
     }
 
     protected Pattern timeFormat = Pattern.compile("([0-9]{2})-([0-9]{2})");
@@ -1095,7 +1171,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
 
         while (cal.get(GregorianCalendar.HOUR_OF_DAY) != maxHour) {
             arr.add(dateFormatter.format(cal.getTime()));
-            cal.add(GregorianCalendar.HOUR_OF_DAY, 1);
+            cal.add(GregorianCalendar.MINUTE, 15);
         }
         arr.add(dateFormatter.format(cal.getTime()));
         return arr;
