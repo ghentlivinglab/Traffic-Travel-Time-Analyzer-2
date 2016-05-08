@@ -107,25 +107,31 @@ public class ThresholdsResource {
             List<JSONObject> listOfObjects = new ArrayList<>();
             try {
                 JSONArray arr = VerkeerLibToJson.parseJsonAsArray(body);
-                for(Object o:arr){
+                for (Object o : arr) {
                     listOfObjects.add((JSONObject) o);
                 }
             } catch (ParserException e) {
-                try{
+                try {
                     JSONObject o = VerkeerLibToJson.parseJsonAsObject(body);
                     listOfObjects.add(o);
-                }catch(ParserException e1){
+                } catch (ParserException e1) {
                     return Response.status(Response.Status.BAD_REQUEST).build();
                 }
             }
-            
-            for(JSONObject o : listOfObjects){
-                Map<IRoute, List<IThreshold>> m = VerkeerLibToJson.fromJson(o,new Route(), new Threshold());
-                for(Map.Entry<IRoute, List<IThreshold>> entry : m.entrySet()){
-                    for(IThreshold th:entry.getValue()){
-                        list.add(th);
+
+            for (JSONObject o : listOfObjects) {
+                try {
+                    Map<IRoute, List<IThreshold>> m = VerkeerLibToJson.fromJson(o, new Route(), new Threshold());
+                    for (Map.Entry<IRoute, List<IThreshold>> entry : m.entrySet()) {
+                        for (IThreshold th : entry.getValue()) {
+                            list.add(th);
+                        }
                     }
+                } catch (ParserException e) {
+                    IThreshold th = VerkeerLibToJson.fromJson(o, new Threshold());
+                    list.add(th);
                 }
+
             }
 
             IThresholdManager man = beans.getThresholdManager();
