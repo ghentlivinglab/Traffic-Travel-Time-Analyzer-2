@@ -123,7 +123,9 @@ public class VerkeerLibToJson {
             obj.setId(o.getLong("id"));
             obj.setLatitude(o.getDouble("latitude"));
             obj.setLongitude(o.getDouble("longitude"));
-            obj.setName(o.getString("name"));
+            if (o.has("name")) {
+                obj.setName(o.getString("name"));
+            }
             obj.setSortRank(o.getInt("sortRank"));
             return obj;
         } catch (Exception e) {
