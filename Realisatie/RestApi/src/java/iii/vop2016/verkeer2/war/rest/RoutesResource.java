@@ -730,6 +730,9 @@ public class RoutesResource {
 
     private JSONArray JSONProvidersData(IRoute route) {
         JSONArray result = new JSONArray();
+        if (providers == null || providers.isEmpty()) {
+            providers = beans.getPropertiesCollection().getDefaultProviders();
+        }
         for (String provider : providers) {
             result.put(JSONProviderData(route, provider));
         }
@@ -759,8 +762,8 @@ public class RoutesResource {
             mapDurations = beans.getDataProvider().getData(route, lprovider, startTime, endTime);
             mapVelocities = beans.getDataProvider().getDataVelocity(route, lprovider, startTime, endTime);
         } else {
-            mapDurations = beans.getDataProvider().getData(route, providers);
-            mapVelocities = beans.getDataProvider().getDataVelocity(route, providers);
+            mapDurations = beans.getDataProvider().getData(route, lprovider);
+            mapVelocities = beans.getDataProvider().getDataVelocity(route, lprovider);
         }
 
         obj.put("duration", JSONData("providerDurations " + provider + " " + route.getId(),
