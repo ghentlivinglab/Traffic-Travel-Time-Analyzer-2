@@ -6,6 +6,7 @@
 package iii.vop2016.verkeer2.war.rest;
 
 import iii.vop2016.verkeer2.bean.APIKey.APIKey;
+import iii.vop2016.verkeer2.bean.auth.AuthUser;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.helper.HelperFunctions;
 import iii.vop2016.verkeer2.ejb.helper.VerkeerLibToJson;
@@ -32,6 +33,7 @@ import javax.json.JsonValue;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.ws.rs.POST;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.json.JSONArray;
@@ -96,6 +98,51 @@ public class SettingsResource {
                 JSONObject o = VerkeerLibToJson.parseJsonAsObject(body);
                 APIKey key = VerkeerLibToJson.fromJson(o, new APIKey());
                 beans.getAPIKeyDAO().deactivateKey(key.getKeyString());
+
+                JsonObjectBuilder b = Json.createObjectBuilder();
+                b.add("status", "done");
+                return Response.status(Response.Status.OK).entity(b.build().toString()).build();
+            } catch (Exception e) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+        }
+    }
+    
+    @GET
+    @Path ("users/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUser(@PathParam("id") String sid){
+        if (!helper.validateAPIKey(context, beans)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        } else {
+            try {
+                int id = Integer.parseInt(sid);
+                AuthUser user = beans.getLoginDAO().getUser(id);
+                if (user == null){
+                    return Response.status(Response.Status.BAD_REQUEST).build();
+                }
+                JSONObject o = VerkeerLibToJson.toJson(user);
+                o.remove("password");
+                return Response.status(Response.Status.OK).entity(o.toString()).build();
+            } catch (Exception e) {
+                Logger.getLogger(SettingsResource.class.getName()).log(Level.SEVERE, null, e);
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+        }
+    }
+    
+    @POST
+    @Path("users/update/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateUser(String body,@PathParam("id") String sid) {
+        if (!helper.validateAPIKey(context, beans)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        } else {
+            try {
+                JSONObject o = VerkeerLibToJson.parseJsonAsObject(body);
+                AuthUser user = VerkeerLibToJson.fromJson(o, new AuthUser());
+                beans.getLoginDAO().updateUser(user);
 
                 JsonObjectBuilder b = Json.createObjectBuilder();
                 b.add("status", "done");
