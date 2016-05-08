@@ -14,9 +14,6 @@ import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.components.IThreshold;
-import iii.vop2016.verkeer2.ejb.components.Route;
-import iii.vop2016.verkeer2.ejb.components.Threshold;
-import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import iii.vop2016.verkeer2.ejb.helper.VerkeerLibToJson;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdManager;
 import java.util.ArrayList;
@@ -28,7 +25,6 @@ import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import org.json.JSONArray;
@@ -322,11 +318,19 @@ public class EditRouteBean {
     }
     
     public String resetObservers(){
-        IThresholdManager thmanager = beanFactory.getThresholdManager();
         for(int i=0; i<getThresholds().size(); i++){
             getThresholds().get(i).setObservers(null);
         }
-        thmanager.ModifyThresholds(getThresholds());
+        List<IThreshold> list = getThresholds();
+        JSONArray obj1 = new JSONArray();
+        for(int i=0; i<list.size(); i++){
+            obj1.put(VerkeerLibToJson.toJson(list.get(i)));
+        }
+        String url1 = prop.getProperty("urlUpdateThresholds");
+        url1 = url1.replaceAll("\\{apikey\\}", ""+prop.getProperty("apiKey"));
+        url1 = url1.replaceAll("\\{id\\}", ""+getRoute().getId());
+        JSONMethods.postArrayToURL(url1, obj1, prop);
+        
         return "pretty:settings-routes-details";
     }
 
