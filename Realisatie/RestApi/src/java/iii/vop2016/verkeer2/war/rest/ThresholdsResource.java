@@ -86,10 +86,10 @@ public class ThresholdsResource {
     }
 
     @POST
-    @Path("[id]/update")
+    @Path("{id}/update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response modifyThresholdsWithId(String body) {
+    public Response modifyThresholdsWithId(@PathParam("id") String sid,String body) {
         return modifyThresholds(body);
     }
 
