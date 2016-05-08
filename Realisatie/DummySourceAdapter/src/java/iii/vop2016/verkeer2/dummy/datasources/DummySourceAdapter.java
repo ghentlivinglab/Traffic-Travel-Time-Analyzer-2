@@ -35,6 +35,9 @@ public class DummySourceAdapter implements DummySourceAdapterRemote {
         r.setRouteId(route.getId());
 
         if (this.route.equals(route)) {
+            if(count == 5){
+                r.setDistance(Math.toIntExact(route.getId() * 2 * 1000));
+            }
             if (count < 50) {
                 count++;
             }else{
