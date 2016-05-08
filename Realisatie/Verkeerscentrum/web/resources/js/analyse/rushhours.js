@@ -80,7 +80,7 @@ function parseXData(name, data){
         date.setHours(h);
         date.setMinutes(m);
         date.setDate(day);
-        if(h == 23) day++;        
+        if(h==23 && m==45) day++;        
         y3.push(date);
     }
     
@@ -218,7 +218,7 @@ function viewAnalyseData(data){
             y: {
                 type: 'number',
                 tick: {
-                    //format: parseToMinSec,
+                    format: parseToMinSec,
                     culling: 2// for some reason this doesn't work
                 },
                 label: {// ADD
