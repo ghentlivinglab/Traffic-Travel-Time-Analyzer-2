@@ -310,7 +310,14 @@ public class EditRouteBean {
             i++;
         }
         getRoute().removeGeoLocation(location);
-        return "pretty:index";
+        
+        JSONObject obj = VerkeerLibToJson.toJson(getRoute());
+        String url = prop.getProperty("urlUpdateRoute");
+        url = url.replaceAll("\\{apikey\\}", ""+prop.getProperty("apiKey"));
+        url = url.replaceAll("\\{id\\}", ""+getRoute().getId());
+        JSONMethods.postObjectToURL(url, obj, prop);
+        
+        return "pretty:settings-routes-details";
     }
 
     public void setGeoLocationToRemove(int geoLocationToRemove) {
