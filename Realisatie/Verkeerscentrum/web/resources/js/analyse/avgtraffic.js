@@ -122,7 +122,7 @@ function viewAnalyseData(data){
             quotientClass = "#ff7043";
         }else if(quotient > 30){
             quotientClass = "#ff9800";
-        }else if(quotient > 10){
+        }else if(quotient > 20){
             quotientClass = "#ffca28";
         }else if(quotient > 10){
             quotientClass = "#ffeb3b";
@@ -137,7 +137,7 @@ function viewAnalyseData(data){
         }
         
         if(optVelocity > 0){
-            optVelocity = Math.round(optVelocity*100)/100;
+            optVelocity = Math.round(optVelocity*3.6*100)/100;
         }else{
             optVelocity = "";
         }
@@ -149,7 +149,7 @@ function viewAnalyseData(data){
         }
         
         if(avgVelocity > 0){
-            avgVelocity = Math.round(avgVelocity*100)/100;
+            avgVelocity = Math.round(avgVelocity*3.6*100)/100;
         }else{
             avgVelocity = "";
         }

@@ -51,19 +51,15 @@
                             <h:form>
                                 <ul class="collection with-header">
                                     
-                                    <c:forEach items="#{propertiesSettings.files}" var="entry">
+                                    <c:forEach items="#{propertiesSettings.vars}" var="entry">
                                         <li class="collection-header"><h4><h:outputText value="#{entry.key}" /></h4></li>
                                         <li class="collection-item">
-                                            <h:dataTable value="#{entry.value.entrySet()}" var="foo">
+                                            <h:dataTable value="#{entry.value}" var="pair">
                                                 <h:column>
-                                                    <h:dataTable value="#{foo.key}" var="foo1">
-                                                        <h:outputText value="#{foo1}" />
-                                                    </h:dataTable>
+                                                        <h:outputText value="#{pair.left}" />
                                                 </h:column>
                                                 <h:column>
-                                                    <h:dataTable value="#{foo.value}" var="foo2">
-                                                        <h:outputText value="#{foo2}" />
-                                                    </h:dataTable>
+                                                    <h:inputText value="#{pair.right}" />
                                                 </h:column>
                                                 
                                             </h:dataTable>

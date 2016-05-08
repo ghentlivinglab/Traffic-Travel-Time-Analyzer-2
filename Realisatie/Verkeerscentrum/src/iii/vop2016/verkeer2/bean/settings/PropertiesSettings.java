@@ -23,13 +23,13 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.util.Pair;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import iii.vop2016.verkeer2.bean.helpers.Pair;
 
 /**
  *
@@ -45,10 +45,9 @@ public class PropertiesSettings implements Serializable{
     protected BeanFactory beanFactory;
     protected static final String JNDILOOKUP_PROPERTYFILE = "resources/properties/WebSettings";
 
-    protected Map<String, List<String>> keys;
-    protected Map<String, List<String>> values;
-    protected Map<String, Map<List<String>,List<String>>> files;
     protected Map<String, String> jndis;
+    
+    protected Map<String, List<Pair<String,String>>> vars;
 
 
     public PropertiesSettings() {
@@ -72,10 +71,8 @@ public class PropertiesSettings implements Serializable{
        
 
     private void downloadProperties() {
-        keys = new HashMap<>();
-        values = new HashMap<>();
         jndis = new HashMap<>();
-        files =  new HashMap<>();
+        vars = new HashMap<>();
         
         String url = prop.getProperty("urlProperties");
         url = url.replaceAll("\\{apikey\\}", ""+prop.getProperty("apiKey"));
@@ -105,17 +102,14 @@ public class PropertiesSettings implements Serializable{
             //
             if(name != null){
                 Properties properties = VerkeerLibToJson.fromJson(array.getJSONObject(i), new Properties());
-                Map<List<String>, List<String>> pair = new HashMap();
-                pair.put(new ArrayList<String>(), new ArrayList<String>());
+                List<Pair<String,String>> temp = new ArrayList<>();
                 for (Map.Entry<Object, Object> e : properties.entrySet()) {
                     String key = (String) e.getKey();
                     String value = (String) e.getValue();
-                    for (Map.Entry<List<String>, List<String>> a : pair.entrySet()) {
-                        a.getKey().add(key);
-                        a.getValue().add(value);
-                    }
+                    Pair<String,String> pair = new Pair<String,String>(key, value); 
+                    temp.add(pair);
                 }
-                files.put(name, pair);
+                vars.put(name, temp);
                 jndis.put(name, array.getJSONObject(i).getString("jndi"));
             }
             
@@ -124,37 +118,30 @@ public class PropertiesSettings implements Serializable{
 
     
     public String submit(){
-        /*
+        
         JSONArray array = new JSONArray();
-        for (Map.Entry<String, Map<String, String>> file : files.entrySet()) {
+        for (Map.Entry<String, List<Pair<String, String>>> var : vars.entrySet()) {
             Properties properties = new Properties();
-            Map<String, String> map = file.getValue();
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                String key = (String) entry.getKey();
-                String value = (String) entry.getValue();
-                properties.put(key, value);
+            String name = var.getKey();
+            List<Pair<String, String>> list = var.getValue();
+            for(int i=0; i<list.size(); i++){
+                Pair<String,String> pair = list.get(i);
+                properties.put(pair.getLeft(), pair.getRight());
             }
-            JSONObject obj = VerkeerLibToJson.toJson(properties, jndis.get(file.getKey()));
+            JSONObject obj = VerkeerLibToJson.toJson(properties, jndis.get(var.getKey()));
             array.put(obj);
 	}
         String url = prop.getProperty("urlUpdateProperties");
         url = url.replaceAll("\\{apikey\\}", ""+prop.getProperty("apiKey"));
         JSONMethods.postArrayToURL(url, array, prop);
-        */
+        
         return "pretty:settings-properties";
     }
 
-    public Map<String, List<String>> getKeys() {
-        return keys;
+    public Map<String, List<Pair<String, String>>> getVars() {
+        return vars;
     }
 
-    public Map<String, List<String>> getValues() {
-        return values;
-    }
-
-    public Map<String, Map<List<String>, List<String>>> getFiles() {
-        return files;
-    }
     
     
     

@@ -43,7 +43,7 @@
         <url-pattern>/faces/pages/analyse*</url-pattern>
         <url-pattern>/faces/pages/settings*</url-pattern>        
     </filter-mapping>
-
+<!--
     <error-page>
             <error-code>404</error-code>
             <location>/faces/pages/error/error.xhtml</location>
@@ -63,5 +63,5 @@
             <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
             <param-value>server</param-value>
     </context-param>
-    
+    -->
 </web-app>
