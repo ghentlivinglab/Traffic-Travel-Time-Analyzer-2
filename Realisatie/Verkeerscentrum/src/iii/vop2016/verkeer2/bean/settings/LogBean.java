@@ -56,11 +56,7 @@ public class LogBean {
             for(int i=0; i<logsarray.length(); i++){
                 logs.add(logsarray.getJSONObject(i));
             }
-            
-            JSONObject obj = new JSONObject("");
-            String url = "http://localhost:8080/RestApi/v2/routes/init?key=mike";
-            JSONMethods.postObjectToURL(url, obj, prop);
-
+        
         } catch (NamingException ex) {
             Logger.getLogger(RouteSettings.class.getName()).log(Level.SEVERE, null, ex);
         }  
