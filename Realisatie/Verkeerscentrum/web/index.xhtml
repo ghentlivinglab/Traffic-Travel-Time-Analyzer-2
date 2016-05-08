@@ -1,154 +1,141 @@
-<?xml version='1.0' encoding='UTF-8' ?>
+<?xml version='1.0' encoding='UTF-8' ?> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
-    
-    <ui:composition template="./templates/BodySideRight.xhtml">
-        
-        <ui:define name="page"> Instellingen </ui:define>
-        
-        <ui:define name="content">
-                   
-            
-            
-            <div class="index pull-bottom">
-                <div class="banner pull-bottom">
-                    <div class="dashboard display-animation row">
-                        <div class="col s7 tile-wrapper">
-                            <h:link outcome="pretty:live" class="tile tile-pink tile-lg ripple-effect" style="background-image: url(http://i39.tinypic.com/20r7ipz.jpg);">
-                                <span class="content-wrapper">
-                                    <span class="tile-content">
-                                        <span class="tile-img"></span>
-                                        <span class="tile-holder tile-holder-sm">
-                                            <span class="title">Huidige situatie</span>
-                                        </span>
-                                    </span>      
-                                </span>
-                            </h:link>
-                        </div>
-                        <div class="col s5 tile-wrapper">
-                            <h:link outcome="pretty:settings" class="tile tile-purple tile-lg ripple-effect" style="background-image: url(#{requestScope.resourceURLimg}/bgsettings.png);">
-                                <span class="content-wrapper">
-                                    <span class="tile-content">
-                                        <span class="tile-img center"> <img src="#{requestScope.resourceURLimg}/settingsiconwhite.png" class="responsive-img" /> </span>
-                                        <span class="tile-holder tile-holder-sm">
-                                            <span class="title">Instellingen</span>
-                                        </span>
-                                    </span>      
-                                </span>
-                            </h:link>
-                        </div>
-                        <div class="col s3 tile-wrapper">
-                            <h:link outcome="pretty:settings-profile" class="tile tile-lg tile-cyan ripple-effect" style="background-image: url(#{requestScope.resourceURLimg}/bgprofile.png);">
-                                <span class="content-wrapper">
-                                    <span class="tile-content">
-                                        <span class="tile-img center"> <img src="#{requestScope.resourceURLimg}/profileiconwhite.png" class="responsive-img" /> </span>
-                                        <span class="tile-holder tile-holder-sm">
-                                            <span class="title">Profiel</span>
-                                        </span>
-                                    </span>      
-                                </span>
-                            </h:link>
-                        </div>
-                        <div class="col s9 tile-wrapper">
-                            <h:link outcome="pretty:analyse" class="tile tile-amber tile-lg ripple-effect" style="background-image: url(#{requestScope.resourceURLimg}/bganalyse.png);">
-                                <span class="content-wrapper">
-                                    <span class="tile-content">
-                                        <span class="tile-img center"> <img src="#{requestScope.resourceURLimg}/analyseeiconwhite.png" class="responsive-img" /> </span>
-                                        <span class="tile-holder tile-holder-sm">
-                                            <span class="title">Analyse</span>
-                                        </span>
-                                    </span>      
-                                </span>
-                            </h:link>
-                        </div>
+      xmlns:pretty="http://ocpsoft.com/prettyfaces">
+                              
+    <pretty:urlbuffer var="resourceURLimg" mappingId="resources-img" />
+    <pretty:urlbuffer var="resourceURLjs" mappingId="resources-js" />
+    <pretty:urlbuffer var="resourceURLcss" mappingId="resources-css" />
 
-                        <div class="col s6 tile-wrapper">
-                            <h:link outcome="pretty:settings-routes" class="tile tile-lg  tile-red ripple-effect" style="background-image: url(#{requestScope.resourceURLimg}/bgroutesedit.png);">
-                                <span class="content-wrapper">
-                                    <span class="tile-content">
-                                        <span class="tile-img center"> <img src="#{requestScope.resourceURLimg}/routeediticonwhite.png" class="responsive-img" /> </span>
-                                        <span class="tile-holder tile-holder-sm">
-                                            <span class="title">Trajecten beheren</span>
-                                        </span>
-                                    </span>      
-                                </span>
-                            </h:link>
-                        </div>
-                        
-                        <div class="col s6 tile-wrapper">
-                            <h:link outcome="pretty:settings-live" class="tile tile-lg tile-light-blue ripple-effect" style="background-image: url(#{requestScope.resourceURLimg}/bgsettings.png);">
-                                <span class="content-wrapper">
-                                    <span class="tile-content">
-                                        <span class="tile-img center"> <img src="#{requestScope.resourceURLimg}/mapiconwhite.png" class="responsive-img" /> </span>
-                                        <span class="tile-holder tile-holder-sm">
-                                            <span class="title">Live</span>
-                                        </span>
-                                    </span>      
-                                </span>
-                            </h:link>
-                        </div>
-                  
-                    </div>
-                </div>
-                
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+        <title>Verkeerscentrum Gent</title>
+        
+          <link rel="icon" href="#{requestScope.resourceURLimg}/favicon.ico" type="image/x-icon" />
+
+
+        <!-- CSS  -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <link type="text/css" rel="stylesheet" href="#{requestScope.resourceURLcss}/materialize.css"  media="screen,projection" />
+        <link type="text/css" rel="stylesheet" href="#{requestScope.resourceURLcss}/homepage.css"  media="screen,projection" />
+    </h:head>
+    <h:body>
+      <nav role="navigation">
+        <div class="nav-wrapper container">
+            <span class="brand-logo center hide-on-med-and-down">  </span>
+            <h:link outcome="pretty:homepage" styleClass="brand-logo">
+                <img src="#{requestScope.resourceURLimg}/logo.png" />
+            </h:link>
+        </div>
+      </nav>
+      <div class="section no-pad-bot" id="index-banner">
+        <div class="container">
+          <br /><br />
+          <h1 class="header center orange-text">Verkeerscentrum Gent</h1>
+         
+          
+          <div class="row center">
+            <h5 class="header col s12 light">If I complain about a traffic jam, I have no one to blame but myself -- Steve Wynn</h5>
+          </div>
+          <div class="row center">
+              <h:link outcome="pretty:index" styleClass="btn-large waves-effect waves-light orange">Log in</h:link>
+          </div>
+          <br /><br />
+
+        </div>
+      </div>
+
+
+      <div class="container">
+        <div class="section">
+
+          <!--   Icon Section   -->
+          <div class="row">
+            <div class="col s12 m4">
+              <div class="icon-block">
+                <h2 class="center orange-text"><i class="material-icons">flash_on</i></h2>
+                <h5 class="center">Live</h5>
+
+                <p class="light">Volg live de verkeerssituatie op de meest belangrijke assen rond en door Gent.</p>
+              </div>
             </div>
-            
-        </ui:define>
-        
-        
-        <ui:define name="right">
-            
-            <div class="container index">
-                
-                <div class="sidebar">
-                    
-                    <img src="#{resourceURLimg}/vcg.png" class="logo img-responsive" /> 
-                    
-                    <p>Hallo #{login.user}</p>
-                    
-                    <p> Welkom op het dashboard van het verkeerscentrum Gent. 
-                        Deze applicatie werd ontwikkeld door studenten industrieel 
-                        ingenieur als bachelorproef. Indien u contact wil 
-                        opnemen met één van ons, kan dit steeds via onderstaande 
-                        e-mailadressen.</p>
-                    
-                    
-                </div>
-                
-                
+
+            <div class="col s12 m4">
+              <div class="icon-block">
+                <h2 class="center orange-text"><i class="material-icons">group</i></h2>
+                <h5 class="center">Analyses</h5>
+
+                <p class="light">Dankzij onze dataopslag en onze analyser kan u onmiddellijk de meest nuttige informatie over de trajcten te weten komen.</p>
+              </div>
             </div>
-            
-            
-        </ui:define>
-        
-        
-        <ui:define name="javascript">
-            
-            
-            <script src="#{requestScope.resourceURLjs}/tiles.js" />
-            
-            <script>
-                // Initialize collapse button
-                $(".button-collapse").sideNav();
-                // Initialize collapsible (uncomment the line below if you use the dropdown variation)
-                //$('.collapsible').collapsible();
-            </script>
-            
-        </ui:define>
-        
-        
-    </ui:composition>
-    
-    
-    
-    
-    
+
+            <div class="col s12 m4">
+              <div class="icon-block">
+                <h2 class="center orange-text"><i class="material-icons">settings</i></h2>
+                <h5 class="center">Meldingen</h5>
+
+                <p class="light">Onze applicatie verwittigt u wanneer een te grote vertraging optreedt op uw traject.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <br /><br />
+
+        <div class="section">
+
+        </div>
+      </div>
+
+      <footer class="page-footer orange">
+        <div class="container">
+          <div class="row">
+            <div class="col l6 s12">
+              <h5 class="white-text">Stad Gent - Universiteit Gent</h5>
+              <p class="grey-text text-lighten-4">Deze applicatie werd ontwikkeld in het kader van een bachelorproef voor studenten industrieel ingenieur..</p>
+
+
+            </div>
+            <div class="col l3 s12">
+                <!--
+              <h5 class="white-text">Settings</h5>
+              <ul>
+                <li><a class="white-text" href="#!">Link 1</a></li>
+                <li><a class="white-text" href="#!">Link 2</a></li>
+                <li><a class="white-text" href="#!">Link 3</a></li>
+                <li><a class="white-text" href="#!">Link 4</a></li>
+              </ul>
+                -->
+            </div>
+            <div class="col l3 s12">
+                <!--
+              <h5 class="white-text">Connect</h5>
+              <ul>
+                <li><a class="white-text" href="#!">Link 1</a></li>
+                <li><a class="white-text" href="#!">Link 2</a></li>
+                <li><a class="white-text" href="#!">Link 3</a></li>
+                <li><a class="white-text" href="#!">Link 4</a></li>
+              </ul>
+              -->
+            </div>
+          </div>
+        </div>
+        <div class="footer-copyright">
+          <div class="container center">
+          Made by <a class="white-text" href="http://materializecss.com">Mike Brants, Simon Vermeersch, Thomas Vande Weghe, Tobias Van der Pulst - UGent</a>
+          </div>
+        </div>
+      </footer>
+
+
+      <!--  Scripts-->
+      <script src="#{requestScope.resourceURLjs}/jquery/jquery.min.js"></script>
+      <script src="#{requestScope.resourceURLjs}/materialize/materialize.min.js"></script>
+
+
+      </h:body>
 </html>
-
-
-
-
-

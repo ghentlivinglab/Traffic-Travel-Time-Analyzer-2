@@ -3,9 +3,14 @@
   xsi:schemaLocation="http://ocpsoft.org/schema/rewrite-config-prettyfaces
                       http://ocpsoft.org/xml/ns/prettyfaces/rewrite-config-prettyfaces.xsd">
 
-	<url-mapping id="index">
+	<url-mapping id="homepage">
 		<pattern value="/" />
 		<view-id value="/faces/index.xhtml" />
+	</url-mapping>
+        
+        <url-mapping id="index">
+		<pattern value="/dashboard" />
+		<view-id value="/faces/dashboard.xhtml" />
 	</url-mapping>
         
         <url-mapping id="resources-img">
@@ -61,41 +66,61 @@
         
         <url-mapping id="settings-routes">
 		<pattern value="/settings/routes" />
-		<view-id value="/faces/pages/settings/routes.xhtml" />
+		<view-id value="/faces/pages/settings/routes/routes.xhtml" />
 	</url-mapping>
         
         <url-mapping id="settings-routes-new">
 		<pattern value="/settings/routes/new" />
-		<view-id value="/faces/pages/settings/routes-new.xhtml" />
+		<view-id value="/faces/pages/settings/routes/routes-new.xhtml" />
 	</url-mapping>
         
         <url-mapping id="settings-routes-edit">
 		<pattern value="/settings/routes/edit/#{id : routeSettings.id}" />
-		<view-id value="/faces/pages/settings/routes-edit.xhtml" />
+		<view-id value="/faces/pages/settings/routes/routes-edit.xhtml" />
 	</url-mapping>
         
         <url-mapping id="settings-routes-del">
 		<pattern value="/settings/routes/del/#{id : routeSettings.id}" />
-		<view-id value="/faces/pages/settings/routes-del.xhtml" />
+		<view-id value="/faces/pages/settings/routes/routes-del.xhtml" />
 	</url-mapping>
         
         <url-mapping id="settings-routes-details">
 		<pattern value="/settings/routes/detail/#{id : routeSettings.id}" />
-		<view-id value="/faces/pages/settings/routes-details.xhtml" />
+		<view-id value="/faces/pages/settings/routes/routes-details.xhtml" />
 	</url-mapping>
         
         <url-mapping id="settings-live">
-		<pattern value="/settings/routes/edit/#{id : routeSettings.id}" />
-		<view-id value="/faces/pages/settings/routes-edit.xhtml" />
+		<pattern value="/settings/live" />
+		<view-id value="/faces/pages/settings/routes/routes-edit.xhtml" />
 	</url-mapping>
         
         <url-mapping id="settings-profile">
-		<pattern value="/settings/routes/edit/#{id : routeSettings.id}" />
-		<view-id value="/faces/pages/settings/routes-edit.xhtml" />
+		<pattern value="/settings/profile" />
+		<view-id value="/faces/pages/profile/profile.xhtml" />
+	</url-mapping>
+       
+        
+        <url-mapping id="logs-server">
+		<pattern value="/logs/server" />
+		<view-id value="/faces/pages/logs/logs-server.xhtml" />
+	</url-mapping>
+        
+         <url-mapping id="settings-users">
+		<pattern value="/settings/users" />
+		<view-id value="/faces/pages/settings/users/index.xhtml" />
+	</url-mapping>
+        
+        
+        <url-mapping id="settings-properties">
+		<pattern value="/settings/properties" />
+		<view-id value="/faces/pages/settings/properties.xhtml" />
 	</url-mapping>
         
        
-       
+       <url-mapping id="settings-apikeys">
+		<pattern value="/settings/apikeys" />
+		<view-id value="/faces/pages/settings/apikeys.xhtml" />
+	</url-mapping>
        
                 
         <url-mapping id="settings">

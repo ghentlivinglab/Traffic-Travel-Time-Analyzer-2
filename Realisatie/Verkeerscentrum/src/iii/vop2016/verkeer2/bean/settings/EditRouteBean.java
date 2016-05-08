@@ -7,13 +7,17 @@ package iii.vop2016.verkeer2.bean.settings;
 
 
 import iii.vop2016.verkeer2.bean.auth.Login;
+import iii.vop2016.verkeer2.bean.helpers.JSONMethods;
+import static iii.vop2016.verkeer2.bean.settings.RouteSettings.prop;
 import iii.vop2016.verkeer2.ejb.components.GeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
 import iii.vop2016.verkeer2.ejb.components.IThreshold;
 import iii.vop2016.verkeer2.ejb.components.Route;
+import iii.vop2016.verkeer2.ejb.components.Threshold;
 import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
+import iii.vop2016.verkeer2.ejb.helper.VerkeerLibToJson;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdManager;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -27,6 +31,8 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 
 /**
@@ -123,11 +129,30 @@ public class EditRouteBean {
     EDIT
     */
     public String submit(){
-        IThresholdManager thmanager = beanFactory.getThresholdManager();
-        //IThresholdManager thresholdManager = beanFactory.get();
-        //doe een rest-call om route op te slaan
-
-        thmanager.ModifyThresholds(getThresholds());
+        
+        //
+        // ROUTE
+        //
+        JSONObject obj = VerkeerLibToJson.toJson(getRoute());
+        String url = prop.getProperty("urlUpdateRoute");
+        url = url.replaceAll("\\{apikey\\}", ""+prop.getProperty("apiKey"));
+        url = url.replaceAll("\\{id\\}", ""+getRoute().getId());
+        JSONMethods.postObjectToURL(url, obj, prop);
+        
+        //
+        // THRESHOLDS
+        //
+        List<IThreshold> list = getThresholds();
+        JSONArray obj1 = new JSONArray();
+        for(int i=0; i<list.size(); i++){
+            obj1.put(VerkeerLibToJson.toJson(list.get(i)));
+        }
+        String url1 = prop.getProperty("urlUpdateThresholds");
+        url1 = url1.replaceAll("\\{apikey\\}", ""+prop.getProperty("apiKey"));
+        url1 = url1.replaceAll("\\{id\\}", ""+getRoute().getId());
+        JSONMethods.postArrayToURL(url1, obj1, prop);
+        
+        
         
         return "pretty:settings-routes-details";
     }
@@ -178,13 +203,13 @@ public class EditRouteBean {
         GET SELECTED THRESHOLD
         */
         IThreshold threshold = null;
-        int i=0;
-        while(i<thresholds.size()){
-            if(thresholds.get(i).getDelayTriggerLevel() == Integer.parseInt(selectedDelayLevel)){
-                threshold = thresholds.get(i);
-                i = thresholds.size();
+        int j=0;
+        while(j<thresholds.size()){
+            if(thresholds.get(j).getDelayTriggerLevel() == Integer.parseInt(selectedDelayLevel)){
+                threshold = thresholds.get(j);
+                j = thresholds.size();
             }
-            i++;
+            j++;
         }
         /*
         ADD OBSERVER TO THRESHOLD
@@ -196,8 +221,17 @@ public class EditRouteBean {
         /*
         UPDATE THRESHOLD
         */
-        thmanager.ModifyThresholds(thresholds);
-        System.out.println(threshold.getObservers());
+        List<IThreshold> list = getThresholds();
+        JSONArray obj1 = new JSONArray();
+        for(int i=0; i<list.size(); i++){
+            obj1.put(VerkeerLibToJson.toJson(list.get(i)));
+        }
+        String url1 = prop.getProperty("urlUpdateThresholds");
+        url1 = url1.replaceAll("\\{apikey\\}", ""+prop.getProperty("apiKey"));
+        url1 = url1.replaceAll("\\{id\\}", ""+getRoute().getId());
+        JSONMethods.postArrayToURL(url1, obj1, prop);
+        
+        
         return "pretty:settings-routes-details";
     }
     
@@ -233,14 +267,11 @@ public class EditRouteBean {
     }
     
     public String addNewGeoLocation(){
-        System.out.println("add new location");
-        IGeneralDAO generalDAO = beanFactory.getGeneralDAO();
-        //IThresholdManager thresholdManager = beanFactory.get();
-        //doe een rest-call om route op te slaan
-        
+               
         String[] partsGeo = newLocationGeo.split(",");
         
         IGeoLocation location = new GeoLocation();
+        location.setName(newLocationName);
         location.setLatitude(Double.parseDouble(partsGeo[0]));
         location.setLongitude(Double.parseDouble(partsGeo[1]));
         
@@ -254,8 +285,14 @@ public class EditRouteBean {
         }
         
         getRoute().addGeolocation(location,afterID);
+        
+        JSONObject obj = VerkeerLibToJson.toJson(getRoute());
+        String url = prop.getProperty("urlUpdateRoute");
+        url = url.replaceAll("\\{apikey\\}", ""+prop.getProperty("apiKey"));
+        url = url.replaceAll("\\{id\\}", ""+getRoute().getId());
+        JSONMethods.postObjectToURL(url, obj, prop);
 
-        return "pretty:settings-routes";
+        return "pretty:settings-routes-details";
     }
 
     public String getAddAfterGeoLocation() {

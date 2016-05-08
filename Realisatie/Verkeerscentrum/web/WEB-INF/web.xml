@@ -30,14 +30,13 @@
 
     <filter-mapping>
         <filter-name>AuthFilter</filter-name>
-        <url-pattern>/live</url-pattern>
-        <url-pattern>/login</url-pattern>
+        <url-pattern>/live/*</url-pattern>
         <url-pattern>/analyse/*</url-pattern>
         <url-pattern>/settings/*</url-pattern>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/dashboard/*</url-pattern>
         
         <url-pattern>/faces/live.xhtml</url-pattern>
-        <url-pattern>/faces/index.xhtml</url-pattern>
+        <url-pattern>/faces/dashboard.xhtml</url-pattern>
         <url-pattern>/faces/settings.xhtml</url-pattern>
         <url-pattern>/faces/analyse.xhtml</url-pattern>
         
@@ -45,24 +44,24 @@
         <url-pattern>/faces/pages/settings*</url-pattern>        
     </filter-mapping>
 
-        <error-page>
-		<error-code>404</error-code>
-		<location>/faces/pages/error/error.xhtml</location>
-	</error-page>
-	<error-page>
-		<error-code>500</error-code>
-		<location>/faces/pages/error/error.xhtml</location>
-	</error-page>
-	<error-page>
-		<exception-type>java.lang.Exception</exception-type>
-		<location>/faces/pages/error/error.xhtml</location>
-	</error-page>
-	<context-param>
-		<description>State saving method: 'client' or 'server'
-						(=default). See JSF Specification 2.5.2
-		</description>
-		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-		<param-value>server</param-value>
-	</context-param>
+    <error-page>
+            <error-code>404</error-code>
+            <location>/faces/pages/error/error.xhtml</location>
+    </error-page>
+    <error-page>
+            <error-code>500</error-code>
+            <location>/faces/pages/error/error.xhtml</location>
+    </error-page>
+    <error-page>
+            <exception-type>java.lang.Exception</exception-type>
+            <location>/faces/pages/error/error.xhtml</location>
+    </error-page>
+    <context-param>
+            <description>State saving method: 'client' or 'server'
+                                            (=default). See JSF Specification 2.5.2
+            </description>
+            <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+            <param-value>server</param-value>
+    </context-param>
     
 </web-app>
