@@ -56,7 +56,7 @@ public class LogBean {
             for(int i=0; i<logsarray.length(); i++){
                 logs.add(logsarray.getJSONObject(i));
             }
-        
+            
         } catch (NamingException ex) {
             Logger.getLogger(RouteSettings.class.getName()).log(Level.SEVERE, null, ex);
         }  

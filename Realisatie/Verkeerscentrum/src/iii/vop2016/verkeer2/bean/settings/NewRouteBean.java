@@ -64,6 +64,34 @@ public class NewRouteBean extends RouteSettings {
         }
         beanFactory = BeanFactory.getInstance(ctx, null);
         thresholds = new ArrayList<>();
+        
+        IThreshold threshold = new Threshold();
+        threshold.setLevel(1);
+        threshold.setDelayTriggerLevel(0);
+        thresholds.add(threshold);
+        threshold = new Threshold();
+        threshold.setLevel(2);
+        threshold.setDelayTriggerLevel(60);
+        thresholds.add(threshold);
+        threshold = new Threshold();
+        threshold.setLevel(3);
+        threshold.setDelayTriggerLevel(120);
+        thresholds.add(threshold);
+        threshold = new Threshold();
+        threshold.setLevel(4);
+        threshold.setDelayTriggerLevel(560);
+        thresholds.add(threshold);
+        threshold = new Threshold();
+        threshold.setLevel(5);
+        threshold.setDelayTriggerLevel(1052);
+        thresholds.add(threshold);
+        
+        thresholdObservers = new ArrayList<>();
+        thresholdObservers.add("");
+        thresholdObservers.add("");
+        thresholdObservers.add("");
+        thresholdObservers.add("");
+        thresholdObservers.add(""); 
     }
    
     public String submit(){
