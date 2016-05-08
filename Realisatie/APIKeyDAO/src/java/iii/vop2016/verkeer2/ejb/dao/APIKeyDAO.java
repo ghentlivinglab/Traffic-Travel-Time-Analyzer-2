@@ -40,7 +40,7 @@ public class APIKeyDAO implements APIKeyDAORemote, APIKeyDAOLocal {
     static char[] charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz".toCharArray();
 
     public APIKeyDAO() {
-       
+
     }
 
     @PostConstruct
@@ -53,9 +53,9 @@ public class APIKeyDAO implements APIKeyDAORemote, APIKeyDAOLocal {
 
         beans = BeanFactory.getInstance(ctx, sctx);
         beans.getLogger().log(Level.INFO, "APIKeyDAO has been initialized.");
-        
+
         int res = em.createQuery("SELECT COUNT(r) FROM APIKey r").getFirstResult();
-        if(res == 0){
+        if (res == 0) {
             APIKey key = new APIKey();
             key.setKeyString("verkeer2MasterKey");
             key.setActive(1);
@@ -81,10 +81,10 @@ public class APIKeyDAO implements APIKeyDAORemote, APIKeyDAOLocal {
     }
 
     @Override
-    public String getKey() {
+    public APIKey getKey() {
 
         APIKey key = insertNewRandomKey();
-        return key.getKeyString();
+        return key;
     }
 
     @Override
@@ -107,11 +107,16 @@ public class APIKeyDAO implements APIKeyDAORemote, APIKeyDAOLocal {
     }
 
     @Override
+    public List<APIKey> getAllKeys() {
+        TypedQuery<APIKey> query = em.createQuery("SELECT u FROM APIKey AS u", APIKey.class);
+        return query.getResultList();
+    }
+
+    @Override
     public void deactivateKey(String key) {
         Query update = em.createQuery("UPDATE APIKey AS u SET u.active = 0 WHERE u.keyString =:keyString");
         update.setParameter("keyString", key);
         update.executeUpdate();
-                            
-    }
 
+    }
 }
