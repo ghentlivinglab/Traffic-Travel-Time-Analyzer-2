@@ -96,7 +96,7 @@ public class Login implements Serializable{
             } catch (Exception ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
-            return "index";
+            return "dashboard";
         } else {
             msg = "fout wachtwoord";
             FacesContext.getCurrentInstance().addMessage(

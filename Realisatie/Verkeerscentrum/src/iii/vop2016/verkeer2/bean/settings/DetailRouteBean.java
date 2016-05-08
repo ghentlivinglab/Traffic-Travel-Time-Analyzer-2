@@ -64,18 +64,26 @@ public class DetailRouteBean {
     }
    
     public void setId(long id) {
-        System.out.println("SET ID to "+id);
         routeSettings.id = id;
-        IThresholdManager thmanager = beanFactory.getThresholdManager();
-        setRoute(routeSettings.getRoute(id));
-        setThresholds(thmanager.getThresholds(getRoute()));
-    }
-    
-    public void setThresholds(List<IThreshold> thresholds) {
-        System.out.println("SET THRESHOLDS");
-        routeSettings.thresholds = thresholds;
     }
 
+   
+
+    
+    /*
+    THRESHOLDS
+    */
+    public void setThresholds(List<IThreshold> thresholds) {
+        routeSettings.thresholds = thresholds;
+    }
+    
+    public List<IThreshold> getThresholds() {
+        return routeSettings.thresholds;
+    }
+
+    /*
+    ROUTES
+    */
     public IRoute getRoute() {
         return routeSettings.route;
     }
@@ -84,16 +92,15 @@ public class DetailRouteBean {
         routeSettings.route = route;
     }
     
+    /*
+    ROUTESETTINGS (SUPER)
+    */
     public RouteSettings getRouteSettings() {
         return routeSettings;
     }
 
     public void setRouteSettings(RouteSettings routeSettings) {
         this.routeSettings = routeSettings;
-    }
-
-    public List<IThreshold> getThresholds() {
-        return routeSettings.thresholds;
     }
     
     

@@ -7,10 +7,13 @@ package iii.vop2016.verkeer2.bean.settings;
 
 import iii.vop2016.verkeer2.bean.settings.*;
 import iii.vop2016.verkeer2.bean.auth.Login;
+import iii.vop2016.verkeer2.bean.helpers.JSONMethods;
+import static iii.vop2016.verkeer2.bean.settings.RouteSettings.prop;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
 import iii.vop2016.verkeer2.ejb.components.IThreshold;
 import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
+import iii.vop2016.verkeer2.ejb.helper.VerkeerLibToJson;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +22,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import org.json.JSONObject;
 
 /**
  *
@@ -46,12 +50,14 @@ public class delRouteBean {
     }
    
     public String submit(){
-        IGeneralDAO generalDAO = beanFactory.getGeneralDAO();
-        //IThresholdManager thresholdManager = beanFactory.get();
         //doe een rest-call om route op te slaan
         
-        generalDAO.removeRoute(getRoute());
-        
+        JSONObject obj = VerkeerLibToJson.toJson(getRoute());
+        String url = prop.getProperty("urlRemoveRoute");
+        url = url.replaceAll("\\{apikey\\}", ""+prop.getProperty("apiKey"));
+        url = url.replaceAll("\\{id\\}", ""+getRoute().getId());
+        JSONMethods.postObjectToURL(url, obj, prop);
+    
         return "pretty:settings-routes";
     }
     

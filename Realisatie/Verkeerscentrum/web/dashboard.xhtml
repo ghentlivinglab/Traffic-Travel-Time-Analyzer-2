@@ -1,0 +1,169 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    
+    <ui:composition template="./templates/BodySideRight.xhtml">
+        
+        <ui:define name="page"> Instellingen </ui:define>
+        
+        <ui:define name="content">
+                   
+            
+            
+            <div class="index pull-bottom">
+                <div class="banner pull-bottom">
+                    <div class="dashboard display-animation row">
+                        <div class="col s7 tile-wrapper">
+                            <h:link outcome="pretty:live" class="tile tile-pink tile-lg ripple-effect" style="background-image: url(http://i39.tinypic.com/20r7ipz.jpg);">
+                                <span class="content-wrapper">
+                                    <span class="tile-content">
+                                        <span class="tile-img"></span>
+                                        <span class="tile-holder tile-holder-sm">
+                                            <span class="title">Huidige situatie</span>
+                                        </span>
+                                    </span>      
+                                </span>
+                            </h:link>
+                        </div>
+                        <div class="col s5 tile-wrapper">
+                            <h:link outcome="pretty:settings" class="tile tile-purple tile-lg ripple-effect" style="background-image: url(#{requestScope.resourceURLimg}/bgsettings.png);">
+                                <span class="content-wrapper">
+                                    <span class="tile-content">
+                                        <span class="tile-img center"> <img src="#{requestScope.resourceURLimg}/settingsiconwhite.png" class="responsive-img" /> </span>
+                                        <span class="tile-holder tile-holder-sm">
+                                            <span class="title">Instellingen</span>
+                                        </span>
+                                    </span>      
+                                </span>
+                            </h:link>
+                        </div>
+                        <div class="col s3 tile-wrapper">
+                            <h:link outcome="pretty:settings-profile" class="tile tile-lg tile-cyan ripple-effect" style="background-image: url(#{requestScope.resourceURLimg}/bgprofile.png);">
+                                <span class="content-wrapper">
+                                    <span class="tile-content">
+                                        <span class="tile-img center"> <img src="#{requestScope.resourceURLimg}/profileiconwhite.png" class="responsive-img" /> </span>
+                                        <span class="tile-holder tile-holder-sm">
+                                            <span class="title">Profiel</span>
+                                        </span>
+                                    </span>      
+                                </span>
+                            </h:link>
+                        </div>
+                        <div class="col s9 tile-wrapper">
+                            <h:link outcome="pretty:analyse" class="tile tile-amber tile-lg ripple-effect" style="background-image: url(#{requestScope.resourceURLimg}/bganalyse.png);">
+                                <span class="content-wrapper">
+                                    <span class="tile-content">
+                                        <span class="tile-img center"> <img src="#{requestScope.resourceURLimg}/analyseeiconwhite.png" class="responsive-img" /> </span>
+                                        <span class="tile-holder tile-holder-sm">
+                                            <span class="title">Analyse</span>
+                                        </span>
+                                    </span>      
+                                </span>
+                            </h:link>
+                        </div>
+
+                        <div class="col s6 tile-wrapper">
+                            <h:link outcome="pretty:settings-routes" class="tile tile-lg  tile-red ripple-effect" style="background-image: url(#{requestScope.resourceURLimg}/bgroutesedit.png);">
+                                <span class="content-wrapper">
+                                    <span class="tile-content">
+                                        <span class="tile-img center"> <img src="#{requestScope.resourceURLimg}/routeediticonwhite.png" class="responsive-img" /> </span>
+                                        <span class="tile-holder tile-holder-sm">
+                                            <span class="title">Trajecten beheren</span>
+                                        </span>
+                                    </span>      
+                                </span>
+                            </h:link>
+                        </div>
+                        
+                        <div class="col s6 tile-wrapper">
+                            <a href="http://docs.verkeerscentrumgent.apiary.io" target="_blank" class="tile tile-lg tile-light-blue ripple-effect" style="background-image: url(#{requestScope.resourceURLimg}/bgdatasources.png);">
+                                <span class="content-wrapper">
+                                    <span class="tile-content">
+                                        <span class="tile-img center"> <img src="#{requestScope.resourceURLimg}/mapiconwhite.png" class="responsive-img" /> </span>
+                                        <span class="tile-holder tile-holder-sm">
+                                            <span class="title">API</span>
+                                        </span>
+                                    </span>      
+                                </span>
+                            </a>
+                        </div>
+                  
+                    </div>
+                </div>
+                
+            </div>
+            
+        </ui:define>
+        
+        
+        <ui:define name="right">
+            
+            <div class="container index">
+                
+                <div class="sidebar">
+                    
+                    <img src="#{resourceURLimg}/vcg.png" class="logo img-responsive" /> 
+                    
+                    <p>Hallo #{login.user}</p>
+                    
+                    <p> Welkom op het dashboard van het verkeerscentrum Gent. 
+                        Deze applicatie werd ontwikkeld door studenten industrieel 
+                        ingenieur als bachelorproef. Indien u contact wil 
+                        opnemen met één van ons, kan dit steeds via onderstaande 
+                        e-mailadressen.</p>
+                    
+                    <ul>
+                        <li>
+                            <a href="mailto:mike.brants@ugent.be">mike.brants@ugent.be</a>
+                        </li>
+                        <li>
+                            <a href="mailto:simon.vermeersch@ugent.be">simon.vermeersch@ugent.be</a>
+                        </li>
+                        <li>
+                            <a href="mailto:tobias.vanderpulst@ugent.be">tobias.vanderpulst@ugent.be</a>
+                        </li>
+                        <li>
+                            <a href="mailto:thomas.vandeweghe@ugent.be">thomas.vandeweghe@ugent.be</a>
+                        </li>
+                    </ul>
+                    
+                    
+                </div>
+                
+                
+            </div>
+            
+            
+        </ui:define>
+        
+        
+        <ui:define name="javascript">
+            
+            
+            <script src="#{requestScope.resourceURLjs}/tiles.js" />
+            
+            <script>
+                // Initialize collapse button
+                $(".button-collapse").sideNav();
+                // Initialize collapsible (uncomment the line below if you use the dropdown variation)
+                //$('.collapsible').collapsible();
+            </script>
+            
+        </ui:define>
+        
+        
+    </ui:composition>
+    
+    
+    
+    
+    
+</html>
+
+
+
+
+

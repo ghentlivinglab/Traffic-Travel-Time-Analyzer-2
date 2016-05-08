@@ -7,6 +7,7 @@ package iii.vop2016.verkeer2.bean.settings;
 
 import iii.vop2016.verkeer2.bean.auth.Login;
 import iii.vop2016.verkeer2.bean.helpers.JSONMethods;
+import static iii.vop2016.verkeer2.bean.settings.RouteSettings.prop;
 import iii.vop2016.verkeer2.ejb.components.GeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IGeoLocation;
 import iii.vop2016.verkeer2.ejb.components.IRoute;
@@ -16,6 +17,7 @@ import iii.vop2016.verkeer2.ejb.components.Threshold;
 import iii.vop2016.verkeer2.ejb.dao.IGeneralDAO;
 import iii.vop2016.verkeer2.ejb.dao.ILoginDAO;
 import iii.vop2016.verkeer2.ejb.helper.BeanFactory;
+import iii.vop2016.verkeer2.ejb.helper.VerkeerLibToJson;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdManager;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -89,12 +91,10 @@ public class NewRouteBean extends RouteSettings {
         thresholdObservers.add("");
         thresholdObservers.add("");
         thresholdObservers.add("");
-        thresholdObservers.add("");    
+        thresholdObservers.add(""); 
     }
    
     public String submit(){
-        IGeneralDAO generalDAO = beanFactory.getGeneralDAO();
-        //IThresholdManager thresholdManager = beanFactory.get();
         //doe een rest-call om route op te slaan
         IRoute route = new Route();
         route.setName(name);
@@ -115,17 +115,11 @@ public class NewRouteBean extends RouteSettings {
         route.addGeolocation(locationStart);
         route.addGeolocation(locationEnd);
      
-        route = generalDAO.addRoute(route);
-        
-        /*
-        for(int i=0; i<thresholds.size(); i++){
-            List<String> observers = Arrays.asList(thresholdObservers.get(i).split(","));
-            thresholds.get(i).setObservers(observers);
-            thresholds.get(i).setRoute(route);
-            generalDAO.addThreshold(thresholds.get(i));
-        }
-        */
-        
+        JSONObject obj = VerkeerLibToJson.toJson(route);
+        String url = prop.getProperty("urlNewRoute");
+        url = url.replaceAll("\\{apikey\\}", ""+prop.getProperty("apiKey"));
+        JSONMethods.postObjectToURL(url, obj, prop);
+
         return "pretty:settings-routes";
     }
     

@@ -47,6 +47,18 @@ function formatDuration(data) {
         return dateFormat(date, "MM")+"m"+dateFormat(date, "ss");
 };
 
+function formatDuration(data) {
+    var date = new Date();
+    date.setTime(0);
+    date.setSeconds(data);
+    var min = dateFormat(date, "MM");
+    var sec = dateFormat(date, "ss");
+    var res = "";
+    res += min + "\'";
+    res += sec + "\"";
+    return res;
+}
+
 function viewAnalyseData(data){
     
     
@@ -64,7 +76,7 @@ function viewAnalyseData(data){
     //
     
   
-    var table = $("<table />").addClass("table");
+    var table = $("<table />").addClass("table striped");
     var row;;
     var col;
     
@@ -73,17 +85,17 @@ function viewAnalyseData(data){
     row = $("<tr />").addClass("header");
     col = $("<th />").text("Naam");
     row.append(col);
-    col = $("<th />").text("Afstand");
+    col = $("<th />").addClass("center").text("Afstand");
     row.append(col);
-    col = $("<th />").text("Optimale reistijd");
+    col = $("<th />").addClass("center").text("Optimale reistijd (min)");
     row.append(col);
-    col = $("<th />").text("Optimale snelheid");
+    col = $("<th />").addClass("center").text("Optimale snelheid (km/h)");
     row.append(col);
-    col = $("<th />").text("Gemiddelde reistijd");
+    col = $("<th />").addClass("center").text("Gemiddelde reistijd (min)");
     row.append(col);
-    col = $("<th />").text("Gemiddelde snelheid");
+    col = $("<th />").addClass("center").text("Gemiddelde snelheid (km/h)");
     row.append(col);
-    col = $("<th />").text("Verschil");
+    col = $("<th />").addClass("center").text("Verschil");
     row.append(col);
     
     table.append(row);
@@ -94,26 +106,71 @@ function viewAnalyseData(data){
     for(k=0; k<data.length; k++){
         row = $("<tr />");
         var name = data[k].name;
-        var optDuration = data[k].name;
         var optDuration = data[k].optimalDuration;
         var optVelocity = data[k].optimalVelocity;
         var avgDuration = data[k].avgDuration;
         var avgVelocity = data[k].avgVelocity;
         var distance = data[k].distance;
+        var quotient = 0;
+        var quotientClass = "";
+        
+        if(optDuration < avgDuration && optDuration>0){
+            var quotient = Math.round((1-optDuration/avgDuration)*10000)/100;
+        }
+        
+        if(quotient > 40){
+            quotientClass = "#ff7043";
+        }else if(quotient > 30){
+            quotientClass = "#ff9800";
+        }else if(quotient > 10){
+            quotientClass = "#ffca28";
+        }else if(quotient > 10){
+            quotientClass = "#ffeb3b";
+        }else{
+            quotientClass = "#c6ff00";
+        }
+        
+        if(optDuration > 0){
+            optDuration = Math.round(optDuration/60*100)/100;
+        }else{
+            optDuration = "";
+        }
+        
+        if(optVelocity > 0){
+            optVelocity = Math.round(optVelocity*100)/100;
+        }else{
+            optVelocity = "";
+        }
+        
+        if(avgDuration > 0){
+            avgDuration = Math.round(avgDuration/60*100)/100;
+        }else{
+            avgDuration = "";
+        }
+        
+        if(avgVelocity > 0){
+            avgVelocity = Math.round(avgVelocity*100)/100;
+        }else{
+            avgVelocity = "";
+        }
+        
+        distance = Math.round(distance/1000*100).toFixed(2)/100 + " km";
+        
+        
         
         col = $("<td />").text(name);
         row.append(col);        
-        col = $("<td />").text(distance);
+        col = $("<td />").addClass("center").text(distance);
         row.append(col);        
-        col = $("<td />").text(optDuration);
+        col = $("<td />").addClass("center").text(optDuration);
         row.append(col);        
-        col = $("<td />").text(optVelocity);
+        col = $("<td />").addClass("center").text(optVelocity);
         row.append(col);        
-        col = $("<td />").text(avgDuration);
+        col = $("<td />").addClass("center").text(avgDuration);
         row.append(col);        
-        col = $("<td />").text(avgVelocity);
+        col = $("<td />").addClass("center").text(avgVelocity);
         row.append(col);        
-        col = $("<td />").text("4 %");
+        col = $("<td />").addClass("center").css("background-color",quotientClass).text(quotient+" %");
         row.append(col);        
         
         table.append(row);

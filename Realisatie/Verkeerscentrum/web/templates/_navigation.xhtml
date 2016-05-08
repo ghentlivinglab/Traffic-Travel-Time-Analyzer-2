@@ -11,8 +11,8 @@
      <h:form>   
     <!-- Dropdown Structure -->
     <ul id="navGeneralDropdown" class="dropdown-content">
-        <li><a href="#!">Profiel</a></li>
-        <li><a href="#!">Server logs</a></li>
+        <li><h:link outcome="pretty:settings-profile">Profiel</h:link></li>
+        <li><h:link outcome="pretty:logs-server">Server logs</h:link></li>
         <li class="divider"></li>
         <li><h:commandLink action="#{login.logout}" value="Uitloggen" /></li>
     </ul>

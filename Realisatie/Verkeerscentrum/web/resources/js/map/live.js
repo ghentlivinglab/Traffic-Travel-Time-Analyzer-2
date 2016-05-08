@@ -189,7 +189,6 @@ function formatDuration(data) {
         return "00:00";
     }
 }
-;
 
 function splitToArraySorted(obj, xdata, ydata) {
     var keys = [];
