@@ -5,6 +5,8 @@
  */
 package iii.vop2016.verkeer2.ejb.dao;
 
+import iii.vop2016.verkeer2.bean.auth.AuthUser;
+
 /**
  *
  * @author Mike
@@ -12,5 +14,7 @@ package iii.vop2016.verkeer2.ejb.dao;
 public interface ILoginDAO {
     
     public boolean validate(String user, String password);
+    public AuthUser getUser(int id);
+    public void updateUser(AuthUser user);
     
 }
