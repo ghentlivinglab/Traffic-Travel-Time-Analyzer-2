@@ -3,7 +3,7 @@
 
 var map;
 var mymap;
-var layer;
+var layerPreview;
 var urlGeoJSONcurrent;
 var geoJSON;
 
@@ -37,8 +37,8 @@ function setGeoJson(data){
 
 function hideRoutePreview(){
     
-    if(layer != undefined){
-        mymap.removeLayer(layer);
+    if(layerPreview != undefined){
+        mymap.removeLayer(layerPreview);
     }
     
     
@@ -64,7 +64,7 @@ function showRoutePreview(routeID){
     hideRoutePreview();
     
     
-    layer = L.geoJson(data, {
+    layerPreview = L.geoJson(data, {
         
         style: function (feature) {
             var color = "black";

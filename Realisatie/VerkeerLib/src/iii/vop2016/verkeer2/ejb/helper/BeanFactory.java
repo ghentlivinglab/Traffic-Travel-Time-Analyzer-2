@@ -27,11 +27,20 @@ import iii.vop2016.verkeer2.ejb.properties.IProperties;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdHandler;
 import iii.vop2016.verkeer2.ejb.threshold.IThresholdManager;
 import java.util.Map;
+import javax.ejb.AccessTimeout;
+import javax.ejb.ConcurrencyManagement;
+import javax.ejb.ConcurrencyManagementType;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
+import javax.ejb.Timeout;
 
 /**
  *
  * @author Tobias
  */
+@Lock(LockType.WRITE)
+@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
+@AccessTimeout(value = 60000)
 public class BeanFactory {
 
     private static final String JNDILOOKUP_BEANFILE = "resources/properties/Beans";
@@ -50,6 +59,7 @@ public class BeanFactory {
     private InitialContext ctx;
     private SessionContext sctx;
 
+    @Lock(LockType.WRITE)
     private Properties getBeanProperties() throws ResourceFileMissingException {
         Properties prop = HelperFunctions.RetrievePropertyFile(JNDILOOKUP_BEANFILE, ctx, Logger.getGlobal());
         if (prop == null) {
@@ -59,6 +69,7 @@ public class BeanFactory {
         return prop;
     }
 
+    @Lock(LockType.WRITE)
     private Properties getThresholdHandlerProperties() throws ResourceFileMissingException {
         Properties prop = HelperFunctions.RetrievePropertyFile(JNDILOOKUP_THRESHOLDHANDLERSFILE, ctx, Logger.getGlobal());
         if (prop == null) {
@@ -68,6 +79,7 @@ public class BeanFactory {
         return prop;
     }
 
+    @Lock(LockType.WRITE)
     private Properties getSourceAdaptorsProperties() throws ResourceFileMissingException {
         Properties prop = HelperFunctions.RetrievePropertyFile(JNDILOOKUP_SOURCEADAPORTSFILE, ctx, Logger.getGlobal());
         if (prop == null) {
@@ -82,7 +94,7 @@ public class BeanFactory {
         this.sctx = sctx;
     }
 
-    
+    @Lock(LockType.WRITE)
     public IProperties getPropertiesCollection() throws ResourceFileMissingException {
         if (sctx != null) {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.Properties, sctx, Logger.getGlobal());
@@ -97,7 +109,8 @@ public class BeanFactory {
         }
         return null;
     }
-    
+
+    @Lock(LockType.WRITE)
     public ILogger getLogger() throws ResourceFileMissingException {
         if (sctx != null) {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.Logger, sctx, Logger.getGlobal());
@@ -113,6 +126,7 @@ public class BeanFactory {
         return null;
     }
 
+    @Lock(LockType.WRITE)
     public ITrafficDataDownstreamAnalyser getTrafficDataDownstreamAnalyser() throws ResourceFileMissingException {
         if (sctx != null) {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.downstreamAnalyser, sctx, Logger.getGlobal());
@@ -128,6 +142,7 @@ public class BeanFactory {
         return null;
     }
 
+    @Lock(LockType.WRITE)
     public IGeoJson getGeoJsonProvider() throws ResourceFileMissingException {
         if (sctx != null) {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.GeoJsonProvider, sctx, Logger.getGlobal());
@@ -143,6 +158,7 @@ public class BeanFactory {
         return null;
     }
 
+    @Lock(LockType.WRITE)
     public ITrafficDataDownloader getDataManager() throws ResourceFileMissingException {
         if (sctx != null) {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.dataManager, sctx, Logger.getGlobal());
@@ -158,6 +174,7 @@ public class BeanFactory {
         return null;
     }
 
+    @Lock(LockType.WRITE)
     public ITimer getTimer() throws ResourceFileMissingException {
         if (sctx != null) {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.Timer, sctx, Logger.getGlobal());
@@ -173,6 +190,7 @@ public class BeanFactory {
         return null;
     }
 
+    @Lock(LockType.WRITE)
     public IGeneralDAO getGeneralDAO() throws ResourceFileMissingException {
         if (sctx != null) {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.generalDAO, sctx, Logger.getGlobal());
@@ -188,6 +206,7 @@ public class BeanFactory {
         return null;
     }
 
+    @Lock(LockType.WRITE)
     public ITrafficDataDAO getTrafficDataDAO() throws ResourceFileMissingException {
         if (sctx != null) {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.trafficDataDAO, sctx, Logger.getGlobal());
@@ -203,6 +222,7 @@ public class BeanFactory {
         return null;
     }
 
+    @Lock(LockType.WRITE)
     public List<ISourceAdapter> getSourceAdaptors() throws ResourceFileMissingException {
         ArrayList<ISourceAdapter> adapters = new ArrayList<>();
         for (Object jndi : getSourceAdaptorsProperties().values()) {
@@ -221,6 +241,7 @@ public class BeanFactory {
         return adapters;
     }
 
+    @Lock(LockType.WRITE)
     public IDataProvider getDataProvider() throws ResourceFileMissingException {
         if (sctx != null) {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.DataProvider, sctx, Logger.getGlobal());
@@ -236,6 +257,7 @@ public class BeanFactory {
         return null;
     }
 
+    @Lock(LockType.WRITE)
     public IThresholdManager getThresholdManager() throws ResourceFileMissingException {
         if (sctx != null) {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.ThresholdManager, sctx, Logger.getGlobal());
@@ -251,6 +273,7 @@ public class BeanFactory {
         return null;
     }
 
+    @Lock(LockType.WRITE)
     public boolean isBeanActive(String bean) {
         for (Object val : getBeanProperties().values()) {
             if (val instanceof String) {
@@ -263,6 +286,7 @@ public class BeanFactory {
         return false;
     }
 
+    @Lock(LockType.WRITE)
     public List<IThresholdHandler> getThresholdHandlers(List<String> observers) {
         List<IThresholdHandler> ret = new ArrayList<>();
         if (observers == null || observers.size() == 0) {
@@ -288,19 +312,21 @@ public class BeanFactory {
         }
         return ret;
     }
-    
+
+    @Lock(LockType.WRITE)
     public List<String> getThresholdHandlers() {
         List<String> ret = new ArrayList<>();
 
         Properties prop = getThresholdHandlerProperties();
-        for(Map.Entry<Object,Object> entry :  prop.entrySet()){
-            if(entry.getKey() instanceof String){
+        for (Map.Entry<Object, Object> entry : prop.entrySet()) {
+            if (entry.getKey() instanceof String) {
                 ret.add((String) entry.getKey());
             }
         }
         return ret;
     }
-    
+
+    @Lock(LockType.WRITE)
     public ILoginDAO getLoginDAO() throws ResourceFileMissingException {
         if (sctx != null) {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.LoginDAO, sctx, Logger.getGlobal());
@@ -315,7 +341,8 @@ public class BeanFactory {
         }
         return null;
     }
-    
+
+    @Lock(LockType.WRITE)
     public IAPIKeyDAO getAPIKeyDAO() throws ResourceFileMissingException {
         if (sctx != null) {
             Object obj = HelperFunctions.getBean(getBeanProperties(), BeanSelector.APIKeyDAO, sctx, Logger.getGlobal());

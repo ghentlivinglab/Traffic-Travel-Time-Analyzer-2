@@ -4,7 +4,29 @@
 
 var dataURL;
 
-function initAnalyse(url){
+var absolute;
+var jsonDataGraph;
+function changeToAbs() {
+    jQuery('#btnSwitchToAbs').parent().addClass("active");
+    jQuery('#btnSwitchToRel').parent().removeClass("active");
+    absolute = true;
+    viewAnalyseData(jsonDataGraph);
+}
+
+function changeToRel() {
+    jQuery('#btnSwitchToRel').parent().addClass("active");
+    jQuery('#btnSwitchToAbs').parent().removeClass("active");
+    absolute = false;
+    viewAnalyseData(jsonDataGraph);
+}
+
+function initAnalyse(url) {
+    jQuery('#btnSwitchToAbs')
+            .click(changeToAbs);
+    jQuery('#btnSwitchToRel')
+            .click(changeToRel);
+    changeToAbs();
+
     dataURL = url;
     $.ajax({
         url: dataURL,
@@ -88,6 +110,9 @@ function parseXData(name, data){
 }
 
 function viewAnalyseData(data){
+    
+            if (data != null) {
+        jsonDataGraph = data;
     
     var route = data[0];
    
@@ -186,8 +211,71 @@ function viewAnalyseData(data){
         return dateFormat(date, "MM")+"m"+dateFormat(date, "ss");
     };
 
-    
+    if (absolute == true) {
     chart = c3.generate({
+        bindto: '#chart',
+        data: {
+            x: 'x',
+            columns: columns,
+            colors: colorMapping
+        },
+        grid: {
+            y: {
+                show: true,
+                ticks: 5
+            }
+        },
+        axis: {
+            x: {
+                show: true,
+                type: 'timeseries',
+                tick: {
+                    format: '%H:%M',
+                    culling: {
+                        max: 7 // the number of tick texts will be adjusted to less than this value
+                    }
+                },
+                label: {// ADD
+                    text: 'Tijdstip',
+                    position: 'outer-center'
+                }
+            },
+            y: {
+                type: 'number',
+                tick: {
+                    format: parseToMinSec,
+                    culling: 2// for some reason this doesn't work
+                },
+                label: {// ADD
+                    text: 'Reistijd',
+                    position: 'outer-middle'
+                },
+                min: 0,
+                padding: {top:0, bottom:0}
+            }
+        },
+        tooltip: {
+            format: {
+                value: function (data) {
+
+                        var date = new Date();
+                        date.setTime(0);
+                        date.setSeconds(data);
+                        return dateFormat(date, "MM")+"m"+dateFormat(date, "ss");
+                    
+                }
+//            value: d3.format(',') // apply this format to both y and y2
+            }
+        },
+        subchart: {
+            show: true
+        },
+        zoom: {
+            enabled: true
+        }
+    });
+        } else {
+                chart = c3.generate({
         bindto: '#chart',
         data: {
             x: 'x',
@@ -247,5 +335,6 @@ function viewAnalyseData(data){
             enabled: true
         }
     });
-    
+        }
+    }
 }
