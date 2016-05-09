@@ -28,6 +28,7 @@ public class DataSourcesComparer extends AnalysePage implements ITableView, IGra
     private IRoute route = null;
     private Pair<Date,Date> period = null;
     private List<DataProvider> dataproviders = null;
+    private int precision = -1;
 
         
     public DataSourcesComparer() {
@@ -73,6 +74,14 @@ public class DataSourcesComparer extends AnalysePage implements ITableView, IGra
         super.setRouteDAO(routeDAO);
         this.route = routeDAO.getSelectedRoutes().get(0);
     }
+
+    @Override
+    public void setPrecisionDAO(PrecisionDAO precisionDAO) {
+        super.setPrecisionDAO(precisionDAO); //To change body of generated methods, choose Tools | Templates.
+        this.precision = precisionDAO.precision;
+    }
+    
+    
     
     public IRoute getRoute() {
         return route;
@@ -120,6 +129,10 @@ public class DataSourcesComparer extends AnalysePage implements ITableView, IGra
                 providersURLS.delete(providersURLS.length()-1, providersURLS.length());
                 urlParts.add(providersURLS.toString());
             }
+        }
+        
+        if(this.precision != -1){
+            urlParts.add("precision=" + precision);
         }
         
         
