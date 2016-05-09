@@ -71,7 +71,7 @@ public class LoginDAO implements LoginDAORemote, LoginDAOLocal {
             return false;
         }
     }
-    
+
     @Override
     public AuthUser getUser(String user, String password) {
         try {
@@ -105,14 +105,21 @@ public class LoginDAO implements LoginDAORemote, LoginDAOLocal {
 
     @Override
     public void updateUser(AuthUser user) {
-        Query update = em.createQuery("UPDATE AuthUser AS u SET u.name = :name , u.password =:password, u.username =:username WHERE u.id =:id");
-        update.setParameter("name", user.getName());
-        update.setParameter("password", user.getPassword());
-        update.setParameter("username", user.getUsername());
-        update.setParameter("id", user.getId());
-        update.executeUpdate();
+        if (user.getPassword() == null || user.getPassword().equals("")) {
+            Query update = em.createQuery("UPDATE AuthUser AS u SET u.name = :name , u.username =:username WHERE u.id =:id");
+            update.setParameter("name", user.getName());
+            update.setParameter("username", user.getUsername());
+            update.setParameter("id", user.getId());
+            update.executeUpdate();
+        } else {
+            Query update = em.createQuery("UPDATE AuthUser AS u SET u.name = :name , u.password =:password, u.username =:username WHERE u.id =:id");
+            update.setParameter("name", user.getName());
+            update.setParameter("password", user.getPassword());
+            update.setParameter("username", user.getUsername());
+            update.setParameter("id", user.getId());
+            update.executeUpdate();
+
+        }
     }
-    
-    
 
 }
