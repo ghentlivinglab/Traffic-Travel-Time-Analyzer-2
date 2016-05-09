@@ -70,7 +70,25 @@ public class LoginDAO implements LoginDAORemote, LoginDAOLocal {
             System.out.println("Login error -->" + ex.getMessage());
             return false;
         }
+    }
+    
+    @Override
+    public AuthUser getUser(String user, String password) {
+        try {
+            TypedQuery<AuthUser> query = em.createQuery("SELECT u FROM AuthUser AS u WHERE u.username = :username AND u.password = :password", AuthUser.class);
+            query.setParameter("username", user);
+            query.setParameter("password", AuthHelpers.getMD5(password));
+            List<AuthUser> users = query.getResultList();
 
+            if (users.size() > 0) {
+                return users.get(0);
+            }
+            return null;
+
+        } catch (Exception ex) {
+            System.out.println("Login error -->" + ex.getMessage());
+            return null;
+        }
     }
 
     @Override

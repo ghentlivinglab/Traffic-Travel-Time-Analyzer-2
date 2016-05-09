@@ -15,6 +15,7 @@ public interface ILoginDAO {
     
     public boolean validate(String user, String password);
     public AuthUser getUser(int id);
+    public AuthUser getUser(String username, String pwd);
     public void updateUser(AuthUser user);
     
 }
