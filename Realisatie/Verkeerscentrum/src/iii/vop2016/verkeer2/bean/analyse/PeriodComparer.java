@@ -25,30 +25,29 @@ import javax.faces.bean.RequestScoped;
 @RequestScoped
 public class PeriodComparer extends AnalysePage implements ITableView, IGraphView {
 
-   
     private IRoute route = null;
-    private List<Pair<Date,Date>> periods = null;
+    private List<Pair<Date, Date>> periods = null;
     private List<DataProvider> dataproviders = null;
+    private int precision = -1;
 
-        
     public PeriodComparer() {
         super();
     }
 
     @Override
     public String getTitle() {
-        if(route == null){
+        if (route == null) {
             return "Geen route geselecteerd";
-        }else{
+        } else {
             return route.getName();
         }
     }
-   
+
     @Override
     public String getSubTitle() {
-        return this.periods.size()+" perioden geselecteerd voor vergelijking";
+        return this.periods.size() + " perioden geselecteerd voor vergelijking";
     }
-    
+
     @Override
     public void setPeriodDAO(PeriodDAO periodDAO) {
         super.setPeriodDAO(periodDAO);
@@ -66,95 +65,98 @@ public class PeriodComparer extends AnalysePage implements ITableView, IGraphVie
         super.setRouteDAO(routeDAO);
         this.route = routeDAO.getSelectedRoutes().get(0);
     }
-    
+
     public IRoute getRoute() {
         return route;
     }
 
-    
+    @Override
+    public void setPrecisionDAO(PrecisionDAO precisionDAO) {
+        super.setPrecisionDAO(precisionDAO); //To change body of generated methods, choose Tools | Templates.
+        this.precision = precisionDAO.precision;
+    }
+
     @Override
     public String getDataURL() {
-        
+
         StringBuilder url = new StringBuilder();
         url.append(super.prop.getProperty("urlPeriodComparer"));
-        
+
         //
         // ROUTE
         //
-        
-        
         //
         // PERIODS
         //
         StringBuilder urlPartStart = new StringBuilder();
         StringBuilder urlPartEnd = new StringBuilder();
-        if(periods != null || periods.isEmpty()){
-            if(this.periods.size() > 0){
-                for(Pair<Date,Date> period : this.periods){
+        if (periods != null || periods.isEmpty()) {
+            if (this.periods.size() > 0) {
+                for (Pair<Date, Date> period : this.periods) {
                     urlPartStart.append(period.getKey().getTime()).append(",");
                     urlPartEnd.append(period.getValue().getTime()).append(",");
                 }
-                urlPartStart.delete(urlPartStart.length()-1, urlPartStart.length());
-                urlPartEnd.delete(urlPartEnd.length()-1, urlPartEnd.length());
+                urlPartStart.delete(urlPartStart.length() - 1, urlPartStart.length());
+                urlPartEnd.delete(urlPartEnd.length() - 1, urlPartEnd.length());
             }
         }
-        
-       
+
         //
         // FILTERS
         //
         List<String> urlParts = new ArrayList<>();
-        
-        if(dataproviders != null || dataproviders.size()==0){
+
+        if (dataproviders != null || dataproviders.size() == 0) {
             StringBuilder providersURLS = new StringBuilder();
-            if(this.dataproviders.size() > 0){
+            if (this.dataproviders.size() > 0) {
                 providersURLS.append("providers=");
-                for(DataProvider provider : this.dataproviders){
+                for (DataProvider provider : this.dataproviders) {
                     providersURLS.append(provider.getName()).append(",");
                 }
-                providersURLS.delete(providersURLS.length()-1, providersURLS.length());
+                providersURLS.delete(providersURLS.length() - 1, providersURLS.length());
                 urlParts.add(providersURLS.toString());
             }
         }
-        
-        if(urlParts.size()>0){
+
+        if (this.precision != -1) {
+            urlParts.add("precision=" + precision);
+        }
+
+        if (urlParts.size() > 0) {
             url.append("?").append(urlParts.get(0));
-            for(int i=1; i<urlParts.size(); i++){
+            for (int i = 1; i < urlParts.size(); i++) {
                 url.append("&").append(urlParts.get(i));
             }
         }
-        
-         //
+
+        //
         // PRECISION
         //
-        urlParts.add("precision="+getPrecisionDAO().getPrecision());
-        
-                
+        urlParts.add("precision=" + getPrecisionDAO().getPrecision());
+
         String surl = url.toString();
-          
-        surl = surl.replaceAll("\\{id\\}", ""+route.getId());
+
+        surl = surl.replaceAll("\\{id\\}", "" + route.getId());
         surl = surl.replaceAll("\\{starts\\}", urlPartStart.toString());
         surl = surl.replaceAll("\\{ends\\}", urlPartEnd.toString());
-        
-        
-        System.out.println("URL = "+surl);
-                
+
+        System.out.println("URL = " + surl);
+
         return surl;
     }
-    
-    public Map<String,String> getPeriodNames() {
-        Map<String,String> res = new HashMap<>();
-        for(int i=0; i<periods.size(); i++){
+
+    public Map<String, String> getPeriodNames() {
+        Map<String, String> res = new HashMap<>();
+        for (int i = 0; i < periods.size(); i++) {
             String date1 = new SimpleDateFormat("dd/MM/yyyy").format(periods.get(i).getKey());
             String date2 = new SimpleDateFormat("dd/MM/yyyy").format(periods.get(i).getValue());
-            if(date1.equals(date2)){
-                res.put("period"+(i+1), date1);
-            }else{
-                res.put("period"+(i+1), date1 +" - "+ date2);
+            if (date1.equals(date2)) {
+                res.put("period" + (i + 1), date1);
+            } else {
+                res.put("period" + (i + 1), date1 + " - " + date2);
             }
         }
         return res;
     }
-    
-    
+
 }
