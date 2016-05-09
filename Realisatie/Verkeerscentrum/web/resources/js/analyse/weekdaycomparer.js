@@ -74,12 +74,14 @@ function parseXData(name, data){
         var res = str.split(":");
         var h = res[0];
         var m = res[1];
+        if(h == 0 && day < 2){
+            day++;
+        }
         console.log(res[0],res[1]);
         var date = new Date();
         date.setHours(h);
         date.setMinutes(m);
-        date.setDate(day);
-        if(h==23 && m==45) day++;        
+        date.setDate(day);        
         y3.push(date);
     }
     

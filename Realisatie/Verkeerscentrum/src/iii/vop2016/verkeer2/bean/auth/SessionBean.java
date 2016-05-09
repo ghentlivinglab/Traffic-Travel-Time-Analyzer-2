@@ -8,6 +8,7 @@ package iii.vop2016.verkeer2.bean.auth;
 import java.io.Serializable;
 import javax.ejb.Singleton;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpSession;
  * @author Mike
  */
 @ManagedBean(name="sessionBean")
-@SessionScoped
+@RequestScoped
 public class SessionBean implements Serializable{
 
     public HttpSession getSession() {
@@ -37,12 +38,12 @@ public class SessionBean implements Serializable{
         return session.getAttribute("username").toString();
     }
  
-    public String getUserId() {
+    public int getUserId() {
         HttpSession session = getSession();
         if (session != null)
-            return (String) session.getAttribute("userid");
+            return (int) session.getAttribute("userid");
         else
-            return null;
+            return -1;
     }
     
     

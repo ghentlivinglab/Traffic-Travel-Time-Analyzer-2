@@ -45,10 +45,61 @@
                     <div class="content">
                         
                         <div class="container">
-                           
                             
+                            <br /><br />
                             
+                            <h:form>
+                                <h:messages showSummary="true" />
+                                <ul class="collection with-header">
+                                    <li class="collection-header"><h4>Algemeen</h4></li>
+                                    <li class="collection-item">
+                                        
+                                        <div class="row">
+                                            <div class="col m4">
+                                                Username
+                                            </div>
+                                            <div class="col m8">
+                                                <h:inputText value="#{profileSettings.user.username}" />
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col m4">
+                                                Naam:
+                                            </div>
+                                            <div class="col m8">
+                                                <h:inputText value="#{profileSettings.user.name}" />
+                                            </div>
+                                        </div>
+                                                                               
+                                    </li>
+                                    
+                                    <li class="collection-header"><h4>Wachtwoord wijzigen</h4></li>
+                                    <li class="collection-item">
+                                    
+                                        <div class="row">
+                                            <div class="col m4">
+                                                Wachtwoord:
+                                            </div>
+                                            <div class="col m8">
+                                                <h:inputText value="#{profileSettings.newPassword}" /> <br />
+                                                (leeglaten als je je wachtwoord wil behouden)
+                                            </div>
+                                        </div>
+                                        
+                                    </li>
+                                    
+                                </ul>
+                                
+                                     <br />
+                                <br />
+                                <h:commandButton action="#{profileSettings.submit}" value="Toevoegen" class="btn btn-large btn-fullwidth green"></h:commandButton>
+                                
+                            </h:form>
                             
+                            <br /><br /><br />
+                            
+                              
                             
                             
                         </div>
@@ -61,7 +112,6 @@
         </ui:define>
         
         <ui:define name="javascript"> 
-           <!--  <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/avgtraffic.js" /> -->
             
         </ui:define>
         

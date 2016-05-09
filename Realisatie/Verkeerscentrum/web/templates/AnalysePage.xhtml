@@ -377,6 +377,9 @@
             <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/d3.min.js" />
             <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/c3.min.js" />
             
+            <script>
+                setPeriodPicker();
+            </script>
             
             <c:forEach var="period" items="#{periodDAO.periods}">
                 <script>

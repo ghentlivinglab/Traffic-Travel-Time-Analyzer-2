@@ -40,7 +40,7 @@ public class Login implements Serializable{
      
     private String pwd;
     private String msg;
-    private String user;
+    private String username;
     private String url;
 
     public Login() {
@@ -76,20 +76,23 @@ public class Login implements Serializable{
         this.msg = msg;
     }
  
-    public String getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
  
-    public void setUser(String user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
     }
  
     //validate login
     public String validateUsernamePassword() {
         ILoginDAO loginDAO = beanFactory.getLoginDAO();
-        boolean valid = loginDAO.validate(user, pwd);
+        boolean valid = loginDAO.validate(username, pwd);
         if (valid) {
-            sessionBean.getSession().setAttribute("username", user);
+            AuthUser user = loginDAO.getUser(username,pwd);
+            sessionBean.getSession().setAttribute("username", user.getUsername());
+            sessionBean.getSession().setAttribute("userid", user.getId());
+            sessionBean.getSession().setAttribute("user", user);
             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
             try {                
                 ec.redirect(url);
