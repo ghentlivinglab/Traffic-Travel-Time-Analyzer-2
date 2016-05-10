@@ -34,6 +34,7 @@ public class ApplicationConfig extends Application {
         resources.add(iii.vop2016.verkeer2.war.rest.ProviderResource.class);
         resources.add(iii.vop2016.verkeer2.war.rest.RoutesResource.class);
         resources.add(iii.vop2016.verkeer2.war.rest.SettingsResource.class);
+        resources.add(iii.vop2016.verkeer2.war.rest.TestResource.class);
         resources.add(iii.vop2016.verkeer2.war.rest.ThresholdsResource.class);
         resources.add(iii.vop2016.verkeer2.war.rest.TimersResource.class);
     }

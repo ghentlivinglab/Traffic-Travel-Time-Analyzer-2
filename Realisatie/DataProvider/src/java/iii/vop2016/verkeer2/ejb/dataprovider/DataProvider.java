@@ -51,7 +51,7 @@ import javax.naming.NamingException;
  */
 @Singleton
 @ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
-@AccessTimeout(value = 60000)
+@AccessTimeout(value = 120000)
 public class DataProvider implements DataProviderRemote, DataProviderLocal {
 
     @Resource
@@ -174,7 +174,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Integer>> currentDuration = new HashMap<>();
 
     @Override
-    @Lock(LockType.WRITE)
+    @Lock(LockType.READ)
     public int getCurrentDuration(IRoute route, List<String> providers) {
         ////ILogger logger = beans.getLogger();
         ////logger.entering("DataProvider", "getCurrentDuration", new Object[]{route, providers});
@@ -210,7 +210,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Integer>> currentSpeed = new HashMap<>();
 
     @Override
-    @Lock(LockType.WRITE)
+    @Lock(LockType.READ)
     public int getCurrentVelocity(IRoute route, List<String> providers) {
         //ILogger logger = beans.getLogger();
         //logger.entering("DataProvider", "getCurrentVelocity", new Object[]{route, providers});
@@ -247,7 +247,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Integer>> optimalDuration = new HashMap<>();
 
     @Override
-    @Lock(LockType.WRITE)
+    @Lock(LockType.READ)
     public int getOptimalDuration(IRoute route, List<String> providers) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -272,7 +272,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Integer>> optimalSpeed = new HashMap<>();
 
     @Override
-    @Lock(LockType.WRITE)
+    @Lock(LockType.READ)
     public int getOptimalVelocity(IRoute route, List<String> providers) {
 
         if (providers == null || providers.isEmpty()) {
@@ -368,7 +368,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Integer>> avgDuration = new HashMap<>();
 
     @Override
-    @Lock(LockType.WRITE)
+    @Lock(LockType.READ)
     public int getAvgDuration(IRoute route, List<String> providers) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -393,7 +393,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Integer>> avgSpeed = new HashMap<>();
 
     @Override
-    @Lock(LockType.WRITE)
+    @Lock(LockType.READ)
     public int getAvgVelocity(IRoute route, List<String> providers) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -552,7 +552,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Integer>> distance = new HashMap<>();
 
     @Override
-    @Lock(LockType.WRITE)
+    @Lock(LockType.READ)
     public int getDistance(IRoute route, List<String> providers) {
         //ILogger logger = beans.getLogger();
         //logger.entering("DataProvider", "getDistance", new Object[]{route, providers});
@@ -591,7 +591,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Integer>> trend = new HashMap<>();
 
     @Override
-    @Lock(LockType.WRITE)
+    @Lock(LockType.READ)
     public int getTrend(IRoute route, List<String> providers) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -695,7 +695,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Map<Date, Integer>>> recentData = new HashMap<>();
 
     @Override
-    @Lock(LockType.WRITE)
+    @Lock(LockType.READ)
     public Map<Date, Integer> getRecentData(IRoute route, List<String> providers) {
         //ILogger logger = beans.getLogger();
         //logger.entering("DataProvider", "getRecentData", new Object[]{route, providers});
@@ -757,7 +757,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Map<Weekdays, List<Integer>>>> dataByDay = new HashMap<>();
 
     @Override
-    @Lock(LockType.WRITE)
+    @Lock(LockType.READ)
     public Map<Weekdays, List<Integer>> getDataByDay(IRoute route, List<String> providers, Weekdays... days) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -795,7 +795,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Map<Weekdays, List<Integer>>>> velocityByDay = new HashMap<>();
 
     @Override
-    @Lock(LockType.WRITE)
+    @Lock(LockType.READ)
     public Map<Weekdays, List<Integer>> getDataVelocityByDay(IRoute route, List<String> providers, Weekdays... days) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -1231,7 +1231,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Map<Date, Integer>>> dataBuffer = new HashMap<>();
 
     @Override
-    @Lock(LockType.WRITE)
+    @Lock(LockType.READ)
     public Map<Date, Integer> getData(IRoute route, List<String> providers) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -1262,7 +1262,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Map<Date, Integer>>> dataVelocityBuffer = new HashMap<>();
 
     @Override
-    @Lock(LockType.WRITE)
+    @Lock(LockType.READ)
     public Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
