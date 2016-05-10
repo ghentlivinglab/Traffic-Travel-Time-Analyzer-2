@@ -17,7 +17,7 @@ Software:
 * MySql server (Project tested on Linux Ubuntu with '5.5.47-0ubuntu0.14.04.1 (Ubuntu) mariadb' ) - Database voor opslag data 
 * (optioneel) nginx - Instellen van forwarding naar http / https poorten van de bovenstaande applicaties
  
-Opmerking: Elk van deze onderdelen kunnen op andere systemen draaien op een enkel systeem te ontlasten.
+_Opmerking: Elk van deze onderdelen kunnen op andere systemen draaien op een enkel systeem te ontlasten._
 
 ### Instellingen
  
