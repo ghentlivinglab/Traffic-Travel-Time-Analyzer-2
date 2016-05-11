@@ -19,6 +19,8 @@ Software:
  
 _Opmerking: Elk van deze onderdelen kunnen op andere systemen draaien om een enkel systeem te ontlasten._
 
+Dit project werd getest met het systeem [hier beschreven](https://github.ugent.be/iii-vop2016/verkeer-2/wiki/Hardware).
+
 ### Instellen systeem
 
 #### Database
@@ -49,21 +51,15 @@ Eens de database is ingesteld kunnen alle resources voor glassfish worden aangem
 
 > Onderstaand proces is geautomatiseerd voor linux in het bash bestand '_setup.sh_ terug te vinden in het setup package.'
 
+Login op de admin console interface. Consulteer uw administrator om het poortnummer te verkrijgen. Voor de default poort bevind zich de interface op http://server_adres:4848
 
-
-Vooraleer dit project kan worden uitgevoerd zullen enkele aanpassingen nodig zijn aan Glassfish.
-
-Dit project werd getest met het systeem [hier beschreven](https://github.ugent.be/iii-vop2016/verkeer-2/wiki/Hardware).
-
-Volgend stappenplan moet doorlopen worden vooraleer het project kan worden gedeployed.
 * Voer allereerst alle [fixes](https://github.ugent.be/iii-vop2016/verkeer-2/wiki/Glassfish---Fixes) door in Glassfish
 * Voeg de [externe libraries](https://github.ugent.be/iii-vop2016/verkeer-2/wiki/Externe-libraries) toe aan Glassfish
 * Herstart Glassfish
 * Voeg [JNDI resources](https://github.ugent.be/iii-vop2016/verkeer-2/wiki/Glassfish-Resources) toe
 * Voeg [JDBC connectie](https://github.ugent.be/iii-vop2016/verkeer-2/wiki/Glassfish---JDBC) toe
-* Start MySQL-server en zorg ervoor dat er een database 'verkeer2' bestaat die leeg is
  
-Afhankelijk van een lokale server of remote server dient een iets ander stappenplan te worden gevolgd.
+Afhankelijk van een lokale testinstallatie aan netbeans of een server dient een iets ander stappenplan te worden gevolgd:
 
 Lokale server
 * Verifieer dat de [Beans](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/Beans.properties) en [SourceAdapter](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/SourceAdaptors.properties) property-bestanden de applicatienaam voor hun JNDI naam hebben staan. Deze moeten voldoen aan volgend formaat:  java:global/ApplicatieNaam/ContainerNaam/BeanNaam. voorbeeld= java:global/Verkeer2/TrafficDataDAO/TrafficDataDAO
