@@ -72,7 +72,34 @@ Lokale server
 
 Externe server (hier wordt iedere bean apart gedeployed)
 * Verifieer dat de [Beans](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/Beans.properties) en [SourceAdapter](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/SourceAdaptors.properties) property-bestanden de applicatienaam niet voor hun JNDI naam hebben staan. Deze moeten voldoen aan volgend formaat:  java:global/ContainerNaam/BeanNaam!remoteOrLocalInterface. voorbeeld= DataProvider=java:global/DataProvider/DataProvider!iii.vop2016.verkeer2.ejb.dataprovider.DataProviderLocal
+* 
 
+Gebruik als laatste het ./cycle.sh script om alle beans in te laden in glassfish en het systeem op te starten voor gebruik.
+
+
+### Beheer systeem
+
+#### Start - stop
+
+Er zijn 2 scripts aanwezig om de services te starten / stoppen: '_./start.sh_' start de glassfish, '_./stop.sh_' stopt de service.
+
+#### Logs bekijken
+
+'_./viewlog.sh_' heeft een link welke de glassfish logs opent via een append mechanisme. Je krijgt live de oude en nieuwere logs te zien tot het script wordt onderbroken.
+
+#### Aanpassen systeem
+
+Via '_./deploy.sh_' kan je modules die niet geladen zijn inladen. Indien je een nieuwe module zelf geschreven hebt, kan je deze toevoegen aan het script door de vorige modules in het script te analyseren. Zolang de core 'VerkeersLib' van de applicatie niet is veranderd kan dit zonder de server te herstarten.
+
+Via '_./redeploy.sh_' kan je een geladen module opnieuw inladen. Dit kan gebruikt worden indien een ontwikkelaar een module heeft gewijzigd en wilt toepassen op de server terwijl deze nog draaiende is.
+
+via '_./undeploy.sh_' kan je een module terug uitladen. Het wordt ten sterkste afgeraden om een uitgeladen module terug in te laden via deploy. Als resources verbonden waren aan deze bean bestaat de kans dat de nieuwe deze resources niet kan alloceren. 
+
+Alle modules bevinden zich in de submap _jars/verkeer2/_ van de installatiemap. Deze kunnen hier worden gewijzigd en vervolgens opnieuw ingeladen via bovenstaande commando's
+
+Via '_./cycle.sh_' kan je alle modules uitladen en opnieuw laten inladen. Deze methode stopt de server en start deze opnieuw op. De functie wordt vooral gebruikt bij aanpassingen als de core 'VerkeerLib' van de applicatie is gewijzigd en moet worden doorgevoegd naar alle modules.
+
+Als men via netbeans of dergelijke aan debugging wenst te doen kan men de server ook opstarten via '_./debug.sh_'
 
 ***
 
