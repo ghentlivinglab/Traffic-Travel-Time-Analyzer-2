@@ -74,7 +74,15 @@ Externe server (hier wordt iedere bean apart gedeployed)
 * Verifieer dat de [Beans](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/Beans.properties) en [SourceAdapter](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/SourceAdaptors.properties) property-bestanden de applicatienaam niet voor hun JNDI naam hebben staan. Deze moeten voldoen aan volgend formaat:  java:global/ContainerNaam/BeanNaam!remoteOrLocalInterface. voorbeeld= DataProvider=java:global/DataProvider/DataProvider!iii.vop2016.verkeer2.ejb.dataprovider.DataProviderLocal
 * 
 
-Gebruik als laatste het ./cycle.sh script om alle beans in te laden in glassfish en het systeem op te starten voor gebruik.
+#### Inladen modules
+
+> Gebruik als laatste het '_./cycle.sh_' script om alle beans in te laden in glassfish en het systeem op te starten voor gebruik. Let hierbij niet op de output van de eerste commando's, Dit script dient eigenlijk om een draaiende server volledig opnieuw op te starten.
+
+Via de admin console van glassfish kunnen alle modules worden ingeladen. Dit kan onder de tab 'Applications'
+
+Login op de admin console interface. Consulteer uw administrator om het poortnummer en logingegevens te verkrijgen. Voor de default poort bevindt zich de interface op http://server_adres:4848
+
+Onder de tab 'Applications' kan je module per module toevoegen dia het 'deploy' commando. Zorg ervoor dat steeds alle eigenschappen voor de bean zijn ingevuld. Het is aangeraden het linux bash script '_./cycle.sh_' te bekijken om alle eigenschappen te zien van iedere bean.
 
 
 ### Beheer systeem
