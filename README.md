@@ -27,7 +27,7 @@ Dit project werd getest met het systeem [hier beschreven](https://github.ugent.b
 
 Dit project is een modulair systeem bestaande uit 10tallen verschillende java enterprise beans. Om deze allen aan te bieden in 1 geheel , alsook het management hiervan is in de [distribution](https://github.ugent.be/iii-vop2016/) map een verzameling aangelegd. In het vervolg van deze tekst zal hiernaar vermeld worden als '_installatiemap_' of '_setupmap_'. 
 
-De bash shell scripts aanwezig in deze map kunnen gebruikt worden indien het project op een linuxdistributie is geintalleerd. Hierbij dient wel op voorhand de '__configuration.sh__' te worden aangepast naar het systeem waarop deze installatie is gedeployed. Vergeet herbij vooral niet bij '_glassfishInstall_' naar de installatielocatie van glassfish te verwijzen en bij '_verkeer2Install_' naar het path van de installatiemap te verwijzen.
+De bash shell scripts aanwezig in deze map kunnen gebruikt worden indien het project op een linuxdistributie is geintalleerd. Hierbij dient wel op voorhand de '__configuration.sh__' te worden aangepast naar het systeem waarop deze installatie is gedeployed. Vergeet hierbij vooral niet bij '_glassfishInstall_' naar de installatielocatie van glassfish te verwijzen en bij '_verkeer2Install_' naar het path van de installatiemap te verwijzen.
 
 #### Database
 _De MySql database dient reeds gestart te zijn alvorens dit aan te vatten. Afhankelijk van de geistalleerde versie en besturingssysteem kan het start-stop commando verschillen. Contacteer uw systeemadministrator voor meer info en login gegevens._
@@ -68,16 +68,10 @@ Login op de admin console interface. Consulteer uw administrator om het poortnum
 Afhankelijk van een lokale testinstallatie aan netbeans of een server dient een iets ander stappenplan te worden gevolgd:
 
 Lokale server
-* Verifieer dat de [Beans](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/Beans.properties) en [SourceAdapter](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/SourceAdaptors.properties) property-bestanden de applicatienaam voor hun JNDI naam hebben staan. Deze moeten voldoen aan volgend formaat:  java:global/ApplicatieNaam/ContainerNaam/BeanNaam. voorbeeld= java:global/Verkeer2/TrafficDataDAO/TrafficDataDAO
-* 'Clean and build' allereerst VerkeersLib, hierna iedere bean en vervolgens de applicatie zelf.
-* Vanuit netbeans kan het project onmiddellijk deployed worden via de java ee applicatie 'Verkeer2'
+* Verifieer dat de [Beans](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/Beans.properties) en [SourceAdapter](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/SourceAdaptors.properties) property-bestanden de applicatienaam voor hun JNDI naam hebben staan. Deze moeten voldoen aan volgend formaat:  java:global/ApplicatieNaam/ContainerNaam/BeanNaam!remoteOrLocalInterface. voorbeeld= DataProvider=java:global/Verkeer2/DataProvider/DataProvider!iii.vop2016.verkeer2.ejb.dataprovider.DataProviderLocal
 
 Externe server (hier wordt iedere bean apart gedeployed)
-* Verifieer dat de [Beans](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/Beans.properties) en [SourceAdapter](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/SourceAdaptors.properties) property-bestanden de applicatienaam niet voor hun JNDI naam hebben staan. Deze moeten voldoen aan volgend formaat:  java:global/ContainerNaam/BeanNaam. voorbeeld= java:global/TrafficDataDAO/TrafficDataDAO
-* 'Clean and build' allereerst VerkeersLib, hierna iedere bean en vervolgens de applicatie zelf.
-* In de adminconsole van Glassfish: voeg iedere module toe onder de 'Applications' tab. Deploy steeds met alle libraries op te geven in het veld 'libraries'. Voor de REST-applicatie geef als contextroot 'api' op.
-* Herstart de server
-* Na het herstarten zal de applicatie worden opgestart en zijn taken vervullen.
+* Verifieer dat de [Beans](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/Beans.properties) en [SourceAdapter](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Realisatie/SourceAdaptors.properties) property-bestanden de applicatienaam niet voor hun JNDI naam hebben staan. Deze moeten voldoen aan volgend formaat:  java:global/ContainerNaam/BeanNaam!remoteOrLocalInterface. voorbeeld= DataProvider=java:global/DataProvider/DataProvider!iii.vop2016.verkeer2.ejb.dataprovider.DataProviderLocal
 
 
 ***
