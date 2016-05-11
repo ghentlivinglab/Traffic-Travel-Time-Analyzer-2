@@ -51,7 +51,7 @@ Eens de database is ingesteld kunnen alle resources voor glassfish worden aangem
 
 > Onderstaand proces is geautomatiseerd voor linux in het bash bestand '_setup.sh_ terug te vinden in het setup package.'
 
-Login op de admin console interface. Consulteer uw administrator om het poortnummer te verkrijgen. Voor de default poort bevind zich de interface op http://server_adres:4848
+Login op de admin console interface. Consulteer uw administrator om het poortnummer en logingegevens te verkrijgen. Voor de default poort bevindt zich de interface op http://server_adres:4848
 
 * Voer allereerst alle [fixes](https://github.ugent.be/iii-vop2016/verkeer-2/wiki/Glassfish---Fixes) door in Glassfish
 * Voeg de [externe libraries](https://github.ugent.be/iii-vop2016/verkeer-2/wiki/Externe-libraries) toe aan Glassfish
