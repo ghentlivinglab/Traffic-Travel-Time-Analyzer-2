@@ -12,12 +12,17 @@
 _Waarschuwing: Dit project is volledig uitgetest met de Chrome browser en Edge browser. Gelieve een van deze browsers te gebruiken, andere browsers geven mogenlijks een onvoorspelbare werking._
 
 Url webapplicatie: verkeer-2.bp.tiwi.be
+
 Login authenticatie UGENT: username: root, passwoord: Wc7miuZpA6 (geldig gedurende 1 browsersessie)
+
 Login authenticatie applicatie: username: root, passwoord: root (geldig gedurende 30min)
+
 
 SSH: root@146.185.151.29 met passwoord: Wc7miuZpA6
 
+
 Glassfish: username: admin, passwoord: Wc7miuZpA6
+
 
 MySql: username: root, passwoord: root
 
