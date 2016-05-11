@@ -27,7 +27,6 @@ import javax.naming.NamingException;
  * @author tobia
  */
 @Singleton
-@Lock(LockType.WRITE)
 public class Properties implements PropertiesRemote, PropertiesLocal {
 
     @Resource

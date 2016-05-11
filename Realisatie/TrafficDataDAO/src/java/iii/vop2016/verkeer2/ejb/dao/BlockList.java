@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,7 +39,7 @@ public class BlockList {
         this.parent = null;
         this.size = size;
         this.startId = 1;
-        this.sublist = new TreeMap<Long, BlockList>();
+        this.sublist = new ConcurrentSkipListMap<>();
         try {
             IRouteData data = dao.getDataByID(startId);
             this.startDate = data.getTimestamp();
@@ -105,6 +106,11 @@ public class BlockList {
         if (i[0] == i[1]) {
             i[1] += minBlockSize;
         }
+        
+                
+        if(i[1]/minBlockSize >= this.size/minBlockSize){
+            i[1] += blockSize;
+        }
 
         return i;
     }
@@ -116,6 +122,10 @@ public class BlockList {
 
         if (i[0] == i[1]) {
             i[1] += minBlockSize;
+        }
+        
+        if(i[1]/minBlockSize >= this.size/minBlockSize){
+            i[1] += blockSize;
         }
 
         return i;

@@ -39,7 +39,7 @@ public interface IThreshold extends Serializable{
     
     void setObservers(List<String> observers);
     
-    void triggerThreshold(int difference,int delay,  BeanFactory fac);
+    void triggerThreshold(int prevLevel,int delay,  BeanFactory fac);
     
     IRoute getRoute();
     

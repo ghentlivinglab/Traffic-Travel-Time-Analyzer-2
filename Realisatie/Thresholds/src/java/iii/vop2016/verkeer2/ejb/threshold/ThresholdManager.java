@@ -20,12 +20,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.AccessTimeout;
+import javax.ejb.ConcurrencyManagement;
+import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.SessionContext;
@@ -38,8 +41,8 @@ import javax.naming.NamingException;
  * @author Tobias
  */
 @Singleton
-@Lock(LockType.WRITE)
-@AccessTimeout(value = 120000)
+@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
+@Lock(LockType.READ)
 public class ThresholdManager implements ThresholdManagerRemote, ThresholdManagerLocal {
 
     @Resource
@@ -67,10 +70,12 @@ public class ThresholdManager implements ThresholdManagerRemote, ThresholdManage
 
         thresholdMap = beans.getGeneralDAO().getThresholds();
         if (thresholdMap == null) {
-            thresholdMap = new HashMap<>();
+            thresholdMap = new ConcurrentHashMap<>();
+        }else{
+            thresholdMap = new ConcurrentHashMap<>(thresholdMap);
         }
 
-        prevThresholdLevel = new HashMap<>();
+        prevThresholdLevel = new ConcurrentHashMap<>();
         for (IRoute route : thresholdMap.keySet()) {
             prevThresholdLevel.put(route, -1);
         }
@@ -130,7 +135,7 @@ public class ThresholdManager implements ThresholdManagerRemote, ThresholdManage
 
             List<IThreshold> thresholdList = getThresholds(route, prevLevel, currentLevel);
             for (IThreshold threshold : thresholdList) {
-                threshold.triggerThreshold(prevLevel - threshold.getLevel(), delay, beans);
+                threshold.triggerThreshold(prevLevel, delay, beans);
             }
 
             return currentLevel - prevLevel;

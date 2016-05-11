@@ -25,8 +25,6 @@ import javax.naming.NamingException;
  *
  * @author Tobias
  */
-@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
-@AccessTimeout(value = 10000)
 public class HelperFunctions {
 
     protected static Pattern timeFormat = Pattern.compile("([0-9]{2})-([0-9]{2})");

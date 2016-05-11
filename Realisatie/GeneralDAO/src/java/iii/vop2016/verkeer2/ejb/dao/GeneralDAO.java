@@ -23,6 +23,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.ejb.ConcurrencyManagement;
+import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.SessionContext;
@@ -37,8 +39,9 @@ import javax.persistence.Query;
  *
  * @author Tobias
  */
+@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
+@Lock(LockType.READ)
 @Singleton
-@Lock(LockType.WRITE)
 public class GeneralDAO implements GeneralDAORemote, GeneralDAOLocal {
 
     @PersistenceContext(name = "GeneralDBPU")

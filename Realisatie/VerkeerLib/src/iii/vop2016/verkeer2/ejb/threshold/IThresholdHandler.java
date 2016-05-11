@@ -12,5 +12,5 @@ import iii.vop2016.verkeer2.ejb.components.IRoute;
  * @author Tobias
  */
 public interface IThresholdHandler {
-    void notify(IRoute route, long routeId,int level,int delayTriggerLevel,int difference,int delay);
+    void notify(IRoute route, long routeId,int level,int delayTriggerLevel,int prevLevel,int delay);
 }

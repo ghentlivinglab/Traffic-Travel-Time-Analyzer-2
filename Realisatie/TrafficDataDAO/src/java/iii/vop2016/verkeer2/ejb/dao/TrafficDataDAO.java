@@ -16,6 +16,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.ejb.ConcurrencyManagement;
+import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.SessionContext;
@@ -34,7 +36,8 @@ import javax.persistence.Query;
  */
 @Singleton
 @Startup
-@Lock(LockType.WRITE)
+@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
+@Lock(LockType.READ)
 public class TrafficDataDAO implements TrafficDataDAORemote, TrafficDataDAOLocal {
 
     @PersistenceContext(name = "TrafficDBPU")
@@ -160,7 +163,7 @@ public class TrafficDataDAO implements TrafficDataDAORemote, TrafficDataDAOLocal
             }
 
             //get all data for that route with specified timestamp and source adaptors
-            Parameter p0 = new Parameter("id", routesEntities.get(0).getId() - 100, Operation.gt);
+            Parameter p0 = new Parameter("id", routesEntities.get(0).getId() - 1000, Operation.gt);
             Date tbegin = new Date(routesEntities.get(0).getTimestamp().getTime() - 30000);
             Date tend = new Date(routesEntities.get(0).getTimestamp().getTime() + 30000);
             Parameter p2 = new Parameter("timestamp", tbegin, tend, Operation.between);

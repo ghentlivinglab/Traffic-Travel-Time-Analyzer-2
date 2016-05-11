@@ -136,7 +136,7 @@ public class TwitterHandler implements ThresholdHandlerLocal, ThresholdHandlerRe
     }
 
     @Override
-    public void notify(IRoute route, long routeId, int level, int delayTriggerLevel, int difference, int delay) {
+    public void notify(IRoute route, long routeId, int level, int delayTriggerLevel, int prevLevel, int delay) {
         Properties prop = getProperties();
 
         BufferedImage img = getImageForRoute(route, prop);
@@ -146,7 +146,7 @@ public class TwitterHandler implements ThresholdHandlerLocal, ThresholdHandlerRe
                 String imageID = uploadImgToTwitter(img, prop);
 
                 String message = "";
-                if (difference > 0) {
+                if (prevLevel < level) {
                     message = prop.getProperty("twittermessageup", "");
                 } else {
                     message = prop.getProperty("twittermessagedown", "");

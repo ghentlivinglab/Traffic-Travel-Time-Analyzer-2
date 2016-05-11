@@ -38,8 +38,6 @@ import javax.ejb.Timeout;
  *
  * @author Tobias
  */
-@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
-@AccessTimeout(value = 10000)
 public class BeanFactory {
 
     private static final String JNDILOOKUP_BEANFILE = "resources/properties/Beans";

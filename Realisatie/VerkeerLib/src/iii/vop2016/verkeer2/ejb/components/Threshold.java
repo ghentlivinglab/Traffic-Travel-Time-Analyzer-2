@@ -104,10 +104,15 @@ public class Threshold extends Observable implements IThreshold{
     }
 
     @Override
-    public void triggerThreshold(int difference,int delay, BeanFactory fac) {
+    public void triggerThreshold(int prevLevel,int delay, BeanFactory fac) {
         List<IThresholdHandler> beans = fac.getThresholdHandlers(observers);
+        
+        if(this.route == null && this.routeId != 0){
+            this.route = fac.getGeneralDAO().getRoute(this.routeId);
+        }
+        
         for(IThresholdHandler handler:beans){
-            handler.notify(this.route, this.routeId,this.level,this.delayTriggerLevel,difference,delay);
+            handler.notify(this.route, this.routeId,this.level,this.delayTriggerLevel,prevLevel,delay);
         }
     }
 

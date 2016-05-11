@@ -35,8 +35,6 @@ import javax.naming.NamingException;
  */
 @Startup
 @Singleton
-@Lock(LockType.WRITE)
-@AccessTimeout(value = 60000)
 public class Logger implements LoggerRemote, LoggerLocal {
 
     protected java.util.logging.Logger l;

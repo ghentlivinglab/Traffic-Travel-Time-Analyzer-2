@@ -39,8 +39,6 @@ import javax.naming.NamingException;
  * @author tobia
  */
 @Singleton
-@Lock(LockType.WRITE)
-@AccessTimeout(value = 240000)
 public class TrafficDataDownstreamAnalyser implements TrafficDataDownstreamAnalyserRemote, TrafficDataDownstreamAnalyserLocal {
 
     @Resource
