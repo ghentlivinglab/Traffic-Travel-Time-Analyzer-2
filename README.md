@@ -23,6 +23,12 @@ Dit project werd getest met het systeem [hier beschreven](https://github.ugent.b
 
 ### Instellen systeem
 
+#### Setup/Installatiemap
+
+Dit project is een modulair systeem bestaande uit 10tallen verschillende java enterprise beans. Om deze allen aan te bieden in 1 geheel , alsook het management hiervan is in de [distribution](https://github.ugent.be/iii-vop2016/) map een verzameling aangelegd. In het vervolg van deze tekst zal hiernaar vermeld worden als '_installatiemap_' of '_setupmap_'. 
+
+De bash shell scripts aanwezig in deze map kunnen gebruikt worden indien het project op een linuxdistributie is geintalleerd. Hierbij dient wel op voorhand de '__configuration.sh__' te worden aangepast naar het systeem waarop deze installatie is gedeployed. Vergeet herbij vooral niet bij '_glassfishInstall_' naar de installatielocatie van glassfish te verwijzen en bij '_verkeer2Install_' naar het path van de installatiemap te verwijzen.
+
 #### Database
 _De MySql database dient reeds gestart te zijn alvorens dit aan te vatten. Afhankelijk van de geistalleerde versie en besturingssysteem kan het start-stop commando verschillen. Contacteer uw systeemadministrator voor meer info en login gegevens._
 
