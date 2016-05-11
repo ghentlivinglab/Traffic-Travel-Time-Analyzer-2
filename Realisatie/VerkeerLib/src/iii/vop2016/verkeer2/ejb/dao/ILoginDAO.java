@@ -6,6 +6,7 @@
 package iii.vop2016.verkeer2.ejb.dao;
 
 import iii.vop2016.verkeer2.bean.auth.AuthUser;
+import java.util.List;
 
 /**
  *
@@ -17,5 +18,7 @@ public interface ILoginDAO {
     public AuthUser getUser(int id);
     public AuthUser getUser(String username, String pwd);
     public void updateUser(AuthUser user);
+
+    public List<AuthUser> getUsers();
     
 }

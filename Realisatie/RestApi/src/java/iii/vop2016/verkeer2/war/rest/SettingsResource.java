@@ -107,18 +107,18 @@ public class SettingsResource {
             }
         }
     }
-    
+
     @GET
-    @Path ("users/{id}")
+    @Path("users/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUser(@PathParam("id") String sid){
+    public Response getUser(@PathParam("id") String sid) {
         if (!helper.validateAPIKey(context, beans)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         } else {
             try {
                 int id = Integer.parseInt(sid);
                 AuthUser user = beans.getLoginDAO().getUser(id);
-                if (user == null){
+                if (user == null) {
                     return Response.status(Response.Status.BAD_REQUEST).build();
                 }
                 JSONObject o = VerkeerLibToJson.toJson(user);
@@ -130,12 +130,62 @@ public class SettingsResource {
             }
         }
     }
+
+    @GET
+    @Path("users")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUsers() {
+        if (!helper.validateAPIKey(context, beans)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        } else {
+            try {
+                List<AuthUser> users = beans.getLoginDAO().getUsers();
+                if (users == null || users.isEmpty()) {
+                    return Response.status(Response.Status.BAD_REQUEST).build();
+                }
+                JSONArray arr = new JSONArray();
+                for (AuthUser user : users) {
+                    JSONObject o = VerkeerLibToJson.toJson(user);
+                    o.remove("password");
+                    arr.put(o);
+                }
+
+                return Response.status(Response.Status.OK).entity(arr.toString()).build();
+            } catch (Exception e) {
+                Logger.getLogger(SettingsResource.class.getName()).log(Level.SEVERE, null, e);
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+        }
+    }
     
+    @POST
+    @Path("users/new")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateUser(String body) {
+        if (!helper.validateAPIKey(context, beans)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        } else {
+            try {
+                JSONObject o = VerkeerLibToJson.parseJsonAsObject(body);
+                AuthUser user = VerkeerLibToJson.fromJson(o, new AuthUser());
+                beans.getLoginDAO().updateUser(user);
+
+                JsonObjectBuilder b = Json.createObjectBuilder();
+                b.add("status", "done");
+                return Response.status(Response.Status.OK).entity(b.build().toString()).build();
+            } catch (Exception e) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+        }
+    }
+
+
     @POST
     @Path("users/update/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateUser(String body,@PathParam("id") String sid) {
+    public Response updateUser(String body, @PathParam("id") String sid) {
         if (!helper.validateAPIKey(context, beans)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         } else {

@@ -6,68 +6,122 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
-    
-    
-    
+
+
+
     <ui:composition template="../../../templates/HeaderBody.xhtml">
-        
+
         <ui:define name="page"> Gebruikers </ui:define>
-        
-        
+
+
         <ui:define name="content"> 
-            
-            
+
+
             <div class="settings">
-                
+
                 <div class="page">
-                    
-                    
+
+
                     <header class="header">
                         <div class="container">
                             <div class="row">                                            
                                 <div class="col m11 valign-wrapper">
                                     <h3 class="valign">
-                                        Overzicht
+                                        Overzicht gebruikers
                                     </h3> 
                                     <span>
-                                        
+
                                     </span>
                                 </div>
                                 <div class="col m1">
-                                    
+
                                 </div>
-                                
+
                             </div>  
                         </div>
-                        
+
                     </header>
-                    
+
                     <div class="content">
-                        
+
                         <div class="container">
-                           
-                            
-                            
-                            
-                            
-                            
+                            <br /><br />
+                            <h:dataTable value="#{GebruikersOverviewBean.gebruikers}" var="gebruikers"
+                                         styleClass="order-table striped"
+                                         headerClass="orange"
+                                         rowClasses=""
+                                         columnClasses="center-align,left-align"
+                                         >
+
+                                <h:column>
+                                    <f:facet name="type">
+                                        Naam
+                                    </f:facet>
+                                    #{gebruikers.get("name")}
+                                </h:column>
+
+                                <h:column>
+                                    <f:facet name="header">
+                                        Gebruikersnaam
+                                    </f:facet>
+                                    #{gebruikers.get("username")}
+                                </h:column>
+
+                                
+                            </h:dataTable>
+
+                            <br /><br />
+                            <h:form>
+                                <table>
+                                    <tr>
+                                        <td>
+                                              Naam:
+                                        </td>
+                                        <td>
+                                            <h:inputText required="true"  value="#{GebruikersOverviewBean.gebruikersNieuwName}" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Gebruikersnaam:
+                                        </td>
+                                        <td>
+                                            <h:inputText required="true"  value="#{GebruikersOverviewBean.gebruikersNieuwUsername}" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                              passwoord:
+                                        </td>
+                                        <td>
+                                            <h:inputSecret required="true"  value="#{GebruikersOverviewBean.gebruikersNieuwPassword}" />
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br />
+                                <h:commandButton action="#{GebruikersOverviewBean.genereerNieuw}" value="Genereer nieuwe gebruiker">
+
+                                </h:commandButton>
+                            </h:form>
+                            <br />
+
+
                         </div>
-                        
-                        
+
+
                     </div>
                 </div>
-                
+
             </div>
         </ui:define>
-        
+
         <ui:define name="javascript"> 
-           <!--  <script type="text/javascript" src="#{requestScope.resourceURLjs}/analyse/avgtraffic.js" /> -->
-            
+
         </ui:define>
-        
+
     </ui:composition>
-    
-    
-    
-    
+
+
+
+
 </html>

@@ -105,7 +105,10 @@ public class LoginDAO implements LoginDAORemote, LoginDAOLocal {
 
     @Override
     public void updateUser(AuthUser user) {
-        if (user.getPassword() == null || user.getPassword().equals("")) {
+
+        if (user.getId() == 0) {
+            em.persist(user);
+        } else if (user.getPassword() == null || user.getPassword().equals("")) {
             Query update = em.createQuery("UPDATE AuthUser AS u SET u.name = :name , u.username =:username WHERE u.id =:id");
             update.setParameter("name", user.getName());
             update.setParameter("username", user.getUsername());
@@ -119,6 +122,20 @@ public class LoginDAO implements LoginDAORemote, LoginDAOLocal {
             update.setParameter("id", user.getId());
             update.executeUpdate();
 
+        }
+    }
+
+    @Override
+    public List<AuthUser> getUsers() {
+        try {
+            TypedQuery<AuthUser> query = em.createQuery("SELECT u FROM AuthUser AS u", AuthUser.class);
+            List<AuthUser> users = query.getResultList();
+
+            return users;
+
+        } catch (Exception ex) {
+            System.out.println("Login error -->" + ex.getMessage());
+            return null;
         }
     }
 

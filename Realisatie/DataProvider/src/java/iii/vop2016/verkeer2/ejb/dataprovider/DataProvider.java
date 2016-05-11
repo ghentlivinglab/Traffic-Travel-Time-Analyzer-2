@@ -79,12 +79,10 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
         beans.getLogger().log(Level.INFO, "DataProvider has been initialized.");
     }
 
-    
     private Properties getProperties() {
         return HelperFunctions.RetrievePropertyFile(JNDILOOKUP_PROPERTYFILE, ctx, Logger.getGlobal());
     }
 
-    
     private int CalculateArithmaticMean(List<IRouteData> data, Function<IRouteData, Long> var, Function<IRouteData, Long> weight) {
         long totalNum = 0;
         long totalDiv = 0;
@@ -119,7 +117,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     };
 
     @Override
-    
+
     public int getMeanDurationFromRouteData(List<IRouteData> routeData) {
         if (routeData == null || routeData.size() == 0) {
             return -1;
@@ -144,11 +142,13 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private static Function<IRouteData, Long> function_distanceMulDistanceDivDuration = new Function<IRouteData, Long>() {
         @Override
         public Long apply(IRouteData t) {
+            if (t.getDuration() == 0) {
+                return 0L;
+            }
             return new Long(t.getDistance() * t.getDistance() / t.getDuration());
         }
     };
 
-    
     private <T> T getDataFromBuffer(Map<Long, Map<IRoute, T>> buffer, IRoute route, List<String> providers, long hash) {
         if (buffer.containsKey(hash)) {
             Map<IRoute, T> lowerBuffer = buffer.get(hash);
@@ -174,7 +174,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Integer>> currentDuration = new ConcurrentHashMap<>();
 
     @Override
-    
+
     public int getCurrentDuration(IRoute route, List<String> providers) {
         ////ILogger logger = beans.getLogger();
         ////logger.entering("DataProvider", "getCurrentDuration", new Object[]{route, providers});
@@ -210,7 +210,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Integer>> currentSpeed = new ConcurrentHashMap<>();
 
     @Override
-    
+
     public int getCurrentVelocity(IRoute route, List<String> providers) {
         //ILogger logger = beans.getLogger();
         //logger.entering("DataProvider", "getCurrentVelocity", new Object[]{route, providers});
@@ -247,7 +247,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Integer>> optimalDuration = new ConcurrentHashMap<>();
 
     @Override
-    
+
     public int getOptimalDuration(IRoute route, List<String> providers) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -272,7 +272,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Integer>> optimalSpeed = new ConcurrentHashMap<>();
 
     @Override
-    
+
     public int getOptimalVelocity(IRoute route, List<String> providers) {
 
         if (providers == null || providers.isEmpty()) {
@@ -296,7 +296,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     @Override
-    
+
     public int getOptimalDuration(IRoute route, List<String> providers, Date startDate, Date endDate) {
         //ILogger logger = beans.getLogger();
         //logger.entering("DataProvider", "getOptimalDuration", new Object[]{route, providers, startDate, endDate});
@@ -331,7 +331,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     @Override
-    
+
     public int getOptimalVelocity(IRoute route, List<String> providers, Date startDate, Date endDate) {
         //ILogger logger = beans.getLogger();
         //logger.entering("DataProvider", "getOptimalVelocity", new Object[]{route, providers, startDate, endDate});
@@ -368,7 +368,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Integer>> avgDuration = new ConcurrentHashMap<>();
 
     @Override
-    
+
     public int getAvgDuration(IRoute route, List<String> providers) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -393,7 +393,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Integer>> avgSpeed = new ConcurrentHashMap<>();
 
     @Override
-    
+
     public int getAvgVelocity(IRoute route, List<String> providers) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -416,7 +416,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     @Override
-    
+
     public int getAvgDuration(IRoute route, List<String> providers, Date start, Date end) {
         //ILogger logger = beans.getLogger();
         //logger.entering("DataProvider", "getAvgDuration", new Object[]{route, providers, start, end});
@@ -444,7 +444,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     @Override
-    
+
     public int getAvgVelocity(IRoute route, List<String> providers, Date start, Date end) {
         //ILogger logger = beans.getLogger();
         //logger.entering("DataProvider", "getAvgDuration", new Object[]{route, providers, start, end});
@@ -473,7 +473,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     @Override
-    
+
     public int getCurrentDelayLevel(IRoute route, List<String> providers) {
         //ILogger logger = beans.getLogger();
         //logger.entering("DataProvider", "getCurrentDelayLevel", new Object[]{route, providers});
@@ -497,7 +497,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     @Override
-    
+
     public int getDelayLevel(IRoute route, List<String> providers, Date start, Date end) {
         //ILogger logger = beans.getLogger();
         //logger.entering("DataProvider", "getDelayLevel", new Object[]{route, providers});
@@ -524,7 +524,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     @Override
-    
+
     public int getAvgDelayLevel(IRoute route, List<String> providers) {
         //ILogger logger = beans.getLogger();
         //logger.entering("DataProvider", "getAvgDelayLevel", new Object[]{route, providers});
@@ -552,7 +552,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Integer>> distance = new ConcurrentHashMap<>();
 
     @Override
-    
+
     public int getDistance(IRoute route, List<String> providers) {
         //ILogger logger = beans.getLogger();
         //logger.entering("DataProvider", "getDistance", new Object[]{route, providers});
@@ -591,7 +591,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Integer>> trend = new ConcurrentHashMap<>();
 
     @Override
-    
+
     public int getTrend(IRoute route, List<String> providers) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -614,7 +614,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     @Override
-    
+
     public int getTrend(IRoute route, List<String> providers, Date start, Date end) {
         //ILogger logger = beans.getLogger();
         //logger.entering("DataProvider", "getTrend", new Object[]{route, providers, start, end});
@@ -695,7 +695,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Map<Date, Integer>>> recentData = new ConcurrentHashMap<>();
 
     @Override
-    
+
     public Map<Date, Integer> getRecentData(IRoute route, List<String> providers) {
         //ILogger logger = beans.getLogger();
         //logger.entering("DataProvider", "getRecentData", new Object[]{route, providers});
@@ -757,7 +757,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Map<Weekdays, List<Integer>>>> dataByDay = new ConcurrentHashMap<>();
 
     @Override
-    
+
     public Map<Weekdays, List<Integer>> getDataByDay(IRoute route, List<String> providers, Weekdays... days) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -795,7 +795,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Map<Weekdays, List<Integer>>>> velocityByDay = new ConcurrentHashMap<>();
 
     @Override
-    
+
     public Map<Weekdays, List<Integer>> getDataVelocityByDay(IRoute route, List<String> providers, Weekdays... days) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -823,7 +823,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     @Override
-    
+
     public Map<Weekdays, List<Integer>> getDataByDay(IRoute route, List<String> providers, Date start, Date end, Weekdays... days) {
         //ILogger logger = beans.getLogger();
         //logger.entering("DataProvider", "getDataByDay", new Object[]{route, providers, start, end});
@@ -855,7 +855,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     @Override
-    
+
     public Map<Weekdays, List<Integer>> getDataVelocityByDay(IRoute route, List<String> providers, Date start, Date end, Weekdays... days) {
         //ILogger logger = beans.getLogger();
         //logger.entering("DataProvider", "getDataVelocityByDay", new Object[]{route, providers, start, end});
@@ -991,7 +991,6 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
 
     protected Pattern timeFormat = Pattern.compile("([0-9]{2})-([0-9]{2})");
 
-    
     private Calendar GetTimeFromPropertyValue(String property) {
         Matcher m = timeFormat.matcher(property);
         if (m.matches()) {
@@ -1005,7 +1004,6 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     //generate a list with all specific hours between 2 dates (for example all 06:00 bewteen 02/02/16 04/04/16)
-    
     private List<Date> GenerateListForHourBetweenDates(Calendar hour, Date startDate, Date endDate) {
         List<Date> dates = new ArrayList<>();
 
@@ -1026,7 +1024,6 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
 
     //List contains 2 list, 1 for startDates, other for endDates. In those dates there is a list for every day of the week.
     //nextday indicated that the endHour is in the next day
-    
     private List<List<List<Date>>> generateListsForDayOfWeek(Date startDate, Date endDate, Calendar startHour, Calendar endHour, boolean nextDay) {
         List<List<List<Date>>> ret = new ArrayList<>();
         for (int j = 0; j < 2; j++) {
@@ -1095,7 +1092,6 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
         this.recentData.clear();
     }
 
-    
     private long calculateHash(List<String> providers) {
         if (providers == null) {
             return 0;
@@ -1107,7 +1103,6 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
         return hash;
     }
 
-    
     private long calculateHash(Weekdays[] days) {
         if (days == null) {
             return 0;
@@ -1119,7 +1114,6 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
         return hash;
     }
 
-    
     private long calculateHash(Set<Weekdays> keySet) {
         if (keySet == null) {
             return 0;
@@ -1131,7 +1125,6 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
         return hash;
     }
 
-    
     private List<Integer> mapDataByCombinedDay(Map<Weekdays, List<Integer>> data) {
         List<Integer> ret = null;
         List<Integer> count = new ArrayList<>();
@@ -1142,7 +1135,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
                 for (int i = 0; i < ret.size(); i++) {
                     if (ret.get(i) != -1) {
                         count.add(1);
-                    }else{
+                    } else {
                         count.add(1);
                     }
                 }
@@ -1150,7 +1143,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
                 for (int i = 0; i < ret.size(); i++) {
                     if (list.get(i) != -1) {
                         ret.set(i, ret.get(i) + list.get(i));
-                        count.set(i, count.get(i) +1);
+                        count.set(i, count.get(i) + 1);
                     }
                 }
             }
@@ -1162,7 +1155,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     @Override
-    
+
     public List<Integer> getDataByCombinedDay(IRoute route, List<String> providers) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -1173,7 +1166,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     @Override
-    
+
     public List<Integer> getDataVelocityByCombinedDay(IRoute route, List<String> providers) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -1184,7 +1177,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     @Override
-    
+
     public List<Integer> getDataByCombinedDay(IRoute route, List<String> providers, Date start, Date end) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -1195,7 +1188,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     @Override
-    
+
     public List<Integer> getDataVelocityByCombinedDay(IRoute route, List<String> providers, Date start, Date end) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -1208,7 +1201,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private DateFormat dateFormatter = new SimpleDateFormat("HH:mm");
 
     @Override
-    
+
     public List<String> getDataByDayHours() {
         int index = 0;
         int hour = 6;
@@ -1230,7 +1223,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Map<Date, Integer>>> dataBuffer = new ConcurrentHashMap<>();
 
     @Override
-    
+
     public Map<Date, Integer> getData(IRoute route, List<String> providers) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -1261,7 +1254,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     private Map<Long, Map<IRoute, Map<Date, Integer>>> dataVelocityBuffer = new ConcurrentHashMap<>();
 
     @Override
-    
+
     public Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -1290,7 +1283,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     @Override
-    
+
     public Map<Date, Integer> getData(IRoute route, List<String> providers, int precision, Date start, Date end) {
         //ILogger logger = beans.getLogger();
         //logger.entering("DataProvider", "getData", new Object[]{route, providers, precision, start, end});
@@ -1363,7 +1356,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     @Override
-    
+
     public Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers, int precision, Date start, Date end) {
         //ILogger logger = beans.getLogger();
         //logger.entering("DataProvider", "getDataVelocity", new Object[]{route, providers, precision, start, end});
@@ -1436,7 +1429,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     @Override
-    
+
     public Map<Date, Integer> getData(IRoute route, List<String> providers, int precision) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -1451,7 +1444,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     @Override
-    
+
     public Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers, int precision) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -1466,7 +1459,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     @Override
-    
+
     public Map<Date, Integer> getData(IRoute route, List<String> providers, Date start, Date end) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -1478,7 +1471,7 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
     }
 
     @Override
-    
+
     public Map<Date, Integer> getDataVelocity(IRoute route, List<String> providers, Date start, Date end) {
         if (providers == null || providers.isEmpty()) {
             providers = beans.getPropertiesCollection().getDefaultProviders();
@@ -1489,7 +1482,6 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
         return getDataVelocity(route, providers, precision, start, end);
     }
 
-    
     private Map<Long, Integer> GenerateListForPrecisionPointBewteenDates(Date start, Date end, long precisionDistance) {
         Map<Long, Integer> ret = new TreeMap<>();
         long t = start.getTime();
@@ -1502,7 +1494,6 @@ public class DataProvider implements DataProviderRemote, DataProviderLocal {
         return ret;
     }
 
-    
     private long generatePrecisionDistance(Date start, Date end, int precision) {
         long precisionDistance = end.getTime() - start.getTime();
         precisionDistance /= precision;

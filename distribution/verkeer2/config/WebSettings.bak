@@ -1,0 +1,7 @@
+urlREST=http://verkeer-2.bp.tiwi.be/api/v2
+urlRESTroutes=http://verkeer-2.bp.tiwi.be/api/v2/routes/{id}
+urlGeoJSON=http://verkeer-2.bp.tiwi.be/api/v2/geojson/{id}/current
+urlAllRoutes=http://verkeer-2.bp.tiwi.be/api/v2/routes/{id}
+urlTimerNewData=http://verkeer-2.bp.tiwi.be/api/v2/timers/newdata
+urlProviderComparer=http://verkeer-2.bp.tiwi.be/api/v2/routes/{id}/providerDifference
+urlPeriodComparer=http://verkeer-2.bp.tiwi.be/api/v2/routes/{id}/periodDifference/{starts}/{ends}
