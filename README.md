@@ -1,5 +1,16 @@
 # verkeer-2
 
+## Inhoudstabel
+
+* Inloggegevens werkende omgeving uitgerust met dit project:
+* Installeren project
+* Structuur repository
+* Structuur project
+
+## Inloggegevens werkende omgeving uitgerust met dit project:
+
+
+
 ## Installeren project
 
 ### Systeemeisen
@@ -25,7 +36,7 @@ Dit project werd getest met het systeem [hier beschreven](https://github.ugent.b
 
 #### Setup/Installatiemap
 
-Dit project is een modulair systeem bestaande uit 10tallen verschillende java enterprise beans. Om deze allen aan te bieden in 1 geheel , alsook het management hiervan is in de [distribution](https://github.ugent.be/iii-vop2016/) map een verzameling aangelegd. In het vervolg van deze tekst zal hiernaar vermeld worden als '_installatiemap_' of '_setupmap_'. 
+Dit project is een modulair systeem bestaande uit 10tallen verschillende java enterprise beans. Om deze allen aan te bieden in 1 geheel , alsook het management hiervan is in de [distribution](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/distribution) map een verzameling aangelegd. In het vervolg van deze tekst zal hiernaar vermeld worden als '_installatiemap_' of '_setupmap_'. 
 
 De bash shell scripts aanwezig in deze map kunnen gebruikt worden indien het project op een linuxdistributie is geintalleerd. Hierbij dient wel op voorhand de '__configuration.sh__' te worden aangepast naar het systeem waarop deze installatie is gedeployed. Vergeet hierbij vooral niet bij '_glassfishInstall_' naar de installatielocatie van glassfish te verwijzen en bij '_verkeer2Install_' naar het path van de installatiemap te verwijzen.
 
@@ -111,8 +122,7 @@ Als men via netbeans of dergelijke aan debugging wenst te doen kan men de server
 
 ***
 
-***
-Verslag na sprint 2: __[Document](https://github.ugent.be/iii-vop2016/verkeer-2/blob/master/Analyse/AnalyseDocumentSprint2.pdf)__
+
 ## Structuur repository
 __[Root/](https://github.ugent.be/iii-vop2016/verkeer-2)__
 
@@ -121,6 +131,10 @@ Deze map bevat de logboeken, dit README-bestand en GNU license.
 __[Analyse/](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Analyse)__
 
 De map bevat alle analysedocumenten van het project.
+
+__[distribution/](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/distribution)__
+
+Deze map bevat een setup- / intallatiemap van het project.
 
 __[Realisatie/](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie)__
 
@@ -144,7 +158,7 @@ Package name: iii.vop2016.verkeer2.ejb.logger
 
 EJB Bean: Logger
   Session Beans: Logger
-  Library interface: LoggerRemote
+  Library interface: LoggerRemote, LoggerLocal
 ````
 
 __[TimerScheduler](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/TimerScheduler)__
@@ -155,7 +169,7 @@ Package name: iii.vop2016.verkeer2.ejb.timer
 
 EJB Bean: TimerScheduler
   Session Beans: TimerScheduler
-  Library interface: ITimer
+  Library interface: TimerRemote, TimerLocal
 ````
 
 __[TrafficDataDownloader](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/TrafficDataDownloader)__
@@ -166,7 +180,7 @@ Package name: iii.vop2016.verkeer2.ejb.datadownloader
 
 EJB Bean: TrafficDataDownloader
   Session Beans: TrafficDataDownloader
-  Library interface: ITrafficDataDownloader
+  Library interface: TrafficDataDownloaderRemote, TrafficDataDownloaderLocal
   extra class: SourceManager implements ISourceManager
 ````
 
@@ -178,9 +192,72 @@ Package name: iii.vop2016.verkeer2.ejb.downstream
 
 EJB Bean: TrafficDataDownstreamAnalyser
   Session Beans: TrafficDataDownstreamAnalyser
-  Library interface: ITrafficDataDownstreamAnalyser
+  Library interface: TrafficDataDownstreamAnalyserRemote, TrafficDataDownstreamAnalyserLocal
 ````
 
+__[DataProvider](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/DataProvider)__
+
+Deze provider is de link tussen de presentatie layer en de data. Hij vormt de ruwe gegevens opgeslagen in de databank, verkregen van de dao's, om naar analyses en verzamelingen van data. Deze worden van via de presentation layer aangeboden aan de eindgebruiker.
+````
+Package name: iii.vop2016.verkeer2.ejb.dataprovider
+
+EJB Bean: DataProvider
+  Session Beans: DataProvider
+  Library interface: DataProviderRemote, DataProviderLocal
+````
+
+__[GeoJsonProvider](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/GeoJsonProvider)__
+
+De geojsonprovider laat toe van de routes aanwezig in de applicatie een gestandariseerde json aan te bieden dat de route beschrijft op een wereldkaart. Op deze mannier kan een mapgenerator eenvoudig de verkregen route uittekenen.
+````
+Package name: iii.vop2016.verkeer2.ejb.geojson
+
+EJB Bean: GeoJsonProvider
+  Session Beans: GeoJsonProvider
+  Library interface: GeoJsonProviderRemote, GeoJsonProviderLocal
+````
+
+__[Properties](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/Properties)__
+
+properties is een zeer eenvoudig registratiesysteem voor globale variabelen gebruikt in meerdere beans. Dit dient hoofdzakelijk als verzamelpunt van alle propertyfiles.
+````
+Package name: iii.vop2016.verkeer2.ejb.properties
+
+EJB Bean: Properties
+  Session Beans: Properties
+  Library interface: PropertiesLocal, PropertiesRemote
+````
+
+__[Thresholds](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/Thresholds)__
+
+De ThresholdManager houdt van alle routes triggerpunten bij. Als blijkt dat een bepaald triggerpunt overschreden wordt bij afhalen van nieuwe data zal deze aan zijn handlers vragen de nodige acties uit te voeren.
+````
+Package name: iii.vop2016.verkeer2.ejb.thresholds
+
+EJB Bean: Thresholds
+  Session Beans: ThresholdManager
+  Library interface: ThresholdManagerRemote, ThresholdManagerLocal
+````
+
+__[VerkeerLibToJson](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/VerkeerLibToJson)__
+
+Een Class interface om eenvoudig objecten te delen met andere componenten via json. Alles basiscomponenten kunnen via deze interface worden omgezet naar json en omgekeerd.
+````
+Package name: iii.vop2016.verkeer2.ejb.helper
+````
+
+### Handlers
+
+__[TwitterHandler](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/TwitterHandler)__
+
+Een van de handlers aanspreekbaar door de thresholdManager. Deze kan, indien verbonden aan een threshold, waarschuwingen genereren op twitter voor een bepaalde route met een bepaalde vertraging.
+````
+Package name: iii.vop2016.verkeer2.ejb.twitter
+
+EJB Bean: TwitterHandler
+  Session Beans: TwitterHandler
+  Library interface: TwitterHandlerRemote, TwitterHandlerLocal
+````
 ### Providers
 
 __[GoogleMapsSourceAdapter](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/GoogleMapsSourceAdapter)__
@@ -191,7 +268,7 @@ Package name: iii.vop2016.verkeer2.ejb.datasources
 
 EJB Bean: GoogleMapsSourceAdapter
   Session Beans: GoogleMapsSourceAdapter
-  Library interface: ISourceAdapter
+  Library interface: SourceAdapterRemote, SourceAdapterLocal
 ````
 
 __[HereSourceAdapter](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/HereSourceAdapter)__
@@ -202,7 +279,40 @@ Package name: iii.vop2016.verkeer2.ejb.datasources
 
 EJB Bean: GoogleMapsSourceAdapter
   Session Beans: GoogleMapsSourceAdapter
-  Library interface: ISourceAdapter
+  Library interface: SourceAdapterRemote, SourceAdapterLocal
+````
+
+__[WazeSourceAdapter](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/WazeSourceAdapter)__
+
+Providers leveren nieuwe trajectdata aan de applicatie. Hiervoor maken ze API-calls naar hun target of scrubben ze de website.
+````
+Package name: iii.vop2016.verkeer2.ejb.datasources
+
+EJB Bean: WazeSourceAdapter
+  Session Beans: WazeSourceAdapter
+  Library interface: SourceAdapterRemote, SourceAdapterLocal
+````
+
+__[CoyoteSourceAdapter](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/CoyoteSourceAdapter)__
+
+Providers leveren nieuwe trajectdata aan de applicatie. Hiervoor maken ze API-calls naar hun target of scrubben ze de website.
+````
+Package name: iii.vop2016.verkeer2.ejb.datasources
+
+EJB Bean: CoyoteSourceAdapter
+  Session Beans: CoyoteSourceAdapter
+  Library interface: SourceAdapterRemote, SourceAdapterLocal
+````
+
+__[TomTomSourceAdapter](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/TomTomSourceAdapter)__
+
+Providers leveren nieuwe trajectdata aan de applicatie. Hiervoor maken ze API-calls naar hun target of scrubben ze de website.
+````
+Package name: iii.vop2016.verkeer2.ejb.datasources
+
+EJB Bean: TomTomSourceAdapter
+  Session Beans: TomTomSourceAdapter
+  Library interface: SourceAdapterRemote, SourceAdapterLocal
 ````
 
 ### Data access Objects
@@ -215,7 +325,7 @@ Package name: iii.vop2016.verkeer2.ejb.dao
 
 EJB Bean: GeneralDAO
   Session Beans: GeneralDAO
-  Library interface: IGeneralDAO
+  Library interface: GeneralDAORemote, GeneralDAOLocal
   extra class: GeoLocationEntity extends GeoLocation, RouteEntity extends Route
 ````
 
@@ -227,30 +337,29 @@ Package name: iii.vop2016.verkeer2.ejb.dao
 
 EJB Bean: TrafficDataDAO
   Session Beans: TrafficDataDAO
-  Library interface: ITrafficDataDAO
-  extra class: RouteDataEntity extends RouteData
+  Library interface: TrafficDataDAORemote, TrafficDataDAOLocal
 ````
 
-__[GeneralDAONoDB](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/GeneralDAONoDB)__
+__[APIKeyDAO](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/APIKeyDAO)__
 
-De generalDAODummy is een dummy-DAO die de databank voor algemene gegegevens, zoals de informatie van Route en GeoLocation, simuleert. Deze kan worden gebruikt voor het uitvoeren van tests, zonder de echte databank te bevuilen.
+Deze dao staat in voor het beheer van de apikeys gebruikt voor authenticatie van afgeschermde delen van de REST service
 ````
-Package name: iii.vop2016.verkeer2.ejb.dao.dummy
+Package name: iii.vop2016.verkeer2.ejb.dao
 
-EJB Bean: GeneralDAONoDB
-  Session Beans: GeneralDAONoDB
-  Library interface: GeneralDAONoDBRemoete
+EJB Bean: APIKeyDAO
+  Session Beans: APIKeyDAO
+  Library interface: APIKeyDAORemote, APIKeyDAOLocal
 ````
 
-__[TrafficDataDAONoDB](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/TrafficDataDAONoDB)__
+__[LoginDAO](https://github.ugent.be/iii-vop2016/verkeer-2/tree/master/Realisatie/LoginDAO)__
 
-De trafficdataDAODummy is een dummy-DAO die de databank voor RouteData simuleert. Deze kan worden gebruikt voor het uitvoeren van tests, zonder de echte databank te bevuilen.
+Deze dao staat in voor het beheer van de gebruikers van de applicatie.
 ````
-Package name: iii.vop2016.verkeer2.ejb.dao.dummy
+Package name: iii.vop2016.verkeer2.ejb.dao
 
-EJB Bean: TrafficDataDAONoDB
-  Session Beans: TrafficDataDAONoDB
-  Library interface: TrafficDataDAONoDBRemote
+EJB Bean: LoginDAO
+  Session Beans: LoginDAO
+  Library interface: LoginDAORemote, LoginDAOLocal
 ````
 
 ### Presentation logic
