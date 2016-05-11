@@ -19,8 +19,36 @@ Software:
  
 _Opmerking: Elk van deze onderdelen kunnen op andere systemen draaien om een enkel systeem te ontlasten._
 
-### Instellingen
+### Instellen systeem
+
+#### Database
+_De MySql database dient reeds gestart te zijn alvorens dit aan te vatten. Afhankelijk van de geistalleerde versie en besturingssysteem kan het start-stop commando verschillen. Contacteer uw systeemadministrator voor meer info en login gegevens._
+
+_Enkele voorbeelden voor linux: systemctl start mariadb.service, systemctl start mysql, /etc/init.d/mariadb.service start, /etc/init.d/mysql start_
+
+Login op de MySql service.
+
+_Onder linux: mysql --user=user_name --password=your_password_
+
+De database dient gecreerd te worden samen met een gebruiker die door de applicatie zal worden gebruikt. 
+
+> Dit script is aanwezig in de setup package onder de naam '_setup.sql_' en kan via fileinput uitgevoerd worden in de MySql service. _Onder linux: mysql --user=user_name --password=your_password_ < setup.sql_
  
+
+Voor een lokale database met gebruikersaccount '_verkeer_' en paswoord '_vop2016_' volstaan volgende commando's:
+```sql
+CREATE DATABASE verkeer2;
+USE verkeer2;
+CREATE USER 'verkeer'@'localhost' IDENTIFIED BY 'vop2016';
+GRANT ALL ON verkeer2.* TO 'verkeer'@'localhost';
+```
+
+#### Glassfish
+
+Eens de database is ingesteld kunnen alle resources voor glassfish worden aangemaakt. Hieronder staat omschreven welke acties dienen uitgevoerd te worden.
+
+> Onderstaand proces is geautomatiseerd voor linux in het bash bestand '_setup.sh_ terug te vinden in het setup package.'
+
 
 
 Vooraleer dit project kan worden uitgevoerd zullen enkele aanpassingen nodig zijn aan Glassfish.
