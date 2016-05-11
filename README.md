@@ -17,6 +17,12 @@ Login authenticatie UGENT: username: root, passwoord: Wc7miuZpA6 (geldig geduren
 
 Login authenticatie applicatie: username: root, passwoord: root (geldig gedurende 30min)
 
+Url api: verkeer-2.bp.tiwi.be/api/v2
+
+Documentatie api is terug te vinden op http://docs.verkeerscentrumgent.apiary.io/#
+
+Beveiligde calls key: verkeer2MasterKey
+
 
 SSH: root@146.185.151.29 met passwoord: Wc7miuZpA6
 
