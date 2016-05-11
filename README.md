@@ -11,17 +11,17 @@
 
 _Waarschuwing: Dit project is volledig uitgetest met de Chrome browser en Edge browser. Gelieve een van deze browsers te gebruiken, andere browsers geven mogenlijks een onvoorspelbare werking._
 
-Url webapplicatie: verkeer-2.bp.tiwi.be
+Url webapplicatie: http://verkeer-2.bp.tiwi.be
 
-Login authenticatie UGENT: username: root, passwoord: Wc7miuZpA6 (geldig gedurende 1 browsersessie)
+_Login authenticatie UGENT: username: root, passwoord: Wc7miuZpA6 (geldig gedurende 1 browsersessie)_
 
-Login authenticatie applicatie: username: root, passwoord: root (geldig gedurende 30min)
+_Login authenticatie applicatie: username: root, passwoord: root (geldig gedurende 30min)_
 
-Url api: verkeer-2.bp.tiwi.be/api/v2
+Url api: http://verkeer-2.bp.tiwi.be/api/v2
 
-Documentatie api is terug te vinden op http://docs.verkeerscentrumgent.apiary.io/#
+_Documentatie api is terug te vinden op http://docs.verkeerscentrumgent.apiary.io/#_
 
-Beveiligde calls key: verkeer2MasterKey
+_Beveiligde calls key: verkeer2MasterKey_
 
 
 SSH: root@146.185.151.29 met passwoord: Wc7miuZpA6
