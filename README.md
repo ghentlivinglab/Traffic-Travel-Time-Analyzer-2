@@ -32,6 +32,9 @@ Glassfish: username: admin, passwoord: Wc7miuZpA6
 
 MySql: username: root, passwoord: root
 
+
+_Installatiemap op server: /root/verkeer2_
+
 ## Installeren project
 
 ### Systeemeisen
