@@ -5,6 +5,8 @@ The city of Ghent is setting up a traffic control center and wants to know:
 - impact of events, roadworks, accidents, weather, time of year, .. on those traveltimes
 - the differences in travel times between different providers
 
+[Project sheet with more info - Dutch] (https://drive.google.com/open?id=0B7oaoHqGAgCVRUxEQ3M3enAxb00)
+
 A project was started with the engineering faculty of Ghent University in 2016. Four groups of students built a monitoring tool to acquire and analyze travel time from: Waze, Coyote, Tomtom and Google Maps. The tool contains a map with real-time traveltimes, a comparison tool to compare traveltimes of different suppliers, a comparison tool to compare travel times between two given periodes (e.g. period during roadworks, and a 'normal' period), and an API.
 
 All the source code from Group 2 can be found in this repository and can be used freely, please mention the names of the authors when further elaborating on the code: o	Mike BRANTS, Thomas VANDE WEGHE, Tobias VAN DER PULST and Simon VERMEERSCH. City of Ghent is very thankful towards these enthusiast en competent engineers for the great work!
