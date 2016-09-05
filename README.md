@@ -29,9 +29,9 @@ _Waarschuwing: Dit project is volledig uitgetest met de Chrome browser en Edge b
 
 Url webapplicatie: http://verkeer-2.bp.tiwi.be
 
-_Login authenticatie UGENT: username: root, passwoord: Wc7miuZpA6 (geldig gedurende 1 browsersessie)_
+_Login authenticatie UGENT: username: root, passwoord:  (geldig gedurende 1 browsersessie)_
 
-_Login authenticatie applicatie: username: root, passwoord: root (geldig gedurende 30min)_
+_Login authenticatie applicatie: username: root, passwoord:  (geldig gedurende 30min)_
 
 Url api: http://verkeer-2.bp.tiwi.be/api/v2
 
@@ -40,13 +40,13 @@ _Documentatie api is terug te vinden op http://docs.verkeerscentrumgent.apiary.i
 _Beveiligde calls key: verkeer2MasterKey_
 
 
-SSH: root@146.185.151.29 met passwoord: Wc7miuZpA6
+SSH: root@146.185.151.29 met passwoord: 
 
 
-Glassfish: username: admin, passwoord: Wc7miuZpA6
+Glassfish: username: admin, passwoord: 
 
 
-MySql: username: root, passwoord: root
+MySql: username: root, passwoord: 
 
 
 _Installatiemap op server: /root/verkeer2_
@@ -94,7 +94,7 @@ De database dient gecreerd te worden samen met een gebruiker die door de applica
 > Dit script is aanwezig in de setup package onder de naam '_setup.sql_' en kan via fileinput uitgevoerd worden in de MySql service. _Onder linux: mysql --user=user_name --password=your_password_ < setup.sql_
  
 
-Voor een lokale database met gebruikersaccount '_verkeer_' en paswoord '_vop2016_' volstaan volgende commando's:
+Voor een lokale database met gebruikersaccount '_verkeer_' en paswoord '' volstaan volgende commando's:
 ```sql
 CREATE DATABASE verkeer2;
 USE verkeer2;
